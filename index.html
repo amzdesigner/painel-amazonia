@@ -155,6 +155,13 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
 
 /* ============ visão geral ============ */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
+.h-status{grid-column:1/-1;margin:-4px 2px 0;font-size:12.5px;font-weight:600;color:var(--muted)}
+.h-status.ok{color:#2e9e5b}.h-status.warn{color:#d98a00;cursor:pointer;text-decoration:underline}.h-status.off{color:var(--muted)}
+#tela-senha{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+#tela-senha[hidden]{display:none}
+#tela-senha .senha-box{width:100%;max-width:380px;margin:0}
+#tela-senha .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+.senha-erro{color:#e04848;font-size:13px;font-weight:600;margin:8px 0 0}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
 .kpi span{display:block;color:var(--muted);font-size:13.5px;line-height:1.3}
 .kpi b{display:block;margin-top:10px;font-size:32px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
@@ -322,6 +329,7 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
           <div class="kpi"><span>Recibos no mês</span><b id="k-rec">0</b></div>
           <div class="kpi"><span>Valor em recibos no mês</span><b id="k-valor" class="dim">R$ 0,00</b></div>
         </div>
+        <p id="h-status" class="h-status">Conectando…</p>
 
         <section class="card">
           <h2>O.S. de camisa criadas</h2>
@@ -565,7 +573,7 @@ function say(txt, cls) {
 const shell = document.getElementById("shell");
 /* Visão Geral desligada por enquanto: troque para true e ela volta ao menu.
    O histórico segue sendo gravado nos bastidores. */
-const MOSTRAR_VISAO = false;
+const MOSTRAR_VISAO = true;
 document.getElementById("nav-visao").hidden = !MOSTRAR_VISAO;
 const TITULOS = { visao: "Visão Geral", os: "O.S Camisa", time: "Lista do time", recibo: "Recibo" };
 function irPara(v) {
@@ -1047,7 +1055,14 @@ $("#gen").addEventListener("click", async () => {
       cliente: $("#cliente").value.trim(),
       quem: $("#feitopor").value.trim(),
       pecas: SIZES.reduce((a, s) => a + qty(s), 0),
-      time: uniformeLigado
+      time: uniformeLigado,
+      dados: {
+        narede: $("#narede").value, entregar: $("#entregar").value,
+        tecido: $("#tecido").value, gola: $("#gola").value, corgola: $("#corgola").value, obs: $("#obs").value,
+        tamanhos: SIZES.reduce((o, s) => (qty(s) ? (o[s] = qty(s), o) : o), {}),
+        modelosRC: rcLigado ? rcSel.filter(id => totalModelo(id) > 0).map(id => ({ nome: (modeloRC(id) || {}).nome, qtd: rcQtd[id] })) : [],
+        time: uniformeLigado ? time.filter(j => j.nome || j.numero || j.tamanho) : []
+      }
     });
     if (downloads) {
       try {
@@ -1814,25 +1829,132 @@ if (lido("amz_view") === "recibo") irPara("recibo");
 
 
 /* ================= HISTÓRICO E VISÃO GERAL ================= */
+/* Modo "nuvem": grava no banco (Neon) pela função /api/historico, com a senha da equipe.
+   Modo "local": quando não há banco (arquivo aberto no PC, prévia etc.), guarda só neste navegador. */
 let historico = [];
-try { const g = JSON.parse(localStorage.getItem("amz_hist") || "[]"); if (Array.isArray(g)) historico = g; } catch (e) {}
-function salvarHist() { try { localStorage.setItem("amz_hist", JSON.stringify(historico.slice(0, 300))); } catch (e) {} }
+let modoHist = "verificando";            /* verificando | nuvem | senha | local */
+let senhaPainel = "";
+try { senhaPainel = localStorage.getItem("amz_senha") || ""; } catch (e) {}
+let fila = [];                            /* registros esperando para subir ao banco */
+try { const f = JSON.parse(localStorage.getItem("amz_fila") || "[]"); if (Array.isArray(f)) fila = f; } catch (e) {}
+function salvarFila() { try { localStorage.setItem("amz_fila", JSON.stringify(fila.slice(-200))); } catch (e) {} }
+
+let histLocal = [];
+try { const g = JSON.parse(localStorage.getItem("amz_hist") || "[]"); if (Array.isArray(g)) histLocal = g; } catch (e) {}
+function salvarHist() { try { localStorage.setItem("amz_hist", JSON.stringify(histLocal.slice(0, 300))); } catch (e) {} }
+
+async function api(metodo, query, corpo) {
+  const r = await fetch("/api/historico" + (query || ""), {
+    method: metodo,
+    headers: Object.assign({ "x-painel-senha": senhaPainel }, corpo ? { "Content-Type": "application/json" } : {}),
+    body: corpo ? JSON.stringify(corpo) : undefined,
+    cache: "no-store"
+  });
+  const tipo = r.headers.get("content-type") || "";
+  if (!tipo.includes("application/json")) { const e = new Error("sem api"); e.semApi = true; throw e; }
+  const j = await r.json();
+  if (!r.ok) { const e = new Error(j.erro || "erro"); e.status = r.status; e.msg = j.erro; throw e; }
+  return j;
+}
 
 function proximoNumero(tipo, ano) {
-  const doAno = historico.filter(h => h.tipo === tipo && new Date(h.quando).getFullYear() === ano);
+  const doAno = histLocal.filter(h => h.tipo === tipo && new Date(h.quando).getFullYear() === ano);
   return String(doAno.length + 1).padStart(3, "0") + "/" + ano;
 }
 function registrar(tipo, dados) {
   const agora = new Date();
-  historico.unshift(Object.assign({
-    tipo: tipo,
-    numero: proximoNumero(tipo, agora.getFullYear()),
-    quando: agora.toISOString()
-  }, dados));
-  historico = historico.slice(0, 300);
-  salvarHist();
+  if (modoHist === "local") {
+    const d = Object.assign({}, dados); delete d.dados;
+    histLocal.unshift(Object.assign({ tipo, numero: proximoNumero(tipo, agora.getFullYear()), quando: agora.toISOString() }, d));
+    histLocal = histLocal.slice(0, 300);
+    salvarHist(); historico = histLocal; renderVisao();
+    return;
+  }
+  /* nuvem (ou ainda verificando / sem senha): entra na fila e sobe assim que possível */
+  const temp = "tmp_" + agora.getTime() + "_" + Math.random().toString(36).slice(2, 6);
+  fila.push(Object.assign({ tipo, _temp: temp, _quando: agora.toISOString() }, dados));
+  salvarFila();
+  historico.unshift(Object.assign({ tipo, id: temp, numero: "…", quando: agora.toISOString(), pendente: true }, dados));
   renderVisao();
+  enviarFila();
 }
+let enviando = false;
+async function enviarFila() {
+  if (enviando || modoHist !== "nuvem" || !fila.length) return;
+  enviando = true;
+  try {
+    while (fila.length) {
+      const item = fila[0];
+      const corpo = Object.assign({}, item); delete corpo._temp; delete corpo._quando;
+      const r = await api("POST", "", corpo);
+      fila.shift(); salvarFila();
+      historico = historico.filter(h => h.id !== item._temp);
+      historico.unshift(r.item);
+    }
+  } catch (e) {
+    if (e.status === 401) pedirSenha("A senha mudou. Digite a senha da equipe de novo.");
+  } finally { enviando = false; renderVisao(); }
+}
+
+/* sem banco: o que estava na fila vira histórico local deste computador */
+function filaParaLocal() {
+  if (!fila.length) return;
+  fila.forEach(it => {
+    const d = Object.assign({}, it); delete d._temp; delete d._quando; delete d.dados;
+    const q = new Date(it._quando);
+    histLocal.unshift(Object.assign(d, { numero: proximoNumero(it.tipo, q.getFullYear()), quando: it._quando }));
+  });
+  fila = []; salvarFila(); salvarHist();
+}
+async function carregarNuvem() {
+  try {
+    const r = await api("GET");
+    modoHist = "nuvem";
+    const pend = historico.filter(h => h.pendente);
+    historico = pend.concat(r.items || r.itens || []);
+    fecharSenha();
+    renderVisao();
+    enviarFila();
+  } catch (e) {
+    if (e.semApi || !e.status) { modoHist = "local"; filaParaLocal(); historico = histLocal; }
+    else if (e.status === 401) { modoHist = "senha"; pedirSenha(senhaPainel ? "Senha incorreta." : ""); }
+    else { modoHist = "local"; filaParaLocal(); historico = histLocal; say("Banco indisponível: " + (e.msg || "erro") + ". Salvando só neste computador por enquanto.", "err"); }
+    renderVisao();
+  }
+}
+
+/* ---- tela de senha ---- */
+const telaSenha = document.createElement("div");
+telaSenha.id = "tela-senha";
+telaSenha.hidden = true;
+telaSenha.innerHTML = '<form class="card senha-box" autocomplete="on">' +
+  '<h2>Senha da equipe</h2><div class="body">' +
+  '<p class="hint">O histórico de O.S. e recibos fica no banco da gráfica. Digite a senha uma vez neste aparelho.</p>' +
+  '<label class="f"><span>Senha</span><input type="password" id="senha-in" autocomplete="current-password" required></label>' +
+  '<p class="senha-erro" id="senha-erro" hidden></p>' +
+  '<div class="acts"><button class="btn" type="button" id="senha-depois">Agora não</button><button class="btn primary" type="submit">Entrar</button></div>' +
+  '</div></form>';
+document.body.appendChild(telaSenha);
+function pedirSenha(msg) {
+  modoHist = "senha";
+  telaSenha.hidden = false;
+  const er = $("#senha-erro"); er.textContent = msg || ""; er.hidden = !msg;
+  setTimeout(() => $("#senha-in").focus(), 50);
+}
+function fecharSenha() { telaSenha.hidden = true; }
+telaSenha.querySelector("form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  senhaPainel = $("#senha-in").value;
+  try { localStorage.setItem("amz_senha", senhaPainel); } catch (e) {}
+  $("#senha-in").value = "";
+  await carregarNuvem();
+});
+$("#senha-depois").addEventListener("click", () => {
+  fecharSenha();
+  say("Sem a senha, as O.S. e recibos ficam guardados aqui e sobem para o banco quando você entrar.");
+  renderVisao();
+});
+
 function dataHora(iso) {
   const d = new Date(iso);
   const p = v => String(v).padStart(2, "0");
@@ -1841,7 +1963,19 @@ function dataHora(iso) {
 function reais(v) { return (Number(v) || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function escapa(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])); }
 
+function statusHist() {
+  const el = $("#h-status"); if (!el) return;
+  let t = "", cls = "";
+  if (modoHist === "nuvem") { t = "● Conectado ao banco da gráfica · todos os computadores veem o mesmo histórico"; cls = "ok"; }
+  else if (modoHist === "senha") { t = "● Falta a senha da equipe · " + (fila.length ? fila.length + " registro(s) esperando para subir" : "clique para entrar"); cls = "warn"; }
+  else if (modoHist === "local") { t = "● Sem banco · histórico guardado só neste computador"; cls = "off"; }
+  else t = "Conectando…";
+  if (modoHist === "nuvem" && fila.length) t += " · enviando " + fila.length + "…";
+  el.textContent = t; el.className = "h-status " + cls;
+}
+
 function renderVisao() {
+  statusHist();
   const agora = new Date(), mes = agora.getMonth(), ano = agora.getFullYear();
   const doMes = h => { const d = new Date(h.quando); return d.getMonth() === mes && d.getFullYear() === ano; };
   const os = historico.filter(h => h.tipo === "os"), rec = historico.filter(h => h.tipo === "recibo");
@@ -1849,39 +1983,63 @@ function renderVisao() {
   $("#k-os").textContent = osMes.length;
   $("#k-pecas").textContent = osMes.reduce((a, h) => a + (h.pecas || 0), 0);
   $("#k-rec").textContent = recMes.reduce((a, h) => a + (h.vias || 1), 0);
-  $("#k-valor").textContent = "R$ " + reais(recMes.reduce((a, h) => a + (h.valor || 0), 0));
+  $("#k-valor").textContent = "R$ " + reais(recMes.reduce((a, h) => a + (Number(h.valor) || 0), 0));
 
-  const linhasOS = os.slice(0, 25).map(h =>
+  const idDe = h => escapa(h.id || h.quando);
+  const pend = h => h.pendente ? ' <span class="quem">· aguardando envio</span>' : "";
+  const linhasOS = os.slice(0, 50).map(h =>
     '<tr><td class="num">' + escapa(h.numero) + '</td>' +
-    '<td class="cli">' + escapa(h.cliente || "Sem cliente") + (h.time ? ' <span class="quem">· time</span>' : "") + '</td>' +
+    '<td class="cli">' + escapa(h.cliente || "Sem cliente") + (h.time ? ' <span class="quem">· time</span>' : "") + pend(h) + '</td>' +
     '<td class="num">' + (h.pecas || 0) + '</td>' +
     '<td class="quem">' + escapa(h.quem || "—") + '</td>' +
     '<td class="qnd">' + dataHora(h.quando) + '</td>' +
-    '<td class="x"><button type="button" data-id="' + escapa(h.quando) + '" aria-label="Remover">×</button></td></tr>').join("");
+    '<td class="x">' + (h.pendente ? "" : '<button type="button" data-id="' + idDe(h) + '" aria-label="Remover">×</button>') + '</td></tr>').join("");
   $("#h-os").innerHTML = linhasOS;
   $("#h-os-vazio").hidden = os.length > 0;
 
-  const linhasRec = rec.slice(0, 25).map(h =>
+  const linhasRec = rec.slice(0, 50).map(h =>
     '<tr><td class="num">' + escapa(h.numero) + '</td>' +
-    '<td class="cli">' + escapa(h.pagador || "Sem nome") + (h.vias > 1 ? ' <span class="quem">· ' + h.vias + ' vias</span>' : "") + '</td>' +
+    '<td class="cli">' + escapa(h.pagador || "Sem nome") + (h.vias > 1 ? ' <span class="quem">· ' + h.vias + ' vias</span>' : "") + pend(h) + '</td>' +
     '<td class="val">R$ ' + reais(h.valor) + '</td>' +
     '<td class="quem">' + escapa(h.quem || "—") + '</td>' +
     '<td class="qnd">' + dataHora(h.quando) + '</td>' +
-    '<td class="x"><button type="button" data-id="' + escapa(h.quando) + '" aria-label="Remover">×</button></td></tr>').join("");
+    '<td class="x">' + (h.pendente ? "" : '<button type="button" data-id="' + idDe(h) + '" aria-label="Remover">×</button>') + '</td></tr>').join("");
   $("#h-rec").innerHTML = linhasRec;
   $("#h-rec-vazio").hidden = rec.length > 0;
 
-  document.querySelectorAll(".hist .x button").forEach(b => b.addEventListener("click", () => {
-    historico = historico.filter(h => h.quando !== b.dataset.id);
-    salvarHist(); renderVisao();
+  document.querySelectorAll(".hist .x button").forEach(b => b.addEventListener("click", async () => {
+    const id = b.dataset.id;
+    if (modoHist === "nuvem") {
+      const h = historico.find(x => x.id === id);
+      if (!confirm("Remover " + (h && h.tipo === "recibo" ? "o recibo " : "a O.S. ") + (h ? h.numero : "") + " do histórico de todos?")) return;
+      try { await api("DELETE", "?id=" + encodeURIComponent(id)); historico = historico.filter(x => x.id !== id); renderVisao(); }
+      catch (e) { say("Não consegui remover: " + (e.msg || "sem conexão") + ".", "err"); }
+    } else {
+      histLocal = histLocal.filter(h => h.quando !== id);
+      salvarHist(); historico = histLocal; renderVisao();
+    }
   }));
 }
-$("#h-limpar").addEventListener("click", () => {
-  if (!historico.length) { say("O histórico já está vazio."); return; }
-  historico = []; salvarHist(); renderVisao();
+$("#h-limpar").addEventListener("click", async () => {
+  if (!historico.filter(h => !h.pendente).length) { say("O histórico já está vazio."); return; }
+  if (modoHist === "nuvem") {
+    if (!confirm("Apagar TODO o histórico do banco? Isso some para todos os computadores e não dá para desfazer.")) return;
+    try { await api("DELETE", "?tudo=1"); historico = historico.filter(h => h.pendente); renderVisao(); say("Histórico limpo.", "ok"); }
+    catch (e) { say("Não consegui limpar: " + (e.msg || "sem conexão") + ".", "err"); }
+    return;
+  }
+  histLocal = []; salvarHist(); historico = histLocal; renderVisao();
   say("Histórico limpo.");
 });
+document.addEventListener("click", e => { if (e.target && e.target.id === "h-status" && modoHist === "senha") pedirSenha(""); });
+
 renderVisao();
+carregarNuvem();
+window.addEventListener("online", () => { if (modoHist === "nuvem") enviarFila(); });
+setInterval(() => { if (modoHist === "nuvem" && fila.length) enviarFila(); }, 30000);
+/* ao abrir a Visão Geral, puxa o que os outros computadores lançaram */
+const _irParaOrig = irPara;
+irPara = function (v) { _irParaOrig(v); if (v === "visao" && modoHist === "nuvem") carregarNuvem(); };
 
 window.renderVisao=renderVisao;
 var _v=lido('amz_view');irPara(TITULOS[_v]&&(_v!=='visao'||MOSTRAR_VISAO)?_v:'os');

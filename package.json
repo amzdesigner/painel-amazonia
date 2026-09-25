@@ -1,0 +1,8 @@
+{
+  "name": "painel-amazonia",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.0"
+  }
+}
