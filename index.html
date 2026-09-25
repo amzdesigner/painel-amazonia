@@ -73,7 +73,7 @@ body{color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans
 .cols > *,.card,.card .body,.preview-wrap{min-width:0}
 .f{display:flex;flex-direction:column;gap:6px}
 .f > span,.f > .lb{font-size:12.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
-input[type=text],input[type=date],textarea{font-family:inherit;font-size:16px;line-height:1.3;color:var(--text);background:var(--field);border:1.5px solid var(--field-line);border-radius:9px;padding:12px;width:100%;min-height:48px;-webkit-appearance:none;appearance:none;display:block}
+input[type=text],input[type=date],input[type=datetime-local],input[type=search],input[type=password],textarea{font-family:inherit;font-size:16px;line-height:1.3;color:var(--text);background:var(--field);border:1.5px solid var(--field-line);border-radius:9px;padding:12px;width:100%;min-height:48px;-webkit-appearance:none;appearance:none;display:block}
 textarea{min-height:76px;resize:vertical}
 input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .hint{color:var(--muted);font-size:12.5px}
@@ -155,6 +155,66 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
 
 /* ============ visão geral ============ */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
+.kpi.atr b{color:#e04848}
+.h-filtros{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:var(--card-2);color:var(--muted);border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.seg button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+#h-busca{flex:1;min-width:180px;max-width:320px;min-height:40px;padding:8px 12px;font-size:14px}
+.hist .ent{white-space:nowrap;font-variant-numeric:tabular-nums}
+.hist tr.atrasada td{background:rgba(224,72,72,.10)}
+.hist tr.atrasada .ent{color:#e04848;font-weight:700}
+.hist tr.entregue td{opacity:.6}
+.hist tr.destaque td{background:var(--accent-soft);transition:background .6s}
+.hist select.st{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:var(--card-2);color:var(--text);cursor:pointer}
+.hist select.st.producao{color:#d98a00}.hist select.st.pronta{color:#2e8fe0}.hist select.st.entregue{color:#2e9e5b}
+.hist .abre{width:74px}
+.hist .abre button{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.orc-tbl{min-width:640px}
+.orc-tbl .opreco{width:120px}.orc-tbl .ounid{width:90px}.orc-tbl .oqtd{width:80px}.orc-tbl .ototal{width:130px}
+.orc-tbl td.ototal{padding:0 12px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.orc-tbl input.num{text-align:right;font-variant-numeric:tabular-nums}
+.orc-somas{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:16px;align-items:end}
+.orc-somas>div,.orc-somas>label{display:flex;flex-direction:column;gap:6px;background:var(--card-2);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.orc-somas span{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.orc-somas b{font-size:20px;font-variant-numeric:tabular-nums}
+.orc-somas input{font-size:18px;font-weight:700;padding:4px 0;border:0;background:transparent;color:var(--text);width:100%}
+.orc-somas .tot{background:var(--accent);border-color:var(--accent)}
+.orc-somas .tot span,.orc-somas .tot b{color:#fff}
+.c-tipo{margin-bottom:6px}
+.c-sec{margin:18px 0 8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.grid-c{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px 14px}
+.grid-c .dup{grid-column:span 2}
+.c-linha{display:flex;gap:8px}.c-linha input{flex:1;min-width:0}.c-linha .btn{white-space:nowrap}
+#c-busca{margin-bottom:6px}
+.hist .doc{white-space:nowrap;font-variant-numeric:tabular-nums}
+.o-cli-wrap{position:relative}
+.o-sug{position:absolute;left:0;right:0;top:100%;z-index:30;margin-top:4px;background:var(--card);border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow);max-height:300px;overflow:auto}
+.o-sug button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:10px 14px;font:inherit;cursor:pointer}
+.o-sug button:last-child{border-bottom:0}
+.o-sug button:hover,.o-sug button.on{background:var(--accent-soft)}
+.o-sug small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.o-sug .novo{color:var(--accent);font-weight:700}
+.o-cli-info{margin:-4px 0 12px;padding:10px 12px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:9px;font-size:13px;color:var(--muted);line-height:1.5}
+.o-cli-info b{color:var(--text)}
+.o-cli-info button{border:0;background:transparent;color:var(--accent);font:inherit;font-weight:700;cursor:pointer;padding:0;margin-left:6px}
+@media (max-width:640px){.grid-c .dup{grid-column:auto}}
+.top-acoes{display:flex;gap:8px;margin-left:auto;margin-right:12px}
+.top-acoes .btn{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:8px 14px;font-size:14px;white-space:nowrap}
+.top-acoes svg{width:17px;height:17px;flex:none}
+.top-acoes #os-consultar.on,.top-acoes #cli-consultar.on,.top-acoes #orc-consultar.on{border-color:var(--accent);color:var(--accent)}
+@media (max-width:760px){.top-acoes .btn span{display:none}.top-acoes .btn{padding:8px 11px}}
+.orc-form-topo{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border:1px solid var(--accent);border-radius:14px;background:var(--accent-soft)}
+.orc-form-topo h2{margin:0;font-size:18px}
+.orc-form-topo p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+#os-form.descendo,#cli-form.descendo,#orc-form.descendo{animation:orcDesce .42s cubic-bezier(.2,.8,.2,1) both;transform-origin:top center}
+@keyframes orcDesce{from{opacity:0;transform:translateY(-60px)}to{opacity:1;transform:none}}
+#os-lista.subindo,#cli-lista.subindo,#orc-lista.subindo{animation:orcSobe .3s ease-out both}
+@keyframes orcSobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.o-filtros{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:10px}
+select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field);border:1.5px solid var(--field-line);border-radius:9px;padding:12px;min-height:48px;width:100%}
+.o-resumo{margin:6px 2px 12px;font-size:13.5px;color:var(--muted)}
+.o-resumo b{color:var(--text)}
 .h-status{grid-column:1/-1;margin:-4px 2px 0;font-size:12.5px;font-weight:600;color:var(--muted)}
 .h-status.ok{color:#2e9e5b}.h-status.warn{color:#d98a00;cursor:pointer;text-decoration:underline}.h-status.off{color:var(--muted)}
 #tela-senha{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px}
@@ -302,6 +362,8 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
     <nav class="nav">
       <button type="button" data-view="visao" id="nav-visao" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v4h-7zM13 11h7v9h-7zM4 14h7v6H4z"/></svg><span>VISÃO GERAL</span></button>
       <button type="button" class="on" data-view="os" id="nav-os"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 5v5h3v11h10V10h3V5l-4-2"/><path d="M9 3a3 3 0 0 0 6 0"/></svg><span>O.S CAMISA</span></button>
+      <button type="button" data-view="cli" id="nav-cli"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18.5 14.5A6.5 6.5 0 0 1 21.5 20"/></svg><span>CLIENTES</span></button>
+      <button type="button" data-view="orc" id="nav-orc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>ORÇAMENTO</span></button>
       <button type="button" data-view="recibo" id="nav-recibo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v18l2.5-1.6L10 21l2-1.6L14 21l2.5-1.6L19 21V3H5Z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>RECIBO</span></button>
       <button type="button" data-view="time" id="nav-time" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 10h18M3 15h18M9 5v14M15 5v14"/></svg><span>LISTA DO TIME</span></button>
     </nav>
@@ -313,6 +375,18 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
     <header class="top">
       <button class="icobtn" type="button" id="menu" aria-label="Abrir ou fechar o menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <h1 id="titulo">O.S Camisa</h1>
+      <div class="top-acoes" id="top-os" hidden>
+        <button class="btn" type="button" id="os-consultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Consultar O.S.</span></button>
+        <button class="btn primary" type="button" id="os-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Nova O.S.</span></button>
+      </div>
+      <div class="top-acoes" id="top-cli" hidden>
+        <button class="btn" type="button" id="cli-consultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Consultar cliente</span></button>
+        <button class="btn primary" type="button" id="cli-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo cliente</span></button>
+      </div>
+      <div class="top-acoes" id="top-orc" hidden>
+        <button class="btn" type="button" id="orc-consultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Consultar orçamento</span></button>
+        <button class="btn primary" type="button" id="orc-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo orçamento</span></button>
+      </div>
       <div class="toggle">
         <button class="switch" type="button" id="tema" role="switch" aria-checked="true" aria-label="Alternar tema claro e escuro"><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="temaIco"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></i></button>
       </div>
@@ -326,41 +400,45 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
         <div class="kpis">
           <div class="kpi"><span>O.S. no mês</span><b id="k-os">0</b></div>
           <div class="kpi"><span>Peças no mês</span><b id="k-pecas">0</b></div>
-          <div class="kpi"><span>Recibos no mês</span><b id="k-rec">0</b></div>
-          <div class="kpi"><span>Valor em recibos no mês</span><b id="k-valor" class="dim">R$ 0,00</b></div>
+          <div class="kpi"><span>Em produção</span><b id="k-prod">0</b></div>
+          <div class="kpi atr"><span>Entregas atrasadas</span><b id="k-atr">0</b></div>
         </div>
         <p id="h-status" class="h-status">Conectando…</p>
 
         <section class="card">
-          <h2>O.S. de camisa criadas</h2>
+          <h2>Controle das O.S.</h2>
           <div class="body">
+            <div class="h-filtros">
+              <div class="seg" id="h-filtro" role="tablist" aria-label="Filtrar O.S.">
+                <button type="button" data-f="abertas" class="on">Em aberto</button>
+                <button type="button" data-f="producao">Em produção</button>
+                <button type="button" data-f="pronta">Prontas</button>
+                <button type="button" data-f="entregue">Entregues</button>
+                <button type="button" data-f="atrasadas">Atrasadas</button>
+                <button type="button" data-f="todas">Todas</button>
+              </div>
+              <input type="search" id="h-busca" placeholder="Buscar cliente ou nº da O.S." autocomplete="off">
+            </div>
             <div class="tblwrap">
               <table class="tbl hist">
-                <thead><tr><th>O.S.</th><th>Cliente</th><th>Peças</th><th>Criada por</th><th>Data e hora</th><th class="x"></th></tr></thead>
+                <thead><tr><th>O.S.</th><th>Cliente</th><th>Peças</th><th>Entrega</th><th>Status</th><th>Criada por</th><th>Criada em</th><th class="x"></th></tr></thead>
                 <tbody id="h-os"></tbody>
               </table>
               <div class="vazio" id="h-os-vazio">Nenhuma O.S. gerada ainda. Cada PDF baixado entra aqui.</div>
             </div>
-          </div>
-        </section>
-
-        <section class="card">
-          <h2>Recibos emitidos</h2>
-          <div class="body">
-            <div class="tblwrap">
-              <table class="tbl hist">
-                <thead><tr><th>Recibo</th><th>Pagador</th><th>Valor</th><th>Criado por</th><th>Data e hora</th><th class="x"></th></tr></thead>
-                <tbody id="h-rec"></tbody>
-              </table>
-              <div class="vazio" id="h-rec-vazio">Nenhum recibo gerado ainda.</div>
-            </div>
-            <div class="acts"><button class="btn danger" type="button" id="h-limpar">Limpar histórico</button></div>
+            <p class="hint">Troque o status conforme a O.S. anda: <b>Em produção</b> → <b>Pronta</b> → <b>Entregue</b>. Entregas vencidas e ainda não entregues aparecem em vermelho.</p>
+            <div class="acts"><button class="btn danger" type="button" id="h-limpar">Limpar O.S. do histórico</button></div>
           </div>
         </section>
       </div>
 
       <!-- ================= O.S CAMISA ================= -->
-      <div id="view-os" class="cols duas" hidden>
+      <div id="view-os" class="cols" hidden>
+       <div id="os-form" class="cols duas" hidden>
+        <div class="orc-form-topo wide">
+          <div><h2 id="os-form-titulo">Nova O.S.</h2><p id="os-form-sub">Preencha a O.S. e baixe o PDF. Ela entra na lista e no controle da Visão Geral.</p></div>
+          <button class="btn" type="button" id="os-fechar">Voltar para a lista</button>
+        </div>
         <section class="card">
           <h2>Cliente e material</h2>
           <div class="body">
@@ -440,6 +518,38 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
             <label class="f"><span>Observações</span><textarea id="obs" placeholder="Pagamento, contato, detalhes de acabamento…"></textarea></label>
           </div>
         </section>
+       </div>
+
+        <section class="card" id="os-lista">
+          <h2>O.S. de camisa feitas</h2>
+          <div class="body">
+            <div class="h-filtros">
+              <div class="seg" id="os-periodo" role="tablist" aria-label="Período">
+                <button type="button" data-p="hoje">Hoje</button>
+                <button type="button" data-p="7d">Últimos 7 dias</button>
+                <button type="button" data-p="mes" class="on">Este mês</button>
+                <button type="button" data-p="todos">Todos</button>
+              </div>
+            </div>
+            <div class="o-filtros">
+              <label class="f"><span>De</span><input type="datetime-local" id="os-de"></label>
+              <label class="f"><span>Até</span><input type="datetime-local" id="os-ate"></label>
+              <label class="f"><span>Status</span><select id="os-st" class="sel">
+                <option value="">Todos</option><option value="producao">Em produção</option><option value="pronta">Prontas</option><option value="entregue">Entregues</option><option value="atrasadas">Atrasadas</option>
+              </select></label>
+              <label class="f o-busca"><span>Buscar</span><input type="search" id="os-busca" placeholder="Cliente, nº da O.S. ou quem fez" autocomplete="off"></label>
+            </div>
+            <p class="o-resumo" id="os-resumo"></p>
+            <div class="tblwrap">
+              <table class="tbl hist">
+                <thead><tr><th>O.S.</th><th>Cliente</th><th>Peças</th><th>Entrega</th><th>Status</th><th>Feita por</th><th>Data e hora</th><th class="abre"></th><th class="x"></th></tr></thead>
+                <tbody id="os-hist"></tbody>
+              </table>
+              <div class="vazio" id="os-hist-vazio">Nenhuma O.S. feita ainda. Clique em “Nova O.S.” para começar.</div>
+            </div>
+            <p class="hint">“Abrir” carrega a O.S. no formulário para reimprimir ou ajustar; baixar o PDF de novo atualiza a mesma O.S. A imagem anexada em “Arte da camisa” não fica guardada — anexe de novo se precisar.</p>
+          </div>
+        </section>
       </div>
 
       <!-- ================= LISTA DO TIME ================= -->
@@ -480,6 +590,155 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
       </div>
 
       <!-- ================= RECIBO ================= -->
+      <!-- ================= CLIENTES ================= -->
+      <div id="view-cli" class="cols" hidden>
+       <div id="cli-form" class="cols" hidden>
+        <div class="orc-form-topo">
+          <div><h2 id="c-titulo">Novo cliente</h2><p id="c-sub">Preencha os dados e salve. O cliente aparece na busca do orçamento.</p></div>
+          <button class="btn" type="button" id="cli-fechar">Voltar para a lista</button>
+        </div>
+        <section class="card">
+          <h2>Dados do cliente</h2>
+          <div class="body">
+            <div class="seg c-tipo" id="c-tipo" role="radiogroup" aria-label="Tipo de cliente">
+              <button type="button" data-t="pj" class="on">Pessoa jurídica</button>
+              <button type="button" data-t="pf">Pessoa física</button>
+            </div>
+            <p class="c-sec">Identificação</p>
+            <div class="grid-c">
+              <label class="f"><span>Nome do cliente *</span><input type="text" id="c-nome" autocomplete="off" placeholder="Como vocês chamam o cliente"></label>
+              <div class="f c-doc dup"><span id="c-doc-rot">CNPJ</span><div class="c-linha"><input type="text" id="c-documento" inputmode="numeric" autocomplete="off" placeholder="00.000.000/0000-00"><button class="btn" type="button" id="c-buscar-cnpj">Buscar CNPJ</button></div></div>
+              <label class="f pj"><span>Razão social</span><input type="text" id="c-razao" autocomplete="off"></label>
+              <label class="f pj"><span>Nome fantasia</span><input type="text" id="c-fantasia" autocomplete="off"></label>
+              <label class="f pj"><span>Inscrição estadual</span><input type="text" id="c-ie" autocomplete="off" placeholder="Ou ISENTO"></label>
+              <label class="f pj"><span>Inscrição municipal</span><input type="text" id="c-im" autocomplete="off"></label>
+            </div>
+            <p class="c-sec">Endereço</p>
+            <div class="grid-c">
+              <div class="f"><span>CEP</span><div class="c-linha"><input type="text" id="c-cep" inputmode="numeric" autocomplete="off" placeholder="00000-000"><button class="btn" type="button" id="c-buscar-cep">Buscar</button></div></div>
+              <label class="f dup"><span>Endereço (rua, avenida)</span><input type="text" id="c-logradouro" autocomplete="off"></label>
+              <label class="f"><span>Número</span><input type="text" id="c-numero" autocomplete="off"></label>
+              <label class="f"><span>Complemento</span><input type="text" id="c-complemento" autocomplete="off"></label>
+              <label class="f"><span>Bairro</span><input type="text" id="c-bairro" autocomplete="off"></label>
+              <label class="f"><span>Cidade</span><input type="text" id="c-cidade" autocomplete="off"></label>
+              <label class="f"><span>UF</span><input type="text" id="c-uf" autocomplete="off" maxlength="2"></label>
+            </div>
+            <p class="c-sec">Contato</p>
+            <div class="grid-c">
+              <label class="f"><span>Telefone 1</span><input type="text" id="c-tel1" autocomplete="off" inputmode="tel" placeholder="(92) 99999-9999"></label>
+              <label class="f"><span>Telefone 2</span><input type="text" id="c-tel2" autocomplete="off" inputmode="tel" placeholder="(92) 3333-3333"></label>
+              <label class="f"><span>E-mail</span><input type="text" id="c-email" autocomplete="off" inputmode="email"></label>
+              <label class="f"><span>Pessoa de contato</span><input type="text" id="c-contato" autocomplete="off" placeholder="Com quem falar"></label>
+            </div>
+            <label class="f"><span>Observações</span><textarea id="c-obs" rows="2" placeholder="Condições combinadas, preferências, etc."></textarea></label>
+            <div class="acts">
+              <button class="btn" type="button" id="c-limpar">Limpar</button>
+              <button class="btn primary" type="button" id="c-salvar">Salvar cliente</button>
+            </div>
+          </div>
+        </section>
+       </div>
+
+        <section class="card" id="cli-lista">
+          <h2>Consulta de clientes</h2>
+          <div class="body">
+            <input type="search" id="c-busca" placeholder="Buscar por nome, razão social, CNPJ/CPF, cidade ou telefone" autocomplete="off">
+            <p class="hint" id="c-info"></p>
+            <div class="tblwrap">
+              <table class="tbl hist">
+                <thead><tr><th>Cliente</th><th>CNPJ / CPF</th><th>Telefone</th><th>Cidade</th><th class="abre"></th><th class="abre"></th><th class="x"></th></tr></thead>
+                <tbody id="c-lista"></tbody>
+              </table>
+              <div class="vazio" id="c-vazio">Nenhum cliente cadastrado ainda. Clique em “Novo cliente” para começar.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= ORÇAMENTO ================= -->
+      <div id="view-orc" class="cols" hidden>
+       <div id="orc-form" class="cols duas" hidden>
+        <div class="orc-form-topo wide">
+          <div><h2 id="orc-form-titulo">Novo orçamento</h2><p id="orc-form-sub">Preencha os dados e baixe o PDF. Ele entra na lista de orçamentos.</p></div>
+          <button class="btn" type="button" id="orc-fechar">Voltar para a lista</button>
+        </div>
+        <section class="card">
+          <h2>Dados do orçamento</h2>
+          <div class="body">
+            <div class="f o-cli-wrap"><span>Cliente</span><input type="text" id="o-cliente" placeholder="Digite para buscar nos clientes cadastrados" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="o-sug"><div class="o-sug" id="o-sug" role="listbox" hidden></div></div>
+            <div class="o-cli-info" id="o-cli-info" hidden></div>
+            <div class="grid2">
+              <label class="f"><span>Nº do orçamento</span><input type="text" id="o-numero" inputmode="numeric" autocomplete="off"></label>
+              <label class="f"><span>Data</span><input type="date" id="o-data"></label>
+            </div>
+            <div class="grid2">
+              <label class="f"><span>Prazo de produção</span><input type="text" id="o-prazo" placeholder="7 dias úteis" autocomplete="off"></label>
+              <label class="f"><span>Feito por</span><input type="text" id="o-feitopor" placeholder="Quem está fazendo o orçamento" autocomplete="off"></label>
+            </div>
+            <p class="hint" id="o-num-info">O número continua a sequência da gráfica. Dá para trocar na mão.</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Condições e informações</h2>
+          <div class="body">
+            <label class="f"><span>Condições de pagamento</span><textarea id="o-cond" rows="3"></textarea></label>
+            <label class="f"><span>Informações adicionais</span><textarea id="o-info" rows="8"></textarea></label>
+            <div class="acts"><button class="btn" type="button" id="o-padrao">Voltar textos padrão</button></div>
+            <p class="hint">Os textos que você editar aqui ficam salvos para os próximos orçamentos.</p>
+          </div>
+        </section>
+
+        <section class="card wide">
+          <h2>Produtos e serviços</h2>
+          <div class="body">
+            <div class="tblwrap">
+              <table class="tbl orc-tbl">
+                <thead><tr><th class="idx">#</th><th>Descrição</th><th class="opreco">Preço (R$)</th><th class="ounid">Unidade</th><th class="oqtd">Qtd.</th><th class="ototal">Total</th><th class="cdel"></th></tr></thead>
+                <tbody id="o-body"></tbody>
+              </table>
+              <div class="vazio" id="o-vazio">Nenhum item. Clique em “+ Item” para começar.</div>
+            </div>
+            <div class="acts"><button class="btn" type="button" id="o-add">+ Item</button></div>
+            <div class="orc-somas">
+              <div><span>Subtotal</span><b id="o-subtotal">R$ 0,00</b></div>
+              <label><span>Desconto (R$)</span><input type="text" id="o-desconto" inputmode="decimal" placeholder="0,00" autocomplete="off"></label>
+              <div class="tot"><span>Total</span><b id="o-total">R$ 0,00</b></div>
+            </div>
+          </div>
+        </section>
+
+       </div>
+
+        <section class="card" id="orc-lista">
+          <h2>Orçamentos feitos</h2>
+          <div class="body">
+            <div class="h-filtros">
+              <div class="seg" id="o-periodo" role="tablist" aria-label="Período">
+                <button type="button" data-p="hoje">Hoje</button>
+                <button type="button" data-p="7d">Últimos 7 dias</button>
+                <button type="button" data-p="mes" class="on">Este mês</button>
+                <button type="button" data-p="todos">Todos</button>
+              </div>
+            </div>
+            <div class="o-filtros">
+              <label class="f"><span>De</span><input type="datetime-local" id="o-de"></label>
+              <label class="f"><span>Até</span><input type="datetime-local" id="o-ate"></label>
+              <label class="f o-busca"><span>Buscar</span><input type="search" id="o-busca" placeholder="Cliente, nº ou quem fez" autocomplete="off"></label>
+            </div>
+            <p class="o-resumo" id="o-resumo"></p>
+            <div class="tblwrap">
+              <table class="tbl hist">
+                <thead><tr><th>Nº</th><th>Cliente</th><th>Total</th><th>Feito por</th><th>Data e hora</th><th class="abre"></th><th class="x"></th></tr></thead>
+                <tbody id="o-hist"></tbody>
+              </table>
+              <div class="vazio" id="o-hist-vazio">Nenhum orçamento feito ainda. Clique em “Novo orçamento” para começar.</div>
+            </div>
+            <p class="hint">“Abrir” carrega o orçamento no formulário para reimprimir ou ajustar. Se baixar o PDF sem trocar o número, ele atualiza o mesmo orçamento.</p>
+          </div>
+        </section>
+      </div>
+
       <div id="view-recibo" class="cols duas" hidden>
         <section class="card">
           <h2>Dados do recibo</h2>
@@ -535,6 +794,11 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
     <button class="btn" type="button" id="clear">Limpar</button>
     <button class="btn primary" type="button" id="gen">Baixar PDF</button>
   </div>
+  <div class="in" id="bar-orc" hidden>
+    <span class="cnt">Total<b id="o-total2">R$ 0,00</b></span>
+    <button class="btn" type="button" id="o-limpar">Limpar</button>
+    <button class="btn primary" type="button" id="o-pdf">Baixar PDF</button>
+  </div>
   <div class="in" id="bar-recibo" hidden>
     <span class="cnt">Recibos<b id="r-count">0</b></span>
     <button class="btn" type="button" id="r-print">Imprimir</button>
@@ -575,15 +839,18 @@ const shell = document.getElementById("shell");
    O histórico segue sendo gravado nos bastidores. */
 const MOSTRAR_VISAO = true;
 document.getElementById("nav-visao").hidden = !MOSTRAR_VISAO;
-const TITULOS = { visao: "Visão Geral", os: "O.S Camisa", time: "Lista do time", recibo: "Recibo" };
+const TITULOS = { visao: "Visão Geral", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo" };
 function irPara(v) {
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.view === v));
   document.getElementById("view-visao").hidden = v !== "visao";
   document.getElementById("view-os").hidden = v !== "os";
   document.getElementById("view-time").hidden = v !== "time";
   document.getElementById("view-recibo").hidden = v !== "recibo";
-  document.querySelector(".bar").hidden = v === "visao";
-  document.getElementById("bar-os").hidden = v === "recibo" || v === "visao";
+  document.getElementById("view-orc").hidden = v !== "orc";
+  document.getElementById("view-cli").hidden = v !== "cli";
+  document.querySelector(".bar").hidden = v === "visao" || v === "cli";
+  document.getElementById("bar-os").hidden = v === "recibo" || v === "visao" || v === "orc";
+  document.getElementById("bar-orc").hidden = v !== "orc";
   document.getElementById("bar-recibo").hidden = v !== "recibo";
   document.getElementById("titulo").textContent = TITULOS[v];
   shell.classList.remove("open");
@@ -591,6 +858,12 @@ function irPara(v) {
   window.scrollTo(0, 0);
   if (v === "recibo" && window.reciboAoAbrir) window.reciboAoAbrir();
   if (v === "visao" && window.renderVisao) window.renderVisao();
+  document.getElementById("top-orc").hidden = v !== "orc";
+  document.getElementById("top-cli").hidden = v !== "cli";
+  document.getElementById("top-os").hidden = v !== "os";
+  if (v === "os" && window.osAoAbrir) window.osAoAbrir();
+  if (v === "orc" && window.orcAoAbrir) window.orcAoAbrir();
+  if (v === "cli" && window.cliAoAbrir) window.cliAoAbrir();
   guardar("amz_view", v);
 }
 document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => irPara(b.dataset.view)));
@@ -1051,7 +1324,7 @@ $("#gen").addEventListener("click", async () => {
     const bytes = await buildOS();
     const blob = new Blob([bytes], { type: "application/pdf" });
     const name = fileName();
-    registrar("os", {
+    registrarOS({
       cliente: $("#cliente").value.trim(),
       quem: $("#feitopor").value.trim(),
       pecas: SIZES.reduce((a, s) => a + qty(s), 0),
@@ -1060,7 +1333,7 @@ $("#gen").addEventListener("click", async () => {
         narede: $("#narede").value, entregar: $("#entregar").value,
         tecido: $("#tecido").value, gola: $("#gola").value, corgola: $("#corgola").value, obs: $("#obs").value,
         tamanhos: SIZES.reduce((o, s) => (qty(s) ? (o[s] = qty(s), o) : o), {}),
-        modelosRC: rcLigado ? rcSel.filter(id => totalModelo(id) > 0).map(id => ({ nome: (modeloRC(id) || {}).nome, qtd: rcQtd[id] })) : [],
+        modelosRC: rcLigado ? rcSel.filter(id => totalModelo(id) > 0).map(id => ({ id, nome: (modeloRC(id) || {}).nome, qtd: rcQtd[id] })) : [],
         time: uniformeLigado ? time.filter(j => j.nome || j.numero || j.tamanho) : []
       }
     });
@@ -1861,22 +2134,61 @@ function proximoNumero(tipo, ano) {
   const doAno = histLocal.filter(h => h.tipo === tipo && new Date(h.quando).getFullYear() === ano);
   return String(doAno.length + 1).padStart(3, "0") + "/" + ano;
 }
+/* versão enxuta de um registro para o histórico local (sem os dados completos, exceto orçamento) */
+function itemLocal(tipo, dados, quando) {
+  const d = Object.assign({}, dados);
+  const extra = d.dados || {};
+  if (tipo !== "orcamento" && tipo !== "os") delete d.dados;
+  return Object.assign(d, {
+    tipo, quando,
+    numero: dados.numero || proximoNumero(tipo, new Date(quando).getFullYear()),
+    status: "producao",
+    entrega: extra.entregar || ""
+  });
+}
 function registrar(tipo, dados) {
+  dados = JSON.parse(JSON.stringify(dados)); /* cópia: o formulário pode mudar depois */
   const agora = new Date();
   if (modoHist === "local") {
-    const d = Object.assign({}, dados); delete d.dados;
-    histLocal.unshift(Object.assign({ tipo, numero: proximoNumero(tipo, agora.getFullYear()), quando: agora.toISOString() }, d));
+    histLocal.unshift(itemLocal(tipo, dados, agora.toISOString()));
     histLocal = histLocal.slice(0, 300);
     salvarHist(); historico = histLocal; renderVisao();
-    return;
+    return agora.toISOString();
   }
   /* nuvem (ou ainda verificando / sem senha): entra na fila e sobe assim que possível */
   const temp = "tmp_" + agora.getTime() + "_" + Math.random().toString(36).slice(2, 6);
   fila.push(Object.assign({ tipo, _temp: temp, _quando: agora.toISOString() }, dados));
   salvarFila();
-  historico.unshift(Object.assign({ tipo, id: temp, numero: "…", quando: agora.toISOString(), pendente: true }, dados));
+  historico.unshift(Object.assign({}, dados, {
+    tipo, id: temp, numero: dados.numero || "…", quando: agora.toISOString(), pendente: true,
+    status: "producao", entrega: (dados.dados && dados.dados.entregar) || ""
+  }));
   renderVisao();
   enviarFila();
+  return temp;
+}
+/* muda status / cliente / valor / dados de um registro já existente */
+async function atualizarRegistro(id, campos) {
+  campos = JSON.parse(JSON.stringify(campos));
+  const junta = h => Object.assign(h, campos, campos.dados && campos.dados.entregar ? { entrega: campos.dados.entregar } : {});
+  if (String(id).startsWith("tmp_")) {
+    const f = fila.find(x => x._temp === id); if (f) { Object.assign(f, campos); salvarFila(); }
+    const h = historico.find(x => x.id === id); if (h) junta(h);
+    renderVisao(); return true;
+  }
+  if (modoHist === "local") {
+    const h = histLocal.find(x => (x.id || x.quando) === id);
+    if (h) { junta(h); salvarHist(); }
+    historico = histLocal; renderVisao(); return true;
+  }
+  try {
+    const r = await api("PATCH", "?id=" + encodeURIComponent(id), campos);
+    historico = historico.map(x => x.id === id ? r.item : x);
+    renderVisao(); return true;
+  } catch (e) {
+    say("Não consegui salvar a alteração: " + (e.msg || "sem conexão") + ".", "err");
+    renderVisao(); return false;
+  }
 }
 let enviando = false;
 async function enviarFila() {
@@ -1890,6 +2202,8 @@ async function enviarFila() {
       fila.shift(); salvarFila();
       historico = historico.filter(h => h.id !== item._temp);
       historico.unshift(r.item);
+      if (window.orcIdTrocado) window.orcIdTrocado(item._temp, r.item.id);
+      if (window.osIdTrocado) window.osIdTrocado(item._temp, r.item.id);
     }
   } catch (e) {
     if (e.status === 401) pedirSenha("A senha mudou. Digite a senha da equipe de novo.");
@@ -1900,9 +2214,8 @@ async function enviarFila() {
 function filaParaLocal() {
   if (!fila.length) return;
   fila.forEach(it => {
-    const d = Object.assign({}, it); delete d._temp; delete d._quando; delete d.dados;
-    const q = new Date(it._quando);
-    histLocal.unshift(Object.assign(d, { numero: proximoNumero(it.tipo, q.getFullYear()), quando: it._quando }));
+    const d = Object.assign({}, it); delete d._temp; delete d._quando;
+    histLocal.unshift(itemLocal(it.tipo, d, it._quando));
   });
   fila = []; salvarFila(); salvarHist();
 }
@@ -1915,11 +2228,13 @@ async function carregarNuvem() {
     fecharSenha();
     renderVisao();
     enviarFila();
+    if (window.carregarClientes) carregarClientes();
   } catch (e) {
     if (e.semApi || !e.status) { modoHist = "local"; filaParaLocal(); historico = histLocal; }
     else if (e.status === 401) { modoHist = "senha"; pedirSenha(senhaPainel ? "Senha incorreta." : ""); }
     else { modoHist = "local"; filaParaLocal(); historico = histLocal; say("Banco indisponível: " + (e.msg || "erro") + ". Salvando só neste computador por enquanto.", "err"); }
     renderVisao();
+    if (window.carregarClientes && modoHist === "local") carregarClientes();
   }
 }
 
@@ -1974,62 +2289,94 @@ function statusHist() {
   el.textContent = t; el.className = "h-status " + cls;
 }
 
+const ST_NOME = { producao: "Em produção", pronta: "Pronta", entregue: "Entregue" };
+let filtroOS = "abertas";
+function hojeISO() { return iso(new Date()); }
+function atrasada(h) { return h.entrega && h.entrega < hojeISO() && (h.status || "producao") !== "entregue"; }
+function dataCurta(v) { if (!v) return "—"; const p = v.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; }
+
 function renderVisao() {
   statusHist();
   const agora = new Date(), mes = agora.getMonth(), ano = agora.getFullYear();
   const doMes = h => { const d = new Date(h.quando); return d.getMonth() === mes && d.getFullYear() === ano; };
-  const os = historico.filter(h => h.tipo === "os"), rec = historico.filter(h => h.tipo === "recibo");
-  const osMes = os.filter(doMes), recMes = rec.filter(doMes);
+  const os = historico.filter(h => h.tipo === "os");
+  const osMes = os.filter(doMes);
   $("#k-os").textContent = osMes.length;
   $("#k-pecas").textContent = osMes.reduce((a, h) => a + (h.pecas || 0), 0);
-  $("#k-rec").textContent = recMes.reduce((a, h) => a + (h.vias || 1), 0);
-  $("#k-valor").textContent = "R$ " + reais(recMes.reduce((a, h) => a + (Number(h.valor) || 0), 0));
+  $("#k-prod").textContent = os.filter(h => (h.status || "producao") === "producao").length;
+  $("#k-atr").textContent = os.filter(atrasada).length;
 
+  const busca = semAcentoTxt(($("#h-busca").value || "").trim());
+  const lista = os.filter(h => {
+    const st = h.status || "producao";
+    if (filtroOS === "abertas" && st === "entregue") return false;
+    if (filtroOS === "atrasadas" && !atrasada(h)) return false;
+    if (["producao", "pronta", "entregue"].includes(filtroOS) && st !== filtroOS) return false;
+    if (busca && !semAcentoTxt((h.cliente || "") + " " + (h.numero || "")).includes(busca)) return false;
+    return true;
+  });
   const idDe = h => escapa(h.id || h.quando);
   const pend = h => h.pendente ? ' <span class="quem">· aguardando envio</span>' : "";
-  const linhasOS = os.slice(0, 50).map(h =>
-    '<tr><td class="num">' + escapa(h.numero) + '</td>' +
-    '<td class="cli">' + escapa(h.cliente || "Sem cliente") + (h.time ? ' <span class="quem">· time</span>' : "") + pend(h) + '</td>' +
-    '<td class="num">' + (h.pecas || 0) + '</td>' +
-    '<td class="quem">' + escapa(h.quem || "—") + '</td>' +
-    '<td class="qnd">' + dataHora(h.quando) + '</td>' +
-    '<td class="x">' + (h.pendente ? "" : '<button type="button" data-id="' + idDe(h) + '" aria-label="Remover">×</button>') + '</td></tr>').join("");
-  $("#h-os").innerHTML = linhasOS;
-  $("#h-os-vazio").hidden = os.length > 0;
+  $("#h-os").innerHTML = lista.slice(0, 150).map(h => {
+    const st = h.status || "producao";
+    return '<tr class="' + (atrasada(h) ? "atrasada " : "") + (st === "entregue" ? "entregue" : "") + '">' +
+      '<td class="num">' + escapa(h.numero) + '</td>' +
+      '<td class="cli">' + escapa(h.cliente || "Sem cliente") + (h.time ? ' <span class="quem">· time</span>' : "") + pend(h) + '</td>' +
+      '<td class="num">' + (h.pecas || 0) + '</td>' +
+      '<td class="ent">' + dataCurta(h.entrega) + (atrasada(h) ? " · atrasada" : "") + '</td>' +
+      '<td><select class="st ' + st + '" data-id="' + idDe(h) + '" aria-label="Status da O.S. ' + escapa(h.numero) + '">' +
+        Object.keys(ST_NOME).map(k => '<option value="' + k + '"' + (k === st ? " selected" : "") + '>' + ST_NOME[k] + '</option>').join("") +
+      '</select></td>' +
+      '<td class="quem">' + escapa(h.quem || "—") + '</td>' +
+      '<td class="qnd">' + dataHora(h.quando) + '</td>' +
+      '<td class="x">' + (h.pendente ? "" : '<button type="button" data-id="' + idDe(h) + '" aria-label="Remover">×</button>') + '</td></tr>';
+  }).join("");
+  const vz = $("#h-os-vazio");
+  vz.hidden = lista.length > 0;
+  vz.textContent = os.length ? "Nenhuma O.S. neste filtro." : "Nenhuma O.S. gerada ainda. Cada PDF baixado entra aqui.";
 
-  const linhasRec = rec.slice(0, 50).map(h =>
-    '<tr><td class="num">' + escapa(h.numero) + '</td>' +
-    '<td class="cli">' + escapa(h.pagador || "Sem nome") + (h.vias > 1 ? ' <span class="quem">· ' + h.vias + ' vias</span>' : "") + pend(h) + '</td>' +
-    '<td class="val">R$ ' + reais(h.valor) + '</td>' +
-    '<td class="quem">' + escapa(h.quem || "—") + '</td>' +
-    '<td class="qnd">' + dataHora(h.quando) + '</td>' +
-    '<td class="x">' + (h.pendente ? "" : '<button type="button" data-id="' + idDe(h) + '" aria-label="Remover">×</button>') + '</td></tr>').join("");
-  $("#h-rec").innerHTML = linhasRec;
-  $("#h-rec-vazio").hidden = rec.length > 0;
-
-  document.querySelectorAll(".hist .x button").forEach(b => b.addEventListener("click", async () => {
-    const id = b.dataset.id;
-    if (modoHist === "nuvem") {
-      const h = historico.find(x => x.id === id);
-      if (!confirm("Remover " + (h && h.tipo === "recibo" ? "o recibo " : "a O.S. ") + (h ? h.numero : "") + " do histórico de todos?")) return;
-      try { await api("DELETE", "?id=" + encodeURIComponent(id)); historico = historico.filter(x => x.id !== id); renderVisao(); }
-      catch (e) { say("Não consegui remover: " + (e.msg || "sem conexão") + ".", "err"); }
-    } else {
-      histLocal = histLocal.filter(h => h.quando !== id);
-      salvarHist(); historico = histLocal; renderVisao();
-    }
+  document.querySelectorAll("#h-os select.st").forEach(sel => sel.addEventListener("change", () => {
+    sel.className = "st " + sel.value;
+    atualizarRegistro(sel.dataset.id, { status: sel.value });
   }));
+  document.querySelectorAll("#h-os .x button").forEach(b => b.addEventListener("click", () => removerRegistro(b.dataset.id)));
+  if (window.orcPronto) renderOrcHist();
+  if (window.osPronto) renderOsHist();
 }
-$("#h-limpar").addEventListener("click", async () => {
-  if (!historico.filter(h => !h.pendente).length) { say("O histórico já está vazio."); return; }
+function semAcentoTxt(t) { return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+
+async function removerRegistro(id) {
+  const h = historico.find(x => (x.id || x.quando) === id);
+  const nome = h ? (h.tipo === "orcamento" ? "o orçamento " : h.tipo === "recibo" ? "o recibo " : "a O.S. ") + h.numero : "este registro";
   if (modoHist === "nuvem") {
-    if (!confirm("Apagar TODO o histórico do banco? Isso some para todos os computadores e não dá para desfazer.")) return;
-    try { await api("DELETE", "?tudo=1"); historico = historico.filter(h => h.pendente); renderVisao(); say("Histórico limpo.", "ok"); }
+    if (!confirm("Remover " + nome + " do histórico de todos?")) return;
+    try { await api("DELETE", "?id=" + encodeURIComponent(id)); historico = historico.filter(x => x.id !== id); renderVisao(); }
+    catch (e) { say("Não consegui remover: " + (e.msg || "sem conexão") + ".", "err"); }
+  } else {
+    if (!confirm("Remover " + nome + "?")) return;
+    histLocal = histLocal.filter(x => (x.id || x.quando) !== id);
+    salvarHist(); historico = histLocal; renderVisao();
+  }
+}
+
+document.querySelectorAll("#h-filtro button").forEach(b => b.addEventListener("click", () => {
+  filtroOS = b.dataset.f;
+  document.querySelectorAll("#h-filtro button").forEach(x => x.classList.toggle("on", x === b));
+  renderVisao();
+}));
+$("#h-busca").addEventListener("input", renderVisao);
+
+$("#h-limpar").addEventListener("click", async () => {
+  if (!historico.filter(h => h.tipo === "os" && !h.pendente).length) { say("Não há O.S. no histórico."); return; }
+  if (modoHist === "nuvem") {
+    if (!confirm("Apagar TODAS as O.S. do banco? Isso some para todos os computadores e não dá para desfazer.")) return;
+    try { await api("DELETE", "?tudo=1&tipo=os"); historico = historico.filter(h => h.tipo !== "os" || h.pendente); renderVisao(); say("O.S. apagadas do histórico.", "ok"); }
     catch (e) { say("Não consegui limpar: " + (e.msg || "sem conexão") + ".", "err"); }
     return;
   }
-  histLocal = []; salvarHist(); historico = histLocal; renderVisao();
-  say("Histórico limpo.");
+  if (!confirm("Apagar todas as O.S. do histórico deste computador?")) return;
+  histLocal = histLocal.filter(h => h.tipo !== "os"); salvarHist(); historico = histLocal; renderVisao();
+  say("O.S. apagadas do histórico.");
 });
 document.addEventListener("click", e => { if (e.target && e.target.id === "h-status" && modoHist === "senha") pedirSenha(""); });
 
@@ -2040,6 +2387,954 @@ setInterval(() => { if (modoHist === "nuvem" && fila.length) enviarFila(); }, 30
 /* ao abrir a Visão Geral, puxa o que os outros computadores lançaram */
 const _irParaOrig = irPara;
 irPara = function (v) { _irParaOrig(v); if (v === "visao" && modoHist === "nuvem") carregarNuvem(); };
+
+
+/* ================= CLIENTES ================= */
+const C_CAMPOS = ["nome", "razao", "fantasia", "documento", "ie", "im", "cep", "logradouro", "numero",
+  "complemento", "bairro", "cidade", "uf", "tel1", "tel2", "email", "contato", "obs"];
+let clientes = [];
+let clientesLocal = [];
+try { const g = JSON.parse(localStorage.getItem("amz_clientes") || "[]"); if (Array.isArray(g)) clientesLocal = g; } catch (e) {}
+function salvarClientesLocal() {
+  try { localStorage.setItem("amz_clientes", JSON.stringify(clientesLocal)); }
+  catch (e) { say("Sem espaço no navegador para guardar os clientes.", "err"); }
+}
+let cliEditId = null, cliTipo = "pj";
+const soDig = v => String(v || "").replace(/\D/g, "");
+
+async function apiCli(metodo, query, corpo) {
+  const r = await fetch("/api/clientes" + (query || ""), {
+    method: metodo,
+    headers: Object.assign({ "x-painel-senha": senhaPainel }, corpo ? { "Content-Type": "application/json" } : {}),
+    body: corpo ? JSON.stringify(corpo) : undefined,
+    cache: "no-store"
+  });
+  const tipo = r.headers.get("content-type") || "";
+  if (!tipo.includes("application/json")) { const e = new Error("sem api"); e.semApi = true; throw e; }
+  const j = await r.json();
+  if (!r.ok) { const e = new Error(j.erro || "erro"); e.status = r.status; e.msg = j.erro; throw e; }
+  return j;
+}
+const porNome = (a, b) => (a.nome || "").localeCompare(b.nome || "", "pt-BR", { sensitivity: "base" });
+
+async function carregarClientes() {
+  if (modoHist === "nuvem") {
+    try { clientes = (await apiCli("GET")).itens || []; }
+    catch (e) { if (!e.semApi) say("Não consegui carregar os clientes: " + (e.msg || "sem conexão") + ".", "err"); }
+  } else if (modoHist === "local") {
+    clientes = clientesLocal.slice().sort(porNome);
+  }
+  renderClientes();
+  if (window.orcPronto) orcCliAtualiza();
+}
+window.carregarClientes = carregarClientes;
+
+/* máscaras */
+function fmtDoc(v) {
+  const d = soDig(v);
+  if (d.length === 14) return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+  if (d.length === 11) return d.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+  return String(v || "").trim();
+}
+function fmtTel(v) {
+  const d = soDig(v);
+  if (d.length === 11) return d.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+  if (d.length === 10) return d.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+  return String(v || "").trim();
+}
+function fmtCep(v) { const d = soDig(v); return d.length === 8 ? d.replace(/^(\d{5})(\d{3})$/, "$1-$2") : String(v || "").trim(); }
+$("#c-documento").addEventListener("blur", e => e.target.value = fmtDoc(e.target.value));
+["c-tel1", "c-tel2"].forEach(id => $("#" + id).addEventListener("blur", e => e.target.value = fmtTel(e.target.value)));
+$("#c-cep").addEventListener("blur", e => e.target.value = fmtCep(e.target.value));
+$("#c-uf").addEventListener("input", e => e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 2));
+
+function setTipoCli(t) {
+  cliTipo = t === "pf" ? "pf" : "pj";
+  document.querySelectorAll("#c-tipo button").forEach(b => b.classList.toggle("on", b.dataset.t === cliTipo));
+  document.querySelectorAll("#view-cli .f.pj").forEach(el => el.hidden = cliTipo === "pf");
+  $("#c-doc-rot").textContent = cliTipo === "pf" ? "CPF" : "CNPJ";
+  $("#c-documento").placeholder = cliTipo === "pf" ? "000.000.000-00" : "00.000.000/0000-00";
+  $("#c-buscar-cnpj").hidden = cliTipo === "pf";
+}
+document.querySelectorAll("#c-tipo button").forEach(b => b.addEventListener("click", () => setTipoCli(b.dataset.t)));
+
+function lerFormCli() {
+  const o = { tipo: cliTipo };
+  C_CAMPOS.forEach(c => o[c] = ($("#c-" + c).value || "").trim());
+  o.documento = fmtDoc(o.documento); o.tel1 = fmtTel(o.tel1); o.tel2 = fmtTel(o.tel2); o.cep = fmtCep(o.cep);
+  return o;
+}
+function preencherFormCli(c) {
+  C_CAMPOS.forEach(k => $("#c-" + k).value = (c && c[k]) || "");
+  setTipoCli((c && c.tipo) || "pj");
+  cliEditId = c && c.id ? c.id : null;
+  $("#c-titulo").textContent = cliEditId ? "Editando: " + (c.nome || "cliente") : "Novo cliente";
+  $("#c-sub").textContent = cliEditId ? "Altere o que precisar e salve. Os próximos orçamentos já usam os dados novos."
+                                      : "Preencha os dados e salve. O cliente aparece na busca do orçamento.";
+  $("#c-salvar").textContent = cliEditId ? "Salvar alterações" : "Salvar cliente";
+}
+
+async function buscarCNPJ() {
+  const d = soDig($("#c-documento").value);
+  if (d.length !== 14) { say("Digite os 14 números do CNPJ.", "err"); return; }
+  const btn = $("#c-buscar-cnpj"); btn.disabled = true; say("Buscando o CNPJ na Receita…");
+  try {
+    const r = await fetch("https://brasilapi.com.br/api/cnpj/v1/" + d);
+    if (r.status === 404) throw new Error("CNPJ não encontrado.");
+    if (!r.ok) throw new Error("Consulta indisponível agora.");
+    const j = await r.json();
+    const put = (id, v) => { if (v) $("#c-" + id).value = String(v).trim(); };
+    put("razao", j.razao_social); put("fantasia", j.nome_fantasia);
+    if (!$("#c-nome").value.trim()) $("#c-nome").value = (j.nome_fantasia || j.razao_social || "").trim();
+    put("cep", fmtCep(j.cep));
+    put("logradouro", [j.descricao_tipo_de_logradouro, j.logradouro].filter(Boolean).join(" "));
+    put("numero", j.numero); put("complemento", j.complemento); put("bairro", j.bairro);
+    put("cidade", j.municipio); put("uf", j.uf);
+    if (j.ddd_telefone_1 && !$("#c-tel1").value.trim()) $("#c-tel1").value = fmtTel(j.ddd_telefone_1);
+    if (j.ddd_telefone_2 && !$("#c-tel2").value.trim()) $("#c-tel2").value = fmtTel(j.ddd_telefone_2);
+    if (j.email && !$("#c-email").value.trim()) $("#c-email").value = String(j.email).toLowerCase();
+    $("#c-documento").value = fmtDoc(d);
+    say("Dados do CNPJ preenchidos. Confira e complete a inscrição estadual.", "ok");
+  } catch (e) { say("Não consegui buscar o CNPJ: " + (e.message || "sem conexão") + " Preencha à mão.", "err"); }
+  finally { btn.disabled = false; }
+}
+async function buscarCEP() {
+  const d = soDig($("#c-cep").value);
+  if (d.length !== 8) { say("Digite os 8 números do CEP.", "err"); return; }
+  const btn = $("#c-buscar-cep"); btn.disabled = true;
+  try {
+    const r = await fetch("https://brasilapi.com.br/api/cep/v1/" + d);
+    if (!r.ok) throw new Error("CEP não encontrado.");
+    const j = await r.json();
+    if (j.street) $("#c-logradouro").value = j.street;
+    if (j.neighborhood) $("#c-bairro").value = j.neighborhood;
+    if (j.city) $("#c-cidade").value = j.city;
+    if (j.state) $("#c-uf").value = j.state;
+    $("#c-cep").value = fmtCep(d);
+    $("#c-numero").focus();
+    say("Endereço preenchido. Falta o número.", "ok");
+  } catch (e) { say("Não consegui buscar o CEP: " + (e.message || "sem conexão"), "err"); }
+  finally { btn.disabled = false; }
+}
+$("#c-buscar-cnpj").addEventListener("click", buscarCNPJ);
+$("#c-buscar-cep").addEventListener("click", buscarCEP);
+
+async function salvarCliente() {
+  const d = lerFormCli();
+  if (!d.nome) { say("Informe o nome do cliente.", "err"); $("#c-nome").focus(); return; }
+  const doc = soDig(d.documento);
+  const repetido = doc && clientes.find(c => soDig(c.documento) === doc && c.id !== cliEditId);
+  if (repetido && !confirm("Já existe um cliente com esse " + (doc.length === 11 ? "CPF" : "CNPJ") + ": " + repetido.nome + ". Salvar mesmo assim?")) return;
+  const btn = $("#c-salvar"); btn.disabled = true;
+  try {
+    let salvo;
+    if (modoHist === "nuvem") {
+      const r = cliEditId ? await apiCli("PATCH", "?id=" + encodeURIComponent(cliEditId), d) : await apiCli("POST", "", d);
+      salvo = r.item;
+      clientes = clientes.filter(c => c.id !== salvo.id).concat([salvo]).sort(porNome);
+    } else if (modoHist === "local") {
+      salvo = Object.assign({}, d, { id: cliEditId || "l_" + Date.now(), atualizado: new Date().toISOString() });
+      clientesLocal = clientesLocal.filter(c => c.id !== salvo.id).concat([salvo]);
+      salvarClientesLocal();
+      clientes = clientesLocal.slice().sort(porNome);
+    } else { say("Entre com a senha da equipe para salvar clientes.", "err"); pedirSenha(""); return; }
+    say(cliEditId ? "Cadastro atualizado." : "Cliente cadastrado.", "ok");
+    preencherFormCli(null);
+    renderClientes();
+    if (!voltarParaOrc) { $("#c-busca").value = ""; mostrarListaCli(); marcarCliente(salvo.id); }
+    /* se o orçamento em andamento é desse cliente, já liga o cadastro */
+    if (window.orcPronto) {
+      const nomeOrc = $("#o-cliente").value.trim().toLowerCase();
+      if ((orcCliente && orcCliente.id === salvo.id) || (!orcCliente && nomeOrc && nomeOrc === salvo.nome.toLowerCase())) selecionarCliOrc(salvo, true);
+      else orcCliAtualiza();
+    }
+    if (voltarParaOrc) { voltarParaOrc = false; cliModo = "lista"; aplicarModoCli(false); if (!orcCliente || orcCliente.id !== salvo.id) selecionarCliOrc(salvo, true); irPara("orc"); }
+  } catch (e) { say("Não consegui salvar: " + (e.msg || "sem conexão") + ".", "err"); }
+  finally { btn.disabled = false; }
+}
+$("#c-salvar").addEventListener("click", salvarCliente);
+$("#c-limpar").addEventListener("click", () => { preencherFormCli(null); $("#c-nome").focus(); });
+
+/* ---------- lista x cadastro ---------- */
+let cliModo = "lista";
+try { if (localStorage.getItem("amz_cli_modo") === "form") cliModo = "form"; } catch (e) {}
+function aplicarModoCli(animar) {
+  const form = $("#cli-form"), lista = $("#cli-lista");
+  form.hidden = cliModo !== "form";
+  lista.hidden = cliModo === "form";
+  form.classList.remove("descendo"); lista.classList.remove("subindo");
+  if (animar) { void form.offsetWidth; (cliModo === "form" ? form : lista).classList.add(cliModo === "form" ? "descendo" : "subindo"); }
+  $("#cli-consultar").classList.toggle("on", cliModo === "lista");
+  $("#cli-fechar").textContent = voltarParaOrc ? "Voltar para o orçamento" : "Voltar para a lista";
+  try { localStorage.setItem("amz_cli_modo", cliModo); } catch (e) {}
+}
+function mostrarFormCli() { cliModo = "form"; window.scrollTo(0, 0); aplicarModoCli(true); }
+function mostrarListaCli() { cliModo = "lista"; voltarParaOrc = false; window.scrollTo(0, 0); aplicarModoCli(true); renderClientes(); }
+function marcarCliente(id) {
+  const b = document.querySelector('#c-lista button[data-id="' + id + '"]');
+  const tr = b && b.closest("tr"); if (!tr) return;
+  tr.classList.add("destaque"); tr.scrollIntoView({ block: "nearest" });
+  setTimeout(() => tr.classList.remove("destaque"), 2200);
+}
+$("#cli-novo").addEventListener("click", () => {
+  if (cliModo === "form" && !cliEditId) { $("#c-nome").focus(); return; }
+  const temRascunho = !cliEditId && C_CAMPOS.some(c => ($("#c-" + c).value || "").trim());
+  if (cliEditId || !temRascunho) preencherFormCli(null);
+  voltarParaOrc = false;
+  mostrarFormCli();
+  setTimeout(() => $("#c-nome").focus(), 60);
+  if (temRascunho) say("Continuando o cadastro que estava em andamento. Use “Limpar” para começar do zero.");
+});
+$("#cli-consultar").addEventListener("click", () => { mostrarListaCli(); setTimeout(() => $("#c-busca").focus(), 60); });
+$("#cli-fechar").addEventListener("click", () => {
+  if (voltarParaOrc) { voltarParaOrc = false; cliModo = "lista"; aplicarModoCli(false); irPara("orc"); return; }
+  mostrarListaCli();
+});
+
+async function removerCliente(id) {
+  const c = clientes.find(x => x.id === id); if (!c) return;
+  if (!confirm("Remover o cliente " + c.nome + " do cadastro?")) return;
+  try {
+    if (modoHist === "nuvem") await apiCli("DELETE", "?id=" + encodeURIComponent(id));
+    else { clientesLocal = clientesLocal.filter(x => x.id !== id); salvarClientesLocal(); }
+    clientes = clientes.filter(x => x.id !== id);
+    if (cliEditId === id) preencherFormCli(null);
+    renderClientes(); say("Cliente removido.", "ok");
+  } catch (e) { say("Não consegui remover: " + (e.msg || "sem conexão") + ".", "err"); }
+}
+
+function textoBuscaCli(c) {
+  return semAcentoTxt([c.nome, c.razao, c.fantasia, c.documento, soDig(c.documento), c.cidade, c.tel1, soDig(c.tel1), c.tel2, soDig(c.tel2), c.email, c.contato].join(" "));
+}
+function renderClientes() {
+  const q = semAcentoTxt(($("#c-busca").value || "").trim());
+  const lista = q ? clientes.filter(c => textoBuscaCli(c).includes(q)) : clientes;
+  $("#c-lista").innerHTML = lista.slice(0, 300).map(c =>
+    '<tr><td class="cli">' + escapa(c.nome) + (c.razao && c.razao.toLowerCase() !== c.nome.toLowerCase() ? '<br><span class="quem">' + escapa(c.razao) + '</span>' : "") + '</td>' +
+    '<td class="doc">' + escapa(c.documento || "—") + '</td>' +
+    '<td class="doc">' + escapa(c.tel1 || c.tel2 || "—") + '</td>' +
+    '<td class="quem">' + escapa([c.cidade, c.uf].filter(Boolean).join("/") || "—") + '</td>' +
+    '<td class="abre"><button type="button" data-a="editar" data-id="' + escapa(c.id) + '">Editar</button></td>' +
+    '<td class="abre"><button type="button" data-a="orc" data-id="' + escapa(c.id) + '" title="Começar um orçamento para este cliente">Orçar</button></td>' +
+    '<td class="x"><button type="button" data-a="del" data-id="' + escapa(c.id) + '" aria-label="Remover cliente">×</button></td></tr>').join("");
+  $("#c-vazio").hidden = lista.length > 0;
+  $("#c-vazio").textContent = clientes.length ? "Nenhum cliente encontrado nessa busca." : "Nenhum cliente cadastrado ainda.";
+  $("#c-info").textContent = clientes.length ? clientes.length + (clientes.length === 1 ? " cliente cadastrado." : " clientes cadastrados.") + (q ? " " + lista.length + " na busca." : "") : "";
+  document.querySelectorAll("#c-lista button").forEach(b => b.addEventListener("click", () => {
+    const c = clientes.find(x => x.id === b.dataset.id); if (!c) return;
+    if (b.dataset.a === "editar") { preencherFormCli(c); voltarParaOrc = false; mostrarFormCli(); setTimeout(() => $("#c-nome").focus(), 60); }
+    else if (b.dataset.a === "orc") { irPara("orc"); limparOrc(false); selecionarCliOrc(c, true); mostrarFormOrc(); }
+    else removerCliente(c.id);
+  }));
+}
+$("#c-busca").addEventListener("input", renderClientes);
+let voltarParaOrc = false;
+window.cliAoAbrir = () => { aplicarModoCli(false); if (modoHist === "nuvem" && !clientes.length) carregarClientes(); else renderClientes(); };
+setTipoCli("pj");
+
+/* ================= ORÇAMENTO ================= */
+const EMPRESA = {
+  nome: "AMAZÔNIA GRÁFICA LTDA",
+  cnpj: "34.635.044/0001-00",
+  endereco: "Rua Padre Francisco, nº 250, a, Santo Antônio, Manaus/AM · CEP 69029-320",
+  contato: "(92) 99102-0236  •  (92) 3247-0029  •  comercial@amazoniagrafica.com",
+  redes: "@amazoniagrafica  •  amazoniagrafica.com"
+};
+const ORC_COND_PADRAO = "À vista • Cartão de crédito parcelado em até 12x com juros • Entrada de 50% e o restante na retirada.";
+const ORC_INFO_PADRAO = "Orçamento válido por 10 dias.\n\nDados para pagamento:\nBanco Cora nº 403\nAgência: 0001\nConta Corrente: 2277988-9\nAmazônia Gráfica Ltda\nPix CNPJ: 34.635.044/0001-00";
+const ASSINATURA = "data:image/jpeg;base64,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olstTkzbBsAnnb9DXvPjHwRpnjGwe3voFY4+V8cg18xfED4Ca14XuTdaWWubXOfLQdBXpQlCquV7mFuV3R9Zadq9rqtuk1tMk0bDI2nmrgY+lfBmkfErxH4T1DyYftEGzhw2cV6Ja/tXajptrHHNbRyHoZGPJ96JYKr9nUtTPq/dzSbj6V8zL+1ygwGt4XBHUGsbVP2v9QeUx2enrt6BhSWAxD1aG5I+sJrlLdC8jBEHJZjgV5/4z+Nnh7wisiPdxz3IHEaHOa+Vb/4qeOfG949vG11tlOFiiBrqPCf7O/iHxPPBdaiTbxk5b7R96tPqip+9VYnK+w7xr8XNc+JUxtbJZIbUnHlRZy1d38KfgKB5Gpauh5+YRtXpvgn4RaJ4LjXyYBPMR8zyDJruQm0YAwo6AVx1K3J/DQ0r7kVlYQafbrDbxrFGB91RipwuKUdKWuffUtaCYopaKAEx715r8fvEZ0DwLcRj712rQgntkf8A169KzzXin7VExXwRAEAZxITz24rWkrzRMtjz39lWzC+ILoS4aTy9wz9a+rcCvmD9ldVk1OaZ2UzeTjA69a+nxWmKd5q5MFZAOlLSDpS1zGgUmPelooATB9aMe9LRQAUUUUAIeaNtLRQKwm2jFLRQMTHvRj3paKAGsm6lxxS0UAJj3paKKACkNLRQAmPek206igBBxS0UUAFJS0UAFFFFABRRRSsgEox7mlopgJj3NFLRQAUUUUAJRS0UAJS0UUgEox70tFMBMH1ox70tFACYoxS0UAJijFLRQAmKMUtFKwDdtG2nUUwE20YpaKAExSbadRQA3b70bfenUUDuJj3ox70tFAhMUYpaKACkxS0UrAJto20tFMBAMUtFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUrANPJwajkiWZSrqrj3oopiZzOt/DfQNfidLnT4sv1dVANcXc/sx+DrlCDDKCf9uiirVWpDaQlFGNF+yR4VS58zExX+75lbtn+zP4OsnWT7NI7A5wXyKKK1+t1pKzkFkd7pHgrRtEVFtNPhQoOG2DNbSqB0AH0oormu5u8mO1iQYptFFGwx9FFFMAooooAQHJ6V4x+0/pF5feCPMtI96ozGRj/CMUUVrS+NEy2PMv2Yba7n8Q5iiKQpGN82etfWgooq8T8aJhsA6UtFFc5oFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB//Z";
+const ORC_PRIMEIRO = 401; /* usado só se ainda não houver nenhum orçamento no histórico */
+
+function parseReal(v) {
+  let t = String(v == null ? "" : v).replace(/R\$|\s/g, "");
+  if (!t) return 0;
+  if (t.includes(",")) t = t.replace(/\./g, "").replace(",", ".");
+  else if (/^\d{1,3}(\.\d{3})+$/.test(t)) t = t.replace(/\./g, "");
+  const x = parseFloat(t);
+  return isFinite(x) ? Math.max(0, x) : 0;
+}
+const fmtReal = v => "R$ " + reais(v);
+const fmtQtd = v => (Math.round(v * 100) / 100).toLocaleString("pt-BR");
+
+let orcItens = [];
+let orcEditId = null, orcEditNumero = null, orcNumSugerido = "";
+let orcCliente = null; /* cópia do cadastro do cliente escolhido (vai junto no orçamento) */
+const ORC_CAMPOS = ["cliente", "numero", "data", "prazo", "feitopor", "desconto"];
+function itemVazio() { return { desc: "", preco: "", unid: "und", qtd: "1" }; }
+
+function salvarOrc() {
+  const o = { itens: orcItens, editId: orcEditId, editNumero: orcEditNumero, cliente_info: orcCliente };
+  ORC_CAMPOS.forEach(c => o[c] = $("#o-" + c).value);
+  try { localStorage.setItem("amz_orc", JSON.stringify(o)); } catch (e) {}
+}
+function salvarTextosOrc() {
+  try { localStorage.setItem("amz_orc_textos", JSON.stringify({ cond: $("#o-cond").value, info: $("#o-info").value })); } catch (e) {}
+}
+
+/* ---------- cliente do orçamento: busca nos cadastrados ---------- */
+const CLI_SNAP = ["id", "tipo", "nome", "razao", "fantasia", "documento", "ie", "im", "cep", "logradouro", "numero", "complemento", "bairro", "cidade", "uf", "tel1", "tel2", "email", "contato"];
+function snapCli(c) { const o = {}; CLI_SNAP.forEach(k => o[k] = c[k] || ""); return o; }
+function enderecoCli(c) {
+  const rua = [c.logradouro, c.numero ? "nº " + c.numero : "", c.complemento].filter(Boolean).join(", ");
+  const cid = [c.cidade, c.uf].filter(Boolean).join("/");
+  return [rua, c.bairro, cid].filter(Boolean).join(" · ") + (c.cep ? " · CEP " + c.cep : "");
+}
+function orcCliAtualiza() {
+  /* pega a versão mais nova do cadastro, se o cliente ainda existir */
+  if (orcCliente && typeof clientes !== "undefined") {
+    const atual = clientes.find(c => c.id === orcCliente.id);
+    if (atual) orcCliente = snapCli(atual);
+  }
+  const box = $("#o-cli-info");
+  if (!orcCliente) { box.hidden = true; box.innerHTML = ""; return; }
+  const c = orcCliente;
+  const l1 = [c.razao && c.razao !== c.nome ? c.razao : "", c.documento ? (soDig(c.documento).length === 11 ? "CPF " : "CNPJ ") + c.documento : "", c.ie ? "IE " + c.ie : ""].filter(Boolean).join(" · ");
+  const l3 = [c.tel1, c.tel2, c.email].filter(Boolean).join(" · ");
+  box.innerHTML = '<b>✓ Cliente cadastrado</b><button type="button" id="o-cli-editar">Editar cadastro</button>' +
+    (l1 ? "<br>" + escapa(l1) : "") + (enderecoCli(c) ? "<br>" + escapa(enderecoCli(c)) : "") + (l3 ? "<br>" + escapa(l3) : "");
+  box.hidden = false;
+  $("#o-cli-editar").addEventListener("click", () => {
+    const cad = clientes.find(x => x.id === c.id) || c;
+    irPara("cli"); preencherFormCli(cad); voltarParaOrc = true; mostrarFormCli();
+  });
+}
+function selecionarCliOrc(c, avisar) {
+  orcCliente = snapCli(c);
+  $("#o-cliente").value = c.nome;
+  fecharSugestoes(); orcCliAtualiza(); salvarOrc();
+  if (avisar) say("Cliente " + c.nome + " no orçamento.", "ok");
+}
+let sugAtiva = -1;
+function fecharSugestoes() { $("#o-sug").hidden = true; $("#o-cliente").setAttribute("aria-expanded", "false"); sugAtiva = -1; }
+function mostrarSugestoes() {
+  const txt = $("#o-cliente").value.trim(), q = semAcentoTxt(txt);
+  const box = $("#o-sug");
+  if (!q) { fecharSugestoes(); return; }
+  const achados = clientes.filter(c => textoBuscaCli(c).includes(q)).slice(0, 8);
+  const exato = clientes.some(c => semAcentoTxt(c.nome) === q);
+  let html = achados.map((c, i) => '<button type="button" role="option" data-i="' + i + '">' + escapa(c.nome) +
+    '<small>' + escapa([c.razao && c.razao !== c.nome ? c.razao : "", c.documento, [c.cidade, c.uf].filter(Boolean).join("/")].filter(Boolean).join(" · ") || "Sem mais dados") + '</small></button>').join("");
+  if (!exato) html += '<button type="button" class="novo" data-novo="1">+ Cadastrar “' + escapa(txt) + '” como cliente novo</button>';
+  box.innerHTML = html; box.hidden = false; sugAtiva = -1;
+  $("#o-cliente").setAttribute("aria-expanded", "true");
+  box.querySelectorAll("button").forEach(b => b.addEventListener("mousedown", ev => {
+    ev.preventDefault();
+    if (b.dataset.novo) { fecharSugestoes(); irPara("cli"); preencherFormCli(null); voltarParaOrc = true; mostrarFormCli(); $("#c-nome").value = txt; setTimeout(() => $("#c-documento").focus(), 60); say("Complete o cadastro e salve. Depois você volta para o orçamento."); }
+    else selecionarCliOrc(achados[+b.dataset.i], false);
+  }));
+}
+$("#o-cliente").addEventListener("input", () => {
+  if (orcCliente && $("#o-cliente").value.trim() !== orcCliente.nome) { orcCliente = null; orcCliAtualiza(); }
+  mostrarSugestoes(); salvarOrc();
+});
+$("#o-cliente").addEventListener("focus", () => { if ($("#o-cliente").value.trim() && !orcCliente) mostrarSugestoes(); });
+$("#o-cliente").addEventListener("blur", () => setTimeout(fecharSugestoes, 120));
+$("#o-cliente").addEventListener("keydown", ev => {
+  const bts = [...$("#o-sug").querySelectorAll("button")];
+  if ($("#o-sug").hidden || !bts.length) return;
+  if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+    ev.preventDefault();
+    sugAtiva = (sugAtiva + (ev.key === "ArrowDown" ? 1 : -1) + bts.length) % bts.length;
+    bts.forEach((b, i) => b.classList.toggle("on", i === sugAtiva));
+  } else if (ev.key === "Enter" && sugAtiva >= 0) {
+    ev.preventDefault(); bts[sugAtiva].dispatchEvent(new MouseEvent("mousedown"));
+  } else if (ev.key === "Escape") fecharSugestoes();
+});
+
+function numBase(numero) { const m = String(numero || "").match(/\d+/); return m ? parseInt(m[0], 10) : 0; }
+function anoDoOrc() { const d = $("#o-data").value; return d ? d.slice(0, 4) : String(new Date().getFullYear()); }
+function numeroCompleto() { const n = $("#o-numero").value.trim(); return n ? n.replace(/\s*-\s*\d{4}$/, "") + " - " + anoDoOrc() : ""; }
+function sugerirNumero() {
+  let maior = 0;
+  historico.filter(h => h.tipo === "orcamento").forEach(h => { maior = Math.max(maior, numBase(h.numero)); });
+  try { maior = Math.max(maior, parseInt(localStorage.getItem("amz_orc_ultimo") || "0", 10) || 0); } catch (e) {}
+  return String(maior ? maior + 1 : ORC_PRIMEIRO);
+}
+function atualizaSugestao() {
+  if (orcEditId) return;
+  const campo = $("#o-numero"), nova = sugerirNumero();
+  if (!campo.value.trim() || campo.value.trim() === orcNumSugerido) campo.value = nova;
+  orcNumSugerido = nova;
+  salvarOrc();
+}
+
+function somasOrc() {
+  const sub = orcItens.reduce((a, it) => a + parseReal(it.preco) * parseReal(it.qtd), 0);
+  const desc = Math.min(sub, parseReal($("#o-desconto").value));
+  return { sub, desc, total: Math.max(0, sub - desc) };
+}
+function atualizaTotaisOrc() {
+  const t = somasOrc();
+  $("#o-subtotal").textContent = fmtReal(t.sub);
+  $("#o-total").textContent = fmtReal(t.total);
+  $("#o-total2").textContent = fmtReal(t.total);
+  document.querySelectorAll("#o-body tr").forEach((tr, i) => {
+    const it = orcItens[i]; if (!it) return;
+    tr.querySelector(".ototal").textContent = fmtReal(parseReal(it.preco) * parseReal(it.qtd));
+  });
+}
+
+function renderOrcItens() {
+  const corpo = $("#o-body");
+  corpo.innerHTML = "";
+  orcItens.forEach((it, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = '<td class="idx">' + (i + 1) + '</td>' +
+      '<td><input type="text" data-c="desc" placeholder="Ex.: Lona vinil 440g" autocomplete="off"></td>' +
+      '<td class="opreco"><input type="text" class="num" data-c="preco" inputmode="decimal" placeholder="0,00" autocomplete="off"></td>' +
+      '<td class="ounid"><input type="text" data-c="unid" placeholder="und" autocomplete="off"></td>' +
+      '<td class="oqtd"><input type="text" class="num" data-c="qtd" inputmode="decimal" placeholder="1" autocomplete="off"></td>' +
+      '<td class="ototal"></td>' +
+      '<td class="cdel"><button class="del" type="button" aria-label="Remover item ' + (i + 1) + '">×</button></td>';
+    tr.querySelectorAll("input").forEach(inp => {
+      const c = inp.dataset.c;
+      inp.value = it[c] || "";
+      inp.addEventListener("input", () => { orcItens[i][c] = inp.value; salvarOrc(); atualizaTotaisOrc(); });
+      inp.addEventListener("keydown", ev => {
+        if (ev.key !== "Enter") return;
+        ev.preventDefault();
+        if (i === orcItens.length - 1) { orcItens.push(itemVazio()); renderOrcItens(); salvarOrc(); }
+        const prox = corpo.querySelectorAll("tr")[i + 1];
+        if (prox) prox.querySelector('input[data-c="desc"]').focus();
+      });
+    });
+    tr.querySelector(".del").addEventListener("click", () => { orcItens.splice(i, 1); renderOrcItens(); salvarOrc(); });
+    corpo.appendChild(tr);
+  });
+  $("#o-vazio").hidden = orcItens.length > 0;
+  atualizaTotaisOrc();
+}
+
+function limparOrc(avisar) {
+  ["cliente", "desconto"].forEach(c => $("#o-" + c).value = "");
+  $("#o-data").value = iso(new Date());
+  $("#o-prazo").value = "7 dias úteis";
+  orcItens = [itemVazio()];
+  orcEditId = null; orcEditNumero = null; orcCliente = null; orcCliAtualiza();
+  $("#o-numero").value = ""; orcNumSugerido = "";
+  atualizaSugestao();
+  renderOrcItens(); salvarOrc(); mostraModoEdicao();
+  if (avisar) say("Orçamento limpo.", "ok");
+}
+function mostraModoEdicao() {
+  $("#orc-form-titulo").textContent = orcEditId ? "Orçamento " + orcEditNumero : "Novo orçamento";
+  $("#orc-form-sub").textContent = orcEditId
+    ? "Ajuste o que precisar e baixe o PDF de novo. As mudanças ficam salvas neste mesmo orçamento."
+    : "Preencha os dados e baixe o PDF. Ele entra na lista de orçamentos.";
+  const el = $("#o-num-info");
+  el.textContent = orcEditId
+    ? "Editando o orçamento " + orcEditNumero + ". Baixar o PDF atualiza este mesmo orçamento; troque o número para salvar como um novo."
+    : "O número continua a sequência da gráfica. Dá para trocar na mão.";
+}
+
+/* carrega um orçamento do histórico no formulário */
+function abrirOrc(id) {
+  const h = historico.find(x => (x.id || x.quando) === id);
+  if (!h || !h.dados) { say("Esse orçamento não tem os dados guardados para reabrir.", "err"); return; }
+  const d = h.dados;
+  $("#o-cliente").value = d.cliente || h.cliente || "";
+  $("#o-numero").value = String(h.numero || "").replace(/\s*-\s*\d{4}$/, "");
+  $("#o-data").value = d.data || iso(new Date());
+  $("#o-prazo").value = d.prazo || "";
+  $("#o-feitopor").value = d.feitopor || h.quem || "";
+  $("#o-desconto").value = d.desconto || "";
+  if (d.cond != null) $("#o-cond").value = d.cond;
+  if (d.info != null) $("#o-info").value = d.info;
+  orcItens = Array.isArray(d.itens) && d.itens.length ? d.itens.map(x => Object.assign(itemVazio(), x)) : [itemVazio()];
+  orcEditId = id; orcEditNumero = h.numero;
+  orcCliente = d.clienteInfo || null; orcCliAtualiza();
+  renderOrcItens(); salvarOrc(); mostraModoEdicao();
+  mostrarFormOrc();
+  say("Orçamento " + h.numero + " aberto.", "ok");
+}
+window.orcIdTrocado = (temp, real) => { if (orcEditId === temp) { orcEditId = real; salvarOrc(); } };
+
+/* ---------- lista x formulário ---------- */
+let orcModo = "lista";
+try { if (localStorage.getItem("amz_orc_modo") === "form") orcModo = "form"; } catch (e) {}
+function aplicarModoOrc(animar) {
+  const form = $("#orc-form"), lista = $("#orc-lista");
+  const noOrc = !$("#view-orc").hidden;
+  form.hidden = orcModo !== "form";
+  lista.hidden = orcModo === "form";
+  form.classList.remove("descendo"); lista.classList.remove("subindo");
+  if (animar) { void form.offsetWidth; (orcModo === "form" ? form : lista).classList.add(orcModo === "form" ? "descendo" : "subindo"); }
+  if (noOrc) {
+    document.querySelector(".bar").hidden = orcModo !== "form";
+    $("#bar-orc").hidden = orcModo !== "form";
+  }
+  $("#orc-consultar").classList.toggle("on", orcModo === "lista");
+  try { localStorage.setItem("amz_orc_modo", orcModo); } catch (e) {}
+}
+function mostrarFormOrc() {
+  orcModo = "form";
+  window.scrollTo(0, 0);
+  aplicarModoOrc(true);
+}
+function mostrarListaOrc() {
+  orcModo = "lista";
+  fecharSugestoes();
+  window.scrollTo(0, 0);
+  aplicarModoOrc(true);
+  renderOrcHist();
+}
+$("#orc-novo").addEventListener("click", () => {
+  if (!$("#view-orc").hidden && orcModo === "form" && !orcEditId) { $("#o-cliente").focus(); return; }
+  /* começa do zero, a não ser que já exista um rascunho novo em andamento */
+  const temRascunho = !orcEditId && ($("#o-cliente").value.trim() || orcItens.some(it => (it.desc || "").trim()));
+  if (orcEditId || !temRascunho) limparOrc(false);
+  mostrarFormOrc();
+  setTimeout(() => $("#o-cliente").focus(), 60);
+  if (temRascunho && !orcEditId) say("Continuando o orçamento que estava em andamento. Use “Limpar” para começar do zero.");
+});
+$("#orc-consultar").addEventListener("click", () => { mostrarListaOrc(); setTimeout(() => $("#o-busca").focus(), 60); });
+$("#orc-fechar").addEventListener("click", mostrarListaOrc);
+
+/* filtros de período (data e hora) */
+const p2 = v => String(v).padStart(2, "0");
+const dtLocal = d => d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) + "T" + p2(d.getHours()) + ":" + p2(d.getMinutes());
+function aplicarPeriodo(p) {
+  const hoje = new Date(); const ini = new Date(hoje); ini.setHours(0, 0, 0, 0);
+  const fim = new Date(hoje); fim.setHours(23, 59, 0, 0);
+  if (p === "7d") ini.setDate(ini.getDate() - 6);
+  if (p === "mes") { ini.setDate(1); fim.setMonth(fim.getMonth() + 1, 0); }
+  $("#o-de").value = p === "todos" ? "" : dtLocal(ini);
+  $("#o-ate").value = p === "todos" ? "" : dtLocal(fim);
+  document.querySelectorAll("#o-periodo button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
+  renderOrcHist();
+}
+document.querySelectorAll("#o-periodo button").forEach(b => b.addEventListener("click", () => aplicarPeriodo(b.dataset.p)));
+["o-de", "o-ate"].forEach(id => $("#" + id).addEventListener("change", () => {
+  document.querySelectorAll("#o-periodo button").forEach(b => b.classList.remove("on"));
+  renderOrcHist();
+}));
+$("#o-busca").addEventListener("input", renderOrcHist);
+
+function renderOrcHist() {
+  const de = $("#o-de").value ? new Date($("#o-de").value) : null;
+  const ate = $("#o-ate").value ? new Date($("#o-ate").value + ":59") : null;
+  const q = semAcentoTxt(($("#o-busca").value || "").trim());
+  const todos = historico.filter(h => h.tipo === "orcamento");
+  const lista = todos.filter(h => {
+    const d = new Date(h.quando);
+    if (de && d < de) return false;
+    if (ate && d > ate) return false;
+    if (q && !semAcentoTxt([h.numero, h.cliente, h.quem].join(" ")).includes(q)) return false;
+    return true;
+  });
+  const soma = lista.reduce((a, h) => a + (Number(h.valor) || 0), 0);
+  $("#o-resumo").innerHTML = todos.length
+    ? "<b>" + lista.length + "</b> " + (lista.length === 1 ? "orçamento" : "orçamentos") + " no filtro · total de <b>" + fmtReal(soma) + "</b>"
+    : "";
+  const idDe = h => escapa(h.id || h.quando);
+  $("#o-hist").innerHTML = lista.slice(0, 100).map(h =>
+    '<tr><td class="num">' + escapa(h.numero) + '</td>' +
+    '<td class="cli">' + escapa(h.cliente || "Sem cliente") + (h.pendente ? ' <span class="quem">· aguardando envio</span>' : "") + '</td>' +
+    '<td class="val">' + fmtReal(h.valor) + '</td>' +
+    '<td class="quem">' + escapa(h.quem || "—") + '</td>' +
+    '<td class="qnd">' + dataHora(h.quando) + '</td>' +
+    '<td class="abre"><button type="button" data-id="' + idDe(h) + '">Abrir</button></td>' +
+    '<td class="x">' + (h.pendente ? "" : '<button type="button" data-id="' + idDe(h) + '" aria-label="Remover">×</button>') + '</td></tr>').join("");
+  $("#o-hist-vazio").hidden = lista.length > 0;
+  $("#o-hist-vazio").textContent = todos.length ? "Nenhum orçamento nesse período ou busca." : "Nenhum orçamento feito ainda. Clique em “Novo orçamento” para começar.";
+  document.querySelectorAll("#o-hist .abre button").forEach(b => b.addEventListener("click", () => abrirOrc(b.dataset.id)));
+  document.querySelectorAll("#o-hist .x button").forEach(b => b.addEventListener("click", () => removerRegistro(b.dataset.id)));
+  atualizaSugestao();
+}
+window.renderOrcHist = renderOrcHist;
+
+/* ---------- PDF do orçamento (mesma identidade da O.S.) ---------- */
+function quebraLinhas(str, size, bold, w) {
+  const out = [];
+  String(str == null ? "" : str).split(/\n/).forEach(par => {
+    let cur = "";
+    par.split(/\s+/).filter(Boolean).forEach(word => {
+      const t = cur ? cur + " " + word : word;
+      if (textW(t, size, bold) > w && cur) { out.push(cur); cur = word; } else cur = t;
+    });
+    out.push(cur);
+  });
+  return out;
+}
+
+async function buildOrc() {
+  const s = new Sheet();
+  const L = 26, R = PW - 26, W = R - L;
+  const AZUL = [20, 135, 196], AZUL_CLARO = [130, 214, 250], CINZA = [245, 245, 245];
+  const Z1 = [236, 236, 236], Z2 = [248, 248, 248], TXT = [25, 25, 25], SUAVE = [95, 95, 95];
+  const numero = numeroCompleto();
+  const dataBr = br($("#o-data").value || iso(new Date()));
+  const autor = $("#o-feitopor").value.trim();
+  const lg = await jpeg(LOGO, 1200);
+  const itens = orcItens.filter(it => (it.desc || "").trim() || parseReal(it.preco));
+  const t = somasOrc();
+  const LIM = PH - 34;
+  const tx = (str, x, y, o) => s.text(str, x, y, Object.assign({ bold: false, color: TXT }, o));
+
+  /* ---- cabeçalho: logo + dados da empresa ---- */
+  const lgW = 92, lgH = lgW * lg.h / lg.w;
+  const iLogo = s.img(lg.bytes, lg.w, lg.h, L, 30, lgW, lgH);
+  const X = L + lgW + 24;
+  tx("Amazônia Gráfica", X, 34, { size: 13 });
+  tx("CNPJ: " + EMPRESA.cnpj, X, 48, { size: 8.5 });
+  tx("Amazônia Gráfica Ltda", X + 230, 48, { size: 8.5 });
+  tx("Rua Padre Francisco, nº 250, a, Santo Antônio, Manaus, AM, 69029-320", X, 61, { size: 8.5 });
+  tx("(92) 99102-0236      (92) 3247-0029      comercial@amazoniagrafica.com", X, 75, { size: 8, color: AZUL });
+  s.rect(X - 2, 81, 186, 17, { fill: CINZA });
+  tx("@amazoniagrafica      amazoniagrafica.com", X + 5, 92.5, { size: 8, color: AZUL });
+  let y = 116;
+
+  /* ---- faixa do título ---- */
+  s.rect(L, y, W, 32, { fill: CINZA });
+  const t1 = "Orçamento", t2 = "  (Nº " + numero + ")";
+  const w1 = textW(t1, 15, true), w2 = textW(t2, 9.5, true);
+  const x0 = PW / 2 - (w1 + w2) / 2;
+  s.text(t1, x0, y + 21, { size: 15, bold: true, color: AZUL });
+  s.text(t2, x0 + w1, y + 21, { size: 9.5, bold: true, color: AZUL });
+  tx(dataBr, R - 10, y + 20, { size: 9, color: AZUL, align: "right" });
+  y += 32 + 14;
+
+  /* ---- cliente (com os dados do cadastro, se houver) ---- */
+  const c = orcCliente;
+  const nomeCli = $("#o-cliente").value.trim() || "-";
+  const extras = [];
+  if (c) {
+    const doc = c.documento ? (soDig(c.documento).length === 11 ? "CPF: " : "CNPJ: ") + c.documento : "";
+    const l1 = [c.razao && c.razao !== c.nome ? "Razão social: " + c.razao : "", doc, c.ie ? "IE: " + c.ie : ""].filter(Boolean).join("   •   ");
+    if (l1) extras.push(l1);
+    if (enderecoCli(c)) extras.push(enderecoCli(c));
+    const l3 = [c.tel1 ? "Tel.: " + [c.tel1, c.tel2].filter(Boolean).join(" / ") : (c.tel2 ? "Tel.: " + c.tel2 : ""), c.email, c.contato ? "Contato: " + c.contato : ""].filter(Boolean).join("   •   ");
+    if (l3) extras.push(l3);
+  }
+  const cliH = 26 + (extras.length ? extras.length * 11 + 4 : 0);
+  s.rect(L, y, W, cliH, { fill: CINZA });
+  tx("Cliente: " + nomeCli, L + 9, y + 17, { size: 10.5, maxW: W - 18 });
+  extras.forEach((l, i) => tx(l, L + 9, y + 31 + i * 11, { size: 8, color: SUAVE, maxW: W - 18 }));
+  y += cliH + 18;
+
+  /* ---- informações básicas ---- */
+  const prazo = $("#o-prazo").value.trim();
+  if (prazo) {
+    s.text("Informações básicas", PW / 2, y, { size: 10.5, bold: true, color: AZUL, align: "center" });
+    y += 20;
+    s.text("Prazo de Produção", L, y, { size: 8, bold: true, color: TXT });
+    tx(prazo, L, y + 11, { size: 8.5 });
+    y += 30;
+  }
+
+  /* ---- produtos ---- */
+  const colP = L + W * 0.585, colU = L + W * 0.675, colQ = L + W * 0.785;
+  const hdr = () => {
+    s.rect(L, y, W, 22, { fill: AZUL_CLARO });
+    s.text("Descrição", L + 8, y + 14.5, { size: 8.5, bold: true, color: TXT });
+    s.text("Preço", colP, y + 14.5, { size: 8.5, bold: true, color: TXT, align: "right" });
+    s.text("Unidade", colU, y + 14.5, { size: 8.5, bold: true, color: TXT, align: "center" });
+    s.text("Qtd.", colQ, y + 14.5, { size: 8.5, bold: true, color: TXT, align: "center" });
+    s.text("Total", R - 8, y + 14.5, { size: 8.5, bold: true, color: TXT, align: "right" });
+    y += 22 + 6;
+  };
+  const continuacao = () => {
+    s.novaPagina();
+    s.reusarImg(iLogo, L, 26, 70, 70 * lg.h / lg.w);
+    s.text("Orçamento", R - textW("  (Nº " + numero + ") · continuação", 9, true), 44, { size: 13, bold: true, color: AZUL, align: "right" });
+    s.text("  (Nº " + numero + ") · continuação", R, 44, { size: 9, bold: true, color: AZUL, align: "right" });
+    y = 26 + 70 * lg.h / lg.w + 20;
+  };
+  s.text("Produtos", PW / 2, y, { size: 13, bold: true, color: AZUL, align: "center" });
+  y += 14;
+  hdr();
+  (itens.length ? itens : [itemVazio()]).forEach((it, i) => {
+    const ls = quebraLinhas((it.desc || "").trim() || "-", 8, false, colP - L - 90).slice(0, 4);
+    const h = Math.max(19, ls.length * 10 + 9);
+    if (y + h > LIM) { continuacao(); hdr(); }
+    s.rect(L, y, W, h, { fill: i % 2 ? Z2 : Z1 });
+    const topo = y + (h - ls.length * 10) / 2 + 7;
+    ls.forEach((l, k) => tx(l, L + 8, topo + k * 10, { size: 8 }));
+    const meio = y + h / 2 + 3;
+    const preco = parseReal(it.preco), qtd = parseReal(it.qtd);
+    tx(fmtReal(preco), colP, meio, { size: 8, align: "right" });
+    tx((it.unid || "").trim() || "-", colU, meio, { size: 8, align: "center", maxW: 50 });
+    tx(fmtQtd(qtd), colQ, meio, { size: 8, align: "center", maxW: 50 });
+    tx(fmtReal(preco * qtd), R - 8, meio, { size: 8, align: "right" });
+    y += h + 1;
+  });
+
+  /* ---- totais, condições, informações e assinatura ---- */
+  const cond = $("#o-cond").value.trim(), info = $("#o-info").value.trim();
+  const lc = cond ? quebraLinhas(cond, 8, false, W - 18) : [], li = info ? quebraLinhas(info, 8, false, W - 18) : [];
+  const blocoH = (ls) => ls.length ? 24 + 14 + ls.length * 10 + 6 : 0;
+  const precisa = 38 + (t.desc ? 16 : 0) + 48 + blocoH(lc) + blocoH(li) + 82;
+  if (y + precisa > LIM) { continuacao(); }
+  y += 15;
+  s.text("Subtotal produtos", L, y, { size: 9.5, bold: true, color: TXT });
+  s.text(fmtReal(t.sub), R, y, { size: 9.5, bold: true, color: TXT, align: "right" });
+  if (t.desc) {
+    y += 16;
+    s.text("Desconto", L, y, { size: 9.5, bold: true, color: TXT });
+    s.text("- " + fmtReal(t.desc), R, y, { size: 9.5, bold: true, color: TXT, align: "right" });
+  }
+  y += 22;
+  const TX = L + W * 0.5;
+  s.rect(TX, y, R - TX, 28, { fill: AZUL_CLARO });
+  tx("Total", TX + 9, y + 19, { size: 13 });
+  tx(fmtReal(t.total), R - 9, y + 19, { size: 13, align: "right" });
+  y += 28 + 18;
+
+  const bloco = (titulo, ls) => {
+    if (!ls.length) return;
+    s.rect(L, y, W, 24, { fill: CINZA });
+    s.text(titulo, L + 9, y + 16, { size: 11, bold: true, color: AZUL });
+    y += 24 + 14;
+    ls.forEach((l, k) => tx(l, L + 9, y + k * 10, { size: 8 }));
+    y += (ls.length - 1) * 10 + 16;
+  };
+  bloco("Condições de pagamento", lc);
+  bloco("Informações adicionais", li);
+
+  /* assinatura */
+  const ay = Math.min(y + 20, LIM - 62);
+  tx("Manaus, " + dataBr, PW / 2, ay, { size: 9, align: "center" });
+  const linhaY = ay + 36;
+  try {
+    const as = await jpeg(ASSINATURA, 1000);
+    const aw = 140, ah = aw * as.h / as.w;
+    s.img(as.bytes, as.w, as.h, PW / 2 - aw / 2, linhaY - ah - 1, aw, ah);
+  } catch (e) {}
+  s.line(PW / 2 - 95, linhaY, PW / 2 + 95, linhaY, 0.8, TXT);
+  tx("Amazônia Gráfica", PW / 2, linhaY + 13, { size: 10, align: "center" });
+  if (autor) tx("Orçamento feito por " + autor, PW / 2, linhaY + 24, { size: 7.5, color: SUAVE, align: "center" });
+  return s.build();
+}
+
+function dadosOrc() {
+  const o = { itens: orcItens.filter(it => (it.desc || "").trim() || parseReal(it.preco)), cond: $("#o-cond").value, info: $("#o-info").value, clienteInfo: orcCliente };
+  ORC_CAMPOS.forEach(c => o[c] = $("#o-" + c).value);
+  return o;
+}
+
+$("#o-pdf").addEventListener("click", async () => {
+  const btn = $("#o-pdf");
+  if (!$("#o-numero").value.trim()) { say("Informe o número do orçamento.", "err"); $("#o-numero").focus(); return; }
+  if (!orcItens.some(it => (it.desc || "").trim())) { say("Adicione pelo menos um produto ou serviço.", "err"); return; }
+  const numero = numeroCompleto();
+  const editando = orcEditId && numero === orcEditNumero;
+  if (!editando && historico.some(h => h.tipo === "orcamento" && h.numero === numero) &&
+      !confirm("Já existe um orçamento nº " + numero + ". Gerar outro com o mesmo número?")) return;
+  btn.disabled = true; say("Gerando o PDF…");
+  try {
+    const bytes = await buildOrc();
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    const cli = ($("#o-cliente").value || "").replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
+    const nomeArq = "Orçamento nº " + numero.replace(/\s/g, " ") + (cli ? " - " + cli : "") + ".pdf";
+    const t = somasOrc();
+    const campos = { cliente: $("#o-cliente").value.trim(), valor: t.total, dados: dadosOrc() };
+    if (editando) {
+      await atualizarRegistro(orcEditId, campos);
+    } else {
+      const id = registrar("orcamento", Object.assign({ numero, quem: $("#o-feitopor").value.trim() }, campos));
+      orcEditId = id; orcEditNumero = numero;
+      try { localStorage.setItem("amz_orc_ultimo", String(Math.max(numBase(numero), parseInt(localStorage.getItem("amz_orc_ultimo") || "0", 10) || 0))); } catch (e) {}
+    }
+    salvarOrc(); mostraModoEdicao(); renderOrcHist();
+    await salvarLocal(blob, nomeArq);
+  } catch (err) { console.error(err); say("Não foi possível gerar o PDF do orçamento.", "err"); }
+  finally { btn.disabled = false; }
+});
+$("#o-limpar").addEventListener("click", () => limparOrc(true));
+$("#o-add").addEventListener("click", () => {
+  orcItens.push(itemVazio()); renderOrcItens(); salvarOrc();
+  const trs = $("#o-body").querySelectorAll("tr"); trs[trs.length - 1].querySelector("input").focus();
+});
+$("#o-padrao").addEventListener("click", () => {
+  $("#o-cond").value = ORC_COND_PADRAO; $("#o-info").value = ORC_INFO_PADRAO; salvarTextosOrc();
+  say("Textos padrão de volta.", "ok");
+});
+["o-cond", "o-info"].forEach(id => $("#" + id).addEventListener("input", salvarTextosOrc));
+ORC_CAMPOS.forEach(c => $("#o-" + c).addEventListener("input", () => {
+  salvarOrc();
+  if (c === "desconto") atualizaTotaisOrc();
+  if (c === "numero" || c === "data") mostraModoEdicao();
+}));
+
+/* restaura o rascunho */
+(function () {
+  let o = null, tx = null;
+  try { o = JSON.parse(localStorage.getItem("amz_orc") || "null"); } catch (e) {}
+  try { tx = JSON.parse(localStorage.getItem("amz_orc_textos") || "null"); } catch (e) {}
+  $("#o-cond").value = tx && tx.cond != null ? tx.cond : ORC_COND_PADRAO;
+  $("#o-info").value = tx && tx.info != null ? tx.info : ORC_INFO_PADRAO;
+  if (o) {
+    ORC_CAMPOS.forEach(c => { if (o[c] != null) $("#o-" + c).value = o[c]; });
+    orcItens = Array.isArray(o.itens) && o.itens.length ? o.itens : [itemVazio()];
+    orcEditId = o.editId || null; orcEditNumero = o.editNumero || null;
+    orcCliente = o.cliente_info || null; orcCliAtualiza();
+    if (!$("#o-data").value) $("#o-data").value = iso(new Date());
+    renderOrcItens(); mostraModoEdicao(); atualizaSugestao();
+  } else limparOrc(false);
+})();
+window.orcAoAbrir = () => { aplicarModoOrc(false); renderOrcHist(); };
+aplicarPeriodo("mes");
+window.orcPronto = true;
+renderOrcHist();
+
+
+/* ================= O.S CAMISA: LISTA E FORMULÁRIO ================= */
+let osEditId = null;
+try { osEditId = localStorage.getItem("amz_os_edit") || null; } catch (e) {}
+function guardarOsEdit() { try { osEditId ? localStorage.setItem("amz_os_edit", osEditId) : localStorage.removeItem("amz_os_edit"); } catch (e) {} }
+window.osIdTrocado = (temp, real) => { if (osEditId === temp) { osEditId = real; guardarOsEdit(); mostraModoOs(); } };
+
+function mostraModoOs() {
+  const h = osEditId ? historico.find(x => (x.id || x.quando) === osEditId) : null;
+  if (osEditId && !h && modoHist === "nuvem") { osEditId = null; guardarOsEdit(); }
+  $("#os-form-titulo").textContent = osEditId ? "O.S. " + (h && h.numero && h.numero !== "…" ? h.numero : "(enviando…)") : "Nova O.S.";
+  $("#os-form-sub").textContent = osEditId
+    ? "Ajuste o que precisar e baixe o PDF de novo. As mudanças ficam salvas nesta mesma O.S."
+    : "Preencha a O.S. e baixe o PDF. Ela entra na lista e no controle da Visão Geral.";
+}
+
+let osModo = "lista";
+try { if (localStorage.getItem("amz_os_modo") === "form") osModo = "form"; } catch (e) {}
+function aplicarModoOs(animar) {
+  const form = $("#os-form"), lista = $("#os-lista");
+  form.hidden = osModo !== "form";
+  lista.hidden = osModo === "form";
+  form.classList.remove("descendo"); lista.classList.remove("subindo");
+  if (animar) { void form.offsetWidth; (osModo === "form" ? form : lista).classList.add(osModo === "form" ? "descendo" : "subindo"); }
+  if (!$("#view-os").hidden) {
+    document.querySelector(".bar").hidden = osModo !== "form";
+    $("#bar-os").hidden = osModo !== "form";
+  }
+  $("#os-consultar").classList.toggle("on", osModo === "lista");
+  mostraModoOs();
+  try { localStorage.setItem("amz_os_modo", osModo); } catch (e) {}
+}
+function mostrarFormOs() { osModo = "form"; window.scrollTo(0, 0); aplicarModoOs(true); }
+function mostrarListaOs() { osModo = "lista"; window.scrollTo(0, 0); aplicarModoOs(true); renderOsHist(); }
+
+function osTemConteudo() {
+  return !!($("#cliente").value.trim() || $("#obs").value.trim() || $("#tecido").value || SIZES.some(s => qty(s) > 0) || (rcLigado && rcTemQuantidade()) || artFile);
+}
+$("#os-novo").addEventListener("click", () => {
+  if (osModo === "form" && !osEditId) { $("#cliente").focus(); return; }
+  const rascunho = !osEditId && osTemConteudo();
+  if (osEditId || !rascunho) { $("#clear").click(); say(""); }
+  mostrarFormOs();
+  setTimeout(() => $("#cliente").focus(), 60);
+  if (rascunho) say("Continuando a O.S. que estava em andamento. Use “Limpar” para começar do zero.");
+});
+$("#os-consultar").addEventListener("click", () => { mostrarListaOs(); setTimeout(() => $("#os-busca").focus(), 60); });
+$("#os-fechar").addEventListener("click", mostrarListaOs);
+/* Limpar começa uma O.S. nova */
+$("#clear").addEventListener("click", () => { osEditId = null; guardarOsEdit(); mostraModoOs(); });
+
+/* registra ou atualiza a O.S. quando o PDF é baixado */
+function registrarOS(reg) {
+  const existe = osEditId && historico.some(x => (x.id || x.quando) === osEditId);
+  if (existe) atualizarRegistro(osEditId, reg);
+  else { osEditId = registrar("os", reg); }
+  guardarOsEdit(); mostraModoOs();
+}
+
+/* carrega uma O.S. do histórico no formulário */
+function abrirOS(id) {
+  const h = historico.find(x => (x.id || x.quando) === id);
+  if (!h || !h.dados) { say("Essa O.S. foi feita antes da atualização e não tem os dados guardados para reabrir.", "err"); return; }
+  const d = h.dados;
+  $("#clear").click(); say("");
+  $("#cliente").value = h.cliente || "";
+  $("#feitopor").value = h.quem || "";
+  ["tecido", "gola", "corgola"].forEach(c => { $("#" + c).value = d[c] || ""; montaChips(c); });
+  $("#obs").value = d.obs || "";
+  if (d.narede) $("#narede").value = d.narede;
+  if (d.entregar) { $("#entregar").value = d.entregar; wd(); }
+  const mods = Array.isArray(d.modelosRC) ? d.modelosRC : [];
+  if (mods.length) {
+    const todos = modelosRC();
+    rcSel = [];
+    mods.forEach(m => {
+      const alvo = todos.find(x => x.id === m.id) || todos.find(x => x.nome === m.nome);
+      if (!alvo) return;
+      garantirQtd(alvo.id);
+      SIZES.forEach(t => rcQtd[alvo.id][t] = parseInt((m.qtd || {})[t], 10) || 0);
+      if (!rcSel.includes(alvo.id)) rcSel.push(alvo.id);
+    });
+    ligarRC(true);
+  } else {
+    SIZES.forEach(t => $("#q-" + t).value = String((d.tamanhos || {})[t] || 0));
+  }
+  if (Array.isArray(d.time) && d.time.length) { time = d.time.map(j => Object.assign(linhaVazia(), j)); ligarUniforme(true); }
+  sync();
+  osEditId = id; guardarOsEdit();
+  mostrarFormOs();
+  const faltou = mods.length && rcSel.length < mods.length;
+  say("O.S. " + h.numero + " aberta." + (faltou ? " Algum modelo RC não existe mais e ficou de fora." : ""), faltou ? "err" : "ok");
+}
+
+/* filtros */
+function aplicarPeriodoOs(p) {
+  const hoje = new Date(); const ini = new Date(hoje); ini.setHours(0, 0, 0, 0);
+  const fim = new Date(hoje); fim.setHours(23, 59, 0, 0);
+  if (p === "7d") ini.setDate(ini.getDate() - 6);
+  if (p === "mes") { ini.setDate(1); fim.setMonth(fim.getMonth() + 1, 0); }
+  $("#os-de").value = p === "todos" ? "" : dtLocal(ini);
+  $("#os-ate").value = p === "todos" ? "" : dtLocal(fim);
+  document.querySelectorAll("#os-periodo button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
+  renderOsHist();
+}
+document.querySelectorAll("#os-periodo button").forEach(b => b.addEventListener("click", () => aplicarPeriodoOs(b.dataset.p)));
+["os-de", "os-ate"].forEach(id => $("#" + id).addEventListener("change", () => {
+  document.querySelectorAll("#os-periodo button").forEach(b => b.classList.remove("on"));
+  renderOsHist();
+}));
+$("#os-st").addEventListener("change", renderOsHist);
+$("#os-busca").addEventListener("input", renderOsHist);
+
+function renderOsHist() {
+  const de = $("#os-de").value ? new Date($("#os-de").value) : null;
+  const ate = $("#os-ate").value ? new Date($("#os-ate").value + ":59") : null;
+  const st = $("#os-st").value;
+  const q = semAcentoTxt(($("#os-busca").value || "").trim());
+  const todos = historico.filter(h => h.tipo === "os");
+  const lista = todos.filter(h => {
+    const d = new Date(h.quando);
+    if (de && d < de) return false;
+    if (ate && d > ate) return false;
+    if (st === "atrasadas" ? !atrasada(h) : (st && (h.status || "producao") !== st)) return false;
+    if (q && !semAcentoTxt([h.numero, h.cliente, h.quem].join(" ")).includes(q)) return false;
+    return true;
+  });
+  const pecas = lista.reduce((a, h) => a + (h.pecas || 0), 0);
+  $("#os-resumo").innerHTML = todos.length
+    ? "<b>" + lista.length + "</b> " + (lista.length === 1 ? "O.S." : "O.S.") + " no filtro · <b>" + pecas + "</b> " + (pecas === 1 ? "peça" : "peças")
+    : "";
+  const idDe = h => escapa(h.id || h.quando);
+  $("#os-hist").innerHTML = lista.slice(0, 200).map(h => {
+    const s = h.status || "producao";
+    return '<tr class="' + (atrasada(h) ? "atrasada " : "") + (s === "entregue" ? "entregue" : "") + '">' +
+      '<td class="num">' + escapa(h.numero) + '</td>' +
+      '<td class="cli">' + escapa(h.cliente || "Sem cliente") + (h.time ? ' <span class="quem">· time</span>' : "") + (h.pendente ? ' <span class="quem">· aguardando envio</span>' : "") + '</td>' +
+      '<td class="num">' + (h.pecas || 0) + '</td>' +
+      '<td class="ent">' + dataCurta(h.entrega) + (atrasada(h) ? " · atrasada" : "") + '</td>' +
+      '<td><select class="st ' + s + '" data-id="' + idDe(h) + '" aria-label="Status da O.S. ' + escapa(h.numero) + '">' +
+        Object.keys(ST_NOME).map(k => '<option value="' + k + '"' + (k === s ? " selected" : "") + '>' + ST_NOME[k] + '</option>').join("") + '</select></td>' +
+      '<td class="quem">' + escapa(h.quem || "—") + '</td>' +
+      '<td class="qnd">' + dataHora(h.quando) + '</td>' +
+      '<td class="abre"><button type="button" data-id="' + idDe(h) + '">Abrir</button></td>' +
+      '<td class="x">' + (h.pendente ? "" : '<button type="button" data-id="' + idDe(h) + '" aria-label="Remover">×</button>') + '</td></tr>';
+  }).join("");
+  $("#os-hist-vazio").hidden = lista.length > 0;
+  $("#os-hist-vazio").textContent = todos.length ? "Nenhuma O.S. nesse período, status ou busca." : "Nenhuma O.S. feita ainda. Clique em “Nova O.S.” para começar.";
+  document.querySelectorAll("#os-hist select.st").forEach(sel => sel.addEventListener("change", () => {
+    sel.className = "st " + sel.value; atualizarRegistro(sel.dataset.id, { status: sel.value });
+  }));
+  document.querySelectorAll("#os-hist .abre button").forEach(b => b.addEventListener("click", () => abrirOS(b.dataset.id)));
+  document.querySelectorAll("#os-hist .x button").forEach(b => b.addEventListener("click", () => removerRegistro(b.dataset.id)));
+  if (!$("#os-form").hidden) mostraModoOs();
+}
+window.osAoAbrir = () => { aplicarModoOs(false); renderOsHist(); };
+aplicarPeriodoOs("mes");
+window.osPronto = true;
 
 window.renderVisao=renderVisao;
 var _v=lido('amz_view');irPara(TITULOS[_v]&&(_v!=='visao'||MOSTRAR_VISAO)?_v:'os');
