@@ -11,7 +11,16 @@
  */
 import { neon } from "@neondatabase/serverless";
 
-const URL_BANCO = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+/* aceita o nome padrão e também nomes com prefixo (ex.: STORAGE_DATABASE_URL, NEON_POSTGRES_URL) */
+function acharUrlBanco() {
+  const env = process.env;
+  if (env.DATABASE_URL) return env.DATABASE_URL;
+  if (env.POSTGRES_URL) return env.POSTGRES_URL;
+  const chave = Object.keys(env).find(k => /(^|_)DATABASE_URL$/.test(k) && !/UNPOOLED/.test(k))
+             || Object.keys(env).find(k => /(^|_)POSTGRES_URL$/.test(k));
+  return chave ? env[chave] : "";
+}
+const URL_BANCO = acharUrlBanco();
 const sql = URL_BANCO ? neon(URL_BANCO) : null;
 
 let preparado = null;
@@ -59,7 +68,7 @@ function formata(r) {
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
-  if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)." });
+  if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
   if (!process.env.PAINEL_SENHA) return res.status(500).json({ erro: "Falta configurar PAINEL_SENHA na Vercel." });
   if (req.headers["x-painel-senha"] !== process.env.PAINEL_SENHA) return res.status(401).json({ erro: "Senha incorreta." });
 
