@@ -236,6 +236,8 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kb-busca{position:relative;flex:0 1 360px;min-width:220px}
 .kb-busca svg{position:absolute;left:12px;top:50%;width:17px;height:17px;transform:translateY(-50%);color:var(--muted);pointer-events:none}
 .kb-busca input{padding-left:38px;min-height:42px;font-size:14.5px}
+.kb-alerta{margin:10px 0 0;padding:11px 14px;border-radius:11px;background:rgba(217,138,0,.14);border:1px solid rgba(217,138,0,.45);color:var(--text);font-size:13.5px;line-height:1.45}
+.kb-alerta b{color:#d98a00}
 .kb-resumo{margin:0;color:var(--muted);font-size:13.5px}
 .kb-resumo b{color:var(--text)}
 .kb{display:flex;gap:14px;overflow-x:auto;padding:14px 2px 14px;align-items:stretch;scroll-snap-type:x proximity;min-height:calc(100vh - 170px)}
@@ -384,6 +386,73 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .c-lista-topo{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 10px}
 .c-lista-topo .hint{margin:0}
 #c-apagar-todos{min-height:36px;padding:6px 14px;font-size:13px}
+.pdf-modal{padding:2vh 16px;z-index:150}
+.pdf-box{max-width:1000px;height:96vh;display:flex;flex-direction:column;animation:none;margin:0}
+.pdf-box .modal-cab{flex:none}
+.pdf-acoes{display:flex;gap:8px;align-items:center}
+#pdf-frame{flex:1;width:100%;border:0;border-radius:0 0 18px 18px;background:#525659}
+@media (max-width:640px){.pdf-box{height:100%;border-radius:0}.pdf-acoes .btn{padding:8px 10px;font-size:13px}}
+.orc-config-bts{display:flex;gap:10px;flex-wrap:wrap}
+.orc-config-bts .btn{flex:1;min-width:140px}
+.top-acoes #orc-config-btn.on{border-color:var(--accent);color:var(--accent)}
+.pm-item-bts{display:flex;gap:10px;flex-wrap:wrap}
+.pm-camisa-btn{display:inline-flex;align-items:center;gap:8px;border-color:var(--accent);color:var(--accent)}
+.pm-camisa-btn svg{width:18px;height:18px}
+.pm-camisa{border:1.5px solid var(--accent);border-radius:14px;padding:14px 16px 16px;background:var(--accent-soft);display:flex;flex-direction:column;gap:12px}
+.pm-camisa-cab{display:flex;align-items:center;justify-content:space-between}
+.pm-camisa-cab h3{margin:0;font-size:16px}
+.pm-camisa-cab .btn-x{width:34px;height:34px;box-shadow:none}
+.cm-seg{flex-wrap:wrap}
+.cm-seg button small{opacity:.75;font-weight:600;margin-left:4px}
+.cm-tbl{min-width:420px}
+.cm-tbl td{padding:6px 12px;font-variant-numeric:tabular-nums}
+.cm-tbl td:first-child{font-weight:800}
+.cm-tbl input{max-width:110px;min-height:40px;padding:8px 10px;text-align:right}
+.cm-tbl .sub{font-weight:800;text-align:right}
+.cm-tbl .un{color:var(--muted)}
+.cm-aviso{margin:0;padding:10px 12px;border-radius:10px;background:rgba(217,138,0,.15);color:#d98a00;font-size:13.5px;font-weight:600}
+.cm-rodape{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cm-total{display:flex;flex-direction:column}
+.cm-total span{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cm-total em{font-style:normal;text-transform:none;letter-spacing:0}
+.cm-total b{font-size:22px;font-variant-numeric:tabular-nums}
+.cm-bts{display:flex;gap:8px}
+.pi-camisa{display:inline-flex;align-items:center;gap:6px;margin-left:8px;background:var(--accent);color:#fff;border-radius:6px;padding:2px 8px;font-size:10.5px;letter-spacing:.05em}
+.pi-camisa-edit{border:0;background:transparent;color:var(--accent);font:inherit;font-size:12.5px;font-weight:700;letter-spacing:0;text-transform:none;cursor:pointer;margin-left:auto;margin-right:6px}
+.pg-metodos{flex-wrap:wrap}
+.pg-conds{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.pg-check{display:inline-flex;align-items:center;gap:9px;font-size:14.5px;font-weight:700;cursor:pointer;min-height:44px}
+.pg-check input{width:20px;height:20px;accent-color:var(--accent);margin:0}
+.pg-data{min-width:180px}
+.pg-50{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card-2);display:flex;flex-direction:column;gap:10px}
+.pg-valor{min-height:48px;display:flex;align-items:center;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.pg-rest{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.pg-rest .f{min-width:200px}
+.kc-pago{background:rgba(34,197,94,.16);color:#22a355;border-radius:6px;padding:1px 6px;font-size:10.5px;letter-spacing:.05em}
+.kc-50{background:rgba(217,138,0,.16);color:#d98a00;border-radius:6px;padding:1px 6px;font-size:10.5px;letter-spacing:.05em}
+.det-os{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border:1px dashed var(--accent);border-radius:11px;font-size:13.5px}
+.det-os b{color:var(--accent)}
+.det-os button{margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.rel-dia{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rel-seta{position:static;margin:0;width:44px;height:44px;background:var(--card);border:1px solid var(--line);color:var(--text);opacity:1;padding:0}
+.rel-seta svg{width:20px;height:20px}
+.rel-data input{min-height:44px;font-size:16px;font-weight:700}
+.rel-extenso{margin:0 0 0 6px;font-size:18px;font-weight:800}
+.rel-caixa{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.rel-cx{background:var(--card-2);border:1px solid var(--line);border-radius:13px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.rel-cx span{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.rel-cx b{font-size:22px;font-variant-numeric:tabular-nums}
+.rel-cx small{color:var(--muted);font-size:12.5px}
+.rel-cx.tot{background:var(--accent);border-color:var(--accent)}
+.rel-cx.tot span,.rel-cx.tot b,.rel-cx.tot small{color:#fff}
+.rel-orig{font-weight:700}
+.rel-orig small{display:block;color:var(--muted);font-weight:600}
+#rel-lista tr.avulsa{cursor:pointer}
+.o-cli-add{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border-color:var(--accent);color:var(--accent)}
+.o-cli-add svg{width:18px;height:18px}
+.o-cli-add.ok{border-color:var(--line);color:var(--muted)}
+@media (max-width:520px){.o-cli-add span{display:none}}
 .pm-itens{display:flex;flex-direction:column;gap:12px}
 .pm-item{border:1px solid var(--line);border-radius:13px;padding:12px 14px 14px;background:var(--card-2);display:flex;flex-direction:column;gap:10px}
 .pm-item-cab{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
@@ -562,6 +631,7 @@ body.modal-aberto{overflow:hidden}
     <nav class="nav">
       <button type="button" data-view="visao" id="nav-visao" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v4h-7zM13 11h7v9h-7zM4 14h7v6H4z"/></svg><span>VISÃO GERAL</span></button>
       <button type="button" data-view="ped" id="nav-ped"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span>PEDIDOS</span></button>
+      <button type="button" data-view="rel" id="nav-rel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>RELATÓRIOS</span></button>
       <button type="button" data-view="prod" id="nav-prod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg><span>PRODUTOS</span></button>
       <button type="button" class="on" data-view="os" id="nav-os"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 5v5h3v11h10V10h3V5l-4-2"/><path d="M9 3a3 3 0 0 0 6 0"/></svg><span>O.S CAMISA</span></button>
       <button type="button" data-view="cli" id="nav-cli"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18.5 14.5A6.5 6.5 0 0 1 21.5 20"/></svg><span>CLIENTES</span></button>
@@ -581,6 +651,9 @@ body.modal-aberto{overflow:hidden}
         <button class="btn" type="button" id="ped-entregues-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/><path d="m9 13 2 2 4-4"/></svg><span>Arquivados</span></button>
         <button class="btn primary" type="button" id="ped-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo pedido</span></button>
       </div>
+      <div class="top-acoes" id="top-rel" hidden>
+        <button class="btn primary" type="button" id="rel-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Nova venda</span></button>
+      </div>
       <div class="top-acoes" id="top-prod" hidden>
         <button class="btn" type="button" id="prod-consultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Consultar produto</span></button>
         <button class="btn primary" type="button" id="prod-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo produto</span></button>
@@ -595,6 +668,7 @@ body.modal-aberto{overflow:hidden}
         <button class="btn primary" type="button" id="cli-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo cliente</span></button>
       </div>
       <div class="top-acoes" id="top-orc" hidden>
+        <button class="btn" type="button" id="orc-config-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span>Editar informações</span></button>
         <button class="btn" type="button" id="orc-consultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Consultar orçamento</span></button>
         <button class="btn primary" type="button" id="orc-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo orçamento</span></button>
       </div>
@@ -649,7 +723,38 @@ body.modal-aberto{overflow:hidden}
           <div class="kb-busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><input type="search" id="ped-busca" placeholder="Buscar pedido, cliente ou material" autocomplete="off"></div>
           <p class="kb-resumo" id="ped-resumo"></p>
         </div>
+        <p class="kb-alerta" id="ped-alerta" hidden>⚠ O arquivo <b>api/pedidos.js</b> no GitHub está desatualizado, por isso as prévias das artes não aparecem nos cards. Envie o <b>api/pedidos.js</b> do último zip para dentro da pasta <b>api</b> do repositório e dê Commit.</p>
         <div class="kb" id="kb" aria-label="Quadro de pedidos"></div>
+      </div>
+
+      <!-- ================= RELATÓRIOS ================= -->
+      <div id="view-rel" class="cols" hidden>
+        <div class="rel-dia">
+          <button class="kc-seta rel-seta" type="button" id="rel-ant" aria-label="Dia anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button>
+          <label class="rel-data"><span class="sr">Dia do relatório</span><input type="date" id="rel-data"></label>
+          <button class="kc-seta rel-seta" type="button" id="rel-prox" aria-label="Próximo dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button>
+          <button class="btn" type="button" id="rel-hoje">Hoje</button>
+          <p class="rel-extenso" id="rel-extenso"></p>
+        </div>
+        <section class="card">
+          <h2>Caixa do dia</h2>
+          <div class="body"><div class="rel-caixa" id="rel-caixa"></div></div>
+        </section>
+        <section class="card">
+          <h2>Vendas do dia</h2>
+          <div class="body">
+            <input type="search" id="rel-busca" placeholder="Buscar cliente, pedido ou descrição" autocomplete="off">
+            <p class="hint" id="rel-info"></p>
+            <div class="tblwrap">
+              <table class="tbl hist">
+                <thead><tr><th>Hora</th><th>Origem</th><th>Cliente</th><th>Descrição</th><th>Pagamento</th><th>Valor</th><th class="x"></th></tr></thead>
+                <tbody id="rel-lista"></tbody>
+              </table>
+              <div class="vazio" id="rel-vazio">Nenhuma venda neste dia.</div>
+            </div>
+            <p class="hint">Entram aqui os pedidos com pagamento marcado (à vista, entrada de 50% e restante, cada um no dia em que foi pago) e as vendas avulsas lançadas pelo botão <b>+ Nova venda</b>.</p>
+          </div>
+        </section>
       </div>
 
       <!-- ================= PRODUTOS ================= -->
@@ -921,6 +1026,7 @@ body.modal-aberto{overflow:hidden}
           <div class="body">
             <div class="f o-cli-wrap"><span>Cliente</span><input type="text" id="o-cliente" placeholder="Digite para buscar nos clientes cadastrados" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="o-sug"><div class="o-sug" id="o-sug" role="listbox" hidden></div></div>
             <div class="o-cli-info" id="o-cli-info" hidden></div>
+            <div class="f"><span>Telefone do cliente</span><div class="c-linha"><input type="text" id="o-telefone" inputmode="tel" placeholder="(92) 99999-9999" autocomplete="off"><button class="btn o-cli-add" type="button" id="o-cli-add" title="Salvar na lista de clientes (nome e telefone)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Salvar cliente</span></button></div></div>
             <div class="grid2">
               <label class="f"><span>Nº do orçamento</span><input type="text" id="o-numero" inputmode="numeric" autocomplete="off"></label>
               <label class="f"><span>Data</span><input type="date" id="o-data"></label>
@@ -933,15 +1039,6 @@ body.modal-aberto{overflow:hidden}
           </div>
         </section>
 
-        <section class="card">
-          <h2>Condições e informações</h2>
-          <div class="body">
-            <label class="f"><span>Condições de pagamento</span><textarea id="o-cond" rows="3"></textarea></label>
-            <label class="f"><span>Informações adicionais</span><textarea id="o-info" rows="8"></textarea></label>
-            <div class="acts"><button class="btn" type="button" id="o-padrao">Voltar textos padrão</button></div>
-            <p class="hint">Os textos que você editar aqui ficam salvos para os próximos orçamentos.</p>
-          </div>
-        </section>
 
         <section class="card wide">
           <h2>Produtos e serviços</h2>
@@ -963,6 +1060,20 @@ body.modal-aberto{overflow:hidden}
         </section>
 
        </div>
+
+        <section class="card" id="orc-config" hidden>
+          <h2>Condições e informações dos orçamentos</h2>
+          <div class="body">
+            <p class="hint" style="margin-top:0">Estes textos saem em todos os orçamentos novos. Edite e clique em <b>Salvar</b> para virar o padrão.</p>
+            <label class="f"><span>Condições de pagamento</span><textarea id="o-cond" rows="3"></textarea></label>
+            <label class="f"><span>Informações adicionais</span><textarea id="o-info" rows="9"></textarea></label>
+            <div class="acts orc-config-bts">
+              <button class="btn" type="button" id="o-limpar-txt">Limpar</button>
+              <button class="btn" type="button" id="o-padrao">Voltar textos originais</button>
+              <button class="btn primary" type="button" id="o-salvar-txt">Salvar</button>
+            </div>
+          </div>
+        </section>
 
         <section class="card" id="orc-lista">
           <h2>Orçamentos feitos</h2>
@@ -1075,6 +1186,45 @@ body.modal-aberto{overflow:hidden}
     </div>
   </div>
 
+  <div class="modal" id="venda-modal" hidden role="dialog" aria-modal="true" aria-labelledby="vd-titulo">
+    <form class="modal-box" id="vd-form" autocomplete="off" novalidate style="max-width:620px">
+      <div class="modal-cab"><h2 id="vd-titulo">Nova venda</h2><button class="btn-x" type="button" id="vd-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo">
+        <p class="hint" style="margin:10px 0 0">Para vendas de balcão que não viraram pedido. Entram no caixa do dia escolhido.</p>
+        <label class="f"><span>Descrição *</span><input type="text" id="vd-descricao" placeholder="Ex.: Impressão de 20 folhas A4 coloridas"></label>
+        <div class="grid-c">
+          <label class="f dup"><span>Cliente</span><input type="text" id="vd-cliente" list="pm-cli-lista" placeholder="Opcional"></label>
+          <label class="f"><span>Valor (R$) *</span><input type="text" id="vd-valor" inputmode="decimal" placeholder="0,00"></label>
+        </div>
+        <div class="f"><span>Método de pagamento *</span><div class="seg pg-metodos" id="vd-metodo"></div></div>
+        <div class="grid-c">
+          <label class="f"><span>Data</span><input type="date" id="vd-data"></label>
+          <label class="f"><span>Hora</span><input type="text" id="vd-hora" placeholder="14:30" inputmode="numeric"></label>
+        </div>
+      </div>
+      <div class="modal-pe">
+        <button class="btn danger" type="button" id="vd-excluir" hidden>Excluir</button>
+        <span class="espaco"></span>
+        <button class="btn" type="button" id="vd-limpar">Limpar</button>
+        <button class="btn primary" type="submit" id="vd-salvar">Salvar venda</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal pdf-modal" id="pdf-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pdf-titulo">
+    <div class="modal-box pdf-box">
+      <div class="modal-cab">
+        <h2 id="pdf-titulo">Pré-visualização</h2>
+        <div class="pdf-acoes">
+          <button class="btn blue" type="button" id="pdf-imprimir">Imprimir</button>
+          <button class="btn" type="button" id="pdf-baixar">Baixar PDF</button>
+          <button class="btn-x" type="button" id="pdf-fechar" aria-label="Fechar pré-visualização"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+      </div>
+      <iframe id="pdf-frame" title="Pré-visualização do PDF"></iframe>
+    </div>
+  </div>
+
   <div class="modal modal-conf" id="conf-modal" hidden role="alertdialog" aria-modal="true" aria-labelledby="conf-titulo" aria-describedby="conf-texto">
     <div class="modal-box conf-box">
       <div class="conf-ico" id="conf-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
@@ -1111,7 +1261,9 @@ body.modal-aberto{overflow:hidden}
       <div class="modal-pe">
         <div class="pm-pdf">
           <div class="seg" id="det-tam" role="radiogroup" aria-label="Tamanho do PDF"><button type="button" data-t="A4" class="on" role="radio" aria-checked="true">A4</button><button type="button" data-t="A5" role="radio" aria-checked="false">A5</button></div>
+          <button class="btn" type="button" id="det-ver">Visualizar</button>
           <button class="btn blue" type="button" id="det-pdf">Baixar PDF</button>
+          <button class="btn" type="button" id="det-imprimir">Imprimir</button>
         </div>
         <span class="espaco"></span>
         <button class="btn" type="button" id="det-fechar2">Fechar</button>
@@ -1132,10 +1284,49 @@ body.modal-aberto{overflow:hidden}
         </div>
         <p class="c-sec">Materiais do pedido</p>
         <div id="pm-itens" class="pm-itens"></div>
-        <button class="btn pm-add-item" type="button" id="pm-add-item">+ Adicionar material</button>
+        <div class="pm-item-bts">
+          <button class="btn pm-add-item" type="button" id="pm-add-item">+ Adicionar material</button>
+          <button class="btn pm-camisa-btn" type="button" id="pm-camisa-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg> Pedido de camisa</button>
+        </div>
+        <div class="pm-camisa" id="pm-camisa" hidden>
+          <div class="pm-camisa-cab"><h3>Venda de camisa</h3><button class="btn-x" type="button" id="cm-fechar" aria-label="Fechar venda de camisa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="f"><span>Tipo de camisa</span><div class="seg cm-seg" id="cm-tipo"></div></div>
+          <div class="f"><span>Tecido</span><div class="seg cm-seg" id="cm-tecido"></div></div>
+          <div class="grid-c">
+            <label class="f"><span>Tipo de gola</span><input type="text" id="cm-gola" list="cm-golas" placeholder="Redonda, gola V, polo…" autocomplete="off"><datalist id="cm-golas"><option value="REDONDA"></option><option value="GOLA V"></option><option value="POLO"></option></datalist></label>
+            <label class="f"><span>Cor da gola</span><input type="text" id="cm-corgola" placeholder="Ex.: branca" autocomplete="off"></label>
+          </div>
+          <div class="f"><span>Arte</span><div class="seg cm-seg" id="cm-arte"></div></div>
+          <div class="f"><span>Tamanhos e preços</span>
+            <div class="tblwrap"><table class="tbl cm-tbl"><thead><tr><th>Tamanho</th><th>Quantidade</th><th>Preço unit.</th><th>Subtotal</th></tr></thead><tbody id="cm-grade"></tbody></table></div>
+          </div>
+          <p class="cm-aviso" id="cm-aviso" hidden></p>
+          <div class="cm-rodape">
+            <div class="cm-total"><span>Total da camisa · <em id="cm-qtd">0 peças</em></span><b id="cm-total">R$ 0,00</b></div>
+            <div class="cm-bts"><button class="btn" type="button" id="cm-cancelar">Cancelar</button><button class="btn primary" type="button" id="cm-ok">Adicionar ao pedido</button></div>
+          </div>
+          <p class="hint">Os preços ficam só neste pedido. Ao salvar, o painel cria a <b>O.S. de camisa sem preço</b> para a produção e manda o pedido para a fila do designer.</p>
+        </div>
         <div class="grid-c">
           <label class="f"><span>Prazo de entrega</span><input type="date" id="pm-prazo"></label>
           <div class="pm-total dup"><span>Total do pedido · <em id="pm-total-n">1 material</em></span><b id="pm-total">R$ 0,00</b></div>
+        </div>
+        <p class="c-sec">Pagamento</p>
+        <div class="f"><span>Método de pagamento</span><div class="seg pg-metodos" id="pg-metodo"></div></div>
+        <div class="pg-conds">
+          <label class="pg-check"><input type="checkbox" id="pg-avista"> Pago à vista</label>
+          <label class="pg-check"><input type="checkbox" id="pg-50"> Pago 50%</label>
+          <label class="f pg-data" id="pg-data-wrap" hidden><span>Data do pagamento</span><input type="date" id="pg-data"></label>
+        </div>
+        <div class="pg-50" id="pg-50-box" hidden>
+          <div class="grid-c">
+            <label class="f"><span>Pagamento de entrada (R$)</span><input type="text" id="pg-entrada" inputmode="decimal" placeholder="0,00" autocomplete="off"></label>
+            <div class="f"><span>Valor restante</span><div class="pg-valor" id="pg-restante">R$ 0,00</div></div>
+          </div>
+          <div class="pg-rest">
+            <label class="pg-check"><input type="checkbox" id="pg-rest-pago"> Restante pago</label>
+            <label class="f"><span>Método do restante</span><select id="pg-rest-metodo" class="sel"><option value="">Mesmo da entrada</option><option value="pix">PIX</option><option value="dinheiro">Dinheiro</option><option value="credito">Cartão de crédito</option><option value="debito">Cartão de débito</option></select></label>
+          </div>
         </div>
         <div class="grid-c">
           <div class="f dup"><span>Prioridade</span><div class="seg" id="pm-prio"><button type="button" data-v="normal" class="on">Normal</button><button type="button" data-v="urgente">Urgente</button></div></div>
@@ -1153,6 +1344,7 @@ body.modal-aberto{overflow:hidden}
         <span class="espaco"></span>
         <div class="pm-pdf">
           <div class="seg" id="pm-tam" role="radiogroup" aria-label="Tamanho do PDF"><button type="button" data-t="A4" class="on" role="radio" aria-checked="true">A4</button><button type="button" data-t="A5" role="radio" aria-checked="false">A5</button></div>
+          <button class="btn" type="button" id="pm-ver">Visualizar</button>
           <button class="btn blue" type="button" id="pm-pdf">Baixar PDF</button>
         </div>
         <button class="btn" type="button" id="pm-cancelar">Cancelar</button>
@@ -1183,12 +1375,20 @@ body.modal-aberto{overflow:hidden}
     <span class="cnt">Total<b id="total2">0</b></span>
     <button class="btn" type="button" id="clear">Limpar</button>
     <button class="btn blue" type="button" id="os-salvar">Salvar</button>
+    <button class="btn" type="button" id="os-ver">Visualizar O.S.</button>
     <button class="btn primary" type="button" id="gen">Baixar PDF</button>
+  </div>
+  <div class="in" id="bar-rel" hidden>
+    <span class="cnt">Total do dia<b id="rel-total2">R$ 0,00</b></span>
+    <button class="btn" type="button" id="rel-limpar">Limpar</button>
+    <button class="btn blue" type="button" id="rel-ver">Visualizar impressão</button>
+    <button class="btn primary" type="button" id="rel-pdf">Salvar PDF</button>
   </div>
   <div class="in" id="bar-orc" hidden>
     <span class="cnt">Total<b id="o-total2">R$ 0,00</b></span>
     <button class="btn" type="button" id="o-limpar">Limpar</button>
     <button class="btn blue" type="button" id="o-salvar">Salvar</button>
+    <button class="btn" type="button" id="o-ver">Pré-visualização</button>
     <button class="btn primary" type="button" id="o-pdf">Baixar PDF</button>
   </div>
   <div class="in" id="bar-recibo" hidden>
@@ -1213,6 +1413,36 @@ window.addEventListener("unhandledrejection", e => bug("falha: " + ((e.reason &&
 
 /* ================= avisos ================= */
 let toastT = null;
+/* ---------- pré-visualização de PDF: ver, imprimir ou baixar ---------- */
+let pdfPrev = { url: null, blob: null, nome: "" };
+const ehCelular = () => matchMedia("(pointer: coarse)").matches && window.innerWidth < 820;
+function verPdf(bytes, titulo, nome, imprimirJa) {
+  if (pdfPrev.url) URL.revokeObjectURL(pdfPrev.url);
+  const blob = new Blob([bytes], { type: "application/pdf" });
+  pdfPrev = { url: URL.createObjectURL(blob), blob, nome };
+  /* celular não mostra PDF dentro da página: abre numa aba nova */
+  if (ehCelular()) { window.open(pdfPrev.url, "_blank"); return; }
+  const m = document.getElementById("pdf-modal"), fr = document.getElementById("pdf-frame");
+  document.getElementById("pdf-titulo").textContent = titulo || "Pré-visualização";
+  fr.onload = imprimirJa ? () => setTimeout(imprimirPdf, 350) : null;
+  fr.src = pdfPrev.url;
+  m.hidden = false; document.body.classList.add("modal-aberto");
+}
+function imprimirPdf() {
+  const fr = document.getElementById("pdf-frame");
+  try { fr.contentWindow.focus(); fr.contentWindow.print(); }
+  catch (e) { window.open(pdfPrev.url, "_blank"); }
+}
+function fecharPdf() {
+  const m = document.getElementById("pdf-modal");
+  m.hidden = true; document.getElementById("pdf-frame").src = "about:blank";
+  if (!document.querySelector(".modal:not([hidden])")) document.body.classList.remove("modal-aberto");
+}
+document.getElementById("pdf-imprimir").addEventListener("click", imprimirPdf);
+document.getElementById("pdf-baixar").addEventListener("click", () => { if (pdfPrev.blob) salvarLocal(pdfPrev.blob, pdfPrev.nome || "documento.pdf"); });
+document.getElementById("pdf-fechar").addEventListener("click", fecharPdf);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !document.getElementById("pdf-modal").hidden) { e.stopImmediatePropagation(); fecharPdf(); } }, true);
+
 /* confirmação própria do painel (a do navegador pode estar bloqueada) */
 let confResolver = null;
 function confirmar(texto, o = {}) {
@@ -1270,7 +1500,7 @@ const shell = document.getElementById("shell");
    O histórico segue sendo gravado nos bastidores. */
 const MOSTRAR_VISAO = true;
 document.getElementById("nav-visao").hidden = !MOSTRAR_VISAO;
-const TITULOS = { visao: "Visão Geral", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo" };
+const TITULOS = { visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo" };
 function irPara(v) {
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.view === v));
   document.getElementById("view-visao").hidden = v !== "visao";
@@ -1281,11 +1511,14 @@ function irPara(v) {
   document.getElementById("view-cli").hidden = v !== "cli";
   document.getElementById("view-ped").hidden = v !== "ped";
   document.getElementById("view-prod").hidden = v !== "prod";
+  document.getElementById("view-rel").hidden = v !== "rel";
+  document.getElementById("top-rel").hidden = v !== "rel";
+  document.getElementById("bar-rel").hidden = v !== "rel";
   document.getElementById("top-prod").hidden = v !== "prod";
   document.getElementById("top-ped").hidden = v !== "ped";
   document.body.classList.toggle("modo-kb", v === "ped");
   document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod";
-  document.getElementById("bar-os").hidden = v === "recibo" || v === "visao" || v === "orc";
+  document.getElementById("bar-os").hidden = v === "recibo" || v === "visao" || v === "orc" || v === "rel";
   document.getElementById("bar-orc").hidden = v !== "orc";
   document.getElementById("bar-recibo").hidden = v !== "recibo";
   document.getElementById("titulo").textContent = TITULOS[v];
@@ -1303,6 +1536,7 @@ function irPara(v) {
   if (v === "cli" && window.cliAoAbrir) window.cliAoAbrir();
   if (window.pedAoMudar) window.pedAoMudar(v === "ped");
   if (v === "prod" && window.prodAoAbrir) window.prodAoAbrir();
+  if (v === "rel" && window.relAoAbrir) window.relAoAbrir();
   guardar("amz_view", v);
 }
 document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => irPara(b.dataset.view)));
@@ -1655,7 +1889,7 @@ async function jpeg(src, maxPx) {
 const BLK = [0,0,0], RED = [255,0,0], SAL = [255,125,125];
 function br(v) { if (!v) return "___/___/___"; const p = v.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; }
 
-async function buildOS() {
+async function buildOS(numero) {
   const s = new Sheet();
   const L = 18, R = PW - 18;
 
@@ -1664,10 +1898,16 @@ async function buildOS() {
   const lgW = 152, lgH = lgW * lg.h / lg.w;
   const iLogo = s.img(lg.bytes, lg.w, lg.h, L, 8, lgW, lgH);
   const tX = L + lgW + 12;
+  /* número da O.S. no canto direito, ao lado do título */
+  const nW = numero ? 96 : 0;
+  if (numero) {
+    s.text("Nº", R, 8 + lgH * 0.3, { size: 11, align: "right", color: RED });
+    s.text(numero, R, 8 + lgH * 0.78, { size: 19, align: "right", color: RED, maxW: nW - 4 });
+  }
   let tSize = 54;
   const tW = textW("O.S CAMISA", tSize, true);
-  if (tW > R - tX) tSize = tSize * (R - tX) / tW;
-  s.text("O.S CAMISA", R, 8 + lgH * 0.78, { size: tSize, align: "right" });
+  if (tW > R - nW - tX) tSize = tSize * (R - nW - tX) / tW;
+  s.text("O.S CAMISA", R - nW, 8 + lgH * 0.78, { size: tSize, align: "right" });
   s.line(tX, 8 + lgH + 4, R, 8 + lgH + 4, 2.4);
 
   /* tabela de tamanhos */
@@ -1776,10 +2016,10 @@ $("#gen").addEventListener("click", async () => {
   const btn = $("#gen");
   btn.disabled = true; say("Gerando o PDF…");
   try {
-    const bytes = await buildOS();
+    const numero = await numeroParaOS();
+    const bytes = await buildOS(numero);
     const blob = new Blob([bytes], { type: "application/pdf" });
-    const name = fileName();
-    registrarOS(montarRegOS());
+    const name = numero ? fileName().replace(/^O\.S CAMISA/, "O.S CAMISA " + numero.replace("/", "-")) : fileName();
     if (downloads) {
       try {
         await downloads.save({ filename: name, data: blob });
@@ -2581,7 +2821,7 @@ function proximoNumero(tipo, ano) {
 function itemLocal(tipo, dados, quando) {
   const d = Object.assign({}, dados);
   const extra = d.dados || {};
-  if (tipo !== "orcamento" && tipo !== "os") delete d.dados;
+  if (tipo !== "orcamento" && tipo !== "os" && tipo !== "venda") delete d.dados;
   return Object.assign(d, {
     tipo, quando,
     numero: dados.numero || proximoNumero(tipo, new Date(quando).getFullYear()),
@@ -2647,6 +2887,7 @@ async function enviarFila() {
       historico.unshift(r.item);
       if (window.orcIdTrocado) window.orcIdTrocado(item._temp, r.item.id);
       if (window.osIdTrocado) window.osIdTrocado(item._temp, r.item.id);
+      (window.tempParaReal = window.tempParaReal || new Map()).set(item._temp, r.item.id);
     }
   } catch (e) {
     if (e.status === 401) pedirSenha("A senha mudou. Digite a senha da equipe de novo.");
@@ -2789,6 +3030,7 @@ function renderVisao() {
   document.querySelectorAll("#h-os .x button").forEach(b => b.addEventListener("click", () => removerRegistro(b.dataset.id)));
   if (window.orcPronto) renderOrcHist();
   if (window.osPronto) renderOsHist();
+  if (window.relAoAbrir && !document.getElementById("view-rel").hidden && typeof relEntradas !== "undefined") relAtualizaAvulsas();
 }
 function semAcentoTxt(t) { return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
@@ -3138,17 +3380,21 @@ const fmtQtd = v => (Math.round(v * 100) / 100).toLocaleString("pt-BR");
 let orcItens = [];
 let orcEditId = null, orcEditNumero = null, orcNumSugerido = "";
 let orcCliente = null; /* cópia do cadastro do cliente escolhido (vai junto no orçamento) */
-const ORC_CAMPOS = ["cliente", "numero", "data", "prazo", "feitopor", "desconto"];
+const ORC_CAMPOS = ["cliente", "telefone", "numero", "data", "prazo", "feitopor", "desconto"];
 function itemVazio() { return { desc: "", preco: "", unid: "und", qtd: "1" }; }
 
 function salvarOrc() {
-  const o = { itens: orcItens, editId: orcEditId, editNumero: orcEditNumero, cliente_info: orcCliente };
+  const o = { itens: orcItens, editId: orcEditId, editNumero: orcEditNumero, cliente_info: orcCliente, textos: orcTextos };
   ORC_CAMPOS.forEach(c => o[c] = $("#o-" + c).value);
   try { localStorage.setItem("amz_orc", JSON.stringify(o)); } catch (e) {}
 }
-function salvarTextosOrc() {
-  try { localStorage.setItem("amz_orc_textos", JSON.stringify({ cond: $("#o-cond").value, info: $("#o-info").value })); } catch (e) {}
+function textosOrcSalvos() {
+  let tx = null; try { tx = JSON.parse(localStorage.getItem("amz_orc_textos") || "null"); } catch (e) {}
+  return { cond: tx && tx.cond != null ? tx.cond : ORC_COND_PADRAO, info: tx && tx.info != null ? tx.info : ORC_INFO_PADRAO };
 }
+/* textos usados no orçamento em edição (um orçamento reaberto mantém os dele) */
+let orcTextos = null;
+const textosDoOrc = () => orcTextos || textosOrcSalvos();
 
 /* ---------- cliente do orçamento: busca nos cadastrados ---------- */
 const CLI_SNAP = ["id", "tipo", "nome", "razao", "fantasia", "cnpj", "cpf", "documento", "ie", "im", "cep", "logradouro", "numero", "complemento", "bairro", "cidade", "uf", "tel1", "tel2", "email", "contato"];
@@ -3159,6 +3405,7 @@ function enderecoCli(c) {
   return [rua, c.bairro, cid].filter(Boolean).join(" · ") + (c.cep ? " · CEP " + c.cep : "");
 }
 function orcCliAtualiza() {
+  setTimeout(atualizaBtnCliOrc, 0);
   /* pega a versão mais nova do cadastro, se o cliente ainda existir */
   if (orcCliente && typeof clientes !== "undefined") {
     const atual = clientes.find(c => c.id === orcCliente.id);
@@ -3177,9 +3424,66 @@ function orcCliAtualiza() {
     irPara("cli"); preencherFormCli(cad); voltarParaOrc = true; mostrarFormCli();
   });
 }
+/* botão + : salva o cliente do orçamento na lista de clientes (só nome e telefone) */
+function atualizaBtnCliOrc() {
+  const b = $("#o-cli-add"); if (!b) return;
+  const tel = soDig($("#o-telefone").value);
+  const telCad = orcCliente ? soDig(orcCliente.tel1 || orcCliente.tel2) : "";
+  const jaTem = !!orcCliente && (!tel || tel === telCad);
+  b.classList.toggle("ok", jaTem);
+  b.querySelector("span").textContent = !orcCliente ? "Salvar cliente" : jaTem ? "Na lista" : "Atualizar telefone";
+  b.title = !orcCliente ? "Salvar na lista de clientes (nome e telefone)" : jaTem ? "Este cliente já está na lista de clientes" : "Guardar este telefone no cadastro do cliente";
+}
+async function salvarClienteDoOrc() {
+  const nome = $("#o-cliente").value.trim(), tel = fmtTel($("#o-telefone").value);
+  if (!nome) { say("Digite o nome do cliente primeiro.", "err"); $("#o-cliente").focus(); return; }
+  if (modoHist !== "nuvem" && modoHist !== "local") { say("Entre com a senha da equipe para salvar clientes.", "err"); if (modoHist === "senha") pedirSenha(""); return; }
+  const grava = async (dados, id) => {
+    if (modoHist === "nuvem") {
+      const r = id ? await apiCli("PATCH", "?id=" + encodeURIComponent(id), dados) : await apiCli("POST", "", dados);
+      clientes = clientes.filter(x => x.id !== r.item.id).concat([normCli(r.item)]).sort(porNome);
+      return r.item;
+    }
+    const salvo = Object.assign({}, dados, { id: id || "l_" + Date.now() });
+    clientesLocal = clientesLocal.filter(x => x.id !== salvo.id).concat([salvo]); salvarClientesLocal();
+    clientes = clientesLocal.map(normCli).slice().sort(porNome);
+    return salvo;
+  };
+  try {
+    /* já ligado a um cadastro: só guarda o telefone novo */
+    let existente = orcCliente ? clientes.find(x => x.id === orcCliente.id) : null;
+    if (!existente) {
+      const mesmoNome = clientes.find(x => semAcentoTxt(x.nome).trim() === semAcentoTxt(nome).trim());
+      if (mesmoNome) {
+        if (!(await confirmar("Já existe o cliente " + mesmoNome.nome + " na lista. Usar esse cadastro?", { titulo: "Cliente já cadastrado", perigo: false, sim: "Usar o cadastro", nao: "Cancelar" }))) return;
+        existente = mesmoNome;
+      }
+    }
+    if (existente) {
+      const telCad = soDig(existente.tel1 || existente.tel2);
+      let salvo = existente;
+      if (tel && soDig(tel) !== telCad) {
+        const upd = Object.assign({}, existente);
+        if (!existente.tel1) upd.tel1 = tel; else if (!existente.tel2) upd.tel2 = tel; else upd.tel1 = tel;
+        salvo = await grava(upd, existente.id);
+        say("Telefone guardado no cadastro de " + existente.nome + ".", "ok");
+      } else say(existente.nome + " já está na lista de clientes.");
+      selecionarCliOrc(salvo, false);
+    } else {
+      const novo = {}; C_CAMPOS.forEach(k => novo[k] = "");
+      Object.assign(novo, { nome, tel1: tel, tipo: "pj", documento: "" });
+      const salvo = await grava(novo, null);
+      selecionarCliOrc(salvo, false);
+      say(nome + " salvo na lista de clientes.", "ok");
+    }
+    if (typeof renderClientes === "function") renderClientes();
+  } catch (e) { say("Não consegui salvar o cliente: " + (e.msg || "sem conexão") + ".", "err"); }
+  finally { atualizaBtnCliOrc(); }
+}
 function selecionarCliOrc(c, avisar) {
   orcCliente = snapCli(c);
   $("#o-cliente").value = c.nome;
+  if (c.tel1 || c.tel2) $("#o-telefone").value = c.tel1 || c.tel2;
   fecharSugestoes(); orcCliAtualiza(); salvarOrc();
   if (avisar) say("Cliente " + c.nome + " no orçamento.", "ok");
 }
@@ -3202,6 +3506,9 @@ function mostrarSugestoes() {
     else selecionarCliOrc(achados[+b.dataset.i], false);
   }));
 }
+$("#o-cli-add").addEventListener("click", salvarClienteDoOrc);
+$("#o-telefone").addEventListener("input", () => atualizaBtnCliOrc());
+$("#o-telefone").addEventListener("blur", e => { e.target.value = fmtTel(e.target.value); salvarOrc(); atualizaBtnCliOrc(); });
 $("#o-cliente").addEventListener("input", () => {
   if (orcCliente && $("#o-cliente").value.trim() !== orcCliente.nome) { orcCliente = null; orcCliAtualiza(); }
   mostrarSugestoes(); salvarOrc();
@@ -3286,11 +3593,11 @@ function renderOrcItens() {
 }
 
 function limparOrc(avisar) {
-  ["cliente", "desconto"].forEach(c => $("#o-" + c).value = "");
+  ["cliente", "telefone", "desconto"].forEach(c => $("#o-" + c).value = "");
   $("#o-data").value = iso(new Date());
   $("#o-prazo").value = "7 dias úteis";
   orcItens = [itemVazio()];
-  orcEditId = null; orcEditNumero = null; orcCliente = null; orcCliAtualiza();
+  orcEditId = null; orcEditNumero = null; orcCliente = null; orcCliAtualiza(); orcTextos = null;
   $("#o-numero").value = ""; orcNumSugerido = "";
   atualizaSugestao();
   renderOrcItens(); salvarOrc(); mostraModoEdicao();
@@ -3299,6 +3606,7 @@ function limparOrc(avisar) {
 function mostraModoEdicao() {
   if (!$("#view-orc").hidden) $("#titulo").textContent = orcModo !== "form" ? "Orçamento"
     : orcEditId ? "Orçamento " + orcEditNumero : "Novo orçamento";
+  if (!$("#view-orc").hidden && orcModo === "config") $("#titulo").textContent = "Informações do orçamento";
   const el = $("#o-num-info");
   el.textContent = orcEditId
     ? "Editando o orçamento " + orcEditNumero + ". Baixar o PDF atualiza este mesmo orçamento; troque o número para salvar como um novo."
@@ -3311,13 +3619,13 @@ function abrirOrc(id) {
   if (!h || !h.dados) { say("Esse orçamento não tem os dados guardados para reabrir.", "err"); return; }
   const d = h.dados;
   $("#o-cliente").value = d.cliente || h.cliente || "";
+  $("#o-telefone").value = d.telefone || (d.clienteInfo && (d.clienteInfo.tel1 || d.clienteInfo.tel2)) || "";
   $("#o-numero").value = String(h.numero || "").replace(/\s*-\s*\d{4}$/, "");
   $("#o-data").value = d.data || iso(new Date());
   $("#o-prazo").value = d.prazo || "";
   $("#o-feitopor").value = d.feitopor || h.quem || "";
   $("#o-desconto").value = d.desconto || "";
-  if (d.cond != null) $("#o-cond").value = d.cond;
-  if (d.info != null) $("#o-info").value = d.info;
+  orcTextos = { cond: d.cond != null ? d.cond : textosOrcSalvos().cond, info: d.info != null ? d.info : textosOrcSalvos().info };
   orcItens = Array.isArray(d.itens) && d.itens.length ? d.itens.map(x => Object.assign(itemVazio(), x)) : [itemVazio()];
   orcEditId = id; orcEditNumero = h.numero;
   orcCliente = d.clienteInfo || null; orcCliAtualiza();
@@ -3331,10 +3639,13 @@ window.orcIdTrocado = (temp, real) => { if (orcEditId === temp) { orcEditId = re
 let orcModo = "lista";
 try { if (localStorage.getItem("amz_orc_modo") === "form") orcModo = "form"; } catch (e) {}
 function aplicarModoOrc(animar) {
-  const form = $("#orc-form"), lista = $("#orc-lista");
+  const form = $("#orc-form"), lista = $("#orc-lista"), cfg = $("#orc-config");
   const noOrc = !$("#view-orc").hidden;
   form.hidden = orcModo !== "form";
-  lista.hidden = orcModo === "form";
+  lista.hidden = orcModo !== "lista";
+  cfg.hidden = orcModo !== "config";
+  $("#orc-config-btn").classList.toggle("on", orcModo === "config");
+  if (orcModo === "config") { const t = textosOrcSalvos(); $("#o-cond").value = t.cond; $("#o-info").value = t.info; }
   form.classList.remove("descendo"); lista.classList.remove("subindo");
   if (animar) { void form.offsetWidth; (orcModo === "form" ? form : lista).classList.add(orcModo === "form" ? "descendo" : "subindo"); }
   if (noOrc) {
@@ -3439,7 +3750,8 @@ function quebraLinhas(str, size, bold, w) {
 async function buildOrc() {
   const s = new Sheet();
   const L = 26, R = PW - 26, W = R - L;
-  const AZUL = [20, 135, 196], AZUL_CLARO = [130, 214, 250], CINZA = [245, 245, 245];
+  /* cores no tema da gráfica: vermelho (títulos) e vermelho claro (faixas) */
+  const AZUL = [206, 38, 44], AZUL_CLARO = [250, 196, 196], CINZA = [245, 245, 245];
   const Z1 = [236, 236, 236], Z2 = [248, 248, 248], TXT = [25, 25, 25], SUAVE = [95, 95, 95];
   const numero = numeroCompleto();
   const dataBr = br($("#o-data").value || iso(new Date()));
@@ -3476,15 +3788,17 @@ async function buildOrc() {
   /* ---- cliente (com os dados do cadastro, se houver) ---- */
   const c = orcCliente;
   const nomeCli = $("#o-cliente").value.trim() || "-";
+  const telOrc = fmtTel($("#o-telefone").value);
   const extras = [];
   if (c) {
     const doc = [c.cnpj || (!c.cpf && c.documento && soDig(c.documento).length !== 11 ? c.documento : "") ? "CNPJ: " + (c.cnpj || c.documento) : "", c.cpf || (!c.cnpj && c.documento && soDig(c.documento).length === 11 ? c.documento : "") ? "CPF: " + (c.cpf || c.documento) : ""].filter(Boolean).join("   •   ");
     const l1 = [c.razao && c.razao !== c.nome ? "Razão social: " + c.razao : "", doc, c.ie ? "IE: " + c.ie : ""].filter(Boolean).join("   •   ");
     if (l1) extras.push(l1);
     if (enderecoCli(c)) extras.push(enderecoCli(c));
-    const l3 = [c.tel1 ? "Tel.: " + [c.tel1, c.tel2].filter(Boolean).join(" / ") : (c.tel2 ? "Tel.: " + c.tel2 : ""), c.email, c.contato ? "Contato: " + c.contato : ""].filter(Boolean).join("   •   ");
+    const tels = [...new Set([telOrc, c.tel1, c.tel2].filter(Boolean))];
+    const l3 = [tels.length ? "Tel.: " + tels.join(" / ") : "", c.email, c.contato ? "Contato: " + c.contato : ""].filter(Boolean).join("   •   ");
     if (l3) extras.push(l3);
-  }
+  } else if (telOrc) extras.push("Tel.: " + telOrc);
   const cliH = 26 + (extras.length ? extras.length * 11 + 4 : 0);
   s.rect(L, y, W, cliH, { fill: CINZA });
   tx("Cliente: " + nomeCli, L + 9, y + 17, { size: 10.5, maxW: W - 18 });
@@ -3539,7 +3853,8 @@ async function buildOrc() {
   });
 
   /* ---- totais, condições, informações e assinatura ---- */
-  const cond = $("#o-cond").value.trim(), info = $("#o-info").value.trim();
+  const { cond: condT, info: infoT } = textosDoOrc();
+  const cond = String(condT || "").trim(), info = String(infoT || "").trim();
   const lc = cond ? quebraLinhas(cond, 8, false, W - 18) : [], li = info ? quebraLinhas(info, 8, false, W - 18) : [];
   const blocoH = (ls) => ls.length ? 24 + 14 + ls.length * 10 + 6 : 0;
   const precisa = 38 + (t.desc ? 16 : 0) + 48 + blocoH(lc) + blocoH(li) + 82;
@@ -3586,7 +3901,7 @@ async function buildOrc() {
 }
 
 function dadosOrc() {
-  const o = { itens: orcItens.filter(it => (it.desc || "").trim() || parseReal(it.preco)), cond: $("#o-cond").value, info: $("#o-info").value, clienteInfo: orcCliente };
+  const o = { itens: orcItens.filter(it => (it.desc || "").trim() || parseReal(it.preco)), cond: textosDoOrc().cond, info: textosDoOrc().info, clienteInfo: orcCliente };
   ORC_CAMPOS.forEach(c => o[c] = $("#o-" + c).value);
   return o;
 }
@@ -3622,6 +3937,17 @@ $("#o-salvar").addEventListener("click", async () => {
   const novo = await gravarOrc();
   say(novo ? "Orçamento " + orcEditNumero + " salvo. Ele já aparece na lista." : "Alterações salvas.", "ok");
 });
+$("#o-ver").addEventListener("click", async () => {
+  if (!orcItens.some(it => (it.desc || "").trim())) { say("Adicione pelo menos um produto ou serviço.", "err"); return; }
+  const btn = $("#o-ver"); btn.disabled = true; say("Montando a pré-visualização…");
+  try {
+    const numero = numeroCompleto();
+    const bytes = await buildOrc();
+    const cli = ($("#o-cliente").value || "").replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
+    say(""); verPdf(bytes, "Orçamento nº " + numero, "Orçamento nº " + numero + (cli ? " - " + cli : "") + ".pdf");
+  } catch (e) { console.error(e); say("Não foi possível montar a pré-visualização.", "err"); }
+  finally { btn.disabled = false; }
+});
 $("#o-pdf").addEventListener("click", async () => {
   const btn = $("#o-pdf");
   if (!(await validarOrc())) return;
@@ -3642,11 +3968,14 @@ $("#o-add").addEventListener("click", () => {
   orcItens.push(itemVazio()); renderOrcItens(); salvarOrc();
   const trs = $("#o-body").querySelectorAll("tr"); trs[trs.length - 1].querySelector("input").focus();
 });
-$("#o-padrao").addEventListener("click", () => {
-  $("#o-cond").value = ORC_COND_PADRAO; $("#o-info").value = ORC_INFO_PADRAO; salvarTextosOrc();
-  say("Textos padrão de volta.", "ok");
+$("#o-padrao").addEventListener("click", () => { $("#o-cond").value = ORC_COND_PADRAO; $("#o-info").value = ORC_INFO_PADRAO; say("Textos originais de volta. Clique em Salvar para usar."); });
+$("#o-limpar-txt").addEventListener("click", () => { $("#o-cond").value = ""; $("#o-info").value = ""; $("#o-cond").focus(); });
+$("#o-salvar-txt").addEventListener("click", () => {
+  try { localStorage.setItem("amz_orc_textos", JSON.stringify({ cond: $("#o-cond").value, info: $("#o-info").value })); } catch (e) {}
+  orcTextos = null;
+  say("Condições e informações salvas. Os próximos orçamentos já saem com elas.", "ok");
 });
-["o-cond", "o-info"].forEach(id => $("#" + id).addEventListener("input", salvarTextosOrc));
+$("#orc-config-btn").addEventListener("click", () => { orcModo = "config"; window.scrollTo(0, 0); aplicarModoOrc(true); setTimeout(() => $("#o-cond").focus(), 60); });
 ORC_CAMPOS.forEach(c => $("#o-" + c).addEventListener("input", () => {
   salvarOrc();
   if (c === "desconto") atualizaTotaisOrc();
@@ -3658,8 +3987,7 @@ ORC_CAMPOS.forEach(c => $("#o-" + c).addEventListener("input", () => {
   let o = null, tx = null;
   try { o = JSON.parse(localStorage.getItem("amz_orc") || "null"); } catch (e) {}
   try { tx = JSON.parse(localStorage.getItem("amz_orc_textos") || "null"); } catch (e) {}
-  $("#o-cond").value = tx && tx.cond != null ? tx.cond : ORC_COND_PADRAO;
-  $("#o-info").value = tx && tx.info != null ? tx.info : ORC_INFO_PADRAO;
+  orcTextos = o && o.textos ? o.textos : null;
   if (o) {
     ORC_CAMPOS.forEach(c => { if (o[c] != null) $("#o-" + c).value = o[c]; });
     orcItens = Array.isArray(o.itens) && o.itens.length ? o.itens : [itemVazio()];
@@ -3743,6 +4071,29 @@ $("#os-salvar").addEventListener("click", () => {
   const nova = !(osEditId && historico.some(x => (x.id || x.quando) === osEditId));
   registrarOS(montarRegOS());
   say(nova ? "O.S. salva. Ela já aparece na lista e na Visão Geral." : "Alterações salvas.", "ok");
+});
+/* salva a O.S. e espera o número dela (vem do banco) para imprimir no PDF */
+async function numeroParaOS() {
+  registrarOS(montarRegOS());
+  for (let t = 0; t < 40; t++) {
+    const h = historico.find(x => (x.id || x.quando) === osEditId);
+    if (h && h.numero && h.numero !== "…") return h.numero;
+    if (modoHist !== "nuvem") return "";
+    if (typeof enviarFila === "function") await enviarFila();
+    await new Promise(r => setTimeout(r, 250));
+  }
+  return "";
+}
+$("#os-ver").addEventListener("click", async () => {
+  if (!osTemConteudo() && !(uniformeLigado && time.some(j => j.nome))) { say("A O.S. está vazia. Preencha o cliente ou os tamanhos antes.", "err"); return; }
+  const btn = $("#os-ver"); btn.disabled = true; say("Montando a O.S…");
+  try {
+    const numero = await numeroParaOS();
+    const bytes = await buildOS(numero);
+    say("");
+    verPdf(bytes, "O.S. de camisa" + (numero ? " nº " + numero : ""), (numero ? "O.S CAMISA " + numero.replace("/", "-") + " - " : "O.S CAMISA - ") + ($("#cliente").value.trim() || "cliente") + ".pdf");
+  } catch (e) { console.error(e); say("Não foi possível montar a O.S.", "err"); }
+  finally { btn.disabled = false; }
 });
 /* registra ou atualiza a O.S. (Salvar ou Baixar PDF) */
 function registrarOS(reg) {
@@ -3907,14 +4258,55 @@ function podeGravarPed() {
   return false;
 }
 
+let pedApiAntiga = false, pedAvisouApi = false;
+const minisTentadas = new Set();
 async function carregarPedidos(silencioso) {
   if (modoHist === "nuvem") {
-    try { pedidos = (await apiPed("GET")).itens || []; }
+    try {
+      pedidos = (await apiPed("GET")).itens || [];
+      /* a versão nova do api/pedidos.js sempre devolve "miniaturas" */
+      pedApiAntiga = pedidos.length > 0 && !("miniaturas" in pedidos[0]);
+      $("#ped-alerta").hidden = !pedApiAntiga;
+      if (pedApiAntiga && !pedAvisouApi) {
+        pedAvisouApi = true;
+        say("O arquivo api/pedidos.js no GitHub está desatualizado, por isso as prévias das artes não aparecem. Envie o api/pedidos.js do último zip para dentro da pasta api.", "err");
+      }
+    }
     catch (e) { if (!silencioso && !e.semApi) say("Não consegui carregar os pedidos: " + (e.msg || "sem conexão") + ".", "err"); return; }
   } else if (modoHist === "local") {
     pedidos = pedLocal.filter(p => !p.arquivado);
   }
   if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden) renderKB();
+  completarMiniaturas();
+}
+/* pedidos com arte mas sem miniatura (feitos antes, ou salvos com o servidor antigo): gera e guarda */
+let completandoMinis = false;
+async function completarMiniaturas() {
+  if (completandoMinis || pedApiAntiga) return;
+  const faltam = pedidos.filter(p => (p.temArte || p.arte || (p.artes && p.artes.length)) && !minisDe(p).length && !minisTentadas.has(p.id));
+  if (!faltam.length) return;
+  completandoMinis = true;
+  try {
+    for (const p of faltam.slice(0, 6)) {
+      minisTentadas.add(p.id);
+      try {
+        let artes = artesCompletasLocais(p);
+        if (!artes.length && modoHist === "nuvem") artes = ((await apiPed("GET", "?id=" + encodeURIComponent(p.id) + "&arte=1")).artes || []).filter(a => a && a.img);
+        if (!artes.length) continue;
+        const minis = await gerarMinis(artes.map(a => ({ img: a.img, rotulo: a.material || (a.item ? "" : "Pedido todo") })));
+        if (!minis.length) continue;
+        if (modoHist === "nuvem") {
+          const r = await apiPed("PATCH", "?id=" + encodeURIComponent(p.id), { miniaturas: minis });
+          const i = pedidos.findIndex(x => x.id === p.id); if (i >= 0) pedidos[i] = r.item;
+        } else {
+          p.miniaturas = minis;
+          const l = pedLocal.find(x => x.id === p.id); if (l) { l.miniaturas = minis; salvarPedLocal(); }
+        }
+        if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden) renderKB();
+      } catch (e) { /* tenta de novo na próxima vez que o quadro abrir */ minisTentadas.delete(p.id); break; }
+    }
+  } finally { completandoMinis = false; }
+  if (pedidos.some(p => (p.temArte || p.arte || (p.artes && p.artes.length)) && !minisDe(p).length && !minisTentadas.has(p.id))) setTimeout(completarMiniaturas, 500);
 }
 window.carregarPedidos = carregarPedidos;
 window.pedAoMudar = on => {
@@ -3945,6 +4337,7 @@ async function criarPedido(dados, fila) {
     pedidos.push(p); pedChegou = p.id;
   }
   renderKB();
+  return pedidos[pedidos.length - 1];
 }
 async function atualizarPedido(id, campos) {
   const antes = pedidos.find(p => p.id === id);
@@ -4044,7 +4437,7 @@ function cardPedido(p, fila, idxFila) {
   const valor = parseReal(p.preco);
   const ultimo = idxFila === FILAS.length - 1;
   el.innerHTML = mini +
-    '<div class="kc-topo"><span class="kc-num">#' + escapa(p.numero) + '</span>' + (p.prioridade === "urgente" ? '<span class="kc-urg">URGENTE</span>' : "") + prazo + '</div>' +
+    '<div class="kc-topo"><span class="kc-num">#' + escapa(p.numero) + '</span>' + (p.prioridade === "urgente" ? '<span class="kc-urg">URGENTE</span>' : "") + badgePag(p) + prazo + '</div>' +
     '<p class="kc-cli">' + escapa(p.cliente || "Sem cliente") + '</p>' +
     (p.descricao ? '<p class="kc-desc">' + escapa(p.descricao) + '</p>' : "") +
     '<div class="kc-tags">' + chipsMateriais(p) +
@@ -4237,6 +4630,7 @@ function abrirPedidoModal(p, filaInicial) {
   const v = (k, def) => (p && p[k] != null ? p[k] : def);
   ["cliente", "contato", "telefone", "prazo", "atendente", "obs"].forEach(k => $("#pm-" + k).value = v(k, ""));
   carregarItensPed(p);
+  if (window.atualizaPagamento) { montaPagamento(p); fecharCamisa(); }
   setPrio(v("prioridade", "normal"));
   $("#pm-fila").value = p ? p.fila : (filaInicial || "atendimento");
   if (!p && !$("#pm-atendente").value) { try { $("#pm-atendente").value = localStorage.getItem("amz_ped_atendente") || ""; } catch (e) {} }
@@ -4273,6 +4667,7 @@ $("#pm-form").addEventListener("submit", async ev => {
     prazo: $("#pm-prazo").value, prioridade: pedPrio,
     atendente: $("#pm-atendente").value.trim(), obs: $("#pm-obs").value.trim()
   };
+  Object.assign(dados, pagamentoDoForm());
   try { localStorage.setItem("amz_ped_atendente", dados.atendente); } catch (e) {}
   const fila = $("#pm-fila").value;
   const btn = $("#pm-salvar"); btn.disabled = true;
@@ -4284,13 +4679,17 @@ $("#pm-form").addEventListener("submit", async ev => {
       else if (p) dados.qtdArtes = p.qtdArtes || "";
       if (p && p.fila !== fila) { campos.fila = fila; campos.ordem = ordemFinal(fila, p.id); pedChegou = p.id; }
       fecharModal($("#ped-modal"));
-      await atualizarPedido(pedEditId, campos);
+      const idEd = pedEditId;
+      await atualizarPedido(idEd, campos);
+      const ped = pedidos.find(x => x.id === idEd);
+      if (ped && dados.itens.some(i => i.camisa)) await sincronizarOSCamisa(ped, dados);
       say("Pedido atualizado.", "ok");
     } else {
       if (pmArtes.length) dados.qtdArtes = String(pmArtes.length);
-      await criarPedido(pmArtes.length ? Object.assign({}, dados, { artes: artesParaSalvar(), miniaturas: await miniaturasArtes() }) : dados, fila);
+      const novo = await criarPedido(pmArtes.length ? Object.assign({}, dados, { artes: artesParaSalvar(), miniaturas: await miniaturasArtes() }) : dados, fila);
       fecharModal($("#ped-modal"));
-      say("Pedido criado em " + filaInfo(fila).nome + ".", "ok");
+      if (novo && dados.itens.some(i => i.camisa)) { await sincronizarOSCamisa(novo, dados); say("Pedido criado em " + filaInfo(fila).nome + " e O.S. de camisa (sem preço) gerada.", "ok"); }
+      else say("Pedido criado em " + filaInfo(fila).nome + ".", "ok");
     }
   } catch (e) { say("Não consegui salvar o pedido: " + (e.msg || "sem conexão") + ".", "err"); }
   finally { btn.disabled = false; }
@@ -4328,10 +4727,10 @@ async function abrirEntregues() {
 }
 $("#ped-entregues-btn").addEventListener("click", abrirEntregues);
 $("#ent-fechar").addEventListener("click", () => fecharModal($("#ent-modal")));
-document.querySelectorAll(".modal:not(.modal-conf)").forEach(m => m.addEventListener("mousedown", e => { if (e.target === m) fecharModal(m); }));
+document.querySelectorAll(".modal:not(.modal-conf):not(.pdf-modal)").forEach(m => m.addEventListener("mousedown", e => { if (e.target === m) fecharModal(m); }));
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
-  const m = [...document.querySelectorAll(".modal:not(.modal-conf)")].find(x => !x.hidden);
+  const m = [...document.querySelectorAll(".modal:not(.modal-conf):not(.pdf-modal)")].find(x => !x.hidden);
   if (m) fecharModal(m);
 });
 
@@ -4485,7 +4884,7 @@ window.prodAoAbrir = () => { aplicarModoProd(false); if (modoHist === "nuvem" &&
 /* ---------- materiais do pedido (vários por pedido) ---------- */
 let pmItens = [];
 const novoUid = () => "i" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-function itemPedVazio() { return { uid: novoUid(), material: "", produtoId: "", precoUnit: "", prod: null, descricao: "", medidas: "", quantidade: "1", preco: "", precoManual: false }; }
+function itemPedVazio() { return { uid: novoUid(), camisa: null, material: "", produtoId: "", precoUnit: "", prod: null, descricao: "", medidas: "", quantidade: "1", preco: "", precoManual: false }; }
 /* pedidos antigos tinham um material só: vira uma lista de um item */
 function itensDoPedido(p) {
   if (!p) return [];
@@ -4500,6 +4899,7 @@ function carregarItensPed(p) {
     const salvo = it.produtoId ? produtos.find(x => x.id === it.produtoId) : null;
     const i = Object.assign(itemPedVazio(), {
       uid: it.uid || novoUid(),
+      camisa: it.camisa ? (typeof it.camisa === "string" ? (() => { try { return JSON.parse(it.camisa); } catch (e) { return null; } })() : it.camisa) : null,
       material: String(it.material || "").toUpperCase(), produtoId: it.produtoId || "", precoUnit: it.precoUnit || "",
       descricao: it.descricao || "", medidas: it.medidas || "", quantidade: it.quantidade || "",
       preco: it.preco ? reais(parseReal(it.preco)) : ""
@@ -4516,6 +4916,7 @@ function atualizaTotalPed() {
   const t = totalItensPed();
   $("#pm-total").textContent = fmtReal(t);
   $("#pm-total-n").textContent = pmItens.length + (pmItens.length === 1 ? " material" : " materiais");
+  if (window.atualizaPagamento) atualizaPagamento();
 }
 function recalcItem(it) {
   if (!it.prod || it.precoManual) return;
@@ -4538,7 +4939,9 @@ function renderItensPed(focar) {
     const el = document.createElement("div");
     el.className = "pm-item";
     el.innerHTML =
-      '<div class="pm-item-cab"><span>Material ' + (i + 1) + '</span>' + (pmItens.length > 1 ? '<button type="button" class="pm-item-x">Remover</button>' : "") + '</div>' +
+      '<div class="pm-item-cab"><span>Material ' + (i + 1) + (it.camisa ? '<span class="pi-camisa">CAMISA' + (it.camisa.osNumero ? " · O.S. " + escapa(it.camisa.osNumero) : "") + '</span>' : "") + '</span>' +
+      (it.camisa ? '<button type="button" class="pi-camisa-edit">Editar camisa</button>' : "") +
+      (pmItens.length > 1 ? '<button type="button" class="pm-item-x">Remover</button>' : "") + '</div>' +
       '<div class="f o-cli-wrap"><span>Produto ou material</span><input type="text" class="pi-material" placeholder="Escolha um produto cadastrado ou escreva o material" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false"><div class="o-sug" role="listbox" hidden></div></div>' +
       '<div class="o-cli-info pi-info" hidden></div>' +
       '<label class="f"><span>Descrição</span><input type="text" class="pi-descricao" placeholder="Ex.: Banner com bastão e corda" autocomplete="off"></label>' +
@@ -4587,6 +4990,7 @@ function renderItensPed(focar) {
       atualizaTotalPed();
     });
     q("preco").addEventListener("blur", () => { if (q("preco").value.trim()) { it.preco = q("preco").value = reais(parseReal(q("preco").value)); atualizaTotalPed(); } });
+    const ec = el.querySelector(".pi-camisa-edit"); if (ec) ec.addEventListener("click", () => abrirCamisa(it.uid));
     const x = el.querySelector(".pm-item-x");
     if (x) x.addEventListener("click", () => { pmItens.splice(i, 1); renderItensPed(); });
     infoItem(el, it);
@@ -4616,6 +5020,7 @@ $("#pm-add-item").addEventListener("click", () => { pmItens.push(itemPedVazio())
 function itensParaSalvar() {
   return pmItens.filter(i => String(i.material).trim() || String(i.descricao).trim() || parseReal(i.preco)).map(i => ({
     uid: i.uid,
+    camisa: i.camisa ? JSON.stringify(i.camisa) : "",
     material: String(i.material).trim().toUpperCase(), produtoId: i.prod ? i.produtoId : "", precoUnit: i.prod ? i.precoUnit : "",
     descricao: String(i.descricao).trim(), medidas: String(i.medidas).trim(), quantidade: String(i.quantidade).trim(),
     preco: String(i.preco).trim() ? parseReal(i.preco).toFixed(2) : ""
@@ -4712,8 +5117,11 @@ $("#pm-arte-file").addEventListener("change", async e => {
 });
 /* miniaturas leves de todas as artes, para o card e o resumo */
 async function miniaturasArtes() {
+  return gerarMinis(pmArtes.map(a => ({ img: a.img, rotulo: a.item ? nomeItemArte(a.item) : "Pedido todo" })));
+}
+async function gerarMinis(lista) {
   const out = [];
-  for (const a of pmArtes) {
+  for (const a of lista) {
     try {
       const im = await loadImg(a.img);
       const w0 = im.naturalWidth || im.width, h0 = im.naturalHeight || im.height;
@@ -4722,7 +5130,7 @@ async function miniaturasArtes() {
       const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
       let q = 0.72, img = c.toDataURL("image/jpeg", q);
       while (img.length > 80000 && q > 0.4) { q -= 0.1; img = c.toDataURL("image/jpeg", q); }
-      out.push({ img, rotulo: a.item ? nomeItemArte(a.item) : "Pedido todo" });
+      out.push({ img, rotulo: a.rotulo || "" });
     } catch (e) {}
   }
   return out;
@@ -4822,7 +5230,7 @@ async function buildPedidoPdf(d, tam) {
     T(d.total || "—", 545, y + 15, { size: 11, bold: true, align: "right", maxW: 70 });
     y += 30;
     campo("Entrega", 40, y, 172, d.prazo); campo("Prioridade", 224, y, 150, d.prioridade); campo("Atendente", 386, y, 169, d.atendente); y += 30;
-    campo("Etapa", 40, y, 515, d.etapa); y += 30;
+    campo("Etapa", 40, y, 195, d.etapa); campo("Pagamento", 247, y, 308, d.pagamento); y += 30;
     campo("Observações", 40, y, 515, d.obs, { h: 48, linhas: 3 }); y += 56;
     RR(28, 172, 539, y - 172 + 2, 10, { stroke: V, lw: 1.3 });
 
@@ -4894,10 +5302,23 @@ function dadosPdfPedido() {
     prioridade: pedPrio === "urgente" ? "URGENTE" : "Normal",
     atendente: $("#pm-atendente").value.trim(),
     etapa: filaInfo($("#pm-fila").value).nome,
+    pagamento: textoPagamento(pagamentoDoForm(), totalItensPed()),
     obs: $("#pm-obs").value.trim(),
     artes: pmArtes.map(a => ({ img: a.img, rotulo: a.item ? nomeItemArte(a.item) : "Pedido todo" }))
   };
 }
+$("#pm-ver").addEventListener("click", async () => {
+  if (!$("#pm-cliente").value.trim()) { say("Informe o nome do cliente antes de visualizar.", "err"); $("#pm-cliente").focus(); return; }
+  const btn = $("#pm-ver"); btn.disabled = true; say("Montando o pedido…");
+  try {
+    if (pmArteCarregando) await pmArteCarregando;
+    const d = dadosPdfPedido();
+    const bytes = await buildPedidoPdf(d, pmTam);
+    const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
+    say(""); verPdf(bytes, "Pedido" + (d.numero ? " nº " + d.numero : "") + " · " + d.cliente + " (" + pmTam + ")", "Pedido" + (d.numero ? " nº " + d.numero : "") + " - " + cli + " (" + pmTam + ").pdf");
+  } catch (err) { console.error(err); say("Não foi possível montar o pedido.", "err"); }
+  finally { btn.disabled = false; }
+});
 $("#pm-pdf").addEventListener("click", async () => {
   if (!$("#pm-cliente").value.trim()) { say("Informe o nome do cliente antes de gerar o PDF.", "err"); $("#pm-cliente").focus(); return; }
   const btn = $("#pm-pdf"); btn.disabled = true; say("Gerando o PDF…");
@@ -5217,9 +5638,16 @@ function renderDetalhe() {
       '<div class="det-mat-val">' + (parseReal(i.preco) ? fmtReal(parseReal(i.preco)) : "—") + '</div></div>';
   }).join("") + '<div class="det-total"><span>Total do pedido</span><b>' + fmtReal(total) + '</b></div>'
     : '<p class="hint" style="margin:0">Nenhum material informado.</p>';
+  const osCamisas = its.map(i => { let c = i.camisa; if (typeof c === "string") { try { c = JSON.parse(c); } catch (e) { c = null; } } return c && c.osId ? { c, uid: i.uid } : null; }).filter(Boolean);
+  osCamisas.forEach(({ c, uid }) => {
+    const div = document.createElement("div"); div.className = "det-os";
+    div.innerHTML = '<span>O.S. de camisa <b>' + escapa(c.osNumero || "…") + '</b> · ' + escapa(cm_resumo(c)) + ' · sem preço, para a produção</span><button type="button">Abrir O.S.</button>';
+    div.querySelector("button").addEventListener("click", () => abrirOSDoPedido(c, p, uid));
+    $("#det-materiais").appendChild(div);
+  });
   $("#det-obs-sec").hidden = !p.obs;
   $("#det-obs").textContent = p.obs || "";
-  const info = [["Etapa", f.nome], ["Atendente", p.atendente || "—"], ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]];
+  const info = [["Etapa", f.nome], ["Pagamento", textoPagamento(p, total)], ["Atendente", p.atendente || "—"], ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]];
   const c = (typeof clientes !== "undefined" ? clientes : []).find(x => (p.clienteId && x.id === p.clienteId) || (x.nome || "").toLowerCase() === (p.cliente || "").toLowerCase());
   if (c) {
     if (c.razao && c.razao !== c.nome) info.push(["Razão social", c.razao]);
@@ -5293,10 +5721,35 @@ function dadosPdfDePedido(p, artes) {
     total: total ? fmtReal(total) : "",
     prazo: p.prazo ? dataCurta(p.prazo) : "", prioridade: p.prioridade === "urgente" ? "URGENTE" : "Normal",
     atendente: p.atendente || "", etapa: filaInfo(p.fila).nome, obs: p.obs || "",
+    pagamento: textoPagamento(p, total),
     artes: (artes || []).map(a => ({ img: a.img, rotulo: a.material || (a.item ? "" : "Pedido todo") }))
   };
 }
 window.detPronto = true;
+$("#det-ver").addEventListener("click", async () => {
+  const p = detPed; if (!p) return;
+  const btn = $("#det-ver"); btn.disabled = true; say("Montando o pedido…");
+  try {
+    if (detCarregando) await detCarregando;
+    const d = dadosPdfDePedido(p, detArtes || []);
+    const bytes = await buildPedidoPdf(d, detTam);
+    const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
+    say(""); verPdf(bytes, "Pedido nº " + d.numero + " · " + d.cliente + " (" + detTam + ")", "Pedido nº " + d.numero + " - " + cli + " (" + detTam + ").pdf");
+  } catch (err) { console.error(err); say("Não foi possível montar o pedido.", "err"); }
+  finally { btn.disabled = false; }
+});
+$("#det-imprimir").addEventListener("click", async () => {
+  const p = detPed; if (!p) return;
+  const btn = $("#det-imprimir"); btn.disabled = true; say("Preparando a impressão…");
+  try {
+    if (detCarregando) await detCarregando;
+    const d = dadosPdfDePedido(p, detArtes || []);
+    const bytes = await buildPedidoPdf(d, detTam);
+    const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
+    say(""); verPdf(bytes, "Pedido nº " + d.numero + " · " + d.cliente, "Pedido nº " + d.numero + " - " + cli + " (" + detTam + ").pdf", true);
+  } catch (err) { console.error(err); say("Não foi possível preparar a impressão.", "err"); }
+  finally { btn.disabled = false; }
+});
 $("#det-pdf").addEventListener("click", async () => {
   const p = detPed; if (!p) return;
   const btn = $("#det-pdf"); btn.disabled = true; say("Gerando o PDF…");
@@ -5308,6 +5761,449 @@ $("#det-pdf").addEventListener("click", async () => {
     await salvarLocal(new Blob([bytes], { type: "application/pdf" }), "Pedido nº " + d.numero + " - " + cli + " (" + detTam + ").pdf");
   } catch (err) { console.error(err); say("Não foi possível gerar o PDF do pedido.", "err"); }
   finally { btn.disabled = false; }
+});
+
+
+/* ================= PEDIDO: VENDA DE CAMISA (com preço) ================= */
+/* TABELA DE PREÇOS — para mudar um valor, é só editar aqui.
+   faixas: [de, até, preço] pela quantidade TOTAL daquele tipo de camisa no pedido. */
+const CAMISA = {
+  curta:    { nome: "CAMISA MANGA CURTA", faixas: [[1, 5, 50], [6, 10, 45], [11, 50, 35], [51, 100, 30], [101, Infinity, 26]], tamanhos: ["PP", "P", "M", "G", "GG", "XG", "EXG"] },
+  raglan:   { nome: "CAMISA MANGA RAGLAN", faixas: [[1, 5, 55], [6, 10, 50], [11, 50, 45], [51, 100, 40], [101, Infinity, 36]], tamanhos: ["PP", "P", "M", "G", "GG", "XG", "EXG"] },
+  polo:     { nome: "CAMISA POLO", faixas: [[10, 50, 45], [51, 100, 40], [101, Infinity, 36]], minimo: 10, tamanhos: ["PP", "P", "M", "G", "GG", "XG", "EXG"] },
+  uniforme: { nome: "UNIFORME PERSONALIZADO (CAMISA + SHORT)", porTamanho: { P: 65, M: 70, G: 75, GG: 85, XG: 90, EXG: 95 }, tamanhos: ["P", "M", "G", "GG", "XG", "EXG"], semColmeia: true }
+};
+const CAMISA_TIPOS = [["curta", "Manga curta"], ["raglan", "Manga raglan"], ["polo", "Polo"], ["uniforme", "Uniforme (camisa + short)"]];
+const ACRESCIMO_TAM = { GG: 10, XG: 15, EXG: 20 };
+const TECIDOS_CAMISA = [["MICRODRY", 0], ["MALHA PP", 0], ["AERODRY", 10], ["COLMEIA", 15]];
+const ARTE_CAMISA = [["tem", "Cliente já tem a arte"], ["recriar", "Recriar a arte do cliente"], ["zero", "Criar do zero"]];
+const nomeArteCamisa = v => (ARTE_CAMISA.find(a => a[0] === v) || [, ""])[1];
+
+function precoUnitCamisa(tipo, tam, total, tecido) {
+  const t = CAMISA[tipo]; if (!t) return 0;
+  const tec = (TECIDOS_CAMISA.find(x => x[0] === tecido) || [, 0])[1];
+  if (t.porTamanho) return (t.porTamanho[tam] || 0) + tec;
+  const f = t.faixas.find(([de, ate]) => total >= de && total <= ate);
+  if (!f) return 0;
+  return f[2] + (ACRESCIMO_TAM[tam] || 0) + tec;
+}
+let cm = null;
+function segCamisa(id, opcoes, valor, aoMudar) {
+  const box = $("#" + id); box.innerHTML = "";
+  opcoes.forEach(([v, rot, extra]) => {
+    const b = document.createElement("button"); b.type = "button";
+    b.className = v === valor ? "on" : ""; b.innerHTML = escapa(rot) + (extra ? "<small>" + escapa(extra) + "</small>" : "");
+    b.addEventListener("click", () => aoMudar(v));
+    box.appendChild(b);
+  });
+}
+function renderCamisa() {
+  const t = CAMISA[cm.tipo];
+  segCamisa("cm-tipo", CAMISA_TIPOS, cm.tipo, v => { cm.tipo = v; renderCamisa(); });
+  const tecidos = TECIDOS_CAMISA.filter(x => !(t.semColmeia && x[0] === "COLMEIA"));
+  if (!tecidos.some(x => x[0] === cm.tecido)) cm.tecido = "MICRODRY";
+  segCamisa("cm-tecido", tecidos.map(([v, a]) => [v, v, a ? "+R$ " + a : ""]), cm.tecido, v => { cm.tecido = v; renderCamisa(); });
+  segCamisa("cm-arte", ARTE_CAMISA, cm.arte, v => { cm.arte = v; renderCamisa(); });
+  $("#cm-gola").value = cm.gola || ""; $("#cm-corgola").value = cm.corgola || "";
+  const total = t.tamanhos.reduce((a, tm) => a + (parseInt(cm.qtd[tm], 10) || 0), 0);
+  const corpo = $("#cm-grade"); corpo.innerHTML = "";
+  let soma = 0;
+  t.tamanhos.forEach(tm => {
+    const q = parseInt(cm.qtd[tm], 10) || 0;
+    const un = precoUnitCamisa(cm.tipo, tm, Math.max(total, 1), cm.tecido);
+    const sub = q * un; soma += sub;
+    const tr = document.createElement("tr");
+    tr.innerHTML = '<td>' + tm + '</td><td><input type="text" inputmode="numeric" data-t="' + tm + '" value="' + (q || "") + '" placeholder="0" aria-label="Quantidade ' + tm + '"></td>' +
+      '<td class="un">' + (un ? fmtReal(un) : "—") + '</td><td class="sub">' + (q ? fmtReal(sub) : "—") + '</td>';
+    corpo.appendChild(tr);
+  });
+  corpo.querySelectorAll("input").forEach(inp => inp.addEventListener("change", () => {
+    cm.qtd[inp.dataset.t] = String(parseInt(soDig(inp.value), 10) || "");
+    renderCamisa();
+    const prox = $("#cm-grade").querySelector('input[data-t="' + inp.dataset.t + '"]'); if (prox) prox.focus();
+  }));
+  cm.total = total; cm.valor = soma;
+  $("#cm-qtd").textContent = total + (total === 1 ? " peça" : " peças");
+  $("#cm-total").textContent = fmtReal(soma);
+  const av = $("#cm-aviso");
+  let msg = "";
+  if (t.minimo && total > 0 && total < t.minimo) msg = "A camisa polo tem pedido mínimo de " + t.minimo + " unidades.";
+  else if (t.faixas && total) { const f = t.faixas.find(([de, ate]) => total >= de && total <= ate); if (f) msg = total + " peças: preço da faixa " + (f[1] === Infinity ? "acima de " + (f[0] - 1) : f[0] + " a " + f[1]) + " unidades (" + fmtReal(f[2]) + " no PP ao G)."; }
+  av.textContent = msg; av.hidden = !msg;
+  av.style.background = t.minimo && total > 0 && total < t.minimo ? "" : "var(--card-2)";
+  av.style.color = t.minimo && total > 0 && total < t.minimo ? "" : "var(--muted)";
+  $("#cm-ok").textContent = cm.uid ? "Atualizar no pedido" : "Adicionar ao pedido";
+}
+["cm-gola", "cm-corgola"].forEach(id => $("#" + id).addEventListener("input", e => { cm[id === "cm-gola" ? "gola" : "corgola"] = e.target.value.toUpperCase(); }));
+function abrirCamisa(uid) {
+  const it = uid ? pmItens.find(i => i.uid === uid) : null;
+  cm = it && it.camisa ? JSON.parse(JSON.stringify(it.camisa)) : { tipo: "curta", tecido: "MICRODRY", gola: "REDONDA", corgola: "", arte: "tem", qtd: {} };
+  cm.uid = it ? uid : null;
+  renderCamisa();
+  $("#pm-camisa").hidden = false;
+  $("#pm-camisa").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function fecharCamisa() { $("#pm-camisa").hidden = true; cm = null; }
+$("#pm-camisa-btn").addEventListener("click", () => abrirCamisa(null));
+["cm-fechar", "cm-cancelar"].forEach(id => $("#" + id).addEventListener("click", fecharCamisa));
+$("#cm-ok").addEventListener("click", () => {
+  document.activeElement && document.activeElement.blur && document.activeElement.blur();
+  $("#cm-grade").querySelectorAll("input").forEach(inp => cm.qtd[inp.dataset.t] = String(parseInt(soDig(inp.value), 10) || ""));
+  renderCamisa();
+  const t = CAMISA[cm.tipo];
+  if (!cm.total) { say("Informe a quantidade de pelo menos um tamanho.", "err"); return; }
+  if (t.minimo && cm.total < t.minimo) { say("A camisa polo tem pedido mínimo de " + t.minimo + " unidades.", "err"); return; }
+  const tams = t.tamanhos.filter(tm => parseInt(cm.qtd[tm], 10) > 0);
+  const camisa = { tipo: cm.tipo, tecido: cm.tecido, gola: cm.gola || "", corgola: cm.corgola || "", arte: cm.arte,
+    qtd: tams.reduce((o, tm) => (o[tm] = parseInt(cm.qtd[tm], 10), o), {}),
+    unit: tams.reduce((o, tm) => (o[tm] = precoUnitCamisa(cm.tipo, tm, cm.total, cm.tecido), o), {}) };
+  let it = cm.uid ? pmItens.find(i => i.uid === cm.uid) : null;
+  if (it && it.camisa) { camisa.osId = it.camisa.osId; camisa.osNumero = it.camisa.osNumero; }
+  if (!it) {
+    const vazio = pmItens.find(i => !String(i.material).trim() && !String(i.descricao).trim() && !parseReal(i.preco));
+    it = vazio || itemPedVazio(); if (!vazio) pmItens.push(it);
+  }
+  Object.assign(it, {
+    camisa, prod: null, produtoId: "", precoUnit: "", precoManual: true,
+    material: t.nome,
+    descricao: [cm.tecido, cm.gola ? "gola " + cm.gola + (cm.corgola ? " " + cm.corgola : "") : "", "arte: " + nomeArteCamisa(cm.arte).toLowerCase()].filter(Boolean).join(" · "),
+    medidas: tams.map(tm => tm + " " + camisa.qtd[tm]).join(" · "),
+    quantidade: String(cm.total),
+    preco: reais(cm.valor)
+  });
+  /* camisa sempre passa pelo designer (arte do cliente, recriar ou criar do zero) */
+  if ($("#pm-fila").value === "atendimento") $("#pm-fila").value = "designer";
+  fecharCamisa();
+  renderItensPed();
+  say("Camisa no pedido: " + cm_resumo(camisa) + ". Ao salvar, a O.S. sem preço é criada.", "ok");
+});
+const cm_resumo = c => CAMISA[c.tipo].nome.toLowerCase() + ", " + Object.values(c.qtd).reduce((a, b) => a + b, 0) + " peças";
+
+/* ---------- O.S. de camisa (SEM preço) ligada ao pedido ---------- */
+window.tempParaReal = window.tempParaReal || new Map();
+async function idReal(id) {
+  for (let t = 0; t < 40 && String(id).startsWith("tmp_"); t++) {
+    if (window.tempParaReal.has(id)) return window.tempParaReal.get(id);
+    if (modoHist !== "nuvem") break;
+    await enviarFila(); await new Promise(r => setTimeout(r, 200));
+  }
+  return window.tempParaReal.get(id) || id;
+}
+function regOSCamisa(c, dados, numPedido, anterior) {
+  const hoje = hojeISO();
+  const entregar = dados.prazo || (() => { const d = new Date(); d.setDate(d.getDate() + 5); return iso(d); })();
+  const tams = {}; Object.entries(c.qtd || {}).forEach(([tm, q]) => { tams[tm === "EXG" ? "XXG" : tm] = q; });
+  const pecas = Object.values(tams).reduce((a, b) => a + b, 0);
+  return {
+    cliente: dados.cliente, quem: dados.atendente || "", pecas, time: false,
+    dados: {
+      narede: (anterior && anterior.narede) || hoje, entregar,
+      tecido: c.tecido, gola: c.gola || "", corgola: c.corgola || "",
+      obs: ["Pedido #" + (numPedido || "?"), CAMISA[c.tipo].nome, "Arte: " + nomeArteCamisa(c.arte)].join(" · "),
+      tamanhos: tams, modelosRC: [], time: [], pedidoId: dados._pedidoId || "", tipoCamisa: c.tipo
+    }
+  };
+}
+async function sincronizarOSCamisa(pedido, dados) {
+  let mudou = false;
+  dados._pedidoId = pedido.id;
+  for (const it of dados.itens || []) {
+    if (!it.camisa) continue;
+    let c; try { c = JSON.parse(it.camisa); } catch (e) { continue; }
+    const existente = c.osId ? historico.find(h => (h.id || h.quando) === c.osId) : null;
+    const reg = regOSCamisa(c, dados, pedido.numero, existente && existente.dados);
+    if (existente) atualizarRegistro(c.osId, reg);
+    else { c.osId = await idReal(registrar("os", reg)); mudou = true; }
+    const h = historico.find(x => (x.id || x.quando) === c.osId);
+    if (h && h.numero && h.numero !== "…" && c.osNumero !== h.numero) { c.osNumero = h.numero; mudou = true; }
+    it.camisa = JSON.stringify(c);
+  }
+  delete dados._pedidoId;
+  if (mudou) await atualizarPedido(pedido.id, { dados });
+}
+/* abre a O.S. ligada ao pedido, já com a arte do material anexada */
+async function abrirOSDoPedido(c, pedido, uid) {
+  const h = historico.find(x => (x.id || x.quando) === c.osId);
+  if (!h) { say("Não achei essa O.S. no histórico. Abra e salve o pedido de novo para recriar.", "err"); return; }
+  fecharModal($("#det-modal"));
+  irPara("os");
+  abrirOS(c.osId);
+  let artes = detArtes;
+  if (!artes && pedido.temArte && modoHist === "nuvem") { try { artes = (await apiPed("GET", "?id=" + encodeURIComponent(pedido.id) + "&arte=1")).artes; } catch (e) {} }
+  artes = (artes || artesCompletasLocais(pedido) || []).filter(a => a && a.img);
+  const a = artes.find(x => x.item === uid) || artes[0];
+  if (a) {
+    try {
+      const blob = await (await fetch(a.img)).blob();
+      artFile = new File([blob], "arte-pedido-" + pedido.numero + ".jpg", { type: blob.type || "image/jpeg" });
+      if (artURL) URL.revokeObjectURL(artURL);
+      artURL = URL.createObjectURL(artFile);
+      $("#prevImg").src = artURL; $("#prev").hidden = false;
+      say("O.S. " + h.numero + " aberta com a arte do pedido. Use “Visualizar O.S.” para imprimir.", "ok");
+    } catch (e) {}
+  }
+}
+
+/* ================= PEDIDO: PAGAMENTO ================= */
+const METODOS = [["pix", "PIX"], ["dinheiro", "Dinheiro"], ["credito", "Cartão de crédito"], ["debito", "Cartão de débito"]];
+const nomeMetodo = id => (METODOS.find(m => m[0] === id) || [, ""])[1];
+let pg = { metodo: "", cond: "", entradaManual: false };
+function montaPagamento(p) {
+  pg = { metodo: (p && p.metodoPag) || "", cond: (p && p.condPag) || "", entradaManual: !!(p && p.entrada) };
+  $("#pg-entrada").value = p && p.entrada ? reais(parseReal(p.entrada)) : "";
+  $("#pg-data").value = (p && p.pagoEm) || "";
+  $("#pg-rest-pago").checked = !!(p && p.restantePago === "1");
+  $("#pg-rest-metodo").value = (p && p.restanteMetodo) || "";
+  pg.restantePagoEm = (p && p.restantePagoEm) || "";
+  renderPagamento();
+}
+function renderPagamento() {
+  segCamisa("pg-metodo", METODOS, pg.metodo, v => { pg.metodo = pg.metodo === v ? "" : v; renderPagamento(); });
+  $("#pg-avista").checked = pg.cond === "avista";
+  $("#pg-50").checked = pg.cond === "50";
+  $("#pg-data-wrap").hidden = !pg.cond;
+  if (pg.cond && !$("#pg-data").value) $("#pg-data").value = hojeISO();
+  $("#pg-50-box").hidden = pg.cond !== "50";
+  atualizaPagamento();
+}
+function atualizaPagamento() {
+  if (typeof pmItens === "undefined" || $("#pg-50-box").hidden) return;
+  const total = totalItensPed();
+  if (!pg.entradaManual) $("#pg-entrada").value = total ? reais(total / 2) : "";
+  const rest = Math.max(0, total - parseReal($("#pg-entrada").value));
+  $("#pg-restante").textContent = fmtReal(rest) + ($("#pg-rest-pago").checked ? " · pago" : "");
+}
+window.atualizaPagamento = atualizaPagamento;
+$("#pg-avista").addEventListener("change", e => { pg.cond = e.target.checked ? "avista" : (pg.cond === "avista" ? "" : pg.cond); renderPagamento(); });
+$("#pg-50").addEventListener("change", e => { pg.cond = e.target.checked ? "50" : (pg.cond === "50" ? "" : pg.cond); renderPagamento(); });
+$("#pg-entrada").addEventListener("input", () => { pg.entradaManual = !!$("#pg-entrada").value.trim(); atualizaPagamento(); });
+$("#pg-entrada").addEventListener("blur", e => { if (e.target.value.trim()) e.target.value = reais(parseReal(e.target.value)); });
+$("#pg-rest-pago").addEventListener("change", e => { pg.restantePagoEm = e.target.checked ? (pg.restantePagoEm || hojeISO()) : ""; atualizaPagamento(); });
+function pagamentoDoForm() {
+  const total = totalItensPed();
+  const o = { metodoPag: pg.metodo, condPag: pg.cond, pagoEm: pg.cond ? ($("#pg-data").value || hojeISO()) : "",
+    entrada: "", restantePago: "", restantePagoEm: "", restanteMetodo: "" };
+  if (pg.cond === "50") {
+    o.entrada = (parseReal($("#pg-entrada").value) || total / 2).toFixed(2);
+    o.restantePago = $("#pg-rest-pago").checked ? "1" : "";
+    o.restantePagoEm = o.restantePago ? (pg.restantePagoEm || hojeISO()) : "";
+    o.restanteMetodo = $("#pg-rest-metodo").value;
+  }
+  return o;
+}
+function textoPagamento(o, total) {
+  const partes = [];
+  if (o.metodoPag) partes.push(nomeMetodo(o.metodoPag));
+  if (o.condPag === "avista") partes.push("Pago à vista");
+  else if (o.condPag === "50") {
+    const e = parseReal(o.entrada) || total / 2;
+    partes.push("Entrada " + fmtReal(e));
+    partes.push(o.restantePago === "1" ? "restante pago" : "falta " + fmtReal(Math.max(0, total - e)));
+  } else partes.push("A pagar");
+  return partes.join(" · ");
+}
+function badgePag(p) {
+  if (p.condPag === "avista" || (p.condPag === "50" && p.restantePago === "1")) return '<span class="kc-pago">PAGO</span>';
+  if (p.condPag === "50") return '<span class="kc-50">50% PAGO</span>';
+  return "";
+}
+
+
+/* ================= RELATÓRIOS (vendas e caixa do dia) ================= */
+let relDia = hojeISO(), relEntradas = [], relCarregando = false;
+const DIAS_SEMANA = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
+function diaExtenso(isoD) { const d = new Date(isoD + "T12:00:00"); return DIAS_SEMANA[d.getDay()] + ", " + d.getDate() + " de " + MESES[d.getMonth()] + " de " + d.getFullYear(); }
+function horaDe(isoT) { if (!isoT) return ""; const d = new Date(isoT); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
+const diaLocal = isoT => { if (!isoT) return ""; const d = new Date(isoT); return iso(d); };
+
+/* cada pagamento de pedido vira uma linha no dia em que foi pago */
+function entradasDePedido(p, dia) {
+  const out = [];
+  const total = itensDoPedido(p).reduce((a, i) => a + parseReal(i.preco), 0) || parseReal(p.preco);
+  const base = { origem: "Pedido #" + p.numero, cliente: p.cliente || "", descricao: p.material || "", pedidoId: p.id, hora: diaLocal(p.criado) === dia ? horaDe(p.criado) : "" };
+  if (p.condPag === "avista" && p.pagoEm === dia) out.push(Object.assign({}, base, { tipo: "À vista", valor: total, metodo: p.metodoPag || "" }));
+  if (p.condPag === "50") {
+    const ent = parseReal(p.entrada) || total / 2;
+    if (p.pagoEm === dia) out.push(Object.assign({}, base, { tipo: "Entrada (50%)", valor: ent, metodo: p.metodoPag || "" }));
+    if (p.restantePago === "1" && p.restantePagoEm === dia) out.push(Object.assign({}, base, { tipo: "Restante", valor: Math.max(0, total - ent), metodo: p.restanteMetodo || p.metodoPag || "", hora: "" }));
+  }
+  return out;
+}
+async function carregarRelatorio() {
+  const dia = relDia;
+  relCarregando = true; renderRelatorio();
+  let peds = [];
+  if (modoHist === "nuvem") {
+    try { peds = (await apiPed("GET", "?relatorio=1&de=" + dia + "&ate=" + dia)).itens || []; }
+    catch (e) { say("Não consegui carregar os pedidos do dia: " + (e.msg || "sem conexão") + ".", "err"); }
+  } else if (modoHist === "local") peds = pedLocal.slice();
+  if (dia !== relDia) return;
+  const ent = [];
+  peds.forEach(p => ent.push(...entradasDePedido(p, dia)));
+  historico.filter(h => h.tipo === "venda" && h.dados && h.dados.data === dia).forEach(h => ent.push({
+    origem: "Venda avulsa", sub: h.numero, cliente: h.cliente || "", descricao: h.dados.descricao || "", valor: Number(h.valor) || 0,
+    metodo: h.dados.metodo || "", hora: h.dados.hora || horaDe(h.quando), tipo: "", vendaId: h.id || h.quando, pendente: h.pendente
+  }));
+  ent.sort((a, b) => (a.hora || "99").localeCompare(b.hora || "99"));
+  relEntradas = ent; relCarregando = false;
+  renderRelatorio();
+}
+function caixaDoDia(lista) {
+  const cx = { dinheiro: 0, pix: 0, credito: 0, debito: 0, outro: 0 }, qt = { dinheiro: 0, pix: 0, credito: 0, debito: 0, outro: 0 };
+  lista.forEach(e => { const k = cx[e.metodo] != null ? e.metodo : "outro"; cx[k] += e.valor; qt[k]++; });
+  return { cx, qt, total: lista.reduce((a, e) => a + e.valor, 0) };
+}
+function renderRelatorio() {
+  $("#rel-data").value = relDia;
+  const ext = diaExtenso(relDia);
+  $("#rel-extenso").textContent = ext.charAt(0).toUpperCase() + ext.slice(1) + (relDia === hojeISO() ? " · hoje" : "");
+  const q = semAcentoTxt(($("#rel-busca").value || "").trim());
+  const lista = q ? relEntradas.filter(e => semAcentoTxt([e.origem, e.sub, e.cliente, e.descricao, e.tipo].join(" ")).includes(q)) : relEntradas;
+  const { cx, qt, total } = caixaDoDia(relEntradas);
+  const caixa = [["dinheiro", "Dinheiro"], ["pix", "PIX"], ["credito", "Cartão de crédito"], ["debito", "Cartão de débito"]];
+  $("#rel-caixa").innerHTML = caixa.map(([k, n]) => '<div class="rel-cx"><span>' + n + '</span><b>' + fmtReal(cx[k]) + '</b><small>' + qt[k] + (qt[k] === 1 ? " lançamento" : " lançamentos") + '</small></div>').join("") +
+    (qt.outro ? '<div class="rel-cx"><span>Sem método informado</span><b>' + fmtReal(cx.outro) + '</b><small>' + qt.outro + ' lançamento(s)</small></div>' : "") +
+    '<div class="rel-cx tot"><span>Total do dia</span><b>' + fmtReal(total) + '</b><small>' + relEntradas.length + (relEntradas.length === 1 ? " venda" : " vendas") + '</small></div>';
+  $("#rel-total2").textContent = fmtReal(total);
+  $("#rel-lista").innerHTML = lista.map((e, k) =>
+    '<tr class="' + (e.vendaId ? "avulsa" : "") + '" data-k="' + relEntradas.indexOf(e) + '"><td class="qnd">' + escapa(e.hora || "—") + '</td>' +
+    '<td class="rel-orig">' + escapa(e.origem) + (e.tipo || e.sub ? '<small>' + escapa(e.tipo || e.sub) + '</small>' : "") + '</td>' +
+    '<td class="cli">' + escapa(e.cliente || "—") + '</td><td class="quem">' + escapa(e.descricao || "—") + '</td>' +
+    '<td>' + escapa(nomeMetodo(e.metodo) || "—") + '</td><td class="val">' + fmtReal(e.valor) + '</td>' +
+    '<td class="x">' + (e.vendaId && !e.pendente ? '<button type="button" data-rm="' + escapa(e.vendaId) + '" aria-label="Excluir venda">×</button>' : "") + '</td></tr>').join("");
+  $("#rel-vazio").hidden = lista.length > 0 || relCarregando;
+  $("#rel-vazio").textContent = relEntradas.length ? "Nada nessa busca." : "Nenhuma venda neste dia.";
+  $("#rel-info").textContent = relCarregando ? "Carregando…" : (relEntradas.length ? relEntradas.length + (relEntradas.length === 1 ? " venda" : " vendas") + " · " + fmtReal(total) : "");
+  $("#rel-lista").querySelectorAll("tr").forEach(tr => tr.addEventListener("click", ev => {
+    const e = relEntradas[+tr.dataset.k]; if (!e) return;
+    const rm = ev.target.closest("[data-rm]");
+    if (rm) { ev.stopPropagation(); excluirVenda(rm.dataset.rm); return; }
+    if (e.vendaId) abrirVenda(historico.find(h => (h.id || h.quando) === e.vendaId));
+    else if (e.pedidoId) { const p = pedidos.find(x => x.id === e.pedidoId); if (p) { irPara("ped"); abrirDetalhe(p); } else say("Esse pedido está arquivado. Veja em Pedidos → Arquivados."); }
+  }));
+}
+function mudarDia(n) { const d = new Date(relDia + "T12:00:00"); d.setDate(d.getDate() + n); relDia = iso(d); carregarRelatorio(); }
+$("#rel-ant").addEventListener("click", () => mudarDia(-1));
+$("#rel-prox").addEventListener("click", () => mudarDia(1));
+$("#rel-hoje").addEventListener("click", () => { relDia = hojeISO(); carregarRelatorio(); });
+$("#rel-data").addEventListener("change", e => { if (e.target.value) { relDia = e.target.value; carregarRelatorio(); } });
+$("#rel-busca").addEventListener("input", renderRelatorio);
+$("#rel-limpar").addEventListener("click", () => { $("#rel-busca").value = ""; relDia = hojeISO(); carregarRelatorio(); say("Relatório de volta para hoje."); });
+function relAtualizaAvulsas() { clearTimeout(window._relT); window._relT = setTimeout(carregarRelatorio, 300); }
+window.relAoAbrir = () => { if (!pedidos.length && modoHist !== "verificando") carregarPedidos(true); carregarRelatorio(); };
+
+/* ---------- venda avulsa (+) ---------- */
+let vdEditId = null, vdMetodo = "";
+function abrirVenda(h) {
+  if (modoHist !== "nuvem" && modoHist !== "local") { say("Entre com a senha da equipe para lançar vendas.", "err"); if (modoHist === "senha") pedirSenha(""); return; }
+  vdEditId = h ? (h.id || h.quando) : null;
+  $("#vd-titulo").textContent = h ? "Venda avulsa " + h.numero : "Nova venda";
+  $("#vd-descricao").value = h ? h.dados.descricao || "" : "";
+  $("#vd-cliente").value = h ? h.cliente || "" : "";
+  $("#vd-valor").value = h && Number(h.valor) ? reais(Number(h.valor)) : "";
+  vdMetodo = h ? h.dados.metodo || "" : "";
+  $("#vd-data").value = h ? h.dados.data : relDia;
+  $("#vd-hora").value = h ? h.dados.hora || "" : horaDe(new Date().toISOString());
+  $("#vd-excluir").hidden = !h;
+  segCamisa("vd-metodo", METODOS, vdMetodo, v => { vdMetodo = v; abrirVendaMetodo(); });
+  abrirModal($("#venda-modal"));
+  setTimeout(() => $("#vd-descricao").focus(), 50);
+}
+function abrirVendaMetodo() { segCamisa("vd-metodo", METODOS, vdMetodo, v => { vdMetodo = v; abrirVendaMetodo(); }); }
+$("#rel-novo").addEventListener("click", () => abrirVenda(null));
+$("#vd-fechar").addEventListener("click", () => fecharModal($("#venda-modal")));
+$("#vd-limpar").addEventListener("click", () => { ["vd-descricao", "vd-cliente", "vd-valor"].forEach(id => $("#" + id).value = ""); vdMetodo = ""; abrirVendaMetodo(); $("#vd-descricao").focus(); });
+$("#vd-valor").addEventListener("blur", e => { if (e.target.value.trim()) e.target.value = reais(parseReal(e.target.value)); });
+$("#vd-form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const descricao = $("#vd-descricao").value.trim(), valor = parseReal($("#vd-valor").value);
+  if (!descricao) { say("Informe a descrição da venda.", "err"); $("#vd-descricao").focus(); return; }
+  if (!valor) { say("Informe o valor da venda.", "err"); $("#vd-valor").focus(); return; }
+  if (!vdMetodo) { say("Escolha o método de pagamento.", "err"); return; }
+  const hora = (soDig($("#vd-hora").value).padStart(4, "0").replace(/^(\d{2})(\d{2}).*$/, "$1:$2"));
+  const reg = { cliente: $("#vd-cliente").value.trim(), valor, dados: { descricao, metodo: vdMetodo, data: $("#vd-data").value || relDia, hora } };
+  if (vdEditId) await atualizarRegistro(vdEditId, reg);
+  else registrar("venda", reg);
+  fecharModal($("#venda-modal"));
+  if (reg.dados.data !== relDia) relDia = reg.dados.data;
+  say(vdEditId ? "Venda atualizada." : "Venda lançada no caixa de " + dataCurta(reg.dados.data) + ".", "ok");
+  setTimeout(carregarRelatorio, 50);
+});
+async function excluirVenda(id) {
+  const h = historico.find(x => (x.id || x.quando) === id); if (!h) return;
+  if (!(await confirmar("Tem certeza que é para excluir esta venda?", { titulo: "Excluir venda", detalhe: (h.dados.descricao || "") + " · " + fmtReal(Number(h.valor) || 0) }))) return;
+  if (modoHist === "nuvem") {
+    try { await api("DELETE", "?id=" + encodeURIComponent(id)); historico = historico.filter(x => x.id !== id); }
+    catch (e) { say("Não consegui excluir: " + (e.msg || "sem conexão") + ".", "err"); return; }
+  } else { histLocal = histLocal.filter(x => (x.id || x.quando) !== id); salvarHist(); historico = histLocal; }
+  fecharModal($("#venda-modal")); say("Venda excluída.", "ok"); carregarRelatorio();
+}
+$("#vd-excluir").addEventListener("click", () => { if (vdEditId) excluirVenda(vdEditId); });
+
+/* ---------- PDF do relatório (identidade da O.S.) ---------- */
+async function buildRelatorio() {
+  const s = new Sheet();
+  const L = 24, R = PW - 24, W = R - L;
+  const lg = await jpeg(LOGO, 1200);
+  const lgW = 130, lgH = lgW * lg.h / lg.w;
+  s.img(lg.bytes, lg.w, lg.h, L, 14, lgW, lgH);
+  s.text("RELATÓRIO DE VENDAS", R, 14 + lgH * 0.55, { size: 24, align: "right" });
+  s.text(diaExtenso(relDia).toUpperCase(), R, 14 + lgH * 0.55 + 20, { size: 11, align: "right", color: RED });
+  let y = 14 + lgH + 12;
+  s.line(L, y, R, y, 2.4); y += 14;
+  /* caixa do dia */
+  const { cx, total } = caixaDoDia(relEntradas);
+  const cols = [["DINHEIRO", cx.dinheiro], ["PIX", cx.pix], ["CRÉDITO", cx.credito], ["DÉBITO", cx.debito], ["TOTAL DO DIA", total]];
+  const cw = W / cols.length;
+  s.rect(L, y, W, 20, { fill: SAL });
+  cols.forEach(([n, v], k) => {
+    s.cell(n, L + k * cw, y, cw, 20, { size: 9.5 });
+    s.cell(fmtReal(v), L + k * cw, y + 20, cw, 30, { size: k === cols.length - 1 ? 15 : 13, color: RED });
+    if (k) s.line(L + k * cw, y, L + k * cw, y + 50, 1.2);
+  });
+  s.rect(L, y, W, 50, { stroke: BLK, lw: 1.6 }); s.line(L, y + 20, R, y + 20, 1.2);
+  y += 50 + (cx.outro ? 14 : 18);
+  if (cx.outro) { s.text("Sem método informado: " + fmtReal(cx.outro), L, y, { size: 9, bold: false, color: RED }); y += 12; }
+  /* vendas */
+  const C = [["HORA", 42], ["ORIGEM", 108], ["CLIENTE", 120], ["DESCRIÇÃO", 150], ["PAGAMENTO", 70], ["VALOR", W - 490]];
+  const cab = () => {
+    s.rect(L, y, W, 20, { fill: SAL });
+    let x = L; C.forEach(([n, w]) => { s.cell(n, x, y, w, 20, { size: 8.5 }); x += w; });
+    s.rect(L, y, W, 20, { stroke: BLK, lw: 1.2 }); y += 20;
+  };
+  cab();
+  const corta = (t, size, w) => { t = String(t || ""); if (textW(t, size, false) <= w) return t; while (t.length > 1 && textW(t + "…", size, false) > w) t = t.slice(0, -1); return t + "…"; };
+  if (!relEntradas.length) { s.cell("Nenhuma venda neste dia.", L, y, W, 26, { size: 10, bold: false }); y += 26; }
+  relEntradas.forEach((e, k) => {
+    if (y + 18 > PH - 40) { s.novaPagina(); y = 30; cab(); }
+    if (k % 2) s.rect(L, y, W, 18, { fill: [247, 247, 247] });
+    const vals = [e.hora || "—", e.origem + (e.tipo ? " · " + e.tipo : ""), e.cliente || "—", e.descricao || "—", (nomeMetodo(e.metodo) || "—").replace("Cartão de c", "C").replace("Cartão de d", "D"), fmtReal(e.valor)];
+    let x = L;
+    vals.forEach((v, i) => {
+      const w = C[i][1];
+      if (i === vals.length - 1) s.text(v, x + w - 6, y + 12.5, { size: 8.5, align: "right" });
+      else s.text(corta(v, 8.5, w - 10), x + 5, y + 12.5, { size: 8.5, bold: false });
+      x += w;
+    });
+    y += 18;
+    s.line(L, y, R, y, 0.4, [200, 200, 200]);
+  });
+  y += 10;
+  s.rect(R - 200, y, 200, 26, { fill: SAL });
+  s.text("TOTAL", R - 192, y + 17.5, { size: 12 });
+  s.text(fmtReal(total), R - 8, y + 17.5, { size: 13, align: "right", color: RED });
+  s.rect(R - 200, y, 200, 26, { stroke: BLK, lw: 1.6 });
+  s.text("Gerado em " + dataHora(new Date().toISOString()), L, PH - 16, { size: 8, bold: false });
+  return s.build();
+}
+const nomeRel = () => "Relatório de vendas " + dataCurta(relDia).replace(/\//g, "-") + ".pdf";
+$("#rel-ver").addEventListener("click", async () => {
+  try { const b = await buildRelatorio(); verPdf(b, "Relatório de vendas · " + dataCurta(relDia), nomeRel()); }
+  catch (e) { console.error(e); say("Não foi possível montar o relatório.", "err"); }
+});
+$("#rel-pdf").addEventListener("click", async () => {
+  try { const b = await buildRelatorio(); await salvarLocal(new Blob([b], { type: "application/pdf" }), nomeRel()); }
+  catch (e) { console.error(e); say("Não foi possível gerar o PDF do relatório.", "err"); }
 });
 
 window.renderVisao=renderVisao;
