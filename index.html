@@ -261,6 +261,21 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 @keyframes kcChega{from{box-shadow:0 0 0 3px #22c55e}to{box-shadow:0 1px 2px rgba(0,0,0,.18)}}
 .kc-fantasma{position:fixed;z-index:200;pointer-events:none;margin:0;transform:rotate(2.5deg);box-shadow:0 18px 40px rgba(0,0,0,.45);opacity:.97;cursor:grabbing}
 .kb-marca{height:3px;border-radius:3px;background:var(--cor);margin:-2px 2px;flex:none}
+.kc-thumb{position:relative;margin:-12px -12px 10px;height:200px;background:#fff;border-radius:12px 12px 0 0;overflow:hidden;border-bottom:1px solid var(--line)}
+.kc-thumb img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+.kc-rot{position:absolute;left:8px;right:8px;bottom:8px;width:fit-content;max-width:calc(100% - 16px);background:rgba(0,0,0,.68);color:#fff;font-size:11px;font-weight:700;border-radius:6px;padding:3px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc-rot[hidden]{display:none}
+.kc-seta{position:absolute;top:50%;width:32px;height:32px;margin-top:-16px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:22px;line-height:1;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 0 3px;cursor:pointer;opacity:.85;transition:opacity .15s,background .15s,transform .15s;touch-action:manipulation}
+.kc-seta:hover{opacity:1;background:rgba(0,0,0,.8);transform:scale(1.06)}
+.kc-seta:focus-visible{outline:3px solid var(--accent);outline-offset:2px;opacity:1}
+.kc-seta.esq{left:8px}.kc-seta.dir{right:8px}
+.kc-seta svg{width:20px;height:20px}
+/* no card: as duas setas juntas no canto de baixo, à direita */
+.kc-setas{position:absolute;right:8px;bottom:8px;display:flex;gap:5px}
+.kc-setas .kc-seta{position:static;margin:0;width:32px;height:32px;padding:0;background:rgba(45,45,45,.72);box-shadow:0 2px 6px rgba(0,0,0,.3);opacity:1}
+.kc-setas .kc-seta svg{width:18px;height:18px}
+.kc-setas .kc-seta:hover{background:rgba(20,20,20,.85)}
+.kc-thumb{margin-bottom:10px}
 .kc-topo{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:11.5px;color:var(--muted);font-weight:700}
 .kc-num{font-variant-numeric:tabular-nums}
 .kc-urg{background:rgba(224,72,72,.15);color:#e04848;border-radius:6px;padding:1px 6px;font-size:10.5px;letter-spacing:.05em}
@@ -300,6 +315,75 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .modal .grid-c{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 @media (max-width:640px){.modal{padding:0}.modal-box{border-radius:0;min-height:100%;margin:0}.modal .grid-c .dup{grid-column:1/-1}}
 #pm-prio{flex-wrap:nowrap}#pm-prio button{padding:10px 16px}
+.imp-box{max-width:900px}
+.imp-escolha{display:flex;gap:10px;flex-wrap:wrap}
+.imp-resumo{margin:8px 0 4px;font-size:15px}
+.imp-resumo b{font-variant-numeric:tabular-nums}
+.imp-op{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:6px 0 12px;cursor:pointer}
+.imp-op input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--accent)}
+#imp-previa td:first-child{width:1%;white-space:nowrap;padding:0 12px}
+#imp-previa .imp-tag{width:auto}
+.imp-tag{display:inline-block;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.imp-tag.novo{background:rgba(34,197,94,.15);color:#22a355}
+.imp-tag.atu{background:rgba(59,130,246,.15);color:#3b82f6}
+.imp-tag.pula{background:var(--card-2);color:var(--muted)}
+.det-box{max-width:1020px;animation:none}
+.det-cab{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:20px 22px 16px;border-bottom:1px solid var(--line)}
+.det-cab-txt{min-width:0}
+.det-tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.det-tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;background:var(--card-2);border:1px solid var(--line)}
+.det-tag i{width:8px;height:8px;border-radius:50%;background:var(--cor,#888)}
+.det-tag.urg{background:rgba(224,72,72,.15);border-color:transparent;color:#e04848}
+.det-tag.atr{background:rgba(224,72,72,.15);border-color:transparent;color:#e04848}
+.det-tag.hoje{background:rgba(217,138,0,.16);border-color:transparent;color:#d98a00}
+.det-cab h2{margin:0;font-size:24px;line-height:1.2;word-break:break-word}
+.det-cab p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.det-corpo{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;padding:18px 22px 22px}
+@media (max-width:820px){.det-corpo{grid-template-columns:1fr}}
+.det-col{display:flex;flex-direction:column;gap:18px;min-width:0}
+.det-sec h3{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.det-mat{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.det-mat:first-child{padding-top:0}
+.det-mat-txt{flex:1;min-width:0}
+.det-mat-txt b{display:block;font-size:14.5px}
+.det-mat-txt span{display:block;color:var(--muted);font-size:13px;margin-top:2px;word-break:break-word}
+.det-mat-val{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.det-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;background:var(--accent);color:#fff;border-radius:11px;padding:11px 14px;font-weight:700}
+.det-total b{font-size:20px;font-variant-numeric:tabular-nums}
+.det-obs{margin:0;white-space:pre-wrap;line-height:1.5;background:var(--card-2);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.det-info{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0;font-size:14px}
+.det-info dt{color:var(--muted);font-weight:600}
+.det-info dd{margin:0;word-break:break-word}
+.det-view{position:relative;height:360px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.det-view img{width:100%;height:100%;object-fit:contain;display:block}
+.det-view .kc-seta{width:40px;height:40px;margin-top:-20px;font-size:26px}
+.det-view .kc-seta.esq{left:10px}.det-view .kc-seta.dir{right:10px}
+.det-cap{margin:10px 2px 0;font-size:13.5px;font-weight:700}
+.det-cap span{color:var(--muted);font-weight:600}
+.det-thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
+.det-thumbs button{flex:none;width:74px;height:54px;border-radius:8px;border:2px solid transparent;background:#fff;padding:0;overflow:hidden;cursor:pointer}
+.det-thumbs button.on{border-color:var(--accent)}
+.det-thumbs img{width:100%;height:100%;object-fit:contain;display:block}
+.det-sem{height:200px;border:1.5px dashed var(--line);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;text-align:center;padding:16px}
+@media (max-width:560px){.det-view{height:260px}.det-cab h2{font-size:20px}}
+.modal-conf{z-index:160;align-items:center}
+.conf-box{max-width:420px;padding:26px 24px 20px;text-align:center;animation:confEntra .2s ease-out}
+@keyframes confEntra{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.conf-ico{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;background:rgba(224,72,72,.14);color:#e04848}
+.conf-ico.aviso{background:rgba(217,138,0,.16);color:#d98a00}
+.conf-ico svg{width:28px;height:28px}
+.conf-box h2{margin:0 0 8px;font-size:19px}
+.conf-box p{margin:0;font-size:15px;line-height:1.45}
+.conf-box .conf-det{margin-top:6px;color:var(--muted);font-size:13.5px}
+.conf-box .conf-det:empty{display:none}
+.conf-bts{display:flex;gap:10px;margin-top:20px}
+.conf-bts .btn{flex:1;min-height:46px;font-size:15px}
+.btn.danger-cheio{background:#e04848;border-color:#e04848;color:#fff}
+.btn.danger-cheio:hover{background:#c93a3a;border-color:#c93a3a}
+.btn.aviso-cheio{background:var(--accent);border-color:var(--accent);color:#fff}
+.c-lista-topo{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 10px}
+.c-lista-topo .hint{margin:0}
+#c-apagar-todos{min-height:36px;padding:6px 14px;font-size:13px}
 .pm-itens{display:flex;flex-direction:column;gap:12px}
 .pm-item{border:1px solid var(--line);border-radius:13px;padding:12px 14px 14px;background:var(--card-2);display:flex;flex-direction:column;gap:10px}
 .pm-item-cab{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
@@ -494,7 +578,7 @@ body.modal-aberto{overflow:hidden}
       <button class="icobtn" type="button" id="menu" aria-label="Abrir ou fechar o menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <h1 id="titulo">O.S Camisa</h1>
       <div class="top-acoes" id="top-ped" hidden>
-        <button class="btn" type="button" id="ped-entregues-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/><path d="m9 13 2 2 4-4"/></svg><span>Entregues</span></button>
+        <button class="btn" type="button" id="ped-entregues-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/><path d="m9 13 2 2 4-4"/></svg><span>Arquivados</span></button>
         <button class="btn primary" type="button" id="ped-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo pedido</span></button>
       </div>
       <div class="top-acoes" id="top-prod" hidden>
@@ -507,6 +591,7 @@ body.modal-aberto{overflow:hidden}
       </div>
       <div class="top-acoes" id="top-cli" hidden>
         <button class="btn" type="button" id="cli-consultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Consultar cliente</span></button>
+        <button class="btn" type="button" id="cli-importar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg><span>Importar planilha</span></button>
         <button class="btn primary" type="button" id="cli-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo cliente</span></button>
       </div>
       <div class="top-acoes" id="top-orc" hidden>
@@ -775,18 +860,15 @@ body.modal-aberto{overflow:hidden}
         <section class="card">
           <h2>Dados do cliente</h2>
           <div class="body">
-            <div class="seg c-tipo" id="c-tipo" role="radiogroup" aria-label="Tipo de cliente">
-              <button type="button" data-t="pj" class="on">Pessoa jurídica</button>
-              <button type="button" data-t="pf">Pessoa física</button>
-            </div>
-            <p class="c-sec">Identificação</p>
+            <p class="c-sec" style="margin-top:4px">Identificação</p>
             <div class="grid-c">
               <label class="f"><span>Nome do cliente *</span><input type="text" id="c-nome" autocomplete="off" placeholder="Como vocês chamam o cliente"></label>
-              <div class="f c-doc dup"><span id="c-doc-rot">CNPJ</span><div class="c-linha"><input type="text" id="c-documento" inputmode="numeric" autocomplete="off" placeholder="00.000.000/0000-00"><button class="btn" type="button" id="c-buscar-cnpj">Buscar CNPJ</button></div></div>
-              <label class="f pj"><span>Razão social</span><input type="text" id="c-razao" autocomplete="off"></label>
-              <label class="f pj"><span>Nome fantasia</span><input type="text" id="c-fantasia" autocomplete="off"></label>
-              <label class="f pj"><span>Inscrição estadual</span><input type="text" id="c-ie" autocomplete="off" placeholder="Ou ISENTO"></label>
-              <label class="f pj"><span>Inscrição municipal</span><input type="text" id="c-im" autocomplete="off"></label>
+              <div class="f c-doc dup"><span>CNPJ</span><div class="c-linha"><input type="text" id="c-cnpj" inputmode="numeric" autocomplete="off" placeholder="00.000.000/0000-00"><button class="btn" type="button" id="c-buscar-cnpj">Buscar CNPJ</button></div></div>
+              <label class="f"><span>CPF</span><input type="text" id="c-cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00"></label>
+              <label class="f"><span>Razão social</span><input type="text" id="c-razao" autocomplete="off"></label>
+              <label class="f"><span>Nome fantasia</span><input type="text" id="c-fantasia" autocomplete="off"></label>
+              <label class="f"><span>Inscrição estadual</span><input type="text" id="c-ie" autocomplete="off" placeholder="Ou ISENTO"></label>
+              <label class="f"><span>Inscrição municipal</span><input type="text" id="c-im" autocomplete="off"></label>
             </div>
             <p class="c-sec">Endereço</p>
             <div class="grid-c">
@@ -818,7 +900,7 @@ body.modal-aberto{overflow:hidden}
           <h2>Consulta de clientes</h2>
           <div class="body">
             <input type="search" id="c-busca" placeholder="Buscar por nome, razão social, CNPJ/CPF, cidade ou telefone" autocomplete="off">
-            <p class="hint" id="c-info"></p>
+            <div class="c-lista-topo"><p class="hint" id="c-info"></p><button class="btn danger" type="button" id="c-apagar-todos" hidden>Apagar todos os clientes</button></div>
             <div class="tblwrap">
               <table class="tbl hist">
                 <thead><tr><th>Cliente</th><th>CNPJ / CPF</th><th>Telefone</th><th>Cidade</th><th class="abre"></th><th class="abre"></th><th class="x"></th></tr></thead>
@@ -960,6 +1042,84 @@ body.modal-aberto{overflow:hidden}
   </div>
 </div>
 
+  <div class="modal" id="imp-modal" hidden role="dialog" aria-modal="true" aria-labelledby="imp-titulo">
+    <div class="modal-box imp-box">
+      <div class="modal-cab"><h2 id="imp-titulo">Importar clientes</h2><button class="btn-x" type="button" id="imp-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo">
+        <div id="imp-passo1">
+          <p class="hint" style="margin:6px 0 12px">Use uma planilha do Excel (.xlsx ou .xls) ou um arquivo CSV com um cliente por linha. A primeira linha deve ter os nomes das colunas — o painel reconhece sozinho colunas como <b>Nome</b>, <b>Razão social</b>, <b>Nome fantasia</b>, <b>CNPJ</b>, <b>CPF</b>, <b>Inscrição estadual</b>, <b>Endereço</b>, <b>Número</b>, <b>Bairro</b>, <b>Cidade</b>, <b>UF</b>, <b>CEP</b>, <b>Telefone</b>, <b>E-mail</b> e <b>Contato</b>.</p>
+          <div class="imp-escolha">
+            <button class="btn primary" type="button" id="imp-escolher">Escolher arquivo</button>
+            <button class="btn" type="button" id="imp-modelo">Baixar planilha modelo (CSV)</button>
+          </div>
+          <input type="file" id="imp-arquivo" accept=".xlsx,.xls,.csv,.txt,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" hidden>
+        </div>
+        <div id="imp-passo2" hidden>
+          <p class="imp-resumo" id="imp-resumo"></p>
+          <p class="hint" id="imp-colunas"></p>
+          <label class="imp-op"><input type="checkbox" id="imp-atualizar" checked> Atualizar os clientes que já existem (mesmo CNPJ/CPF ou mesmo nome) com os dados da planilha</label>
+          <div class="tblwrap">
+            <table class="tbl hist">
+              <thead><tr><th>Situação</th><th>Cliente</th><th>CNPJ / CPF</th><th>Telefone</th><th>Cidade</th></tr></thead>
+              <tbody id="imp-previa"></tbody>
+            </table>
+          </div>
+          <p class="hint" id="imp-mais"></p>
+        </div>
+      </div>
+      <div class="modal-pe" id="imp-pe" hidden>
+        <button class="btn" type="button" id="imp-outro">Escolher outro arquivo</button>
+        <span class="espaco"></span>
+        <button class="btn primary" type="button" id="imp-confirmar">Importar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal modal-conf" id="conf-modal" hidden role="alertdialog" aria-modal="true" aria-labelledby="conf-titulo" aria-describedby="conf-texto">
+    <div class="modal-box conf-box">
+      <div class="conf-ico" id="conf-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+      <h2 id="conf-titulo">Tem certeza?</h2>
+      <p id="conf-texto"></p>
+      <p class="conf-det" id="conf-det"></p>
+      <div class="conf-bts">
+        <button class="btn" type="button" id="conf-nao">Não</button>
+        <button class="btn danger-cheio" type="button" id="conf-sim">Sim</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="det-modal" hidden role="dialog" aria-modal="true" aria-labelledby="det-cliente">
+    <div class="modal-box det-box">
+      <div class="det-cab">
+        <div class="det-cab-txt">
+          <div class="det-tags" id="det-tags"></div>
+          <h2 id="det-cliente"></h2>
+          <p id="det-contato"></p>
+        </div>
+        <button class="btn-x" type="button" id="det-fechar" aria-label="Fechar resumo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+      <div class="det-corpo">
+        <div class="det-col">
+          <section class="det-sec"><h3>Materiais</h3><div id="det-materiais"></div></section>
+          <section class="det-sec" id="det-obs-sec"><h3>Observações</h3><p class="det-obs" id="det-obs"></p></section>
+          <section class="det-sec"><h3>Informações</h3><dl class="det-info" id="det-info"></dl></section>
+        </div>
+        <div class="det-col">
+          <section class="det-sec"><h3 id="det-artes-tit">Artes</h3><div id="det-viewer"></div></section>
+        </div>
+      </div>
+      <div class="modal-pe">
+        <div class="pm-pdf">
+          <div class="seg" id="det-tam" role="radiogroup" aria-label="Tamanho do PDF"><button type="button" data-t="A4" class="on" role="radio" aria-checked="true">A4</button><button type="button" data-t="A5" role="radio" aria-checked="false">A5</button></div>
+          <button class="btn blue" type="button" id="det-pdf">Baixar PDF</button>
+        </div>
+        <span class="espaco"></span>
+        <button class="btn" type="button" id="det-fechar2">Fechar</button>
+        <button class="btn primary" type="button" id="det-editar">Editar informações</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal" id="ped-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pm-titulo">
     <form class="modal-box" id="pm-form" autocomplete="off" novalidate>
       <div class="modal-cab"><h2 id="pm-titulo">Novo pedido</h2><button class="btn-x" type="button" id="pm-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
@@ -1003,16 +1163,16 @@ body.modal-aberto{overflow:hidden}
 
   <div class="modal" id="ent-modal" hidden role="dialog" aria-modal="true" aria-labelledby="ent-titulo">
     <div class="modal-box">
-      <div class="modal-cab"><h2 id="ent-titulo">Pedidos entregues</h2><button class="btn-x" type="button" id="ent-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-cab"><h2 id="ent-titulo">Pedidos arquivados</h2><button class="btn-x" type="button" id="ent-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
       <div class="modal-corpo">
         <div class="tblwrap">
           <table class="tbl hist">
-            <thead><tr><th>Nº</th><th>Cliente</th><th>Material</th><th>Qtd.</th><th>Entregue em</th><th class="abre"></th></tr></thead>
+            <thead><tr><th>Nº</th><th>Cliente</th><th>Material</th><th>Qtd.</th><th>Arquivado em</th><th class="abre"></th></tr></thead>
             <tbody id="ent-lista"></tbody>
           </table>
-          <div class="vazio" id="ent-vazio">Nenhum pedido entregue ainda.</div>
+          <div class="vazio" id="ent-vazio">Nenhum pedido arquivado ainda.</div>
         </div>
-        <p class="hint">Marque “Entregue” no card da fila Pedido pronto para ele vir para cá. “Voltar” devolve o pedido para a fila Pedido pronto.</p>
+        <p class="hint">Marque “Arquivar” no card da fila Pedido entregue para ele sair do quadro e vir para cá. “Voltar” devolve o pedido para a fila Pedido entregue.</p>
       </div>
     </div>
   </div>
@@ -1053,6 +1213,45 @@ window.addEventListener("unhandledrejection", e => bug("falha: " + ((e.reason &&
 
 /* ================= avisos ================= */
 let toastT = null;
+/* confirmação própria do painel (a do navegador pode estar bloqueada) */
+let confResolver = null;
+function confirmar(texto, o = {}) {
+  return new Promise(resolve => {
+    if (confResolver) confResolver(false);
+    confResolver = resolve;
+    const m = document.getElementById("conf-modal");
+    document.getElementById("conf-titulo").textContent = o.titulo || "Tem certeza?";
+    document.getElementById("conf-texto").textContent = texto;
+    document.getElementById("conf-det").textContent = o.detalhe || "";
+    const sim = document.getElementById("conf-sim"), nao = document.getElementById("conf-nao");
+    sim.textContent = o.sim || "Sim"; nao.textContent = o.nao || "Não";
+    const perigo = o.perigo !== false;
+    sim.className = "btn " + (perigo ? "danger-cheio" : "aviso-cheio");
+    document.getElementById("conf-ico").className = "conf-ico" + (perigo ? "" : " aviso");
+    confVoltaFoco = document.activeElement;
+    m.hidden = false;
+    document.body.classList.add("modal-aberto");
+    setTimeout(() => (perigo ? nao : sim).focus(), 30);
+  });
+}
+let confVoltaFoco = null;
+function responderConf(v) {
+  const m = document.getElementById("conf-modal");
+  if (m.hidden) return;
+  m.hidden = true;
+  if (!document.querySelector(".modal:not([hidden])")) document.body.classList.remove("modal-aberto");
+  const r = confResolver; confResolver = null;
+  if (confVoltaFoco && confVoltaFoco.focus) try { confVoltaFoco.focus(); } catch (e) {}
+  if (r) r(v);
+}
+document.getElementById("conf-sim").addEventListener("click", () => responderConf(true));
+document.getElementById("conf-nao").addEventListener("click", () => responderConf(false));
+document.getElementById("conf-modal").addEventListener("mousedown", e => { if (e.target.id === "conf-modal") responderConf(false); });
+document.addEventListener("keydown", e => {
+  if (document.getElementById("conf-modal").hidden) return;
+  if (e.key === "Escape") { e.preventDefault(); e.stopImmediatePropagation(); responderConf(false); }
+}, true);
+
 function say(txt, cls) {
   const old = document.querySelector(".toast");
   if (old) old.remove();
@@ -1752,9 +1951,9 @@ function renderRC() {
       const x = document.createElement("span");
       x.className = "rc-x"; x.title = "Remover esta arte"; x.textContent = "×";
       x.setAttribute("role", "button"); x.setAttribute("aria-label", "Remover " + m.nome);
-      x.addEventListener("click", ev => {
+      x.addEventListener("click", async ev => {
         ev.stopPropagation();
-        if (totalModelo(m.id) > 0 && !confirm("Remover " + m.nome + " e os tamanhos lançados nela?")) return;
+        if (totalModelo(m.id) > 0 && !(await confirmar("Remover " + m.nome + " e os tamanhos lançados nela?", { titulo: "Remover arte" }))) return;
         removerArteRC(m.id);
       });
       b.appendChild(x);
@@ -2597,11 +2796,11 @@ async function removerRegistro(id) {
   const h = historico.find(x => (x.id || x.quando) === id);
   const nome = h ? (h.tipo === "orcamento" ? "o orçamento " : h.tipo === "recibo" ? "o recibo " : "a O.S. ") + h.numero : "este registro";
   if (modoHist === "nuvem") {
-    if (!confirm("Remover " + nome + " do histórico de todos?")) return;
+    if (!(await confirmar("Tem certeza que é para remover " + nome + "?", { titulo: "Remover do histórico", detalhe: "Some do histórico de todos os computadores." }))) return;
     try { await api("DELETE", "?id=" + encodeURIComponent(id)); historico = historico.filter(x => x.id !== id); renderVisao(); }
     catch (e) { say("Não consegui remover: " + (e.msg || "sem conexão") + ".", "err"); }
   } else {
-    if (!confirm("Remover " + nome + "?")) return;
+    if (!(await confirmar("Tem certeza que é para remover " + nome + "?", { titulo: "Remover do histórico" }))) return;
     histLocal = histLocal.filter(x => (x.id || x.quando) !== id);
     salvarHist(); historico = histLocal; renderVisao();
   }
@@ -2617,12 +2816,12 @@ $("#h-busca").addEventListener("input", renderVisao);
 $("#h-limpar").addEventListener("click", async () => {
   if (!historico.filter(h => h.tipo === "os" && !h.pendente).length) { say("Não há O.S. no histórico."); return; }
   if (modoHist === "nuvem") {
-    if (!confirm("Apagar TODAS as O.S. do banco? Isso some para todos os computadores e não dá para desfazer.")) return;
+    if (!(await confirmar("Tem certeza que é para apagar TODAS as O.S. do histórico?", { titulo: "Apagar O.S.", detalhe: "Some para todos os computadores e não dá para desfazer." }))) return;
     try { await api("DELETE", "?tudo=1&tipo=os"); historico = historico.filter(h => h.tipo !== "os" || h.pendente); renderVisao(); say("O.S. apagadas do histórico.", "ok"); }
     catch (e) { say("Não consegui limpar: " + (e.msg || "sem conexão") + ".", "err"); }
     return;
   }
-  if (!confirm("Apagar todas as O.S. do histórico deste computador?")) return;
+  if (!(await confirmar("Tem certeza que é para apagar todas as O.S. do histórico deste computador?", { titulo: "Apagar O.S." }))) return;
   histLocal = histLocal.filter(h => h.tipo !== "os"); salvarHist(); historico = histLocal; renderVisao();
   say("O.S. apagadas do histórico.");
 });
@@ -2638,7 +2837,7 @@ irPara = function (v) { _irParaOrig(v); if (v === "visao" && modoHist === "nuvem
 
 
 /* ================= CLIENTES ================= */
-const C_CAMPOS = ["nome", "razao", "fantasia", "documento", "ie", "im", "cep", "logradouro", "numero",
+const C_CAMPOS = ["nome", "razao", "fantasia", "cnpj", "cpf", "ie", "im", "cep", "logradouro", "numero",
   "complemento", "bairro", "cidade", "uf", "tel1", "tel2", "email", "contato", "obs"];
 let clientes = [];
 let clientesLocal = [];
@@ -2647,7 +2846,23 @@ function salvarClientesLocal() {
   try { localStorage.setItem("amz_clientes", JSON.stringify(clientesLocal)); }
   catch (e) { say("Sem espaço no navegador para guardar os clientes.", "err"); }
 }
-let cliEditId = null, cliTipo = "pj";
+let cliEditId = null;
+/* clientes antigos tinham um campo só ("documento"): separa em CNPJ ou CPF pelo tamanho */
+function normCli(c) {
+  if (!c) return c;
+  if (!c.cnpj && !c.cpf && c.documento) {
+    const d = soDig(c.documento);
+    if (d.length === 11) c.cpf = c.documento; else c.cnpj = c.documento;
+  }
+  c.documento = c.cnpj || c.cpf || "";
+  return c;
+}
+/* texto com os documentos do cliente, para mostrar */
+function docsCli(c, sep) {
+  if (!c) return "";
+  normCli(c);
+  return [c.cnpj ? "CNPJ " + c.cnpj : "", c.cpf ? "CPF " + c.cpf : ""].filter(Boolean).join(sep || " · ");
+}
 const soDig = v => String(v || "").replace(/\D/g, "");
 
 async function apiCli(metodo, query, corpo) {
@@ -2667,10 +2882,10 @@ const porNome = (a, b) => (a.nome || "").localeCompare(b.nome || "", "pt-BR", { 
 
 async function carregarClientes() {
   if (modoHist === "nuvem") {
-    try { clientes = (await apiCli("GET")).itens || []; }
+    try { clientes = ((await apiCli("GET")).itens || []).map(normCli); }
     catch (e) { if (!e.semApi) say("Não consegui carregar os clientes: " + (e.msg || "sem conexão") + ".", "err"); }
   } else if (modoHist === "local") {
-    clientes = clientesLocal.slice().sort(porNome);
+    clientes = clientesLocal.map(normCli).slice().sort(porNome);
   }
   renderClientes();
   if (window.orcPronto) orcCliAtualiza();
@@ -2691,30 +2906,24 @@ function fmtTel(v) {
   return String(v || "").trim();
 }
 function fmtCep(v) { const d = soDig(v); return d.length === 8 ? d.replace(/^(\d{5})(\d{3})$/, "$1-$2") : String(v || "").trim(); }
-$("#c-documento").addEventListener("blur", e => e.target.value = fmtDoc(e.target.value));
+["c-cnpj", "c-cpf"].forEach(id => $("#" + id).addEventListener("blur", e => e.target.value = fmtDoc(e.target.value)));
 ["c-tel1", "c-tel2"].forEach(id => $("#" + id).addEventListener("blur", e => e.target.value = fmtTel(e.target.value)));
 $("#c-cep").addEventListener("blur", e => e.target.value = fmtCep(e.target.value));
 $("#c-uf").addEventListener("input", e => e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 2));
 
-function setTipoCli(t) {
-  cliTipo = t === "pf" ? "pf" : "pj";
-  document.querySelectorAll("#c-tipo button").forEach(b => b.classList.toggle("on", b.dataset.t === cliTipo));
-  document.querySelectorAll("#view-cli .f.pj").forEach(el => el.hidden = cliTipo === "pf");
-  $("#c-doc-rot").textContent = cliTipo === "pf" ? "CPF" : "CNPJ";
-  $("#c-documento").placeholder = cliTipo === "pf" ? "000.000.000-00" : "00.000.000/0000-00";
-  $("#c-buscar-cnpj").hidden = cliTipo === "pf";
-}
-document.querySelectorAll("#c-tipo button").forEach(b => b.addEventListener("click", () => setTipoCli(b.dataset.t)));
 
 function lerFormCli() {
-  const o = { tipo: cliTipo };
+  const o = {};
   C_CAMPOS.forEach(c => o[c] = ($("#c-" + c).value || "").trim());
-  o.documento = fmtDoc(o.documento); o.tel1 = fmtTel(o.tel1); o.tel2 = fmtTel(o.tel2); o.cep = fmtCep(o.cep);
+  o.cnpj = fmtDoc(o.cnpj); o.cpf = fmtDoc(o.cpf);
+  o.documento = o.cnpj || o.cpf;
+  o.tipo = o.cnpj ? "pj" : o.cpf ? "pf" : "pj";
+  o.tel1 = fmtTel(o.tel1); o.tel2 = fmtTel(o.tel2); o.cep = fmtCep(o.cep);
   return o;
 }
 function preencherFormCli(c) {
+  if (c) normCli(c);
   C_CAMPOS.forEach(k => $("#c-" + k).value = (c && c[k]) || "");
-  setTipoCli((c && c.tipo) || "pj");
   cliEditId = c && c.id ? c.id : null;
   $("#c-titulo").textContent = cliEditId ? "Editando: " + (c.nome || "cliente") : "Novo cliente";
   $("#c-sub").textContent = cliEditId ? "Altere o que precisar e salve. Os próximos orçamentos já usam os dados novos."
@@ -2723,7 +2932,7 @@ function preencherFormCli(c) {
 }
 
 async function buscarCNPJ() {
-  const d = soDig($("#c-documento").value);
+  const d = soDig($("#c-cnpj").value);
   if (d.length !== 14) { say("Digite os 14 números do CNPJ.", "err"); return; }
   const btn = $("#c-buscar-cnpj"); btn.disabled = true; say("Buscando o CNPJ na Receita…");
   try {
@@ -2741,7 +2950,7 @@ async function buscarCNPJ() {
     if (j.ddd_telefone_1 && !$("#c-tel1").value.trim()) $("#c-tel1").value = fmtTel(j.ddd_telefone_1);
     if (j.ddd_telefone_2 && !$("#c-tel2").value.trim()) $("#c-tel2").value = fmtTel(j.ddd_telefone_2);
     if (j.email && !$("#c-email").value.trim()) $("#c-email").value = String(j.email).toLowerCase();
-    $("#c-documento").value = fmtDoc(d);
+    $("#c-cnpj").value = fmtDoc(d);
     say("Dados do CNPJ preenchidos. Confira e complete a inscrição estadual.", "ok");
   } catch (e) { say("Não consegui buscar o CNPJ: " + (e.message || "sem conexão") + " Preencha à mão.", "err"); }
   finally { btn.disabled = false; }
@@ -2770,9 +2979,11 @@ $("#c-buscar-cep").addEventListener("click", buscarCEP);
 async function salvarCliente() {
   const d = lerFormCli();
   if (!d.nome) { say("Informe o nome do cliente.", "err"); $("#c-nome").focus(); return; }
-  const doc = soDig(d.documento);
-  const repetido = doc && clientes.find(c => soDig(c.documento) === doc && c.id !== cliEditId);
-  if (repetido && !confirm("Já existe um cliente com esse " + (doc.length === 11 ? "CPF" : "CNPJ") + ": " + repetido.nome + ". Salvar mesmo assim?")) return;
+  if (d.cnpj && soDig(d.cnpj).length !== 14 && !(await confirmar("O CNPJ tem " + soDig(d.cnpj).length + " números (o certo são 14). Salvar mesmo assim?", { titulo: "Confira o CNPJ", perigo: false }))) { $("#c-cnpj").focus(); return; }
+  if (d.cpf && soDig(d.cpf).length !== 11 && !(await confirmar("O CPF tem " + soDig(d.cpf).length + " números (o certo são 11). Salvar mesmo assim?", { titulo: "Confira o CPF", perigo: false }))) { $("#c-cpf").focus(); return; }
+  const mesmo = (a, b) => a && soDig(a) && soDig(a) === soDig(b);
+  const repetido = clientes.find(c => c.id !== cliEditId && (normCli(c), mesmo(d.cnpj, c.cnpj) || mesmo(d.cpf, c.cpf)));
+  if (repetido && !(await confirmar("Já existe um cliente com esse " + (mesmo(d.cnpj, repetido.cnpj) ? "CNPJ" : "CPF") + ": " + repetido.nome + ". Salvar mesmo assim?", { titulo: "Cliente repetido", perigo: false }))) return;
   const btn = $("#c-salvar"); btn.disabled = true;
   try {
     let salvo;
@@ -2839,9 +3050,28 @@ $("#cli-fechar").addEventListener("click", () => {
   mostrarListaCli();
 });
 
+async function apagarTodosClientes() {
+  const n = clientes.length;
+  if (!n) return;
+  if (!(await confirmar("Tem certeza que é para apagar TODOS os clientes?", { titulo: "Apagar todos os clientes", detalhe: n + (n === 1 ? " cliente será apagado" : " clientes serão apagados") + " do cadastro. Pedidos e orçamentos antigos não mudam.", sim: "Sim, apagar" }))) return;
+  if (!(await confirmar("Última confirmação: apagar os " + n + " clientes? Não dá para desfazer.", { titulo: "Tem certeza mesmo?", sim: "Apagar todos", nao: "Cancelar" }))) return;
+  const btn = $("#c-apagar-todos"); btn.disabled = true;
+  try {
+    if (modoHist === "nuvem") await apiCli("DELETE", "?tudo=1");
+    else if (modoHist === "local") { clientesLocal = []; salvarClientesLocal(); }
+    else { say("Entre com a senha da equipe para apagar clientes.", "err"); return; }
+    clientes = [];
+    preencherFormCli(null);
+    $("#c-busca").value = "";
+    renderClientes();
+    say(n + (n === 1 ? " cliente apagado." : " clientes apagados."), "ok");
+  } catch (e) { say("Não consegui apagar: " + (e.msg || "sem conexão") + ".", "err"); if (modoHist === "nuvem") carregarClientes(); }
+  finally { btn.disabled = false; }
+}
+$("#c-apagar-todos").addEventListener("click", apagarTodosClientes);
 async function removerCliente(id) {
   const c = clientes.find(x => x.id === id); if (!c) return;
-  if (!confirm("Remover o cliente " + c.nome + " do cadastro?")) return;
+  if (!(await confirmar("Tem certeza que é para excluir o cliente?", { titulo: "Excluir cliente", detalhe: c.nome + " sai do cadastro. Pedidos e orçamentos antigos não mudam." }))) return;
   try {
     if (modoHist === "nuvem") await apiCli("DELETE", "?id=" + encodeURIComponent(id));
     else { clientesLocal = clientesLocal.filter(x => x.id !== id); salvarClientesLocal(); }
@@ -2852,14 +3082,15 @@ async function removerCliente(id) {
 }
 
 function textoBuscaCli(c) {
-  return semAcentoTxt([c.nome, c.razao, c.fantasia, c.documento, soDig(c.documento), c.cidade, c.tel1, soDig(c.tel1), c.tel2, soDig(c.tel2), c.email, c.contato].join(" "));
+  normCli(c);
+  return semAcentoTxt([c.nome, c.razao, c.fantasia, c.cnpj, soDig(c.cnpj), c.cpf, soDig(c.cpf), c.cidade, c.tel1, soDig(c.tel1), c.tel2, soDig(c.tel2), c.email, c.contato].join(" "));
 }
 function renderClientes() {
   const q = semAcentoTxt(($("#c-busca").value || "").trim());
   const lista = q ? clientes.filter(c => textoBuscaCli(c).includes(q)) : clientes;
   $("#c-lista").innerHTML = lista.slice(0, 300).map(c =>
     '<tr><td class="cli">' + escapa(c.nome) + (c.razao && c.razao.toLowerCase() !== c.nome.toLowerCase() ? '<br><span class="quem">' + escapa(c.razao) + '</span>' : "") + '</td>' +
-    '<td class="doc">' + escapa(c.documento || "—") + '</td>' +
+    '<td class="doc">' + (docsCli(c) ? escapa(docsCli(c, "\n")).replace(/\n/g, "<br>") : "—") + '</td>' +
     '<td class="doc">' + escapa(c.tel1 || c.tel2 || "—") + '</td>' +
     '<td class="quem">' + escapa([c.cidade, c.uf].filter(Boolean).join("/") || "—") + '</td>' +
     '<td class="abre"><button type="button" data-a="editar" data-id="' + escapa(c.id) + '">Editar</button></td>' +
@@ -2868,6 +3099,7 @@ function renderClientes() {
   $("#c-vazio").hidden = lista.length > 0;
   $("#c-vazio").textContent = clientes.length ? "Nenhum cliente encontrado nessa busca." : "Nenhum cliente cadastrado ainda.";
   $("#c-info").textContent = clientes.length ? clientes.length + (clientes.length === 1 ? " cliente cadastrado." : " clientes cadastrados.") + (q ? " " + lista.length + " na busca." : "") : "";
+  $("#c-apagar-todos").hidden = !clientes.length;
   document.querySelectorAll("#c-lista button").forEach(b => b.addEventListener("click", () => {
     const c = clientes.find(x => x.id === b.dataset.id); if (!c) return;
     if (b.dataset.a === "editar") { preencherFormCli(c); voltarParaOrc = false; mostrarFormCli(); setTimeout(() => $("#c-nome").focus(), 60); }
@@ -2878,7 +3110,6 @@ function renderClientes() {
 $("#c-busca").addEventListener("input", renderClientes);
 let voltarParaOrc = false;
 window.cliAoAbrir = () => { aplicarModoCli(false); if (modoHist === "nuvem" && !clientes.length) carregarClientes(); else renderClientes(); };
-setTipoCli("pj");
 
 /* ================= ORÇAMENTO ================= */
 const EMPRESA = {
@@ -2920,8 +3151,8 @@ function salvarTextosOrc() {
 }
 
 /* ---------- cliente do orçamento: busca nos cadastrados ---------- */
-const CLI_SNAP = ["id", "tipo", "nome", "razao", "fantasia", "documento", "ie", "im", "cep", "logradouro", "numero", "complemento", "bairro", "cidade", "uf", "tel1", "tel2", "email", "contato"];
-function snapCli(c) { const o = {}; CLI_SNAP.forEach(k => o[k] = c[k] || ""); return o; }
+const CLI_SNAP = ["id", "tipo", "nome", "razao", "fantasia", "cnpj", "cpf", "documento", "ie", "im", "cep", "logradouro", "numero", "complemento", "bairro", "cidade", "uf", "tel1", "tel2", "email", "contato"];
+function snapCli(c) { normCli(c); const o = {}; CLI_SNAP.forEach(k => o[k] = c[k] || ""); return o; }
 function enderecoCli(c) {
   const rua = [c.logradouro, c.numero ? "nº " + c.numero : "", c.complemento].filter(Boolean).join(", ");
   const cid = [c.cidade, c.uf].filter(Boolean).join("/");
@@ -2936,7 +3167,7 @@ function orcCliAtualiza() {
   const box = $("#o-cli-info");
   if (!orcCliente) { box.hidden = true; box.innerHTML = ""; return; }
   const c = orcCliente;
-  const l1 = [c.razao && c.razao !== c.nome ? c.razao : "", c.documento ? (soDig(c.documento).length === 11 ? "CPF " : "CNPJ ") + c.documento : "", c.ie ? "IE " + c.ie : ""].filter(Boolean).join(" · ");
+  const l1 = [c.razao && c.razao !== c.nome ? c.razao : "", docsCli(c), c.ie ? "IE " + c.ie : ""].filter(Boolean).join(" · ");
   const l3 = [c.tel1, c.tel2, c.email].filter(Boolean).join(" · ");
   box.innerHTML = '<b>✓ Cliente cadastrado</b><button type="button" id="o-cli-editar">Editar cadastro</button>' +
     (l1 ? "<br>" + escapa(l1) : "") + (enderecoCli(c) ? "<br>" + escapa(enderecoCli(c)) : "") + (l3 ? "<br>" + escapa(l3) : "");
@@ -2961,13 +3192,13 @@ function mostrarSugestoes() {
   const achados = clientes.filter(c => textoBuscaCli(c).includes(q)).slice(0, 8);
   const exato = clientes.some(c => semAcentoTxt(c.nome) === q);
   let html = achados.map((c, i) => '<button type="button" role="option" data-i="' + i + '">' + escapa(c.nome) +
-    '<small>' + escapa([c.razao && c.razao !== c.nome ? c.razao : "", c.documento, [c.cidade, c.uf].filter(Boolean).join("/")].filter(Boolean).join(" · ") || "Sem mais dados") + '</small></button>').join("");
+    '<small>' + escapa([c.razao && c.razao !== c.nome ? c.razao : "", docsCli(c), [c.cidade, c.uf].filter(Boolean).join("/")].filter(Boolean).join(" · ") || "Sem mais dados") + '</small></button>').join("");
   if (!exato) html += '<button type="button" class="novo" data-novo="1">+ Cadastrar “' + escapa(txt) + '” como cliente novo</button>';
   box.innerHTML = html; box.hidden = false; sugAtiva = -1;
   $("#o-cliente").setAttribute("aria-expanded", "true");
   box.querySelectorAll("button").forEach(b => b.addEventListener("mousedown", ev => {
     ev.preventDefault();
-    if (b.dataset.novo) { fecharSugestoes(); irPara("cli"); preencherFormCli(null); voltarParaOrc = true; mostrarFormCli(); $("#c-nome").value = txt; setTimeout(() => $("#c-documento").focus(), 60); say("Complete o cadastro e salve. Depois você volta para o orçamento."); }
+    if (b.dataset.novo) { fecharSugestoes(); irPara("cli"); preencherFormCli(null); voltarParaOrc = true; mostrarFormCli(); $("#c-nome").value = txt; setTimeout(() => $("#c-cnpj").focus(), 60); say("Complete o cadastro e salve. Depois você volta para o orçamento."); }
     else selecionarCliOrc(achados[+b.dataset.i], false);
   }));
 }
@@ -3247,7 +3478,7 @@ async function buildOrc() {
   const nomeCli = $("#o-cliente").value.trim() || "-";
   const extras = [];
   if (c) {
-    const doc = c.documento ? (soDig(c.documento).length === 11 ? "CPF: " : "CNPJ: ") + c.documento : "";
+    const doc = [c.cnpj || (!c.cpf && c.documento && soDig(c.documento).length !== 11 ? c.documento : "") ? "CNPJ: " + (c.cnpj || c.documento) : "", c.cpf || (!c.cnpj && c.documento && soDig(c.documento).length === 11 ? c.documento : "") ? "CPF: " + (c.cpf || c.documento) : ""].filter(Boolean).join("   •   ");
     const l1 = [c.razao && c.razao !== c.nome ? "Razão social: " + c.razao : "", doc, c.ie ? "IE: " + c.ie : ""].filter(Boolean).join("   •   ");
     if (l1) extras.push(l1);
     if (enderecoCli(c)) extras.push(enderecoCli(c));
@@ -3361,13 +3592,13 @@ function dadosOrc() {
 }
 
 /* confere e grava o orçamento; devolve false se algo impediu */
-function validarOrc() {
+async function validarOrc() {
   if (!$("#o-numero").value.trim()) { say("Informe o número do orçamento.", "err"); $("#o-numero").focus(); return false; }
   if (!orcItens.some(it => (it.desc || "").trim())) { say("Adicione pelo menos um produto ou serviço.", "err"); return false; }
   const numero = numeroCompleto();
   const editando = orcEditId && numero === orcEditNumero;
   if (!editando && historico.some(h => h.tipo === "orcamento" && h.numero === numero) &&
-      !confirm("Já existe um orçamento nº " + numero + ". Salvar outro com o mesmo número?")) return false;
+      !(await confirmar("Já existe um orçamento nº " + numero + ". Salvar outro com o mesmo número?", { titulo: "Número repetido", perigo: false }))) return false;
   return true;
 }
 async function gravarOrc() {
@@ -3387,13 +3618,13 @@ async function gravarOrc() {
   return !editando;
 }
 $("#o-salvar").addEventListener("click", async () => {
-  if (!validarOrc()) return;
+  if (!(await validarOrc())) return;
   const novo = await gravarOrc();
   say(novo ? "Orçamento " + orcEditNumero + " salvo. Ele já aparece na lista." : "Alterações salvas.", "ok");
 });
 $("#o-pdf").addEventListener("click", async () => {
   const btn = $("#o-pdf");
-  if (!validarOrc()) return;
+  if (!(await validarOrc())) return;
   btn.disabled = true; say("Gerando o PDF…");
   try {
     const numero = numeroCompleto();
@@ -3644,7 +3875,8 @@ const FILAS = [
   { id: "impressao", nome: "Fila da impressão", cor: "#06b6d4" },
   { id: "acabamento", nome: "Fila do acabamento", cor: "#f59e0b" },
   { id: "costura", nome: "Fila da costura", cor: "#ec4899" },
-  { id: "pronto", nome: "Pedido pronto", cor: "#22c55e" }
+  { id: "pronto", nome: "Pedido pronto", cor: "#22c55e" },
+  { id: "entregue", nome: "Pedido entregue", cor: "#64748b" }
 ];
 const MATERIAIS = ["LONA", "ADESIVO", "ACM", "PVC", "BANNER", "PLACA", "CAMISA", "FAIXA", "IMPRESSOS", "OUTRO"];
 const filaInfo = id => FILAS.find(f => f.id === id) || FILAS[0];
@@ -3682,7 +3914,7 @@ async function carregarPedidos(silencioso) {
   } else if (modoHist === "local") {
     pedidos = pedLocal.filter(p => !p.arquivado);
   }
-  if (!pedDrag && $("#ped-modal").hidden) renderKB();
+  if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden) renderKB();
 }
 window.carregarPedidos = carregarPedidos;
 window.pedAoMudar = on => {
@@ -3722,6 +3954,7 @@ async function atualizarPedido(id, campos) {
     if (campos.dados) Object.assign(antes, campos.dados);
     ["fila", "ordem", "arquivado"].forEach(k => { if (campos[k] != null) antes[k] = campos[k]; });
     if (campos.artes !== undefined) antes.temArte = campos.artes.length > 0;
+    if (campos.miniaturas !== undefined) { antes.miniaturas = campos.miniaturas; delete antes.miniatura; }
     antes.atualizado = new Date().toISOString();
     if (antes.arquivado) pedidos = pedidos.filter(p => p.id !== id);
   }
@@ -3737,6 +3970,7 @@ async function atualizarPedido(id, campos) {
         if (campos.dados) Object.assign(l, campos.dados);
         ["fila", "ordem", "arquivado"].forEach(k => { if (campos[k] != null) l[k] = campos[k]; });
         if (campos.artes !== undefined) { delete l.arte; if (campos.artes.length) l.artes = campos.artes; else delete l.artes; l.temArte = campos.artes.length > 0; }
+        if (campos.miniaturas !== undefined) { l.miniaturas = campos.miniaturas; delete l.miniatura; }
         l.atualizado = new Date().toISOString();
         salvarPedLocal();
         if (!l.arquivado && !pedidos.some(p => p.id === id)) pedidos.push(l);
@@ -3775,6 +4009,13 @@ const ICO_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stro
 const ICO_PES = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>';
 const ICO_ARTE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="13" height="13"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>';
 const ICO_OBS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" width="13" height="13"><path d="M5 4h14v12l-4 4H5z"/><path d="M9 9h6M9 13h4"/></svg>';
+const kcArteIdx = new Map(); /* qual arte cada card está mostrando */
+/* miniaturas do pedido (aceita o formato antigo, de uma imagem só) */
+function minisDe(p) {
+  if (Array.isArray(p.miniaturas) && p.miniaturas.length) return p.miniaturas.filter(m => m && m.img);
+  if (p.miniatura) return [{ img: p.miniatura, rotulo: "" }];
+  return [];
+}
 function chipsMateriais(p) {
   const its = itensDoPedido(p);
   const mats = its.map(i => i.material).filter(Boolean);
@@ -3795,20 +4036,43 @@ function cardPedido(p, fila, idxFila) {
   el.style.setProperty("--cor", fila.cor);
   el.setAttribute("aria-label", "Pedido " + p.numero + ", " + (p.cliente || ""));
   const hoje = hojeISO();
-  const prazo = p.prazo ? '<span class="kc-prazo' + (p.prazo < hoje ? " atr" : p.prazo === hoje ? " hoje" : "") + '" title="Prazo de entrega">' + ICO_CAL + (p.prazo === hoje ? "Hoje" : dataCurta(p.prazo).slice(0, 5)) + '</span>' : "";
+  const concluido = fila.id === "pronto" || fila.id === "entregue";
+  const prazo = p.prazo ? '<span class="kc-prazo' + (concluido ? "" : p.prazo < hoje ? " atr" : p.prazo === hoje ? " hoje" : "") + '" title="Prazo de entrega">' + ICO_CAL + (p.prazo === hoje ? "Hoje" : dataCurta(p.prazo).slice(0, 5)) + '</span>' : "";
+  const minis = minisDe(p);
+  const mini = minis.length ? '<div class="kc-thumb"><img alt="" draggable="false">' +
+    (minis.length > 1 ? '<div class="kc-setas"><button type="button" class="kc-seta esq" aria-label="Arte anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button><button type="button" class="kc-seta dir" aria-label="Próxima arte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button></div>' : "") + '</div>' : "";
   const valor = parseReal(p.preco);
   const ultimo = idxFila === FILAS.length - 1;
-  el.innerHTML =
+  el.innerHTML = mini +
     '<div class="kc-topo"><span class="kc-num">#' + escapa(p.numero) + '</span>' + (p.prioridade === "urgente" ? '<span class="kc-urg">URGENTE</span>' : "") + prazo + '</div>' +
     '<p class="kc-cli">' + escapa(p.cliente || "Sem cliente") + '</p>' +
     (p.descricao ? '<p class="kc-desc">' + escapa(p.descricao) + '</p>' : "") +
     '<div class="kc-tags">' + chipsMateriais(p) +
       (p.obs ? '<span class="kc-info" title="' + escapa(p.obs) + '">' + ICO_OBS + '</span>' : "") +
-      ((p.temArte || p.arte || (p.artes && p.artes.length)) ? '<span class="kc-info" title="Tem arte anexada">' + ICO_ARTE + (p.artes && p.artes.length > 1 ? " " + p.artes.length : "") + '</span>' : "") +
+      (!minis.length && (p.temArte || p.arte || (p.artes && p.artes.length)) ? '<span class="kc-info" title="Tem arte anexada">' + ICO_ARTE + '</span>' : "") +
       (valor ? '<span class="kc-valor">' + fmtReal(valor) + '</span>' : "") + '</div>' +
     ((p.contato || p.telefone) ? '<p class="kc-contato">' + ICO_PES + '<span>' + escapa([p.contato, p.telefone].filter(Boolean).join(" · ")) + '</span></p>' : "") +
-    '<div class="kc-pe"><label class="kc-ok"><input type="checkbox" aria-label="' + (ultimo ? "Marcar pedido " + escapa(p.numero) + " como entregue" : "OK: mandar pedido " + escapa(p.numero) + " para " + escapa(FILAS[idxFila + 1].nome)) + '">' + (ultimo ? "ENTREGUE" : "OK") + '</label>' +
-    '<span class="kc-prox">' + (ultimo ? "sai do quadro" : "→ " + escapa(FILAS[idxFila + 1].nome)) + '</span></div>';
+    '<div class="kc-pe"><label class="kc-ok"><input type="checkbox" aria-label="' + (ultimo ? "Arquivar pedido " + escapa(p.numero) : "OK: mandar pedido " + escapa(p.numero) + " para " + escapa(FILAS[idxFila + 1].nome)) + '">' + (ultimo ? "ARQUIVAR" : "OK") + '</label>' +
+    '<span class="kc-prox">' + (ultimo ? "tira do quadro" : "→ " + escapa(FILAS[idxFila + 1].nome)) + '</span></div>';
+  if (minis.length) {
+    const img = el.querySelector(".kc-thumb img");
+    const mostra = () => {
+      const k = ((kcArteIdx.get(p.id) || 0) % minis.length + minis.length) % minis.length;
+      img.src = minis[k].img;
+      img.alt = "Arte " + (k + 1) + " do pedido " + p.numero;
+      const nome = minis[k].rotulo || "";
+      img.title = (minis.length > 1 ? "Arte " + (k + 1) + " de " + minis.length + (nome ? " · " : "") : "") + nome;
+    };
+    el.querySelectorAll(".kc-seta").forEach(b => {
+      b.addEventListener("pointerdown", ev => ev.stopPropagation());
+      b.addEventListener("click", ev => {
+        ev.stopPropagation();
+        kcArteIdx.set(p.id, (kcArteIdx.get(p.id) || 0) + (b.classList.contains("dir") ? 1 : -1));
+        mostra();
+      });
+    });
+    mostra();
+  }
   el.querySelector(".kc-ok input").addEventListener("change", ev => {
     if (!ev.target.checked) return;
     if (!podeGravarPed()) { ev.target.checked = false; return; }
@@ -3816,7 +4080,7 @@ function cardPedido(p, fila, idxFila) {
     setTimeout(() => {
       if (ultimo) {
         atualizarPedido(p.id, { arquivado: true });
-        say("Pedido #" + p.numero + " entregue. Ele fica guardado em “Entregues”.", "ok");
+        say("Pedido #" + p.numero + " arquivado. Ele fica guardado em “Arquivados”.", "ok");
       } else {
         const prox = FILAS[idxFila + 1].id;
         pedChegou = p.id;
@@ -3826,10 +4090,10 @@ function cardPedido(p, fila, idxFila) {
     }, 240);
   });
   el.addEventListener("click", ev => {
-    if (ev.target.closest(".kc-ok") || Date.now() - pedSoltouEm < 300) return;
-    abrirPedidoModal(p);
+    if (ev.target.closest(".kc-ok") || ev.target.closest(".kc-seta") || Date.now() - pedSoltouEm < 300) return;
+    abrirDetalhe(p, el);
   });
-  el.addEventListener("keydown", ev => { if ((ev.key === "Enter" || ev.key === " ") && ev.target === el) { ev.preventDefault(); abrirPedidoModal(p); } });
+  el.addEventListener("keydown", ev => { if ((ev.key === "Enter" || ev.key === " ") && ev.target === el) { ev.preventDefault(); abrirDetalhe(p, el); } });
   return el;
 }
 function renderKB() {
@@ -3859,7 +4123,7 @@ function renderKB() {
     }
     kb.appendChild(col);
   });
-  pedidos.forEach(p => { total++; if (p.prioridade === "urgente") urg++; if (p.prazo && p.prazo < hoje && p.fila !== "pronto") atr++; });
+  pedidos.forEach(p => { total++; if (p.prioridade === "urgente") urg++; if (p.prazo && p.prazo < hoje && p.fila !== "pronto" && p.fila !== "entregue") atr++; });
   $("#ped-resumo").innerHTML = total
     ? "<b>" + total + "</b> " + (total === 1 ? "pedido" : "pedidos") + " no quadro" + (urg ? " · <b>" + urg + "</b> urgente" + (urg > 1 ? "s" : "") : "") + (atr ? " · <b style=\"color:#e04848\">" + atr + "</b> atrasado" + (atr > 1 ? "s" : "") : "")
     : "Quadro vazio.";
@@ -3873,7 +4137,7 @@ let pedDrag = null, pedSoltouEm = 0;
 document.addEventListener("touchmove", e => { if (pedDrag) e.preventDefault(); }, { passive: false });
 $("#kb").addEventListener("pointerdown", e => {
   const card = e.target.closest(".kc");
-  if (!card || e.button > 0 || e.target.closest(".kc-ok")) return;
+  if (!card || e.button > 0 || e.target.closest(".kc-ok") || e.target.closest(".kc-seta")) return;
   const toque = e.pointerType === "touch";
   const x0 = e.clientX, y0 = e.clientY;
   let ultimo = e, timer = null;
@@ -4016,13 +4280,15 @@ $("#pm-form").addEventListener("submit", async ev => {
     if (pedEditId) {
       const p = pedidos.find(x => x.id === pedEditId);
       const campos = { dados };
-      if (pmArteMudou) campos.artes = artesParaSalvar();
+      if (pmArteMudou) { campos.artes = artesParaSalvar(); campos.miniaturas = await miniaturasArtes(); dados.qtdArtes = String(pmArtes.length); }
+      else if (p) dados.qtdArtes = p.qtdArtes || "";
       if (p && p.fila !== fila) { campos.fila = fila; campos.ordem = ordemFinal(fila, p.id); pedChegou = p.id; }
       fecharModal($("#ped-modal"));
       await atualizarPedido(pedEditId, campos);
       say("Pedido atualizado.", "ok");
     } else {
-      await criarPedido(pmArtes.length ? Object.assign({}, dados, { artes: artesParaSalvar() }) : dados, fila);
+      if (pmArtes.length) dados.qtdArtes = String(pmArtes.length);
+      await criarPedido(pmArtes.length ? Object.assign({}, dados, { artes: artesParaSalvar(), miniaturas: await miniaturasArtes() }) : dados, fila);
       fecharModal($("#ped-modal"));
       say("Pedido criado em " + filaInfo(fila).nome + ".", "ok");
     }
@@ -4031,7 +4297,7 @@ $("#pm-form").addEventListener("submit", async ev => {
 });
 $("#pm-excluir").addEventListener("click", async () => {
   const p = pedidos.find(x => x.id === pedEditId); if (!p) return;
-  if (!confirm("Excluir o pedido #" + p.numero + " de " + p.cliente + "? Não dá para desfazer.")) return;
+  if (!(await confirmar("Tem certeza que é para excluir o pedido?", { titulo: "Excluir pedido", detalhe: "Pedido #" + p.numero + " · " + p.cliente + ". Não dá para desfazer." }))) return;
   if (await excluirPedido(p.id)) { fecharModal($("#ped-modal")); say("Pedido excluído.", "ok"); }
 });
 ["pm-fechar", "pm-cancelar"].forEach(id => $("#" + id).addEventListener("click", () => fecharModal($("#ped-modal"))));
@@ -4043,7 +4309,7 @@ async function abrirEntregues() {
   let lista = [];
   if (modoHist === "nuvem") {
     try { lista = (await apiPed("GET", "?entregues=1")).itens || []; }
-    catch (e) { say("Não consegui carregar os entregues: " + (e.msg || "sem conexão") + ".", "err"); return; }
+    catch (e) { say("Não consegui carregar os arquivados: " + (e.msg || "sem conexão") + ".", "err"); return; }
   } else lista = pedLocal.filter(p => p.arquivado).sort((a, b) => (b.atualizado || "").localeCompare(a.atualizado || ""));
   $("#ent-lista").innerHTML = lista.map(p =>
     '<tr><td class="num">#' + escapa(p.numero) + '</td><td class="cli">' + escapa(p.cliente || "—") + '</td>' +
@@ -4055,17 +4321,17 @@ async function abrirEntregues() {
     const p = lista.find(x => x.id === b.dataset.id);
     if (!pedidos.some(x => x.id === p.id)) pedidos.push(Object.assign({}, p));
     pedChegou = p.id;
-    const ok = await atualizarPedido(p.id, { arquivado: false, fila: "pronto", ordem: ordemFinal("pronto", p.id) });
-    if (ok) { b.closest("tr").remove(); if (!$("#ent-lista").children.length) $("#ent-vazio").hidden = false; say("Pedido #" + p.numero + " voltou para Pedido pronto.", "ok"); }
+    const ok = await atualizarPedido(p.id, { arquivado: false, fila: "entregue", ordem: ordemFinal("entregue", p.id) });
+    if (ok) { b.closest("tr").remove(); if (!$("#ent-lista").children.length) $("#ent-vazio").hidden = false; say("Pedido #" + p.numero + " voltou para Pedido entregue.", "ok"); }
   }));
   abrirModal($("#ent-modal"));
 }
 $("#ped-entregues-btn").addEventListener("click", abrirEntregues);
 $("#ent-fechar").addEventListener("click", () => fecharModal($("#ent-modal")));
-document.querySelectorAll(".modal").forEach(m => m.addEventListener("mousedown", e => { if (e.target === m) fecharModal(m); }));
+document.querySelectorAll(".modal:not(.modal-conf)").forEach(m => m.addEventListener("mousedown", e => { if (e.target === m) fecharModal(m); }));
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
-  const m = [...document.querySelectorAll(".modal")].find(x => !x.hidden);
+  const m = [...document.querySelectorAll(".modal:not(.modal-conf)")].find(x => !x.hidden);
   if (m) fecharModal(m);
 });
 
@@ -4129,7 +4395,7 @@ async function salvarProduto() {
   const d = lerFormProd();
   if (!d.nome) { say("Informe o nome do produto.", "err"); $("#pr-nome").focus(); return; }
   const igual = produtos.find(x => x.id !== prodEditId && x.nome === d.nome && (x.tamanho || "").toLowerCase() === d.tamanho.toLowerCase());
-  if (igual && !confirm("Já existe o produto " + d.nome + (d.tamanho ? " " + d.tamanho : "") + ". Salvar mesmo assim?")) return;
+  if (igual && !(await confirmar("Já existe o produto " + d.nome + (d.tamanho ? " " + d.tamanho : "") + ". Salvar mesmo assim?", { titulo: "Produto repetido", perigo: false }))) return;
   const btn = $("#pr-salvar"); btn.disabled = true;
   try {
     let salvo;
@@ -4155,7 +4421,7 @@ $("#pr-limpar").addEventListener("click", () => { preencherFormProd(null); $("#p
 
 async function removerProduto(id) {
   const p = produtos.find(x => x.id === id); if (!p) return;
-  if (!confirm("Remover o produto " + p.nome + (p.tamanho ? " " + p.tamanho : "") + "? Pedidos antigos não mudam.")) return;
+  if (!(await confirmar("Tem certeza que é para excluir o produto?", { titulo: "Excluir produto", detalhe: p.nome + (p.tamanho ? " " + p.tamanho : "") + ". Pedidos antigos não mudam." }))) return;
   try {
     if (modoHist === "nuvem") await apiProd("DELETE", "?id=" + encodeURIComponent(id));
     else { produtosLocal = produtosLocal.filter(x => x.id !== id); salvarProdutosLocal(); }
@@ -4444,6 +4710,23 @@ $("#pm-arte-file").addEventListener("change", async e => {
     say(total > 3800000 ? "As artes estão pesadas demais para guardar juntas. Remova alguma." : "Arte anexada. Confira a qual material ela pertence e salve o pedido.", total > 3800000 ? "err" : "ok");
   } catch (err) { say("Não consegui abrir essa imagem.", "err"); }
 });
+/* miniaturas leves de todas as artes, para o card e o resumo */
+async function miniaturasArtes() {
+  const out = [];
+  for (const a of pmArtes) {
+    try {
+      const im = await loadImg(a.img);
+      const w0 = im.naturalWidth || im.width, h0 = im.naturalHeight || im.height;
+      const k = Math.min(1, 560 / w0, 400 / h0);
+      const c = document.createElement("canvas"); c.width = Math.max(1, Math.round(w0 * k)); c.height = Math.max(1, Math.round(h0 * k));
+      const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+      let q = 0.72, img = c.toDataURL("image/jpeg", q);
+      while (img.length > 80000 && q > 0.4) { q -= 0.1; img = c.toDataURL("image/jpeg", q); }
+      out.push({ img, rotulo: a.item ? nomeItemArte(a.item) : "Pedido todo" });
+    } catch (e) {}
+  }
+  return out;
+}
 function artesParaSalvar() {
   return pmArtes.map(a => ({ img: a.img, item: a.item || "", material: a.item ? nomeItemArte(a.item) : "" }));
 }
@@ -4455,6 +4738,7 @@ function setTamPed(t) {
   pmTam = t === "A5" ? "A5" : "A4";
   document.querySelectorAll("#pm-tam button").forEach(b => { const on = b.dataset.t === pmTam; b.classList.toggle("on", on); b.setAttribute("aria-checked", on ? "true" : "false"); });
   try { localStorage.setItem("amz_ped_pdf_tam", pmTam); } catch (e) {}
+  if (window.detPronto) detTam = pmTam;
 }
 document.querySelectorAll("#pm-tam button").forEach(b => b.addEventListener("click", () => setTamPed(b.dataset.t)));
 setTamPed(pmTam);
@@ -4625,6 +4909,403 @@ $("#pm-pdf").addEventListener("click", async () => {
     const nome = "Pedido" + (d.numero ? " nº " + d.numero : "") + " - " + cli + " (" + pmTam + ").pdf";
     await salvarLocal(new Blob([bytes], { type: "application/pdf" }), nome);
     if (!pedEditId) say("PDF gerado. O pedido ainda não foi criado: clique em “Criar pedido” para guardar.");
+  } catch (err) { console.error(err); say("Não foi possível gerar o PDF do pedido.", "err"); }
+  finally { btn.disabled = false; }
+});
+
+
+/* ================= CLIENTES: IMPORTAR PLANILHA ================= */
+let impLinhas = [];
+const IMP_COLS = [
+  ["tel", /telefone|^tel|celular|^fone|whats|zap/],
+  ["email", /email|^mail/],
+  ["fantasia", /fantasia/],
+  ["razao", /razao|^empresa$/],
+  ["contato", /contato|responsavel/],
+  ["documento", /cnpjcpf|cpfcnpj|documento|^doc$|^docto$|^ndoc|^numdoc|identificacao/],
+  ["cnpj", /cnpj|cgc|inscricaofederal/],
+  ["cpf", /cpf|^cic$/],
+  ["ie", /inscricaoestadual|^ie$|inscest/],
+  ["im", /inscricaomunicipal|^im$|inscmun/],
+  ["cep", /^cep/],
+  ["logradouro", /endereco|logradouro|^rua|^avenida|^end$/],
+  ["numero", /^numero$|^num$|^n$|^no$|^nro$|^n°$/],
+  ["complemento", /complemento|^compl/],
+  ["bairro", /bairro/],
+  ["cidade", /cidade|municipio/],
+  ["uf", /^uf$|^estado$/],
+  ["obs", /obs|observ/],
+  ["nome", /nome|cliente/]
+];
+const normCab = t => semAcentoTxt(String(t || "")).replace(/[^a-z0-9°]/g, "");
+function mapearCabecalho(linha) {
+  const mapa = {}; let tels = 0;
+  linha.forEach((c, i) => {
+    const n = normCab(c); if (!n) return;
+    const achou = IMP_COLS.find(([, re]) => re.test(n));
+    if (!achou) return;
+    let campo = achou[0];
+    if (campo === "tel") { tels++; if (tels > 2) return; campo = tels === 1 ? "tel1" : "tel2"; }
+    if (mapa[campo] == null) mapa[campo] = i;
+  });
+  return mapa;
+}
+/* CSV com ; , ou tab, aspas e quebras de linha dentro de aspas */
+function lerCSV(txt) {
+  txt = txt.replace(/^\uFEFF/, "");
+  const primeira = txt.split(/\r?\n/)[0] || "";
+  const sep = [";", ",", "\t"].map(c => [c, primeira.split(c).length]).sort((a, b) => b[1] - a[1])[0][0];
+  const linhas = []; let lin = [], campo = "", aspas = false;
+  for (let i = 0; i < txt.length; i++) {
+    const ch = txt[i];
+    if (aspas) {
+      if (ch === '"') { if (txt[i + 1] === '"') { campo += '"'; i++; } else aspas = false; }
+      else campo += ch;
+    } else if (ch === '"') aspas = true;
+    else if (ch === sep) { lin.push(campo); campo = ""; }
+    else if (ch === "\n" || ch === "\r") {
+      if (ch === "\r" && txt[i + 1] === "\n") i++;
+      lin.push(campo); linhas.push(lin); lin = []; campo = "";
+    } else campo += ch;
+  }
+  if (campo || lin.length) { lin.push(campo); linhas.push(lin); }
+  return linhas.filter(l => l.some(c => String(c).trim()));
+}
+let xlsxCarregando = null;
+function carregarXLSX() {
+  if (window.XLSX) return Promise.resolve();
+  if (!xlsxCarregando) xlsxCarregando = new Promise((ok, erro) => {
+    const sc = document.createElement("script");
+    sc.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+    sc.onload = () => ok(); sc.onerror = () => { xlsxCarregando = null; erro(new Error("sem xlsx")); };
+    document.head.appendChild(sc);
+  });
+  return xlsxCarregando;
+}
+async function lerArquivoPlanilha(file) {
+  const nome = file.name.toLowerCase();
+  const buf = await file.arrayBuffer();
+  if (/\.(xlsx|xls)$/.test(nome)) {
+    await carregarXLSX();
+    const wb = XLSX.read(buf, { type: "array" });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    return XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: "" })
+      .map(l => l.map(v => typeof v === "number" ? (Number.isInteger(v) ? String(v) : String(v).replace(".", ",")) : String(v == null ? "" : v)))
+      .filter(l => l.some(c => c.trim()));
+  }
+  /* CSV: tenta UTF-8; se vier com caracteres quebrados, lê como Windows (Excel) */
+  let txt = new TextDecoder("utf-8").decode(buf);
+  if (txt.includes("\uFFFD")) txt = new TextDecoder("windows-1252").decode(buf);
+  return lerCSV(txt);
+}
+/* CNPJ/CPF que o Excel guardou como número perde o zero da frente */
+function docDaPlanilha(v) {
+  let d = soDig(v);
+  if (d.length === 13) d = "0" + d;
+  else if (d.length === 10) d = "0" + d;
+  return d.length === 14 || d.length === 11 ? fmtDoc(d) : String(v || "").trim();
+}
+function chaveCliente(c) {
+  normCli(c);
+  const j = soDig(c.cnpj), f = soDig(c.cpf);
+  return j.length >= 13 ? "j" + j : f.length >= 10 ? "f" + f : "n" + semAcentoTxt(c.nome || "").replace(/\s+/g, " ").trim();
+}
+
+function montarImportacao(linhas) {
+  let ini = -1, mapa = null;
+  for (let i = 0; i < Math.min(linhas.length, 6); i++) {
+    const m = mapearCabecalho(linhas[i]);
+    if (Object.keys(m).length >= 2 && (m.nome != null || m.razao != null || m.fantasia != null)) { ini = i; mapa = m; break; }
+  }
+  if (ini < 0) return { erro: "Não achei a linha de títulos. A primeira linha precisa ter colunas como “Nome”, “CNPJ”, “Telefone”…" };
+  /* sem coluna de CNPJ/CPF pelo nome: procura pelo conteúdo */
+  const corpo = linhas.slice(ini + 1);
+  const pareceDoc = v => {
+    v = String(v || "").trim(); if (!v) return false;
+    if (/^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/.test(v)) return true;                /* CNPJ */
+    if (/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(v)) return true;                        /* CPF formatado */
+    const d = soDig(v); return /^\d+$/.test(v) && (d.length === 14 || d.length === 13);     /* CNPJ só números */
+  };
+  if (mapa.documento == null && mapa.cnpj == null && mapa.cpf == null) {
+    const usadas = new Set(Object.values(mapa));
+    let melhor = -1, taxa = 0;
+    const larg = Math.max(...linhas.slice(ini, ini + 50).map(l => l.length));
+    for (let c = 0; c < larg; c++) {
+      if (usadas.has(c)) continue;
+      const vals = corpo.slice(0, 200).map(l => l[c]).filter(v => String(v || "").trim());
+      if (!vals.length) continue;
+      const t = vals.filter(pareceDoc).length / vals.length;
+      if (t > taxa) { taxa = t; melhor = c; }
+    }
+    if (melhor >= 0 && taxa >= 0.6) mapa.documento = melhor;
+  }
+  const val = (l, c) => mapa[c] != null ? String(l[mapa[c]] == null ? "" : l[mapa[c]]).trim() : "";
+  const porChave = new Map();
+  let cientificos = 0;
+  corpo.forEach(l => {
+    const c = {};
+    C_CAMPOS.forEach(k => c[k] = val(l, k));
+    c.nome = c.nome || c.fantasia || c.razao;
+    if (!c.nome) return;
+    /* 1,23457E+13: o Excel cortou os dígitos */
+    const cient = v => { if (/\d[.,]?\d*e\+?\d+/i.test(v)) { cientificos++; return ""; } return v; };
+    const docCol = cient(val(l, "documento"));
+    c.cnpj = cient(c.cnpj); c.cpf = cient(c.cpf);
+    /* cada número vai para o campo certo pelo tamanho, mesmo se estiver na coluna errada */
+    const tam = v => { const d = soDig(v); return d.length === 14 || d.length === 13 ? "cnpj" : d.length === 11 || d.length === 10 ? "cpf" : ""; };
+    const coloca = v => { if (!v) return; const t = tam(v); if (t && !c[t]) c[t] = docDaPlanilha(v); else if (!t && !c.cnpj) c.cnpj = v; };
+    const cnpjCol = c.cnpj, cpfCol = c.cpf;
+    c.cnpj = ""; c.cpf = "";
+    [cnpjCol, cpfCol, docCol].forEach(coloca);
+    c.documento = c.cnpj || c.cpf;
+    c.tel1 = fmtTel(c.tel1); c.tel2 = fmtTel(c.tel2); c.cep = fmtCep(c.cep);
+    c.uf = c.uf.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 2);
+    c.email = c.email.toLowerCase();
+    c.tipo = c.cnpj ? "pj" : c.cpf ? "pf" : "pj";
+    porChave.set(chaveCliente(c), c);
+  });
+  const existentes = new Map(clientes.map(c => [chaveCliente(c), c]));
+  clientes.forEach(c => { const k = "n" + semAcentoTxt(c.nome || "").replace(/\s+/g, " ").trim(); if (!existentes.has(k)) existentes.set(k, c); });
+  const itens = [...porChave.values()].map(c => {
+    const ja = existentes.get(chaveCliente(c)) || existentes.get("n" + semAcentoTxt(c.nome).replace(/\s+/g, " ").trim());
+    return { dados: c, existente: ja || null };
+  });
+  const nomesCol = { nome: "Nome", razao: "Razão social", fantasia: "Nome fantasia", documento: "CNPJ/CPF", cnpj: "CNPJ", cpf: "CPF", ie: "Inscrição estadual", im: "Inscrição municipal", cep: "CEP", logradouro: "Endereço", numero: "Número", complemento: "Complemento", bairro: "Bairro", cidade: "Cidade", uf: "UF", tel1: "Telefone 1", tel2: "Telefone 2", email: "E-mail", contato: "Contato", obs: "Observações" };
+  return { itens, colunas: Object.keys(mapa).map(k => nomesCol[k] || k), semDoc: mapa.documento == null && mapa.cnpj == null && mapa.cpf == null, cientificos };
+}
+function renderImportacao() {
+  const atualizar = $("#imp-atualizar").checked;
+  const novos = impLinhas.filter(i => !i.existente).length, ja = impLinhas.length - novos;
+  $("#imp-resumo").innerHTML = "<b>" + impLinhas.length + "</b> " + (impLinhas.length === 1 ? "cliente" : "clientes") + " na planilha · <b>" + novos + "</b> " + (novos === 1 ? "novo" : "novos") +
+    (ja ? " · <b>" + ja + "</b> já " + (ja === 1 ? "cadastrado" : "cadastrados") + (atualizar ? " (serão atualizados)" : " (serão ignorados)") : "");
+  $("#imp-previa").innerHTML = impLinhas.slice(0, 60).map(i => {
+    const tag = !i.existente ? '<span class="imp-tag novo">Novo</span>' : atualizar ? '<span class="imp-tag atu">Atualiza</span>' : '<span class="imp-tag pula">Ignorado</span>';
+    const c = i.dados;
+    return '<tr><td>' + tag + '</td><td class="cli">' + escapa(i.existente && i.existente.nome !== c.nome ? i.existente.nome : c.nome) + (i.existente && i.existente.nome !== c.nome ? '<br><span class="quem">na planilha: ' + escapa(c.nome) + '</span>' : "") + (c.razao && c.razao !== c.nome ? '<br><span class="quem">' + escapa(c.razao) + '</span>' : "") + '</td>' +
+      '<td class="doc">' + (docsCli(c) ? escapa(docsCli(c, "\n")).replace(/\n/g, "<br>") : "—") + '</td><td class="doc">' + escapa(c.tel1 || c.tel2 || "—") + '</td><td class="quem">' + escapa([c.cidade, c.uf].filter(Boolean).join("/") || "—") + '</td></tr>';
+  }).join("");
+  $("#imp-mais").textContent = impLinhas.length > 60 ? "Mostrando os 60 primeiros. Todos os " + impLinhas.length + " serão importados." : "";
+  const total = novos + (atualizar ? ja : 0);
+  $("#imp-confirmar").textContent = total ? "Importar " + total + (total === 1 ? " cliente" : " clientes") : "Nada para importar";
+  $("#imp-confirmar").disabled = !total;
+}
+function abrirImportacao() {
+  if (modoHist !== "nuvem" && modoHist !== "local") { say("Entre com a senha da equipe para importar clientes.", "err"); if (modoHist === "senha") pedirSenha(""); return; }
+  impLinhas = [];
+  $("#imp-atualizar").checked = true;
+  $("#imp-titulo").textContent = "Importar clientes";
+  $("#imp-passo1").hidden = false; $("#imp-passo2").hidden = true; $("#imp-pe").hidden = true;
+  abrirModal($("#imp-modal"));
+}
+$("#cli-importar").addEventListener("click", abrirImportacao);
+$("#imp-fechar").addEventListener("click", () => fecharModal($("#imp-modal")));
+$("#imp-escolher").addEventListener("click", () => $("#imp-arquivo").click());
+$("#imp-outro").addEventListener("click", () => $("#imp-arquivo").click());
+$("#imp-atualizar").addEventListener("change", renderImportacao);
+$("#imp-arquivo").addEventListener("change", async e => {
+  const f = e.target.files && e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  say("Lendo a planilha…");
+  try {
+    const r = montarImportacao(await lerArquivoPlanilha(f));
+    if (r.erro) { say(r.erro, "err"); return; }
+    if (!r.itens.length) { say("A planilha não tem nenhum cliente com nome.", "err"); return; }
+    impLinhas = r.itens;
+    $("#imp-titulo").textContent = "Importar clientes · " + f.name;
+    let aviso = "Colunas reconhecidas: " + r.colunas.join(", ") + ".";
+    if (r.semDoc) aviso += " ⚠ Não achei colunas de CNPJ ou CPF. Dê a elas os títulos “CNPJ” e “CPF” na primeira linha da planilha.";
+    if (r.cientificos) aviso += " ⚠ " + r.cientificos + (r.cientificos === 1 ? " CNPJ veio" : " CNPJs vieram") + " no formato 1,23E+13: o Excel cortou os números ao salvar. Na planilha, formate a coluna CNPJ como Texto e salve de novo.";
+    $("#imp-colunas").textContent = aviso;
+    $("#imp-passo1").hidden = true; $("#imp-passo2").hidden = false; $("#imp-pe").hidden = false;
+    renderImportacao(); say("");
+  } catch (err) {
+    console.error(err);
+    say(err && err.message === "sem xlsx" ? "Não consegui abrir arquivos do Excel agora (sem internet?). Salve a planilha como CSV e tente de novo." : "Não consegui ler esse arquivo.", "err");
+  }
+});
+$("#imp-confirmar").addEventListener("click", async () => {
+  const atualizar = $("#imp-atualizar").checked;
+  const novos = impLinhas.filter(i => !i.existente).map(i => i.dados);
+  /* atualiza só os campos que vieram preenchidos na planilha */
+  const junta = i => {
+    /* mantém o nome já cadastrado; atualiza só os outros campos que vieram preenchidos */
+    const o = Object.assign({}, i.existente); C_CAMPOS.forEach(k => { if (i.dados[k] && !(k === "nome" && o.nome)) o[k] = i.dados[k]; });
+    o.documento = o.cnpj || o.cpf || ""; o.tipo = o.cnpj ? "pj" : o.cpf ? "pf" : (o.tipo || "pj"); return o;
+  };
+  const atuais = atualizar ? impLinhas.filter(i => i.existente).map(junta) : [];
+  const btn = $("#imp-confirmar"); btn.disabled = true; btn.textContent = "Importando…";
+  try {
+    if (modoHist === "nuvem") {
+      for (let k = 0; k < Math.max(novos.length, atuais.length); k += 300) {
+        const r = await apiCli("POST", "", { lote: novos.slice(k, k + 300), atualizar: atuais.slice(k, k + 300) });
+        const mudou = new Map((r.atualizados || []).map(c => [c.id, c]));
+        clientes = clientes.map(c => mudou.get(c.id) || c).concat(r.criados || []);
+      }
+      clientes.sort(porNome);
+    } else {
+      const agora = Date.now();
+      novos.forEach((c, n) => clientesLocal.push(Object.assign({}, c, { id: "l_" + agora + "_" + n })));
+      atuais.forEach(c => { const i = clientesLocal.findIndex(x => x.id === c.id); if (i >= 0) clientesLocal[i] = c; });
+      salvarClientesLocal();
+      clientes = clientesLocal.slice().sort(porNome);
+    }
+    fecharModal($("#imp-modal"));
+    $("#c-busca").value = ""; renderClientes();
+    say(novos.length + (novos.length === 1 ? " cliente importado" : " clientes importados") + (atuais.length ? " e " + atuais.length + " atualizado" + (atuais.length > 1 ? "s" : "") : "") + ".", "ok");
+  } catch (err) {
+    say("A importação parou: " + (err.msg || "sem conexão") + ". Os clientes que já entraram ficaram salvos.", "err");
+    if (modoHist === "nuvem") carregarClientes();
+    renderImportacao();
+  } finally { btn.disabled = false; }
+});
+$("#imp-modelo").addEventListener("click", async () => {
+  const cab = ["Nome do cliente", "Razão social", "Nome fantasia", "CNPJ", "CPF", "Inscrição estadual", "Inscrição municipal", "CEP", "Endereço", "Número", "Complemento", "Bairro", "Cidade", "UF", "Telefone 1", "Telefone 2", "E-mail", "Contato", "Observações"];
+  const ex = ["Grupo Enepar", "ENEPAR EMPREENDIMENTOS LTDA", "Grupo Enepar", "12.345.678/0001-95", "", "04.123.456-7", "", "69029-320", "Av. Djalma Batista", "1200", "Sala 4", "Chapada", "Manaus", "AM", "(92) 99102-0236", "(92) 3247-0029", "compras@enepar.com.br", "Marcos", ""];
+  const csv = "\uFEFF" + [cab, ex].map(l => l.join(";")).join("\r\n") + "\r\n";
+  await salvarLocal(new Blob([csv], { type: "text/csv;charset=utf-8" }), "modelo-clientes.csv");
+});
+
+
+/* ================= PEDIDO: RESUMO EXPANDIDO ================= */
+let detPed = null, detArtes = null, detMinis = [], detIdx = 0, detCarregando = null, detTam = "A4";
+try { if (localStorage.getItem("amz_ped_pdf_tam") === "A5") detTam = "A5"; } catch (e) {}
+function diasAte(iso) { const a = new Date(hojeISO() + "T12:00:00"), b = new Date(iso + "T12:00:00"); return Math.round((b - a) / 86400000); }
+function artesCompletasLocais(p) {
+  if (Array.isArray(p.artes)) return p.artes.filter(a => a && a.img);
+  if (p.arte) return [{ img: p.arte, item: "", material: "" }];
+  return [];
+}
+function renderViewerDet() {
+  const box = $("#det-viewer");
+  const lista = detArtes || detMinis;
+  $("#det-artes-tit").textContent = lista.length > 1 ? "Artes (" + lista.length + ")" : "Arte";
+  if (!lista.length) {
+    box.innerHTML = '<div class="det-sem">' + (detCarregando ? "Carregando as artes…" : "Nenhuma arte anexada neste pedido.") + '</div>';
+    return;
+  }
+  detIdx = ((detIdx % lista.length) + lista.length) % lista.length;
+  const a = lista[detIdx];
+  const rot = (a.rotulo != null ? a.rotulo : a.material) || (a.item ? "" : "Pedido todo");
+  box.innerHTML = '<div class="det-view"><img alt="Arte ' + (detIdx + 1) + '">' +
+    (lista.length > 1 ? '<button type="button" class="kc-seta esq" aria-label="Arte anterior">‹</button><button type="button" class="kc-seta dir" aria-label="Próxima arte">›</button>' : "") + '</div>' +
+    '<p class="det-cap">Arte ' + (detIdx + 1) + (lista.length > 1 ? " de " + lista.length : "") + (rot ? ' <span>· ' + escapa(rot) + '</span>' : "") + (detCarregando ? ' <span>· carregando em alta…</span>' : "") + '</p>' +
+    (lista.length > 1 ? '<div class="det-thumbs">' + lista.map((x, k) => '<button type="button" class="' + (k === detIdx ? "on" : "") + '" data-k="' + k + '" aria-label="Ver arte ' + (k + 1) + '"><img alt=""></button>').join("") + '</div>' : "");
+  box.querySelector(".det-view img").src = a.img;
+  box.querySelectorAll(".det-thumbs button").forEach(b => { const x = (detMinis[+b.dataset.k] || lista[+b.dataset.k]); b.querySelector("img").src = x.img; b.addEventListener("click", () => { detIdx = +b.dataset.k; renderViewerDet(); }); });
+  box.querySelectorAll(".det-view .kc-seta").forEach(b => b.addEventListener("click", () => { detIdx += b.classList.contains("dir") ? 1 : -1; renderViewerDet(); }));
+}
+function renderDetalhe() {
+  const p = detPed; if (!p) return;
+  const f = filaInfo(p.fila);
+  let tags = '<span class="det-tag" style="--cor:' + f.cor + '"><i></i>' + escapa(f.nome) + '</span><span class="det-tag">Pedido #' + escapa(p.numero) + '</span>';
+  if (p.prioridade === "urgente") tags += '<span class="det-tag urg">URGENTE</span>';
+  const concluido = p.fila === "pronto" || p.fila === "entregue";
+  if (p.prazo) {
+    const d = diasAte(p.prazo);
+    const txt = "Entrega " + dataCurta(p.prazo) + (concluido ? "" : d < 0 ? " · atrasado há " + (-d) + (d === -1 ? " dia" : " dias") : d === 0 ? " · hoje" : " · faltam " + d + (d === 1 ? " dia" : " dias"));
+    tags += '<span class="det-tag' + (!concluido && d < 0 ? " atr" : !concluido && d === 0 ? " hoje" : "") + '">' + escapa(txt) + '</span>';
+  }
+  $("#det-tags").innerHTML = tags;
+  $("#det-cliente").textContent = p.cliente || "Sem cliente";
+  $("#det-contato").textContent = [p.contato, p.telefone].filter(Boolean).join(" · ") || "Sem contato informado";
+  const its = itensDoPedido(p);
+  const total = its.reduce((a, i) => a + parseReal(i.preco), 0);
+  $("#det-materiais").innerHTML = its.length ? its.map(i => {
+    const q = String(i.quantidade || ""), det = [i.medidas, q ? q + (/^\d+$/.test(q) ? " un." : "") : ""].filter(Boolean).join(" · ");
+    return '<div class="det-mat"><div class="det-mat-txt"><b>' + escapa(String(i.material || "Sem material").toUpperCase()) + '</b>' +
+      (i.descricao ? '<span>' + escapa(i.descricao) + '</span>' : "") + (det ? '<span>' + escapa(det) + '</span>' : "") + '</div>' +
+      '<div class="det-mat-val">' + (parseReal(i.preco) ? fmtReal(parseReal(i.preco)) : "—") + '</div></div>';
+  }).join("") + '<div class="det-total"><span>Total do pedido</span><b>' + fmtReal(total) + '</b></div>'
+    : '<p class="hint" style="margin:0">Nenhum material informado.</p>';
+  $("#det-obs-sec").hidden = !p.obs;
+  $("#det-obs").textContent = p.obs || "";
+  const info = [["Etapa", f.nome], ["Atendente", p.atendente || "—"], ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]];
+  const c = (typeof clientes !== "undefined" ? clientes : []).find(x => (p.clienteId && x.id === p.clienteId) || (x.nome || "").toLowerCase() === (p.cliente || "").toLowerCase());
+  if (c) {
+    if (c.razao && c.razao !== c.nome) info.push(["Razão social", c.razao]);
+    normCli(c);
+    if (c.cnpj) info.push(["CNPJ", c.cnpj]);
+    if (c.cpf) info.push(["CPF", c.cpf]);
+    if (c.ie) info.push(["Inscr. estadual", c.ie]);
+    if (enderecoCli(c)) info.push(["Endereço", enderecoCli(c)]);
+    if (c.email) info.push(["E-mail", c.email]);
+  }
+  $("#det-info").innerHTML = info.map(([k, v]) => '<dt>' + escapa(k) + '</dt><dd>' + escapa(v) + '</dd>').join("");
+  renderViewerDet();
+}
+function setTamDet(t) {
+  detTam = t === "A5" ? "A5" : "A4";
+  document.querySelectorAll("#det-tam button").forEach(b => { const on = b.dataset.t === detTam; b.classList.toggle("on", on); b.setAttribute("aria-checked", on ? "true" : "false"); });
+  try { localStorage.setItem("amz_ped_pdf_tam", detTam); } catch (e) {}
+  if (typeof setTamPed === "function") setTamPed(detTam);
+}
+document.querySelectorAll("#det-tam button").forEach(b => b.addEventListener("click", () => setTamDet(b.dataset.t)));
+
+function abrirDetalhe(p, origem) {
+  detPed = p; detIdx = kcArteIdx.get(p.id) || 0; detMinis = minisDe(p); detArtes = null; detCarregando = null;
+  /* artes em tamanho real: locais já estão no pedido; no banco, busca agora */
+  const locais = artesCompletasLocais(p);
+  if (locais.length) detArtes = locais;
+  else if (p.temArte && modoHist === "nuvem") {
+    const id = p.id;
+    detCarregando = apiPed("GET", "?id=" + encodeURIComponent(id) + "&arte=1")
+      .then(r => { if (detPed && detPed.id === id) detArtes = (r.artes || []).filter(a => a && a.img); })
+      .catch(() => {})
+      .finally(() => { detCarregando = null; if (detPed && detPed.id === id) renderViewerDet(); });
+  }
+  setTamDet(detTam);
+  renderDetalhe();
+  const m = $("#det-modal");
+  abrirModal(m);
+  /* o card "cresce" até virar a tela de resumo */
+  const box = m.querySelector(".det-box");
+  if (origem && box.animate && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const c = origem.getBoundingClientRect(), r = box.getBoundingClientRect();
+    const dx = (c.left + c.width / 2) - (r.left + r.width / 2), dy = (c.top + c.height / 2) - (r.top + r.height / 2);
+    box.animate([
+      { transform: "translate(" + dx + "px," + dy + "px) scale(" + Math.max(.05, c.width / r.width) + "," + Math.max(.05, c.height / r.height) + ")", opacity: .35 },
+      { transform: "none", opacity: 1 }
+    ], { duration: 340, easing: "cubic-bezier(.2,.8,.2,1)" });
+    m.animate([{ backgroundColor: "rgba(0,0,0,0)" }, { backgroundColor: "rgba(0,0,0,.55)" }], { duration: 300 });
+  }
+  setTimeout(() => $("#det-editar").focus(), 60);
+}
+["det-fechar", "det-fechar2"].forEach(id => $("#" + id).addEventListener("click", () => fecharModal($("#det-modal"))));
+$("#det-editar").addEventListener("click", () => {
+  const p = detPed; if (!p) return;
+  fecharModal($("#det-modal"));
+  /* aproveita as artes já carregadas no resumo */
+  abrirPedidoModal(detArtes ? Object.assign({}, p, { artes: detArtes }) : p);
+});
+function dadosPdfDePedido(p, artes) {
+  const quando = p.criado ? new Date(p.criado) : new Date();
+  const pad = v => String(v).padStart(2, "0");
+  const its = itensDoPedido(p);
+  const total = its.reduce((a, i) => a + parseReal(i.preco), 0);
+  return {
+    numero: p.numero || "",
+    data: pad(quando.getDate()) + "/" + pad(quando.getMonth() + 1) + "/" + quando.getFullYear(),
+    dataExtenso: quando.getDate() + " de " + MESES[quando.getMonth()] + " de " + quando.getFullYear(),
+    cliente: p.cliente || "", contato: p.contato || "", telefone: p.telefone || "",
+    itens: its.map(i => { const q = String(i.quantidade || ""); return {
+      material: String(i.material || "").toUpperCase(), descricao: i.descricao || "", medidas: i.medidas || "",
+      quantidade: q ? q + (/^\d+$/.test(q) ? " un." : "") : "", valor: parseReal(i.preco) ? fmtReal(parseReal(i.preco)) : "" }; }),
+    total: total ? fmtReal(total) : "",
+    prazo: p.prazo ? dataCurta(p.prazo) : "", prioridade: p.prioridade === "urgente" ? "URGENTE" : "Normal",
+    atendente: p.atendente || "", etapa: filaInfo(p.fila).nome, obs: p.obs || "",
+    artes: (artes || []).map(a => ({ img: a.img, rotulo: a.material || (a.item ? "" : "Pedido todo") }))
+  };
+}
+window.detPronto = true;
+$("#det-pdf").addEventListener("click", async () => {
+  const p = detPed; if (!p) return;
+  const btn = $("#det-pdf"); btn.disabled = true; say("Gerando o PDF…");
+  try {
+    if (detCarregando) await detCarregando;
+    const d = dadosPdfDePedido(p, detArtes || []);
+    const bytes = await buildPedidoPdf(d, detTam);
+    const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
+    await salvarLocal(new Blob([bytes], { type: "application/pdf" }), "Pedido nº " + d.numero + " - " + cli + " (" + detTam + ").pdf");
   } catch (err) { console.error(err); say("Não foi possível gerar o PDF do pedido.", "err"); }
   finally { btn.disabled = false; }
 });
