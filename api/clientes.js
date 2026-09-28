@@ -3,8 +3,10 @@
  *
  * GET    /api/clientes          → lista todos os clientes (ordem alfabética)
  * POST   /api/clientes          → cadastra um cliente
+ *        { lote: [...], atualizar: [{ id, ... }] } → importa vários de uma vez (planilha)
  * PATCH  /api/clientes?id=12    → atualiza um cliente
  * DELETE /api/clientes?id=12    → remove um cliente
+ * DELETE /api/clientes?tudo=1   → apaga todos os clientes
  *
  * Toda chamada precisa do cabeçalho "x-painel-senha" igual à variável PAINEL_SENHA da Vercel.
  */
@@ -40,11 +42,13 @@ function prepararBanco() {
 }
 
 /* campos aceitos no cadastro */
-const CAMPOS = ["nome", "tipo", "razao", "fantasia", "documento", "ie", "im", "cep", "logradouro", "numero",
+const CAMPOS = ["nome", "tipo", "razao", "fantasia", "cnpj", "cpf", "documento", "ie", "im", "cep", "logradouro", "numero",
   "complemento", "bairro", "cidade", "uf", "tel1", "tel2", "email", "contato", "obs"];
 function limpa(b) {
   const o = {};
   CAMPOS.forEach(c => { o[c] = String(b[c] == null ? "" : b[c]).trim().slice(0, c === "obs" ? 2000 : 200); });
+  /* CNPJ e CPF ficam separados; "documento" guarda o principal para busca e compatibilidade */
+  o.documento = o.cnpj || o.cpf || o.documento;
   return o;
 }
 function formata(r) {
@@ -67,6 +71,29 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
       const linhas = await sql`SELECT * FROM clientes ORDER BY lower(nome) LIMIT 5000`;
       return res.status(200).json({ itens: linhas.map(formata) });
+    }
+
+    if (req.method === "POST" && (Array.isArray(corpo().lote) || Array.isArray(corpo().atualizar))) {
+      const b = corpo();
+      const novos = (b.lote || []).slice(0, 1000).map(limpa).filter(d => d.nome);
+      const atual = (b.atualizar || []).slice(0, 1000)
+        .map(x => Object.assign(limpa(x), { id: String(parseInt(x && x.id, 10) || "") }))
+        .filter(d => d.nome && d.id);
+      let criados = [], atualizados = [];
+      if (novos.length) {
+        criados = await sql`
+          INSERT INTO clientes (nome, documento, dados)
+          SELECT e->>'nome', e->>'documento', e FROM jsonb_array_elements(${JSON.stringify(novos)}::jsonb) AS e
+          RETURNING *`;
+      }
+      if (atual.length) {
+        atualizados = await sql`
+          UPDATE clientes AS c SET nome = e->>'nome', documento = e->>'documento', dados = e - 'id', atualizado_em = now()
+          FROM jsonb_array_elements(${JSON.stringify(atual)}::jsonb) AS e
+          WHERE c.id = (e->>'id')::bigint
+          RETURNING c.*`;
+      }
+      return res.status(200).json({ criados: criados.map(formata), atualizados: atualizados.map(formata) });
     }
 
     if (req.method === "POST") {
@@ -94,6 +121,10 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "DELETE") {
+      if (req.query.tudo === "1") {
+        const r = await sql`DELETE FROM clientes RETURNING id`;
+        return res.status(200).json({ ok: true, apagados: r.length });
+      }
       const id = parseInt(req.query.id, 10);
       if (!id) return res.status(400).json({ erro: "Informe o id." });
       await sql`DELETE FROM clientes WHERE id = ${id}::bigint`;
