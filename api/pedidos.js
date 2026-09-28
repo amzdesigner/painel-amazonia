@@ -25,7 +25,7 @@ function acharUrlBanco() {
 const URL_BANCO = acharUrlBanco();
 const sql = URL_BANCO ? neon(URL_BANCO) : null;
 
-const FILAS = ["atendimento", "designer", "impressao", "acabamento", "costura", "pronto"];
+const FILAS = ["atendimento", "designer", "impressao", "acabamento", "costura", "pronto", "entregue"];
 
 let preparado = null;
 function prepararBanco() {
@@ -42,13 +42,14 @@ function prepararBanco() {
       )`;
       await sql`CREATE INDEX IF NOT EXISTS pedidos_ativos ON pedidos (arquivado, fila, ordem)`;
       await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS arte TEXT`;
+      await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS miniatura TEXT`;
     })().catch(e => { preparado = null; throw e; });
   }
   return preparado;
 }
 
 const CAMPOS = ["cliente", "clienteId", "contato", "telefone", "material", "produtoId", "precoUnit", "descricao", "medidas",
-  "quantidade", "preco", "prazo", "prioridade", "atendente", "obs"];
+  "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes"];
 /* cada material do pedido */
 const ITEM_CAMPOS = ["uid", "material", "produtoId", "precoUnit", "descricao", "medidas", "quantidade", "preco"];
 function limpa(b) {
@@ -88,10 +89,30 @@ function artesDoBanco(txt) {
   if (txt.startsWith("[")) { try { return JSON.parse(txt); } catch (e) { return []; } }
   return [{ img: txt, item: "", material: "" }];
 }
+/* miniaturas das artes (pequenas), para o card do quadro passar de uma para outra.
+   Guardadas como JSON na coluna "miniatura": [{ img, rotulo }] */
+const MAX_MINI = 90000, MAX_MINIS = 600000;
+function lerMiniatura(b) {
+  let lista = b.miniaturas;
+  if (lista === undefined && b.miniatura !== undefined) lista = b.miniatura ? [{ img: b.miniatura, rotulo: "" }] : [];
+  if (lista === undefined) return undefined;
+  if (!Array.isArray(lista) || lista.length > MAX_QTD_ARTES) return false;
+  if (!lista.length) return null;
+  const limpas = lista.map(m => ({ img: m && m.img, rotulo: String((m && m.rotulo) || "").slice(0, 200) }));
+  if (!limpas.every(m => imgOk(m.img) && m.img.length <= MAX_MINI)) return false;
+  const txt = JSON.stringify(limpas);
+  return txt.length > MAX_MINIS ? false : txt;
+}
+function minisDoBanco(txt) {
+  if (!txt) return [];
+  if (txt.startsWith("[")) { try { return JSON.parse(txt); } catch (e) { return []; } }
+  return [{ img: txt, rotulo: "" }];
+}
 function formata(r) {
   return Object.assign({}, r.dados || {}, {
     id: String(r.id), numero: String(r.id), fila: r.fila, ordem: Number(r.ordem), arquivado: r.arquivado,
     temArte: r.tem_arte != null ? !!r.tem_arte : !!r.arte,
+    miniaturas: minisDoBanco(r.miniatura),
     criado: new Date(r.criado_em).toISOString(), atualizado: new Date(r.atualizado_em).toISOString()
   });
 }
@@ -116,9 +137,9 @@ export default async function handler(req, res) {
       }
       /* a lista não traz as imagens, só se o pedido tem arte */
       const linhas = req.query.entregues === "1"
-        ? await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, (arte IS NOT NULL) AS tem_arte
+        ? await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
                     FROM pedidos WHERE arquivado ORDER BY atualizado_em DESC LIMIT 200`
-        : await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, (arte IS NOT NULL) AS tem_arte
+        : await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
                     FROM pedidos WHERE NOT arquivado ORDER BY fila, ordem LIMIT 2000`;
       return res.status(200).json({ itens: linhas.map(formata) });
     }
@@ -131,9 +152,11 @@ export default async function handler(req, res) {
       const ordem = Number.isFinite(Number(b.ordem)) ? Number(b.ordem) : Date.now();
       const arte = lerArtes(b);
       if (arte === false) return res.status(400).json({ erro: "Artes inválidas ou pesadas demais (máx. 12 imagens)." });
+      const mini = lerMiniatura(b);
+      if (mini === false) return res.status(400).json({ erro: "Miniatura inválida." });
       const [linha] = await sql`
-        INSERT INTO pedidos (fila, ordem, dados, arte)
-        VALUES (${fila}::text, ${ordem}::float8, ${JSON.stringify(d)}::jsonb, ${arte || null}::text)
+        INSERT INTO pedidos (fila, ordem, dados, arte, miniatura)
+        VALUES (${fila}::text, ${ordem}::float8, ${JSON.stringify(d)}::jsonb, ${arte || null}::text, ${mini || null}::text)
         RETURNING *`;
       return res.status(201).json({ item: formata(linha) });
     }
@@ -155,9 +178,13 @@ export default async function handler(req, res) {
       const arte = lerArtes(b);
       if (arte === false) return res.status(400).json({ erro: "Artes inválidas ou pesadas demais (máx. 12 imagens)." });
       const mexeArte = arte !== undefined;
+      const mini = lerMiniatura(b);
+      if (mini === false) return res.status(400).json({ erro: "Miniatura inválida." });
+      const mexeMini = mini !== undefined;
       const [linha] = await sql`
         UPDATE pedidos SET
           arte      = CASE WHEN ${mexeArte}::boolean THEN ${arte || null}::text ELSE arte END,
+          miniatura = CASE WHEN ${mexeMini}::boolean THEN ${mini || null}::text ELSE miniatura END,
           fila      = COALESCE(${fila}::text, fila),
           ordem     = COALESCE(${ordem}::float8, ordem),
           arquivado = COALESCE(${arquivado}::boolean, arquivado),
