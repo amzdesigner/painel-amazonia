@@ -49,9 +49,11 @@ function prepararBanco() {
 }
 
 const CAMPOS = ["cliente", "clienteId", "contato", "telefone", "material", "produtoId", "precoUnit", "descricao", "medidas",
-  "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes"];
+  "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes",
+  /* pagamento */
+  "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo"];
 /* cada material do pedido */
-const ITEM_CAMPOS = ["uid", "material", "produtoId", "precoUnit", "descricao", "medidas", "quantidade", "preco"];
+const ITEM_CAMPOS = ["uid", "camisa", "material", "produtoId", "precoUnit", "descricao", "medidas", "quantidade", "preco"];
 function limpa(b) {
   const o = {};
   CAMPOS.forEach(c => { o[c] = String(b[c] == null ? "" : b[c]).trim().slice(0, c === "obs" || c === "descricao" ? 3000 : 200); });
@@ -59,7 +61,7 @@ function limpa(b) {
   if (Array.isArray(b.itens)) {
     o.itens = b.itens.slice(0, 60).filter(it => it && typeof it === "object").map(it => {
       const i = {};
-      ITEM_CAMPOS.forEach(c => { i[c] = String(it[c] == null ? "" : it[c]).trim().slice(0, c === "descricao" ? 1000 : 200); });
+      ITEM_CAMPOS.forEach(c => { i[c] = String(it[c] == null ? "" : it[c]).trim().slice(0, c === "camisa" ? 4000 : c === "descricao" ? 1000 : 200); });
       return i;
     });
   }
@@ -128,6 +130,16 @@ export default async function handler(req, res) {
     const corpo = () => (typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {}));
 
     if (req.method === "GET") {
+      /* relatório: pedidos com pagamento (entrada/à vista ou restante) no período, arquivados inclusive */
+      if (req.query.relatorio === "1") {
+        const de = String(req.query.de || "").slice(0, 10), ate = String(req.query.ate || de).slice(0, 10);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(de) || !/^\d{4}-\d{2}-\d{2}$/.test(ate)) return res.status(400).json({ erro: "Datas inválidas." });
+        const linhas = await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
+          FROM pedidos
+          WHERE (dados->>'pagoEm' BETWEEN ${de}::text AND ${ate}::text) OR (dados->>'restantePagoEm' BETWEEN ${de}::text AND ${ate}::text)
+          ORDER BY criado_em LIMIT 3000`;
+        return res.status(200).json({ itens: linhas.map(formata) });
+      }
       if (req.query.arte === "1") {
         const id = parseInt(req.query.id, 10);
         if (!id) return res.status(400).json({ erro: "Informe o id." });

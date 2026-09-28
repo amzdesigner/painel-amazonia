@@ -58,7 +58,7 @@ function prepararBanco() {
   return preparado;
 }
 
-const TIPOS = ["os", "recibo", "orcamento"];
+const TIPOS = ["os", "recibo", "orcamento", "venda"];
 const STATUS = ["producao", "pronta", "entregue"];
 const texto = (v, max) => String(v == null ? "" : v).trim().slice(0, max);
 const inteiro = v => Math.max(0, Math.min(1e6, parseInt(v, 10) || 0));
@@ -71,7 +71,7 @@ function formata(r) {
     quem: r.quem || "", time: r.uniforme,
     status: r.status || "producao",
     entrega: (r.dados && r.dados.entregar) || "",
-    dados: r.tipo === "orcamento" || r.tipo === "os" ? (r.dados || null) : undefined,
+    dados: r.tipo === "orcamento" || r.tipo === "os" || r.tipo === "venda" ? (r.dados || null) : undefined,
     quando: new Date(r.criado_em).toISOString()
   };
 }
