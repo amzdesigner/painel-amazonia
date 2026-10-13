@@ -1012,7 +1012,7 @@ body.modal-aberto{overflow:hidden}
               </table>
               <div class="vazio" id="os-hist-vazio">Nenhuma O.S. feita ainda. Clique em “Nova O.S.” para começar.</div>
             </div>
-            <p class="hint">“Abrir” carrega a O.S. no formulário para reimprimir ou ajustar; baixar o PDF de novo atualiza a mesma O.S. A imagem anexada em “Arte da camisa” não fica guardada — anexe de novo se precisar.</p>
+            <p class="hint">“Abrir” carrega a O.S. no formulário para reimprimir ou ajustar; baixar o PDF de novo atualiza a mesma O.S. A imagem anexada em “Arte da camisa” fica guardada junto com a O.S. e volta ao abrir.</p>
           </div>
         </section>
       </div>
@@ -1764,6 +1764,8 @@ const WBOLD = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2
 const DIAS = ["DOMINGO","SEGUNDA-FEIRA","TERÇA-FEIRA","QUARTA-FEIRA","QUINTA-FEIRA","SEXTA-FEIRA","SÁBADO"];
 const $ = s => document.querySelector(s);
 let artFile = null, artURL = null;
+let osArteMudou = false, osArteTok = 0;      /* a arte mudou desde a última vez que a O.S. foi salva/aberta? */
+const osArteCache = new Map();                /* id da O.S. → imagem (data URL) já salva */
 
 /* ---------------- formulário ---------------- */
 document.querySelectorAll(".size").forEach(d => {
@@ -1891,12 +1893,14 @@ $("#pick").addEventListener("click", () => $("#file").click());
 $("#file").addEventListener("change", e => {
   const f = e.target.files && e.target.files[0];
   if (!f) return;
-  artFile = f;
+  artFile = f; osArteMudou = true; osArteTok++;
   if (artURL) URL.revokeObjectURL(artURL);
   artURL = URL.createObjectURL(f);
   $("#prevImg").src = artURL; $("#prev").hidden = false;
 });
 $("#rm").addEventListener("click", () => {
+  if (artFile) osArteMudou = true;
+  osArteTok++;
   artFile = null; if (artURL) URL.revokeObjectURL(artURL); artURL = null;
   $("#prev").hidden = true; $("#file").value = "";
 });
@@ -2973,6 +2977,25 @@ let fila = [];                            /* registros esperando para subir ao b
 try { const f = JSON.parse(localStorage.getItem("amz_fila") || "[]"); if (Array.isArray(f)) fila = f; } catch (e) {}
 function salvarFila() { try { localStorage.setItem("amz_fila", JSON.stringify(fila.slice(-200))); } catch (e) {} }
 
+/* artes das O.S. no modo sem banco: ficam no IndexedDB deste aparelho (o localStorage é pequeno demais) */
+const arteLocal = (() => {
+  let db = null;
+  const abrir = () => db || (db = new Promise((ok, falha) => {
+    const r = indexedDB.open("amz_artes", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("os");
+    r.onsuccess = () => ok(r.result); r.onerror = () => { db = null; falha(r.error); };
+  }));
+  const tx = async (modo, f) => { const d = await abrir(); return new Promise((ok, falha) => {
+    const t = d.transaction("os", modo); const req = f(t.objectStore("os"));
+    t.oncomplete = () => ok(req && req.result); t.onerror = () => falha(t.error);
+  }); };
+  return {
+    get: id => tx("readonly", st => st.get(String(id))),
+    set: (id, v) => tx("readwrite", st => st.put(v, String(id))),
+    del: id => tx("readwrite", st => st.delete(String(id)))
+  };
+})();
+
 let histLocal = [];
 try { const g = JSON.parse(localStorage.getItem("amz_hist") || "[]"); if (Array.isArray(g)) histLocal = g; } catch (e) {}
 function salvarHist() { try { localStorage.setItem("amz_hist", JSON.stringify(histLocal.slice(0, 300))); } catch (e) {} }
@@ -3077,6 +3100,7 @@ function filaParaLocal() {
   if (!fila.length) return;
   fila.forEach(it => {
     const d = Object.assign({}, it); delete d._temp; delete d._quando;
+    if (d.arte !== undefined) { if (d.arte) arteLocal.set(it._quando, d.arte).catch(() => {}); d.temArte = !!d.arte; delete d.arte; }
     histLocal.unshift(itemLocal(it.tipo, d, it._quando));
   });
   fila = []; salvarFila(); salvarHist();
@@ -4229,7 +4253,7 @@ $("#os-novo").addEventListener("click", () => {
 $("#os-consultar").addEventListener("click", () => { mostrarListaOs(); setTimeout(() => $("#os-busca").focus(), 60); });
 $("#os-fechar").addEventListener("click", mostrarListaOs);
 /* Limpar começa uma O.S. nova */
-$("#clear").addEventListener("click", () => { osEditId = null; guardarOsEdit(); mostraModoOs(); });
+$("#clear").addEventListener("click", () => { osEditId = null; osArteMudou = false; guardarOsEdit(); mostraModoOs(); });
 
 function montarRegOS() {
   return {
@@ -4249,12 +4273,14 @@ function montarRegOS() {
 $("#os-salvar").addEventListener("click", () => {
   if (!osTemConteudo() && !(uniformeLigado && time.some(j => j.nome))) { say("A O.S. está vazia. Preencha o cliente ou os tamanhos antes de salvar.", "err"); return; }
   const nova = !(osEditId && historico.some(x => (x.id || x.quando) === osEditId));
-  registrarOS(montarRegOS());
-  say(nova ? "O.S. salva. Ela já aparece na lista e na Visão Geral." : "Alterações salvas.", "ok");
+  const comArte = osArteMudou && artFile;
+  registrarOS(montarRegOS()).then(() => {
+    say((nova ? "O.S. salva. Ela já aparece na lista e na Visão Geral." : "Alterações salvas.") + (comArte ? " A arte da camisa ficou guardada junto." : ""), "ok");
+  });
 });
 /* salva a O.S. e espera o número dela (vem do banco) para imprimir no PDF */
 async function numeroParaOS() {
-  registrarOS(montarRegOS());
+  await registrarOS(montarRegOS());
   for (let t = 0; t < 40; t++) {
     const h = historico.find(x => (x.id || x.quando) === osEditId);
     if (h && h.numero && h.numero !== "…") return h.numero;
@@ -4275,12 +4301,57 @@ $("#os-ver").addEventListener("click", async () => {
   } catch (e) { console.error(e); say("Não foi possível montar a O.S.", "err"); }
   finally { btn.disabled = false; }
 });
-/* registra ou atualiza a O.S. (Salvar ou Baixar PDF) */
+/* registra ou atualiza a O.S. (Salvar ou Baixar PDF), junto com a arte da camisa quando ela mudou */
+let osGravando = Promise.resolve();
 function registrarOS(reg) {
+  const vez = osGravando.then(() => gravarOS(reg)).catch(e => console.error(e));
+  osGravando = vez;
+  return vez;
+}
+async function gravarOS(reg) {
+  let arte;                                   /* undefined = não mexe · "" = tira · data URL = grava */
+  if (osArteMudou) {
+    arte = "";
+    if (artFile) {
+      try { arte = await reduzirArte(artFile); }
+      catch (e) { arte = undefined; say("Não consegui guardar a imagem da arte (formato não suportado).", "err"); }
+    }
+    osArteMudou = false;
+  }
+  const local = modoHist === "local";
+  if (arte !== undefined) { reg.temArte = !!arte; if (!local) reg.arte = arte; }
   const existe = osEditId && historico.some(x => (x.id || x.quando) === osEditId);
-  if (existe) atualizarRegistro(osEditId, reg);
+  if (existe) { const ok = await atualizarRegistro(osEditId, reg); if (!ok && arte !== undefined) osArteMudou = true; }
   else { osEditId = registrar("os", reg); }
+  const id = osEditId;
+  if (arte !== undefined) {
+    if (arte) osArteCache.set(id, arte); else osArteCache.delete(id);
+    if (local) { try { arte ? await arteLocal.set(id, arte) : await arteLocal.del(id); } catch (e) { say("Não consegui guardar a imagem da arte neste computador.", "err"); } }
+  }
+  /* a imagem não fica na lista em memória (só a marca temArte) */
+  const h = historico.find(x => (x.id || x.quando) === id); if (h) delete h.arte;
   guardarOsEdit(); mostraModoOs();
+}
+
+
+/* busca a arte guardada de uma O.S. (memória → aparelho → banco) */
+async function buscarArteOS(id, h) {
+  if (osArteCache.has(id)) return osArteCache.get(id);
+  for (const [t, r] of (window.tempParaReal || new Map())) if (r === id && osArteCache.has(t)) return osArteCache.get(t);
+  if (modoHist === "local") { try { return (await arteLocal.get(id)) || ""; } catch (e) { return ""; } }
+  if (!h || !h.temArte || String(id).startsWith("tmp_") || modoHist !== "nuvem") return "";
+  const r = await api("GET", "?id=" + encodeURIComponent(id) + "&arte=1");
+  if (r.arte) osArteCache.set(id, r.arte);
+  return r.arte || "";
+}
+/* coloca uma imagem (data URL) no quadro "Arte da camisa" */
+async function porArteNoForm(dataUrl, nome) {
+  const blob = await (await fetch(dataUrl)).blob();
+  artFile = new File([blob], nome || "arte.jpg", { type: blob.type || "image/jpeg" });
+  if (artURL) URL.revokeObjectURL(artURL);
+  artURL = URL.createObjectURL(artFile);
+  $("#prevImg").src = artURL; $("#prev").hidden = false;
+  if (typeof sync === "function") sync();
 }
 
 /* carrega uma O.S. do histórico no formulário */
@@ -4312,10 +4383,19 @@ function abrirOS(id) {
   }
   if (Array.isArray(d.time) && d.time.length) { time = d.time.map(j => Object.assign(linhaVazia(), j)); ligarUniforme(true); }
   sync();
-  osEditId = id; guardarOsEdit();
+  osEditId = id; osArteMudou = false; guardarOsEdit();
   mostrarFormOs();
   const faltou = mods.length && rcSel.length < mods.length;
   say("O.S. " + h.numero + " aberta." + (faltou ? " Algum modelo RC não existe mais e ficou de fora." : ""), faltou ? "err" : "ok");
+  /* traz a arte da camisa que foi salva com a O.S. */
+  const tok = ++osArteTok;
+  const pronto = buscarArteOS(id, h).then(async url => {
+    if (!url || tok !== osArteTok || osEditId !== id) return false;
+    await porArteNoForm(url, "arte-os-" + String(h.numero || "").replace("/", "-") + ".jpg");
+    return true;
+  }).catch(e => { console.error(e); if (tok === osArteTok) say("Não consegui carregar a arte desta O.S. agora. Tente abrir de novo.", "err"); return false; });
+  window.osArtePronta = pronto;
+  return pronto;
 }
 
 /* filtros */
@@ -5132,8 +5212,8 @@ function renderItensPed(focar) {
       '<div class="o-cli-info pi-info" hidden></div>' +
       '<label class="f"><span>Descrição</span><input type="text" class="pi-descricao" placeholder="Ex.: Banner com bastão e corda" autocomplete="off"></label>' +
       '<div class="grid-c"><label class="f"><span>Medidas</span><input type="text" class="pi-medidas" placeholder="Ex.: 2,00 × 1,00 m" autocomplete="off"></label>' +
-      '<label class="f"><span>Quantidade</span><input type="text" class="pi-quantidade" inputmode="decimal" placeholder="1" autocomplete="off"></label>' +
       '<label class="f"><span>Preço unitário (R$)</span><input type="text" class="pi-unit" inputmode="decimal" placeholder="' + (it.camisa ? "por tamanho" : "0,00") + '" autocomplete="off"' + (it.camisa ? " disabled" : "") + '></label>' +
+      '<label class="f"><span>Quantidade</span><input type="text" class="pi-quantidade" inputmode="decimal" placeholder="1" autocomplete="off"></label>' +
       '<div class="f"><span>Total do material</span><div class="pi-total" aria-live="polite"></div></div></div>';
     const q = c => el.querySelector(".pi-" + c);
     ["material", "descricao", "medidas", "quantidade", "unit"].forEach(c => q(c).value = it[c] || "");
@@ -6125,18 +6205,17 @@ async function abrirOSDoPedido(c, pedido, uid) {
   if (!h) { say("Não achei essa O.S. no histórico. Abra e salve o pedido de novo para recriar.", "err"); return; }
   fecharModal($("#det-modal"));
   irPara("os");
-  abrirOS(c.osId);
+  const jaTem = await abrirOS(c.osId);
+  if (jaTem) { say("O.S. " + h.numero + " aberta com a arte salva nela. Use “Visualizar O.S.” para imprimir.", "ok"); return; }
   let artes = detArtes;
   if (!artes && pedido.temArte && modoHist === "nuvem") { try { artes = (await apiPed("GET", "?id=" + encodeURIComponent(pedido.id) + "&arte=1")).artes; } catch (e) {} }
   artes = (artes || artesCompletasLocais(pedido) || []).filter(a => a && a.img);
   const a = artes.find(x => x.item === uid) || artes[0];
   if (a) {
     try {
-      const blob = await (await fetch(a.img)).blob();
-      artFile = new File([blob], "arte-pedido-" + pedido.numero + ".jpg", { type: blob.type || "image/jpeg" });
-      if (artURL) URL.revokeObjectURL(artURL);
-      artURL = URL.createObjectURL(artFile);
-      $("#prevImg").src = artURL; $("#prev").hidden = false;
+      osArteTok++;
+      await porArteNoForm(a.img, "arte-pedido-" + pedido.numero + ".jpg");
+      osArteMudou = true;   /* fica guardada na O.S. ao salvar ou visualizar */
       say("O.S. " + h.numero + " aberta com a arte do pedido. Use “Visualizar O.S.” para imprimir.", "ok");
     } catch (e) {}
   }
