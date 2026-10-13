@@ -911,6 +911,7 @@ body.modal-aberto{overflow:hidden}
               <label class="f"><span>Cliente</span><input type="text" id="cliente" placeholder="Nome do cliente ou empresa" autocomplete="off"></label>
               <label class="f"><span>O.S. feita por</span><input type="text" id="feitopor" placeholder="Quem está preenchendo" autocomplete="off"></label>
             </div>
+            <div class="f"><span>Tipo de camisa</span><div class="chips" id="ch-tipocamisa"></div><input type="hidden" id="tipocamisa"></div>
             <div class="f"><span>Tecido</span><div class="chips" id="ch-tecido"></div><input type="hidden" id="tecido"></div>
             <div class="f"><span>Tipo de gola</span><div class="chips" id="ch-gola"></div><input type="hidden" id="gola"></div>
             <div class="f"><span>Cor da gola</span><div class="chips" id="ch-corgola"></div><input type="hidden" id="corgola"></div>
@@ -1815,6 +1816,7 @@ calcEntrega(); sync();
 
 /* ---------------- escolhas em botão ---------------- */
 const GRUPOS = {
+  tipocamisa: { opcoes: ["MANGA CURTA", "MANGA LONGA", "REGATA", "MACHÃO"], mais: "+ NOVO TIPO", dica: "Novo tipo de camisa" },
   tecido:  { opcoes: ["MICRODRY", "AERODRY", "MALHA PP", "HELANCA"] },
   gola:    { opcoes: ["REDONDA", "GOLA V", "POLO"] },
   corgola: { opcoes: ["BRANCA", "PRETO", "AMARELO", "VERMELHO", "AZUL", "ROSA"],
@@ -1861,7 +1863,8 @@ function montaChips(campo) {
 
   const mais = document.createElement("button");
   mais.type = "button"; mais.className = "chip add";
-  mais.textContent = "+ PERSONALIZADO";
+  mais.textContent = g.mais || "+ PERSONALIZADO";
+  if (g.dica) mais.title = g.dica;
   mais.addEventListener("click", () => abrirNovo(campo, box));
   box.appendChild(mais);
 }
@@ -1870,7 +1873,7 @@ function abrirNovo(campo, box) {
   const linha = document.createElement("div");
   linha.className = "novo";
   const inp = document.createElement("input");
-  inp.type = "text"; inp.placeholder = "Escreva a opção"; inp.autocomplete = "off";
+  inp.type = "text"; inp.placeholder = campo === "tipocamisa" ? "Ex.: Manga raglan" : "Escreva a opção"; inp.autocomplete = "off";
   const ok = document.createElement("button");
   ok.type = "button"; ok.className = "btn blue"; ok.textContent = "Adicionar";
   const confirmar = () => {
@@ -1887,7 +1890,7 @@ function abrirNovo(campo, box) {
   box.appendChild(linha);
   inp.focus();
 }
-["tecido", "gola", "corgola"].forEach(montaChips);
+["tipocamisa", "tecido", "gola", "corgola"].forEach(montaChips);
 
 $("#pick").addEventListener("click", () => $("#file").click());
 $("#file").addEventListener("change", e => {
@@ -1905,8 +1908,8 @@ $("#rm").addEventListener("click", () => {
   $("#prev").hidden = true; $("#file").value = "";
 });
 $("#clear").addEventListener("click", () => {
-  ["cliente","tecido","gola","corgola","feitopor","obs"].forEach(id => $("#" + id).value = "");
-  ["tecido","gola","corgola"].forEach(montaChips);
+  ["cliente","tipocamisa","tecido","gola","corgola","feitopor","obs"].forEach(id => $("#" + id).value = "");
+  ["tipocamisa","tecido","gola","corgola"].forEach(montaChips);
   SIZES.forEach(s => $("#q-" + s).value = "0");
   $("#rm").click();
   /* prazos voltam para hoje + 5 dias corridos */
@@ -2125,15 +2128,15 @@ async function buildOS(numero) {
   s.cell(br(ev), CM, TT + 52, CR - CM, 34, { size: 17, color: RED });
 
   /* cliente / tecido / gola / cor */
-  const FT = 182, FB = 459, fh = (FB - FT) / 8;
-  const fields = [["CLIENTE", $("#cliente").value], ["TECIDO", $("#tecido").value], ["TIPO DE GOLA", $("#gola").value], ["COR DA GOLA", $("#corgola").value]];
+  const fields = [["CLIENTE", $("#cliente").value], ["TIPO DE CAMISA", $("#tipocamisa").value], ["TECIDO", $("#tecido").value], ["TIPO DE GOLA", $("#gola").value], ["COR DA GOLA", $("#corgola").value]];
+  const FT = 182, FB = 459, fh = (FB - FT) / (fields.length * 2);
   fields.forEach((f, i) => {
     const y = FT + i * 2 * fh;
     s.rect(CL, y, CR - CL, fh, { fill: SAL });
     s.cell(f[0], CL, y, CR - CL, fh, { size: 15 });
     s.cell(f[1] || "-", CL, y + fh, CR - CL, fh, { size: 16, color: RED });
     s.line(CL, y + fh, CR, y + fh, 1.4);
-    if (i < 3) s.line(CL, y + 2 * fh, CR, y + 2 * fh, 1.4);
+    if (i < fields.length - 1) s.line(CL, y + 2 * fh, CR, y + 2 * fh, 1.4);
   });
   s.rect(CL, FT, CR - CL, FB - FT, { stroke: BLK, lw: 1.8 });
 
@@ -4263,7 +4266,7 @@ function montarRegOS() {
     time: uniformeLigado,
     dados: {
       narede: $("#narede").value, entregar: $("#entregar").value,
-      tecido: $("#tecido").value, gola: $("#gola").value, corgola: $("#corgola").value, obs: $("#obs").value,
+      tipocamisa: $("#tipocamisa").value, tecido: $("#tecido").value, gola: $("#gola").value, corgola: $("#corgola").value, obs: $("#obs").value,
       tamanhos: SIZES.reduce((o, s) => (qty(s) ? (o[s] = qty(s), o) : o), {}),
       modelosRC: rcLigado ? rcSel.filter(id => totalModelo(id) > 0).map(id => ({ id, nome: (modeloRC(id) || {}).nome, qtd: rcQtd[id] })) : [],
       time: uniformeLigado ? time.filter(j => j.nome || j.numero || j.tamanho) : []
@@ -4362,7 +4365,7 @@ function abrirOS(id) {
   $("#clear").click(); say("");
   $("#cliente").value = h.cliente || "";
   $("#feitopor").value = h.quem || "";
-  ["tecido", "gola", "corgola"].forEach(c => { $("#" + c).value = d[c] || ""; montaChips(c); });
+  ["tipocamisa", "tecido", "gola", "corgola"].forEach(c => { $("#" + c).value = d[c] || ""; montaChips(c); });
   $("#obs").value = d.obs || "";
   if (d.narede) $("#narede").value = d.narede;
   if (d.entregar) { $("#entregar").value = d.entregar; wd(); }
@@ -6176,7 +6179,7 @@ function regOSCamisa(c, dados, numPedido, anterior) {
     cliente: dados.cliente, quem: dados.atendente || "", pecas, time: false,
     dados: {
       narede: (anterior && anterior.narede) || hoje, entregar,
-      tecido: c.tecido, gola: c.gola || "", corgola: c.corgola || "",
+      tipocamisa: String(nomeTipoCamisa(c) || "").toUpperCase().replace(/^CAMISA\s+/, ""), tecido: c.tecido, gola: c.gola || "", corgola: c.corgola || "",
       obs: ["Pedido #" + (numPedido || "?"), nomeTipoCamisa(c), "Arte: " + nomeArteCamisa(c.arte), outros.length ? "Outros tamanhos: " + outros.join(", ") : ""].filter(Boolean).join(" · "),
       tamanhos: tams, modelosRC: [], time: [], pedidoId: dados._pedidoId || "", tipoCamisa: c.tipo
     }
