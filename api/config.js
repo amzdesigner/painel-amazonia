@@ -2,6 +2,7 @@
  * Painel Amazônia Gráfica · configurações compartilhadas (Neon Postgres)
  *
  * GET  /api/config?chave=malharia   → { valor } (null se ainda não foi salva)
+ * chaves aceitas: malharia (tabela de preços) e tamanhos_os (tamanhos que vão na O.S.)
  * PUT  /api/config                  → { chave, valor } grava a configuração
  *
  * Toda chamada precisa do cabeçalho "x-painel-senha" igual à variável PAINEL_SENHA da Vercel.
@@ -18,7 +19,7 @@ function acharUrlBanco() {
 }
 const URL_BANCO = acharUrlBanco();
 const sql = URL_BANCO ? neon(URL_BANCO) : null;
-const CHAVES = ["malharia"];
+const CHAVES = ["malharia", "tamanhos_os"];
 
 let preparado = null;
 function prepararBanco() {
