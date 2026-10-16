@@ -106,6 +106,20 @@ input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px soli
 /* ============ arte ============ */
 .drop{border:2px dashed var(--line-2);border-radius:11px;padding:18px;text-align:center;background:var(--card-2)}
 .drop p{margin:0 0 11px;color:var(--muted);font-size:13.5px}
+.colar-zona{border:2px dashed var(--accent);border-radius:11px;background:var(--accent-soft);min-height:74px;padding:14px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:text;color:transparent;caret-color:transparent;outline:none;overflow:hidden;position:relative;font-size:0;-webkit-user-select:text;user-select:text}
+.colar-zona::before{content:attr(data-texto);color:var(--text);font-size:14px;font-weight:600;pointer-events:none}
+.colar-zona::after{content:"ou arraste a imagem para cá";position:absolute;bottom:7px;left:0;right:0;color:var(--muted);font-size:12px;font-weight:500;pointer-events:none}
+.colar-zona{padding-bottom:26px}
+.colar-zona:focus{border-style:solid;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 35%,transparent)}
+.colar-zona:focus::before{content:"Pronto! Agora aperte Ctrl+V (ou toque e segure → Colar)"}
+.colar-zona.arrastando{border-style:solid;background:color-mix(in srgb,var(--accent) 25%,transparent)}
+.colar-zona.arrastando::before{content:"Solte a imagem aqui"}
+.drop-bts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:11px}
+.drop-bts .btn{display:inline-flex;align-items:center;gap:8px}
+.drop-bts svg{width:18px;height:18px}
+#ped-modal .drop-bts{justify-content:flex-start}
+#ped-modal .drop-bts .pm-add-item{margin:0}
+#ped-modal .colar-zona{margin-top:4px}
 .preview{margin-top:13px;position:relative}
 .preview img{display:block;width:100%;border:1.5px solid var(--line-2);border-radius:10px;background:#fff}
 .preview .rm{position:absolute;top:9px;right:9px;background:var(--card);border:1.5px solid var(--line-2);border-radius:9px;padding:8px 12px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text)}
@@ -968,7 +982,8 @@ body.modal-aberto{overflow:hidden}
           <div class="body">
             <div class="drop">
               <p>Anexe a arte, a foto da referência ou o layout aprovado.</p>
-              <button class="btn" type="button" id="pick">Escolher imagem</button>
+              <div class="colar-zona" id="os-colar" contenteditable="true" spellcheck="false" role="textbox" aria-label="Colar imagem da arte" data-texto="Clique aqui e aperte Ctrl+V para colar a imagem"></div>
+              <div class="drop-bts"><button class="btn blue" type="button" id="os-colar-bt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/></svg>Colar imagem</button><button class="btn" type="button" id="pick">Escolher do computador</button></div>
               <input type="file" id="file" accept="image/*">
               <div class="preview" id="prev" hidden><img id="prevImg" alt="Prévia da arte"><button class="rm" type="button" id="rm">Remover</button></div>
             </div>
@@ -1443,7 +1458,8 @@ body.modal-aberto{overflow:hidden}
         <label class="f"><span>Observações</span><textarea id="pm-obs" rows="3" placeholder="Acabamento, arquivo do cliente, forma de pagamento…"></textarea></label>
         <p class="c-sec">Artes</p>
         <div class="pm-artes" id="pm-artes"></div>
-        <button class="btn pm-add-item" type="button" id="pm-arte-add">+ Adicionar arte</button>
+        <div class="colar-zona" id="pm-colar" contenteditable="true" spellcheck="false" role="textbox" aria-label="Colar imagem da arte do pedido" data-texto="Clique aqui e aperte Ctrl+V para colar uma arte"></div>
+        <div class="drop-bts"><button class="btn blue" type="button" id="pm-colar-bt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/></svg>Colar imagem</button><button class="btn pm-add-item" type="button" id="pm-arte-add">+ Adicionar do computador</button></div>
         <input type="file" id="pm-arte-file" accept="image/*" class="arquivo-oculto">
       </div>
       <div class="modal-pe">
@@ -1998,10 +2014,79 @@ $("#pick").addEventListener("click", () => $("#file").click());
 $("#file").addEventListener("change", e => {
   const f = e.target.files && e.target.files[0];
   if (!f) return;
+  usarArteOS(f);
+});
+/* coloca uma imagem (escolhida, colada ou arrastada) como arte da O.S. */
+function usarArteOS(f) {
   artFile = f; osArteMudou = true; osArteTok++;
   if (artURL) URL.revokeObjectURL(artURL);
   artURL = URL.createObjectURL(f);
   $("#prevImg").src = artURL; $("#prev").hidden = false;
+}
+
+/* ---------------- colar imagem (Ctrl+V, botão ou arrastar) ---------------- */
+function imagemDoEvento(dt) {
+  if (!dt) return null;
+  const itens = Array.from(dt.items || []);
+  for (const it of itens) if (it.kind === "file" && /^image\//.test(it.type)) { const f = it.getAsFile(); if (f) return f; }
+  for (const f of Array.from(dt.files || [])) if (/^image\//.test(f.type)) return f;
+  return null;
+}
+function nomeColada(tipo) { return "imagem-colada-" + Date.now() + "." + ((tipo || "image/png").split("/")[1] || "png").replace("jpeg", "jpg"); }
+/* botão "Colar imagem": lê a área de transferência (o navegador pode pedir permissão) */
+async function lerImagemCopiada() {
+  if (!navigator.clipboard || !navigator.clipboard.read) { const e = new Error("sem api"); e.semApi = true; throw e; }
+  const itens = await navigator.clipboard.read();
+  for (const it of itens) {
+    const tipo = it.types.find(t => /^image\//.test(t));
+    if (tipo) { const blob = await it.getType(tipo); return new File([blob], nomeColada(tipo), { type: tipo }); }
+  }
+  return null;
+}
+function avisoSemImagem(e) {
+  if (e && (e.semApi || e.name === "NotAllowedError" || e.name === "SecurityError"))
+    say("O navegador não deixou o botão ler a imagem copiada. Clique no quadro tracejado e aperte Ctrl+V (no celular: toque e segure → Colar).", "err");
+  else say("Não tem imagem copiada. Copie a imagem (botão direito → Copiar imagem, ou print com Win+Shift+S) e tente de novo.", "err");
+}
+function ligarBotaoColar(botao, zona, usar) {
+  botao.addEventListener("click", async () => {
+    try { const f = await lerImagemCopiada(); if (f) usar(f); else avisoSemImagem(); }
+    catch (e) { avisoSemImagem(e); if (zona) zona.focus(); }
+  });
+}
+/* quadro onde se cola (Ctrl+V / toque e segure → Colar) ou se arrasta a imagem */
+function ligarZonaColar(zona, usar) {
+  zona.addEventListener("beforeinput", e => { if (e.inputType !== "insertFromPaste") e.preventDefault(); });
+  zona.addEventListener("input", () => { zona.innerHTML = ""; });
+  zona.addEventListener("keydown", e => { if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) e.preventDefault(); });
+  zona.addEventListener("paste", e => {
+    e.preventDefault(); e.stopPropagation();
+    const f = imagemDoEvento(e.clipboardData);
+    zona.innerHTML = "";
+    if (f) { usar(f); zona.blur(); } else avisoSemImagem();
+  });
+  zona.addEventListener("dragover", e => { e.preventDefault(); zona.classList.add("arrastando"); });
+  zona.addEventListener("dragleave", () => zona.classList.remove("arrastando"));
+  zona.addEventListener("drop", e => {
+    e.preventDefault(); zona.classList.remove("arrastando");
+    const f = imagemDoEvento(e.dataTransfer);
+    if (f) usar(f); else say("Isso não é uma imagem.", "err");
+  });
+}
+const usarArteOSColada = f => { usarArteOS(f); say("Imagem colada na arte da camisa. Salve a O.S. para guardar.", "ok"); };
+ligarZonaColar($("#os-colar"), usarArteOSColada);
+ligarBotaoColar($("#os-colar-bt"), $("#os-colar"), usarArteOSColada);
+/* Ctrl+V em qualquer lugar da tela (fora dos campos de texto) também cola a imagem */
+document.addEventListener("paste", e => {
+  const alvo = e.target;
+  if (alvo && (alvo.closest && alvo.closest("input, textarea, select, [contenteditable='true']"))) return;
+  const f = imagemDoEvento(e.clipboardData);
+  if (!f) return;
+  const ped = document.getElementById("ped-modal");
+  if (ped && !ped.hidden && window.colarArtePedido) { e.preventDefault(); window.colarArtePedido(f); return; }
+  if (document.querySelector(".modal:not([hidden])")) return;
+  const osForm = document.getElementById("os-form");
+  if (osForm && !osForm.hidden && !document.getElementById("view-os").hidden) { e.preventDefault(); usarArteOSColada(f); }
 });
 $("#rm").addEventListener("click", () => {
   if (artFile) osArteMudou = true;
@@ -5139,21 +5224,25 @@ function atualizaOpcoesArte() {
 function renderArtesPed() {
   const box = $("#pm-artes"); box.innerHTML = "";
   if (pmArteCarregando) { box.innerHTML = '<div class="pm-arte-vazio"><span>Carregando as artes…</span></div>'; return; }
-  if (!pmArtes.length) box.innerHTML = '<div class="pm-arte-vazio"><span>Nenhuma arte anexada. Use “+ Adicionar arte” e escolha a qual material ela pertence.</span></div>';
+  if (!pmArtes.length) box.innerHTML = '<div class="pm-arte-vazio"><span>Nenhuma arte anexada. Cole a imagem no quadro abaixo (Ctrl+V) ou use “+ Adicionar do computador”, e escolha a qual material ela pertence.</span></div>';
   pmArtes.forEach((a, k) => {
     const el = document.createElement("div");
     el.className = "pm-arte-linha";
     el.innerHTML = '<img alt="Arte ' + (k + 1) + '">' +
       '<div class="pm-arte-dados"><span class="pm-arte-n">Arte ' + (k + 1) + ' · ' + Math.max(1, Math.round(a.img.length * 0.75 / 1024)) + ' KB</span>' +
       '<label class="f"><span>É a arte de</span><select class="sel pa-item">' + opcoesArte(a.item) + '</select></label>' +
-      '<div class="pm-arte-bts"><button class="btn" type="button" data-a="trocar">Trocar imagem</button><button class="btn danger" type="button" data-a="rm">Remover</button></div></div>';
+      '<div class="pm-arte-bts"><button class="btn" type="button" data-a="colar">Colar outra</button><button class="btn" type="button" data-a="trocar">Trocar imagem</button><button class="btn danger" type="button" data-a="rm">Remover</button></div></div>';
     el.querySelector("img").src = a.img;
     el.querySelector(".pa-item").addEventListener("change", e => { a.item = e.target.value; pmArteMudou = true; });
     el.querySelector('[data-a="trocar"]').addEventListener("click", () => { pmArteAlvo = k; $("#pm-arte-file").click(); });
+    el.querySelector('[data-a="colar"]').addEventListener("click", async () => {
+      try { const f = await lerImagemCopiada(); if (f) anexarArtePedido(f, k); else avisoSemImagem(); } catch (e) { avisoSemImagem(e); }
+    });
     el.querySelector('[data-a="rm"]').addEventListener("click", () => { pmArtes.splice(k, 1); pmArteMudou = true; renderArtesPed(); });
     box.appendChild(el);
   });
   $("#pm-arte-add").hidden = pmArtes.length >= 12;
+  $("#pm-colar").hidden = $("#pm-colar-bt").hidden = pmArtes.length >= 12;
 }
 function artesDeLista(lista) {
   return (Array.isArray(lista) ? lista : []).filter(a => a && a.img).map(a => ({ img: a.img, item: a.item || "" }));
@@ -5192,6 +5281,12 @@ $("#pm-arte-add").addEventListener("click", () => { pmArteAlvo = -1; $("#pm-arte
 $("#pm-arte-file").addEventListener("change", async e => {
   const f = e.target.files && e.target.files[0]; e.target.value = "";
   if (!f) return;
+  await anexarArtePedido(f);
+});
+/* acrescenta (ou troca, se pmArteAlvo >= 0) uma arte do pedido — escolhida, colada ou arrastada */
+async function anexarArtePedido(f, alvo) {
+  if (alvo !== undefined) pmArteAlvo = alvo;
+  if (pmArteAlvo < 0 && pmArtes.length >= 12) { say("Dá para anexar até 12 artes por pedido.", "err"); return; }
   try {
     const img = await reduzirArte(f);
     if (pmArteAlvo >= 0 && pmArtes[pmArteAlvo]) pmArtes[pmArteAlvo].img = img;
@@ -5204,7 +5299,11 @@ $("#pm-arte-file").addEventListener("change", async e => {
     pmArteMudou = true; pmArteCarregando = null; renderArtesPed();
     say(total > 3800000 ? "As artes estão pesadas demais para guardar juntas. Remova alguma." : "Arte anexada. Confira a qual material ela pertence e salve o pedido.", total > 3800000 ? "err" : "ok");
   } catch (err) { say("Não consegui abrir essa imagem.", "err"); }
-});
+  finally { pmArteAlvo = -1; }
+}
+window.colarArtePedido = f => anexarArtePedido(f, -1);
+ligarZonaColar($("#pm-colar"), f => anexarArtePedido(f, -1));
+ligarBotaoColar($("#pm-colar-bt"), $("#pm-colar"), f => anexarArtePedido(f, -1));
 /* miniaturas leves de todas as artes, para o card e o resumo */
 async function miniaturasArtes() {
   return gerarMinis(pmArtes.map(a => ({ img: a.img, rotulo: a.item ? nomeItemArte(a.item) : "Pedido todo" })));
