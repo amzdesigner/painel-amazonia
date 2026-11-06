@@ -244,6 +244,71 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
   .bar .btn{min-width:0;padding-left:8px;padding-right:8px;font-size:14px}
   #bar-orc .cnt b{font-size:16px}
 }
+/* ---------- CALCULADORA ATUAL CARD ---------- */
+#view-calc{display:flex;flex-direction:column;gap:18px;--ac-frete:#2BA3D6;--ac-entregador:#E2A400;--ac-material:#E8478E;--ac-bom:#2ECC71;--ac-bom-bg:rgba(46,204,113,.13);--ac-mau:#FF6B6B;--ac-mau-bg:rgba(255,107,107,.13)}
+:root.claro #view-calc{--ac-frete:#1585B5;--ac-entregador:#B98400;--ac-material:#C8155F;--ac-bom:#17784A;--ac-bom-bg:#E2F3E9;--ac-mau:#C0262D;--ac-mau-bg:#FBE5E5}
+.ac-c-frete{background:var(--ac-frete)}.ac-c-entregador{background:var(--ac-entregador)}.ac-c-material{background:var(--ac-material)}
+.ac-lede{margin:0;font-size:14px;max-width:70ch}
+.ac-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;align-items:start}
+@media (max-width:980px){.ac-grid{grid-template-columns:1fr}}
+.ac-linha{display:flex;gap:8px;align-items:stretch}
+.ac-box{flex:1;display:flex;align-items:center;border:1.5px solid var(--field-line);border-radius:9px;background:var(--field);min-width:0}
+.ac-box:focus-within{border-color:var(--accent)}
+.ac-box input{flex:1;min-width:0;border:0!important;background:transparent!important;color:var(--text);font:600 20px Inter,system-ui,sans-serif;padding:12px;font-variant-numeric:tabular-nums;outline:none;min-height:48px}
+.ac-box input:focus-visible{outline:none}
+.ac-pre{padding:0 12px;color:var(--muted);font-weight:600;font-size:15px}
+.ac-pre + input{padding-left:0}
+.ac-box.sm input{font-size:16px;padding:9px 10px;min-height:42px}
+.ac-seg{display:inline-flex;border:1.5px solid var(--field-line);border-radius:9px;overflow:hidden;background:var(--field)}
+.ac-seg input{position:absolute;opacity:0;pointer-events:none}
+.ac-seg label{padding:0 18px;display:flex;align-items:center;cursor:pointer;font-weight:700;font-size:15px;color:var(--muted);user-select:none}
+.ac-seg input:checked + label{background:var(--accent);color:#fff}
+.ac-seg input:focus-visible + label{outline:2px solid var(--accent);outline-offset:-3px}
+#view-calc .hint strong{color:var(--text)}
+#view-calc .hint.erro{color:var(--ac-mau);font-weight:600}
+.ac-fixos{border-top:1px solid var(--line);padding-top:14px}
+.ac-fixos-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+.ac-fixos-cab .btn{min-height:40px;padding:8px 16px}
+.ac-rot{margin:0;font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.ac-fixos ul{list-style:none;margin:0;padding:0}
+.ac-fixos li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.ac-fixos li:last-child{border-bottom:0}
+.ac-fixos li b{font-variant-numeric:tabular-nums}
+.ac-val{display:inline-flex;align-items:center;gap:8px}
+.ac-tag{font-size:11.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:1px 8px}
+.ac-form{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.ac-ed{display:grid;grid-template-columns:minmax(0,1fr) 170px;align-items:center;gap:12px}
+.ac-ed label{font-size:15px;font-weight:500}
+@media (max-width:460px){.ac-ed{grid-template-columns:1fr;gap:6px}}
+.ac-res{border:2px solid var(--brand)}
+.ac-total-linha{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:6px}
+.ac-total{margin:0;font-weight:800;font-size:clamp(38px,5vw,54px);line-height:1;color:var(--brand);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ac-total.vazio{color:var(--muted)}
+.ac-copy-msg{min-height:1.4em;margin:8px 0 0}
+.ac-split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:460px){.ac-split{grid-template-columns:1fr}}
+.ac-tile{display:flex;flex-direction:column;gap:4px;border-radius:12px;padding:14px 16px;background:var(--card-2);border:1px solid var(--line)}
+.ac-tv{font-weight:800;font-size:27px;line-height:1.1;font-variant-numeric:tabular-nums}
+.ac-ts{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ac-tile.bom{background:var(--ac-bom-bg);border-color:transparent}
+.ac-tile.bom .ac-rot,.ac-tile.bom .ac-tv{color:var(--ac-bom)}
+.ac-tile.mau{background:var(--ac-mau-bg);border-color:transparent}
+.ac-tile.mau .ac-rot,.ac-tile.mau .ac-tv{color:var(--ac-mau)}
+.ac-barra{display:flex;height:12px;border-radius:999px;overflow:hidden;background:var(--line)}
+.ac-barra span{display:block;height:100%;transition:width .25s ease}
+@media (prefers-reduced-motion:reduce){.ac-barra span{transition:none}}
+.ac-tab{width:100%;border-collapse:collapse;font-size:15px}
+.ac-tab td{padding:10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.ac-tab td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:12px}
+.ac-nome{display:flex;align-items:flex-start;gap:10px}
+.ac-sw{width:10px;height:10px;border-radius:3px;margin-top:6px;flex:none}
+.ac-sub{display:block;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.ac-soma td{border-bottom:0;padding-top:14px;font-weight:800;font-size:17px}
+.ac-soma td:last-child{color:var(--brand)}
+.ac-formula{margin:0;font-size:13px;color:var(--muted);background:var(--card-2);border-radius:10px;padding:10px 12px;font-variant-numeric:tabular-nums}
+.ac-exemplos h2{margin:0 0 10px;font-size:15px;font-weight:700}
+.ac-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ac-chips span{font-size:14px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px;font-variant-numeric:tabular-nums}
 /* ---------- PEDIDOS: kanban ---------- */
 .modo-kb .content{max-width:none}
 .kb-barra{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -727,6 +792,7 @@ body.modal-aberto{overflow:hidden}
       <button type="button" data-view="cli" id="nav-cli"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18.5 14.5A6.5 6.5 0 0 1 21.5 20"/></svg><span>CLIENTES</span></button>
       <button type="button" data-view="orc" id="nav-orc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>ORÇAMENTO</span></button>
       <button type="button" data-view="recibo" id="nav-recibo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v18l2.5-1.6L10 21l2-1.6L14 21l2.5-1.6L19 21V3H5Z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>RECIBO</span></button>
+      <button type="button" data-view="calc" id="nav-calc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7v3h-7z"/><path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 16.5h.01M12 16.5h.01M15.5 16.5h.01"/></svg><span>CALCULADORA ATUALCARD</span></button>
       <button type="button" data-view="time" id="nav-time" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 10h18M3 15h18M9 5v14M15 5v14"/></svg><span>LISTA DO TIME</span></button>
     </nav>
     <div class="rule"></div>
@@ -847,6 +913,97 @@ body.modal-aberto{overflow:hidden}
             </div>
             <p class="hint">Entram aqui os pedidos com pagamento marcado (à vista, entrada de 50% e restante, cada um no dia em que foi pago) e as vendas avulsas lançadas pelo botão <b>+ Nova venda</b>.</p>
           </div>
+        </section>
+      </div>
+
+      <!-- ================= CALCULADORA ATUAL CARD ================= -->
+      <div id="view-calc" hidden>
+        <p class="hint ac-lede">Digite o peso e o preço do material. O valor de venda sai na hora, já com frete, entregador e margem. Para mudar esses valores, use o botão <b>Editar</b>.</p>
+        <div class="ac-grid">
+          <section class="card" aria-labelledby="ac-t-entrada">
+            <h2 id="ac-t-entrada">Dados do pedido</h2>
+            <div class="body">
+              <div class="f">
+                <span class="lb"><label for="ac-peso">Peso do material</label></span>
+                <div class="ac-linha">
+                  <div class="ac-box"><input id="ac-peso" type="text" inputmode="decimal" autocomplete="off" value="425" placeholder="Ex.: 425" aria-describedby="ac-peso-hint"></div>
+                  <div class="ac-seg" role="radiogroup" aria-label="Unidade do peso">
+                    <input type="radio" name="ac-unidade" id="ac-un-g" value="g" checked><label for="ac-un-g">g</label>
+                    <input type="radio" name="ac-unidade" id="ac-un-kg" value="kg"><label for="ac-un-kg">kg</label>
+                  </div>
+                </div>
+                <p class="hint" id="ac-peso-hint">Arredondado para cima: <strong>425 g vira 1 kg</strong>.</p>
+              </div>
+              <div class="f">
+                <span class="lb"><label for="ac-material">Preço do material</label></span>
+                <div class="ac-box"><span class="ac-pre">R$</span><input id="ac-material" type="text" inputmode="decimal" autocomplete="off" value="40,00" placeholder="0,00" aria-describedby="ac-material-hint"></div>
+                <p class="hint" id="ac-material-hint">Use vírgula para os centavos, como 40,50.</p>
+              </div>
+              <div class="ac-fixos">
+                <div class="ac-fixos-cab">
+                  <span class="ac-rot">Valores da conta</span>
+                  <button type="button" class="btn" id="ac-editar" aria-controls="ac-form">Editar</button>
+                </div>
+                <ul id="ac-ver">
+                  <li><span>Frete por kg</span><span class="ac-val"><span class="ac-tag" id="ac-tag-frete" hidden>alterado</span><b id="ac-fx-frete">R$ 13,00</b></span></li>
+                  <li><span>Taxa do entregador</span><span class="ac-val"><span class="ac-tag" id="ac-tag-entregador" hidden>alterado</span><b id="ac-fx-entregador">R$ 25,00</b></span></li>
+                  <li><span>Margem de lucro</span><span class="ac-val"><span class="ac-tag" id="ac-tag-margem" hidden>alterado</span><b id="ac-fx-margem">1,5×</b></span></li>
+                </ul>
+                <form class="ac-form" id="ac-form" hidden novalidate>
+                  <div class="ac-ed"><label for="ac-ed-frete">Frete por kg</label><div class="ac-box sm"><span class="ac-pre">R$</span><input id="ac-ed-frete" type="text" inputmode="decimal" autocomplete="off"></div></div>
+                  <div class="ac-ed"><label for="ac-ed-entregador">Taxa do entregador</label><div class="ac-box sm"><span class="ac-pre">R$</span><input id="ac-ed-entregador" type="text" inputmode="decimal" autocomplete="off"></div></div>
+                  <div class="ac-ed"><label for="ac-ed-margem">Margem de lucro</label><div class="ac-box sm"><input id="ac-ed-margem" type="text" inputmode="decimal" autocomplete="off"><span class="ac-pre">×</span></div></div>
+                  <p class="hint" id="ac-edit-msg">Margem 1,5 significa preço do material vezes 1,5.</p>
+                  <div class="acts">
+                    <button type="submit" class="btn primary">Salvar</button>
+                    <button type="button" class="btn" id="ac-cancelar">Cancelar</button>
+                    <button type="button" class="btn" id="ac-padrao">Voltar ao padrão (R$ 13 · R$ 25 · 1,5×)</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
+
+          <section class="card ac-res" aria-labelledby="ac-t-total">
+            <div class="body">
+              <div>
+                <p class="ac-rot" id="ac-t-total">Valor de venda final</p>
+                <div class="ac-total-linha">
+                  <p class="ac-total" id="ac-total" aria-live="polite">R$ 98,00</p>
+                  <button class="btn primary" id="ac-copiar" type="button">Copiar valor</button>
+                </div>
+                <p class="hint ac-copy-msg" id="ac-copy-msg" aria-live="polite"></p>
+              </div>
+              <div class="ac-split">
+                <div class="ac-tile bom" id="ac-tile-lucro">
+                  <span class="ac-rot" id="ac-lbl-lucro">Você ganha</span>
+                  <span class="ac-tv" id="ac-v-lucro">R$ 20,00</span>
+                  <span class="ac-ts" id="ac-sub-lucro">20% do valor de venda</span>
+                </div>
+                <div class="ac-tile">
+                  <span class="ac-rot">Seus gastos</span>
+                  <span class="ac-tv" id="ac-v-gasto">R$ 78,00</span>
+                  <span class="ac-ts" id="ac-sub-gasto">material R$ 40,00 + frete R$ 13,00 + entregador R$ 25,00</span>
+                </div>
+              </div>
+              <div class="ac-barra" aria-hidden="true">
+                <span id="ac-bar-frete" class="ac-c-frete"></span><span id="ac-bar-entregador" class="ac-c-entregador"></span><span id="ac-bar-material" class="ac-c-material"></span>
+              </div>
+              <table class="ac-tab">
+                <tbody>
+                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-frete"></i><span>Frete<span class="ac-sub" id="ac-sub-frete">1 kg × R$ 13,00</span></span></span></td><td id="ac-v-frete">R$ 13,00</td></tr>
+                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-entregador"></i><span>Taxa do entregador<span class="ac-sub">valor por pedido</span></span></span></td><td id="ac-v-entregador">R$ 25,00</td></tr>
+                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-material"></i><span>Material com margem<span class="ac-sub" id="ac-sub-material">R$ 40,00 × 1,5</span></span></span></td><td id="ac-v-material">R$ 60,00</td></tr>
+                  <tr class="ac-soma"><td>Total</td><td id="ac-v-total">R$ 98,00</td></tr>
+                </tbody>
+              </table>
+              <p class="ac-formula" id="ac-formula">Fórmula: (kg arredondado × R$ 13,00) + R$ 25,00 + (preço do material × 1,5)</p>
+            </div>
+          </section>
+        </div>
+        <section class="ac-exemplos" aria-labelledby="ac-t-ex">
+          <h2 id="ac-t-ex">Como o peso é arredondado</h2>
+          <div class="ac-chips"><span>425 g → <b>1 kg</b></span><span>1 kg → <b>1 kg</b></span><span>1,2 kg → <b>2 kg</b></span><span>1,5 kg → <b>2 kg</b></span><span>2,01 kg → <b>3 kg</b></span></div>
         </section>
       </div>
 
@@ -1694,7 +1851,7 @@ const shell = document.getElementById("shell");
    O histórico segue sendo gravado nos bastidores. */
 const MOSTRAR_VISAO = true;
 document.getElementById("nav-visao").hidden = !MOSTRAR_VISAO;
-const TITULOS = { mal: "Malharia", visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo" };
+const TITULOS = { mal: "Malharia", visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo", calc: "Calculadora Atual Card" };
 function irPara(v) {
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.view === v));
   document.getElementById("view-visao").hidden = v !== "visao";
@@ -1707,6 +1864,7 @@ function irPara(v) {
   document.getElementById("view-prod").hidden = v !== "prod";
   document.getElementById("view-rel").hidden = v !== "rel";
   document.getElementById("view-mal").hidden = v !== "mal";
+  document.getElementById("view-calc").hidden = v !== "calc";
   document.getElementById("top-mal").hidden = v !== "mal";
   document.getElementById("bar-mal").hidden = v !== "mal";
   document.getElementById("top-rel").hidden = v !== "rel";
@@ -1714,7 +1872,7 @@ function irPara(v) {
   document.getElementById("top-prod").hidden = v !== "prod";
   document.getElementById("top-ped").hidden = v !== "ped";
   document.body.classList.toggle("modo-kb", v === "ped");
-  document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod";
+  document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod" || v === "calc";
   document.getElementById("bar-os").hidden = v === "recibo" || v === "visao" || v === "orc" || v === "rel" || v === "mal";
   document.getElementById("bar-orc").hidden = v !== "orc";
   document.getElementById("bar-recibo").hidden = v !== "recibo";
@@ -1735,6 +1893,7 @@ function irPara(v) {
   if (v === "prod" && window.prodAoAbrir) window.prodAoAbrir();
   if (v === "rel" && window.relAoAbrir) window.relAoAbrir();
   if (v === "mal" && window.malAoAbrir) window.malAoAbrir();
+  if (v === "calc" && window.calcAoAbrir) window.calcAoAbrir();
   guardar("amz_view", v);
 }
 document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => irPara(b.dataset.view)));
@@ -6410,6 +6569,189 @@ $("#rel-pdf").addEventListener("click", async () => {
   catch (e) { console.error(e); say("Não foi possível gerar o PDF do relatório.", "err"); }
 });
 
+
+/* ================= CALCULADORA ATUAL CARD ================= */
+(function () {
+  var PADRAO = { frete: 13, entregador: 25, margem: 1.5 };
+  var CHAVE = "atualcard-valores-v1";
+  var cfg = { frete: PADRAO.frete, entregador: PADRAO.entregador, margem: PADRAO.margem };
+  function valido(v) { return v && v.frete >= 0 && v.entregador >= 0 && v.margem > 0; }
+  try {
+    var salvo = JSON.parse(localStorage.getItem(CHAVE) || "null");
+    if (valido(salvo)) cfg = { frete: +salvo.frete, entregador: +salvo.entregador, margem: +salvo.margem };
+  } catch (e) {}
+  function guardarLocal() { try { localStorage.setItem(CHAVE, JSON.stringify(cfg)); } catch (e) {} }
+
+  var brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+  var num = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 3 });
+  var dec2 = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: false });
+  var fmtMargem = function (m) { return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 4 }).format(m); };
+
+  function parseBR(s) {
+    s = String(s || "").trim().replace(/\s/g, "").replace(/^R\$/i, "");
+    if (!s) return NaN;
+    if (s.indexOf(",") !== -1) s = s.replace(/\./g, "").replace(",", ".");
+    else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+    if (!/^(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+    return parseFloat(s);
+  }
+  function kgCobrado(gramas) { if (!(gramas > 0)) return 0; return Math.ceil(gramas / 1000 - 1e-9); }
+  function calcular(gramas, material) {
+    var kg = kgCobrado(gramas), frete = kg * cfg.frete, mat = material * cfg.margem;
+    return { kg: kg, frete: frete, entregador: cfg.entregador, material: mat, total: frete + cfg.entregador + mat };
+  }
+
+  var g = function (id) { return document.getElementById("ac-" + id); };
+  var elPeso = g("peso"), elMat = g("material");
+  var ultimoTotal = null;
+  function unidade() { return g("un-kg").checked ? "kg" : "g"; }
+
+  function atualizar() {
+    var vPeso = parseBR(elPeso.value), vMat = parseBR(elMat.value);
+    var hintPeso = g("peso-hint"), hintMat = g("material-hint");
+    var okPeso = !isNaN(vPeso) && vPeso > 0, okMat = !isNaN(vMat) && vMat >= 0;
+    if (!okPeso) {
+      hintPeso.className = "hint erro";
+      hintPeso.textContent = elPeso.value.trim() ? "Peso inválido. Digite só números, como 425 ou 1,5." : "Digite o peso do material.";
+    }
+    if (!okMat) {
+      hintMat.className = "hint erro";
+      hintMat.textContent = elMat.value.trim() ? "Preço inválido. Digite só números, como 40,50." : "Digite o preço do material.";
+    } else { hintMat.className = "hint"; hintMat.textContent = "Use vírgula para os centavos, como 40,50."; }
+
+    var gramas = okPeso ? (unidade() === "kg" ? vPeso * 1000 : vPeso) : 0;
+    var r = calcular(gramas, okMat ? vMat : 0);
+    if (okPeso) {
+      hintPeso.className = "hint"; hintPeso.innerHTML = "";
+      hintPeso.appendChild(document.createTextNode("Arredondado para cima: "));
+      var st = document.createElement("strong");
+      st.textContent = num.format(vPeso) + " " + unidade() + " vira " + r.kg + " kg";
+      hintPeso.appendChild(st); hintPeso.appendChild(document.createTextNode("."));
+    }
+    g("sub-frete").textContent = r.kg + " kg × " + brl.format(cfg.frete);
+    g("sub-material").textContent = brl.format(okMat ? vMat : 0) + " × " + fmtMargem(cfg.margem);
+    g("v-frete").textContent = brl.format(r.frete);
+    g("v-entregador").textContent = brl.format(r.entregador);
+    g("v-material").textContent = brl.format(r.material);
+
+    var pronto = okPeso && okMat, elTotal = g("total");
+    var matBase = okMat ? vMat : 0, gasto = matBase + r.frete + r.entregador, lucro = r.total - gasto;
+    var tile = g("tile-lucro");
+    if (pronto) {
+      var perde = lucro < -0.004;
+      tile.className = perde ? "ac-tile mau" : "ac-tile bom";
+      g("lbl-lucro").textContent = perde ? "Você perde" : "Você ganha";
+      g("v-lucro").textContent = brl.format(Math.abs(lucro));
+      var pctVenda = r.total > 0 ? Math.round(lucro / r.total * 100) : 0;
+      g("sub-lucro").textContent = perde ? "A margem está abaixo de 1. Ajuste em Editar." : pctVenda + "% do valor de venda";
+      g("v-gasto").textContent = brl.format(gasto);
+      g("sub-gasto").textContent = "material " + brl.format(matBase) + " + frete " + brl.format(r.frete) + " + entregador " + brl.format(r.entregador);
+      elTotal.textContent = brl.format(r.total); elTotal.className = "ac-total";
+      g("v-total").textContent = brl.format(r.total);
+      ultimoTotal = brl.format(r.total); g("copiar").disabled = false;
+    } else {
+      tile.className = "ac-tile bom";
+      g("lbl-lucro").textContent = "Você ganha"; g("v-lucro").textContent = "—";
+      g("sub-lucro").textContent = "Preencha peso e preço";
+      g("v-gasto").textContent = "—"; g("sub-gasto").textContent = "material + frete + entregador";
+      elTotal.textContent = "R$ —"; elTotal.className = "ac-total vazio";
+      g("v-total").textContent = "—"; ultimoTotal = null; g("copiar").disabled = true;
+    }
+    var soma = r.frete + r.entregador + r.material;
+    var pct = function (v) { return soma > 0 ? (v / soma * 100) + "%" : "0%"; };
+    g("bar-frete").style.width = pct(r.frete);
+    g("bar-entregador").style.width = pct(r.entregador);
+    g("bar-material").style.width = pct(r.material);
+    g("copy-msg").textContent = "";
+  }
+
+  /* ao trocar a unidade, converte o número digitado para manter o mesmo peso */
+  var unidadeAnterior = "g";
+  function trocarUnidade() {
+    var nova = unidade();
+    if (nova === unidadeAnterior) return;
+    var v = parseBR(elPeso.value);
+    if (!isNaN(v)) elPeso.value = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 3, useGrouping: false }).format(nova === "kg" ? v / 1000 : v * 1000);
+    unidadeAnterior = nova; atualizar();
+  }
+  elPeso.addEventListener("input", atualizar);
+  elMat.addEventListener("input", atualizar);
+  g("un-g").addEventListener("change", trocarUnidade);
+  g("un-kg").addEventListener("change", trocarUnidade);
+  elMat.addEventListener("blur", function () {
+    var v = parseBR(elMat.value);
+    if (!isNaN(v)) elMat.value = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
+  });
+  g("copiar").addEventListener("click", function () {
+    if (!ultimoTotal) return;
+    var msg = g("copy-msg"), falhou = function () { msg.textContent = "Não deu para copiar aqui. Selecione o valor e copie manualmente."; };
+    try { navigator.clipboard.writeText(ultimoTotal).then(function () { msg.textContent = "Copiado: " + ultimoTotal; }, falhou); }
+    catch (e) { falhou(); }
+  });
+
+  /* valores da conta: exibição e edição */
+  function mostrarValores() {
+    g("fx-frete").textContent = brl.format(cfg.frete);
+    g("fx-entregador").textContent = brl.format(cfg.entregador);
+    g("fx-margem").textContent = fmtMargem(cfg.margem) + "×";
+    g("tag-frete").hidden = cfg.frete === PADRAO.frete;
+    g("tag-entregador").hidden = cfg.entregador === PADRAO.entregador;
+    g("tag-margem").hidden = cfg.margem === PADRAO.margem;
+    g("formula").textContent = "Fórmula: (kg arredondado × " + brl.format(cfg.frete) + ") + " + brl.format(cfg.entregador) + " + (preço do material × " + fmtMargem(cfg.margem) + ")";
+  }
+  var form = g("form"), btnEditar = g("editar"), editMsg = g("edit-msg");
+  var MSG_PADRAO = "Margem 1,5 significa preço do material vezes 1,5.";
+  function abrirEdicao() {
+    g("ed-frete").value = dec2.format(cfg.frete);
+    g("ed-entregador").value = dec2.format(cfg.entregador);
+    g("ed-margem").value = fmtMargem(cfg.margem);
+    editMsg.className = "hint"; editMsg.textContent = MSG_PADRAO;
+    g("ver").hidden = true; form.hidden = false; btnEditar.hidden = true;
+    g("ed-frete").focus(); g("ed-frete").select();
+  }
+  function fecharEdicao() { form.hidden = true; g("ver").hidden = false; btnEditar.hidden = false; btnEditar.focus(); }
+  /* grava neste aparelho e, com o banco ligado, para todos os computadores */
+  function gravar() {
+    guardarLocal(); mostrarValores(); atualizar(); fecharEdicao();
+    if (typeof modoHist !== "undefined" && modoHist === "nuvem" && typeof apiCfg === "function") {
+      apiCfg("PUT", "", { chave: "atualcard", valor: cfg })
+        .then(function () { say("Valores da calculadora salvos para todos os computadores.", "ok"); })
+        .catch(function (e) { say(e && e.status === 400 ? "Valores salvos só neste aparelho. Suba também o arquivo api/config.js no GitHub para valer em todos." : "Valores salvos neste aparelho, mas não consegui gravar no banco.", "err"); });
+    } else say("Valores da calculadora salvos neste aparelho.", "ok");
+  }
+  btnEditar.addEventListener("click", abrirEdicao);
+  g("cancelar").addEventListener("click", fecharEdicao);
+  form.addEventListener("keydown", function (e) { if (e.key === "Escape") fecharEdicao(); });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = parseBR(g("ed-frete").value), t = parseBR(g("ed-entregador").value), m = parseBR(g("ed-margem").value), erro = null;
+    if (isNaN(f) || f < 0) erro = "Frete por kg inválido. Digite um valor como 13,00.";
+    else if (isNaN(t) || t < 0) erro = "Taxa do entregador inválida. Digite um valor como 25,00.";
+    else if (isNaN(m) || m <= 0) erro = "Margem inválida. Digite um número maior que zero, como 1,5.";
+    if (erro) { editMsg.className = "hint erro"; editMsg.textContent = erro; return; }
+    cfg = { frete: Math.round(f * 100) / 100, entregador: Math.round(t * 100) / 100, margem: m };
+    gravar();
+  });
+  g("padrao").addEventListener("click", function () {
+    cfg = { frete: PADRAO.frete, entregador: PADRAO.entregador, margem: PADRAO.margem };
+    gravar();
+  });
+
+  /* ao abrir a aba, pega os valores salvos no banco (se houver) */
+  window.calcAoAbrir = function () {
+    if (typeof modoHist === "undefined" || modoHist !== "nuvem" || typeof apiCfg !== "function") return;
+    apiCfg("GET", "?chave=atualcard").then(function (r) {
+      var v = r && r.valor;
+      if (valido(v) && (v.frete !== cfg.frete || v.entregador !== cfg.entregador || v.margem !== cfg.margem) && form.hidden) {
+        cfg = { frete: +v.frete, entregador: +v.entregador, margem: +v.margem };
+        guardarLocal(); mostrarValores(); atualizar();
+      }
+    }).catch(function () {});
+  };
+  window.__calcAC = { parseBR: parseBR, kgCobrado: kgCobrado, calcular: calcular, cfg: function () { return cfg; } };
+  mostrarValores();
+  atualizar();
+})();
 
 /* ================= MALHARIA: tabela editável de camisas ================= */
 const TAM_PADRAO = ["PP", "P", "M", "G", "GG", "XG", "EXG"];
