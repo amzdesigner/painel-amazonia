@@ -247,7 +247,8 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 /* ---------- CALCULADORA ATUAL CARD ---------- */
 #view-calc{display:flex;flex-direction:column;gap:18px;--ac-frete:#2BA3D6;--ac-entregador:#E2A400;--ac-material:#E8478E;--ac-bom:#2ECC71;--ac-bom-bg:rgba(46,204,113,.13);--ac-mau:#FF6B6B;--ac-mau-bg:rgba(255,107,107,.13)}
 :root.claro #view-calc{--ac-frete:#1585B5;--ac-entregador:#B98400;--ac-material:#C8155F;--ac-bom:#17784A;--ac-bom-bg:#E2F3E9;--ac-mau:#C0262D;--ac-mau-bg:#FBE5E5}
-.ac-c-frete{background:var(--ac-frete)}.ac-c-entregador{background:var(--ac-entregador)}.ac-c-material{background:var(--ac-material)}
+.ac-c-frete{background:var(--ac-frete)}.ac-c-entregador{background:var(--ac-entregador)}.ac-c-material{background:var(--ac-material)}.ac-c-lucro{background:var(--ac-bom)}
+.ac-passo{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--card-2);border:1px solid var(--line-2);font-size:11.5px;font-weight:800;margin-right:8px;vertical-align:1px}
 .ac-lede{margin:0;font-size:14px;max-width:70ch}
 .ac-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;align-items:start}
 @media (max-width:980px){.ac-grid{grid-template-columns:1fr}}
@@ -918,7 +919,7 @@ body.modal-aberto{overflow:hidden}
 
       <!-- ================= CALCULADORA ATUAL CARD ================= -->
       <div id="view-calc" hidden>
-        <p class="hint ac-lede">Digite o peso e o preço do material. O valor de venda sai na hora, já com frete, entregador e margem. Para mudar esses valores, use o botão <b>Editar</b>.</p>
+        <p class="hint ac-lede">Digite o peso e o preço do material. A conta é feita em 4 passos: frete pelo peso, mais a taxa do entregador, mais o preço do material, e tudo isso vezes a margem de lucro. Para mudar esses valores, use o botão <b>Editar</b>.</p>
         <div class="ac-grid">
           <section class="card" aria-labelledby="ac-t-entrada">
             <h2 id="ac-t-entrada">Dados do pedido</h2>
@@ -953,7 +954,7 @@ body.modal-aberto{overflow:hidden}
                   <div class="ac-ed"><label for="ac-ed-frete">Frete por kg</label><div class="ac-box sm"><span class="ac-pre">R$</span><input id="ac-ed-frete" type="text" inputmode="decimal" autocomplete="off"></div></div>
                   <div class="ac-ed"><label for="ac-ed-entregador">Taxa do entregador</label><div class="ac-box sm"><span class="ac-pre">R$</span><input id="ac-ed-entregador" type="text" inputmode="decimal" autocomplete="off"></div></div>
                   <div class="ac-ed"><label for="ac-ed-margem">Margem de lucro</label><div class="ac-box sm"><input id="ac-ed-margem" type="text" inputmode="decimal" autocomplete="off"><span class="ac-pre">×</span></div></div>
-                  <p class="hint" id="ac-edit-msg">Margem 1,5 significa preço do material vezes 1,5.</p>
+                  <p class="hint" id="ac-edit-msg">Margem 1,5 significa o custo todo (frete + entregador + material) vezes 1,5.</p>
                   <div class="acts">
                     <button type="submit" class="btn primary">Salvar</button>
                     <button type="button" class="btn" id="ac-cancelar">Cancelar</button>
@@ -969,7 +970,7 @@ body.modal-aberto{overflow:hidden}
               <div>
                 <p class="ac-rot" id="ac-t-total">Valor de venda final</p>
                 <div class="ac-total-linha">
-                  <p class="ac-total" id="ac-total" aria-live="polite">R$ 98,00</p>
+                  <p class="ac-total" id="ac-total" aria-live="polite">R$ 117,00</p>
                   <button class="btn primary" id="ac-copiar" type="button">Copiar valor</button>
                 </div>
                 <p class="hint ac-copy-msg" id="ac-copy-msg" aria-live="polite"></p>
@@ -977,8 +978,8 @@ body.modal-aberto{overflow:hidden}
               <div class="ac-split">
                 <div class="ac-tile bom" id="ac-tile-lucro">
                   <span class="ac-rot" id="ac-lbl-lucro">Você ganha</span>
-                  <span class="ac-tv" id="ac-v-lucro">R$ 20,00</span>
-                  <span class="ac-ts" id="ac-sub-lucro">20% do valor de venda</span>
+                  <span class="ac-tv" id="ac-v-lucro">R$ 39,00</span>
+                  <span class="ac-ts" id="ac-sub-lucro">33% do valor de venda</span>
                 </div>
                 <div class="ac-tile">
                   <span class="ac-rot">Seus gastos</span>
@@ -987,17 +988,18 @@ body.modal-aberto{overflow:hidden}
                 </div>
               </div>
               <div class="ac-barra" aria-hidden="true">
-                <span id="ac-bar-frete" class="ac-c-frete"></span><span id="ac-bar-entregador" class="ac-c-entregador"></span><span id="ac-bar-material" class="ac-c-material"></span>
+                <span id="ac-bar-frete" class="ac-c-frete"></span><span id="ac-bar-entregador" class="ac-c-entregador"></span><span id="ac-bar-material" class="ac-c-material"></span><span id="ac-bar-lucro" class="ac-c-lucro"></span>
               </div>
               <table class="ac-tab">
                 <tbody>
-                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-frete"></i><span>Frete<span class="ac-sub" id="ac-sub-frete">1 kg × R$ 13,00</span></span></span></td><td id="ac-v-frete">R$ 13,00</td></tr>
-                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-entregador"></i><span>Taxa do entregador<span class="ac-sub">valor por pedido</span></span></span></td><td id="ac-v-entregador">R$ 25,00</td></tr>
-                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-material"></i><span>Material com margem<span class="ac-sub" id="ac-sub-material">R$ 40,00 × 1,5</span></span></span></td><td id="ac-v-material">R$ 60,00</td></tr>
-                  <tr class="ac-soma"><td>Total</td><td id="ac-v-total">R$ 98,00</td></tr>
+                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-frete"></i><span><b class="ac-passo">1</b>Frete<span class="ac-sub" id="ac-sub-frete">1 kg × R$ 13,00</span></span></span></td><td id="ac-v-r1">R$ 13,00</td></tr>
+                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-entregador"></i><span><b class="ac-passo">2</b>+ Taxa do entregador<span class="ac-sub" id="ac-sub-r2">R$ 13,00 + R$ 25,00</span></span></span></td><td id="ac-v-r2">R$ 38,00</td></tr>
+                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-material"></i><span><b class="ac-passo">3</b>+ Preço do material<span class="ac-sub" id="ac-sub-r3">R$ 38,00 + R$ 40,00</span></span></span></td><td id="ac-v-r3">R$ 78,00</td></tr>
+                  <tr><td><span class="ac-nome"><i class="ac-sw ac-c-lucro"></i><span><b class="ac-passo">4</b>× Margem de lucro<span class="ac-sub" id="ac-sub-r4">R$ 78,00 × 1,5</span></span></span></td><td id="ac-v-r4">R$ 117,00</td></tr>
+                  <tr class="ac-soma"><td>Valor de venda final</td><td id="ac-v-total">R$ 117,00</td></tr>
                 </tbody>
               </table>
-              <p class="ac-formula" id="ac-formula">Fórmula: (kg arredondado × R$ 13,00) + R$ 25,00 + (preço do material × 1,5)</p>
+              <p class="ac-formula" id="ac-formula">Fórmula: ((kg arredondado × R$ 13,00) + R$ 25,00 + preço do material) × 1,5</p>
             </div>
           </section>
         </div>
@@ -6596,9 +6598,14 @@ $("#rel-pdf").addEventListener("click", async () => {
     return parseFloat(s);
   }
   function kgCobrado(gramas) { if (!(gramas > 0)) return 0; return Math.ceil(gramas / 1000 - 1e-9); }
+  /* 1) peso × frete por kg · 2) + entregador · 3) + material · 4) × margem */
   function calcular(gramas, material) {
-    var kg = kgCobrado(gramas), frete = kg * cfg.frete, mat = material * cfg.margem;
-    return { kg: kg, frete: frete, entregador: cfg.entregador, material: mat, total: frete + cfg.entregador + mat };
+    var kg = kgCobrado(gramas);
+    var r1 = kg * cfg.frete;
+    var r2 = r1 + cfg.entregador;
+    var r3 = r2 + material;
+    var total = r3 * cfg.margem;
+    return { kg: kg, frete: r1, entregador: cfg.entregador, material: material, r1: r1, r2: r2, r3: r3, total: total };
   }
 
   var g = function (id) { return document.getElementById("ac-" + id); };
@@ -6629,10 +6636,13 @@ $("#rel-pdf").addEventListener("click", async () => {
       hintPeso.appendChild(st); hintPeso.appendChild(document.createTextNode("."));
     }
     g("sub-frete").textContent = r.kg + " kg × " + brl.format(cfg.frete);
-    g("sub-material").textContent = brl.format(okMat ? vMat : 0) + " × " + fmtMargem(cfg.margem);
-    g("v-frete").textContent = brl.format(r.frete);
-    g("v-entregador").textContent = brl.format(r.entregador);
-    g("v-material").textContent = brl.format(r.material);
+    g("v-r1").textContent = brl.format(r.r1);
+    g("sub-r2").textContent = brl.format(r.r1) + " + " + brl.format(cfg.entregador);
+    g("v-r2").textContent = brl.format(r.r2);
+    g("sub-r3").textContent = brl.format(r.r2) + " + " + brl.format(r.material);
+    g("v-r3").textContent = brl.format(r.r3);
+    g("sub-r4").textContent = brl.format(r.r3) + " × " + fmtMargem(cfg.margem);
+    g("v-r4").textContent = brl.format(r.total);
 
     var pronto = okPeso && okMat, elTotal = g("total");
     var matBase = okMat ? vMat : 0, gasto = matBase + r.frete + r.entregador, lucro = r.total - gasto;
@@ -6657,11 +6667,12 @@ $("#rel-pdf").addEventListener("click", async () => {
       elTotal.textContent = "R$ —"; elTotal.className = "ac-total vazio";
       g("v-total").textContent = "—"; ultimoTotal = null; g("copiar").disabled = true;
     }
-    var soma = r.frete + r.entregador + r.material;
-    var pct = function (v) { return soma > 0 ? (v / soma * 100) + "%" : "0%"; };
+    var soma = Math.max(r.total, r.r3);
+    var pct = function (v) { return soma > 0 ? (Math.max(0, v) / soma * 100) + "%" : "0%"; };
     g("bar-frete").style.width = pct(r.frete);
     g("bar-entregador").style.width = pct(r.entregador);
     g("bar-material").style.width = pct(r.material);
+    g("bar-lucro").style.width = pct(r.total - r.r3);
     g("copy-msg").textContent = "";
   }
 
@@ -6697,10 +6708,10 @@ $("#rel-pdf").addEventListener("click", async () => {
     g("tag-frete").hidden = cfg.frete === PADRAO.frete;
     g("tag-entregador").hidden = cfg.entregador === PADRAO.entregador;
     g("tag-margem").hidden = cfg.margem === PADRAO.margem;
-    g("formula").textContent = "Fórmula: (kg arredondado × " + brl.format(cfg.frete) + ") + " + brl.format(cfg.entregador) + " + (preço do material × " + fmtMargem(cfg.margem) + ")";
+    g("formula").textContent = "Fórmula: ((kg arredondado × " + brl.format(cfg.frete) + ") + " + brl.format(cfg.entregador) + " + preço do material) × " + fmtMargem(cfg.margem);
   }
   var form = g("form"), btnEditar = g("editar"), editMsg = g("edit-msg");
-  var MSG_PADRAO = "Margem 1,5 significa preço do material vezes 1,5.";
+  var MSG_PADRAO = "Margem 1,5 significa o custo todo (frete + entregador + material) vezes 1,5.";
   function abrirEdicao() {
     g("ed-frete").value = dec2.format(cfg.frete);
     g("ed-entregador").value = dec2.format(cfg.entregador);
