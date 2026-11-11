@@ -627,6 +627,17 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .pm-chips .chip{min-height:40px;padding:8px 13px;font-size:13px}
 .modal-pe{display:flex;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid var(--line)}
 .modal-pe .espaco{flex:1}
+#os-form.modo-servico .so-camisa,#os-form:not(.modo-servico) .so-servico{display:none!important}
+.os-tipo-tag{display:inline-block;margin-left:8px;vertical-align:2px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 9px}
+.os-escolha-box{max-width:620px}
+.os-escolha-grade{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.os-escolha-grade{grid-template-columns:1fr}}
+.os-escolha-op{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;padding:18px;border-radius:14px;border:1.5px solid var(--line-2);background:var(--card-2);color:var(--text);font:inherit;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
+.os-escolha-op:hover,.os-escolha-op:focus-visible{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-1px)}
+.os-escolha-op svg{width:34px;height:34px;color:var(--accent)}
+.os-escolha-op b{font-size:17px}
+.os-escolha-op span{font-size:13.5px;color:var(--muted);line-height:1.4}
+.hist .modelo{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:1px;background:var(--accent-soft);color:var(--accent)}
 .tam-edit-linha{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px}
 .tam-edit-linha .btn{display:inline-flex;align-items:center;gap:8px;letter-spacing:.03em}
 .tam-edit-linha svg{width:17px;height:17px}
@@ -1089,17 +1100,22 @@ body.modal-aberto{overflow:hidden}
        <div id="os-form" class="cols duas" hidden>
         <div class="form-x wide"><button class="btn-x" type="button" id="os-fechar" aria-label="Fechar e voltar para a lista de O.S." title="Voltar para a lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
         <section class="card">
-          <h2>Cliente e material</h2>
+          <h2>Cliente e material <span class="os-tipo-tag" id="os-tipo-tag">O.S. de camisa</span></h2>
           <div class="body">
             <div class="grid2">
               <label class="f"><span>Cliente</span><input type="text" id="cliente" placeholder="Nome do cliente ou empresa" autocomplete="off"></label>
               <label class="f"><span>O.S. feita por</span><input type="text" id="feitopor" placeholder="Quem está preenchendo" autocomplete="off"></label>
             </div>
-            <div class="f"><span>Tipo de camisa</span><div class="chips" id="ch-tipocamisa"></div><input type="hidden" id="tipocamisa"></div>
-            <div class="f"><span>Tecido</span><div class="chips" id="ch-tecido"></div><input type="hidden" id="tecido"></div>
-            <div class="f"><span>Tipo de gola</span><div class="chips" id="ch-gola"></div><input type="hidden" id="gola"></div>
-            <div class="f"><span>Cor da gola</span><div class="chips" id="ch-corgola"></div><input type="hidden" id="corgola"></div>
-            <div class="tam-edit-linha"><button class="btn" type="button" id="tam-editar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>EDITAR TAMANHOS</button><span class="hint" id="tam-resumo"></span></div>
+            <label class="f so-servico"><span>Material</span><input type="text" id="sv-material" placeholder="Ex.: Banner 120 × 90 com bastão e corda" autocomplete="off"></label>
+            <div class="grid2 so-servico">
+              <label class="f"><span>Quantidade</span><input type="text" id="sv-quantidade" placeholder="Ex.: 2 unidades" autocomplete="off"></label>
+              <label class="f"><span>Tecido</span><input type="text" id="sv-tecido" placeholder="Se tiver (ex.: lona fosca, oxford…)" autocomplete="off"></label>
+            </div>
+            <div class="f so-camisa"><span>Tipo de camisa</span><div class="chips" id="ch-tipocamisa"></div><input type="hidden" id="tipocamisa"></div>
+            <div class="f so-camisa"><span>Tecido</span><div class="chips" id="ch-tecido"></div><input type="hidden" id="tecido"></div>
+            <div class="f so-camisa"><span>Tipo de gola</span><div class="chips" id="ch-gola"></div><input type="hidden" id="gola"></div>
+            <div class="f so-camisa"><span>Cor da gola</span><div class="chips" id="ch-corgola"></div><input type="hidden" id="corgola"></div>
+            <div class="tam-edit-linha so-camisa"><button class="btn" type="button" id="tam-editar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>EDITAR TAMANHOS</button><span class="hint" id="tam-resumo"></span></div>
           </div>
         </section>
 
@@ -1115,7 +1131,7 @@ body.modal-aberto{overflow:hidden}
         </section>
 
 
-        <section class="card wide">
+        <section class="card wide so-camisa">
           <h2>Uniforme de time</h2>
           <div class="body">
             <div class="linha-sw">
@@ -1128,7 +1144,7 @@ body.modal-aberto{overflow:hidden}
           </div>
         </section>
 
-        <section class="card wide" id="card-tamanhos">
+        <section class="card wide so-camisa" id="card-tamanhos">
           <h2>Tamanhos</h2>
           <div class="body">
             <div class="sizes" id="sizes"></div>
@@ -1137,7 +1153,7 @@ body.modal-aberto{overflow:hidden}
         </section>
 
         <section class="card wide">
-          <h2>Arte da camisa</h2>
+          <h2 id="os-arte-titulo">Arte da camisa</h2>
           <div class="body">
             <div class="drop">
               <p>Anexe a arte, a foto da referência ou o layout aprovado.</p>
@@ -1152,7 +1168,7 @@ body.modal-aberto{overflow:hidden}
        </div>
 
         <section class="card" id="os-lista">
-          <h2>O.S. de camisa feitas</h2>
+          <h2>Ordens de serviço feitas</h2>
           <div class="body">
             <div class="h-filtros">
               <div class="seg" id="os-periodo" role="tablist" aria-label="Período">
@@ -1168,7 +1184,8 @@ body.modal-aberto{overflow:hidden}
               <label class="f"><span>Status</span><select id="os-st" class="sel">
                 <option value="">Todos</option><option value="producao">Em produção</option><option value="pronta">Prontas</option><option value="entregue">Entregues</option><option value="atrasadas">Atrasadas</option>
               </select></label>
-              <label class="f o-busca"><span>Buscar</span><input type="search" id="os-busca" placeholder="Cliente, nº da O.S. ou quem fez" autocomplete="off"></label>
+              <label class="f o-busca"><span>Buscar</span><input type="search" id="os-busca" placeholder="Cliente, nº da O.S., material ou quem fez" autocomplete="off"></label>
+              <label class="f"><span>Modelo</span><select id="os-mod" class="sel"><option value="">Todos</option><option value="camisa">O.S. de camisa</option><option value="servico">Ordem de serviço</option></select></label>
             </div>
             <p class="o-resumo" id="os-resumo"></p>
             <div class="tblwrap">
@@ -1178,7 +1195,7 @@ body.modal-aberto{overflow:hidden}
               </table>
               <div class="vazio" id="os-hist-vazio">Nenhuma O.S. feita ainda. Clique em “Nova O.S.” para começar.</div>
             </div>
-            <p class="hint">“Abrir” carrega a O.S. no formulário para reimprimir ou ajustar; baixar o PDF de novo atualiza a mesma O.S. A imagem anexada em “Arte da camisa” fica guardada junto com a O.S. e volta ao abrir.</p>
+            <p class="hint">“Abrir” carrega a O.S. no formulário para reimprimir ou ajustar; baixar o PDF de novo atualiza a mesma O.S. A imagem anexada na arte fica guardada junto com a O.S. e volta ao abrir.</p>
           </div>
         </section>
       </div>
@@ -1492,6 +1509,25 @@ body.modal-aberto{overflow:hidden}
     </div>
   </div>
 
+  <div class="modal" id="os-escolha" hidden role="dialog" aria-modal="true" aria-labelledby="os-escolha-titulo">
+    <div class="modal-box os-escolha-box">
+      <div class="modal-cab"><h2 id="os-escolha-titulo">Qual O.S. você quer criar?</h2><button class="btn-x" type="button" id="os-escolha-x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo">
+        <div class="os-escolha-grade">
+          <button type="button" class="os-escolha-op" data-tipo="camisa">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg>
+            <b>O.S. de camisa</b>
+            <span>Tamanhos, tipo de camisa, tecido, gola e uniforme de time.</span>
+          </button>
+          <button type="button" class="os-escolha-op" data-tipo="servico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>
+            <b>Ordem de serviço</b>
+            <span>Para qualquer serviço: cliente, material, quantidade, tecido, prazos, observação e arte.</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal" id="tam-modal" hidden role="dialog" aria-modal="true" aria-labelledby="tam-titulo">
     <div class="modal-box tam-box">
       <div class="modal-cab"><h2 id="tam-titulo">Editar tamanhos da O.S.</h2><button class="btn-x" type="button" id="tam-x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
@@ -1655,7 +1691,7 @@ body.modal-aberto{overflow:hidden}
 <div class="bar">
   <button type="button" class="topo-btn" id="topo-btn" aria-label="Voltar para o topo" title="Voltar para o topo" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></button>
   <div class="in" id="bar-os">
-    <span class="cnt">Total<b id="total2">0</b></span>
+    <span class="cnt" id="total2-box">Total<b id="total2">0</b></span>
     <button class="btn" type="button" id="clear">Limpar</button>
     <button class="btn blue" type="button" id="os-salvar">Salvar</button>
     <button class="btn" type="button" id="os-ver">Visualizar O.S.</button>
@@ -2423,6 +2459,7 @@ const BLK = [0,0,0], RED = [255,0,0], SAL = [255,125,125];
 function br(v) { if (!v) return "___/___/___"; const p = v.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; }
 
 async function buildOS(numero) {
+  if (osTipo === "servico") return buildServico(numero);
   const s = new Sheet();
   const L = 18, R = PW - 18;
 
@@ -2535,6 +2572,85 @@ async function buildOS(numero) {
   return s.build();
 }
 
+/* ordem de serviço comum (mesmo modelo do PDF da gráfica) */
+async function buildServico(numero) {
+  const s = new Sheet();
+  const L = 18, R = PW - 18;
+  /* cabeçalho */
+  const lg = await jpeg(LOGO, 1400);
+  const lgW = 152, lgH = lgW * lg.h / lg.w;
+  const HT = 74;
+  s.img(lg.bytes, lg.w, lg.h, L, HT, lgW, lgH);
+  const tX = L + lgW + 14, base = HT + lgH * 0.86;
+  const nW = numero ? 84 : 0;
+  if (numero) {
+    s.text("Nº", R, HT + 14, { size: 9.5, align: "right", color: RED });
+    s.text(numero, R, base, { size: 16, align: "right", color: RED, maxW: nW - 4 });
+  }
+  let tSize = 34;
+  const tW = textW("Ordem de Serviço", tSize, true);
+  if (tW > R - nW - tX - 6) tSize = tSize * (R - nW - tX - 6) / tW;
+  s.text("Ordem de Serviço", R - nW - 6, base, { size: tSize, align: "right" });
+  const ly = Math.max(HT + lgH, base + 8) + 2;
+  s.line(tX, ly, R, ly, 2.4);
+
+  /* cliente / material / quantidade / tecido */
+  const FT = ly + 32, CL = L + 1, CR = 297, rh = 27.75;
+  const campos = [["CLIENTE", $("#cliente").value], ["MATERIAL", $("#sv-material").value], ["QUANTIDADE", $("#sv-quantidade").value], ["TECIDO", $("#sv-tecido").value]];
+  campos.forEach((c, i) => {
+    const y = FT + i * 2 * rh;
+    s.rect(CL, y, CR - CL, rh, { fill: SAL });
+    s.cell(c[0], CL, y, CR - CL, rh, { size: 12.5 });
+    s.cell((c[1] || "").trim() || "-", CL, y + rh, CR - CL, rh, { size: 13, color: RED });
+    s.line(CL, y + rh, CR, y + rh, 1.2);
+    if (i < campos.length - 1) s.line(CL, y + 2 * rh, CR, y + 2 * rh, 1.2);
+  });
+  const FB = FT + campos.length * 2 * rh;
+  s.rect(CL, FT, CR - CL, FB - FT, { stroke: BLK, lw: 1.4 });
+
+  /* datas */
+  const DL = 300, DR = R, DM = 441, DB = FT + 90;
+  s.rect(DL, FT, DR - DL, DB - FT, { stroke: BLK, lw: 1.4 });
+  s.line(DL, FT + 23, DR, FT + 23, 1.2);
+  s.line(DM, FT, DM, DB, 1.2);
+  s.cell("NA REDE:", DL, FT, DM - DL, 23, { size: 12.5 });
+  s.cell("ENTREGAR:", DM, FT, DR - DM, 23, { size: 12.5 });
+  s.cell(br($("#narede").value), DL, FT + 23, DM - DL, DB - FT - 23, { size: 15, color: RED });
+  const ev = $("#entregar").value;
+  s.cell(ev ? DIAS[new Date(ev + "T12:00:00").getDay()] : "DIA DA SEMANA", DM, FT + 28, DR - DM, 18, { size: 10.5, color: RED });
+  s.cell(br(ev), DM, FT + 50, DR - DM, 26, { size: 15, color: RED });
+
+  /* observação */
+  const OT = DB + 6, OH = 28;
+  s.rect(DL, OT, DR - DL, OH, { fill: SAL });
+  s.cell("OBSERVAÇÃO", DL, OT, DR - DL, OH, { size: 12.5 });
+  s.line(DL, OT + OH, DR, OT + OH, 1.2);
+  s.rect(DL, OT, DR - DL, FB - OT, { stroke: BLK, lw: 1.4 });
+  const obs = $("#obs").value.trim();
+  if (obs) s.wrap(obs, DL + 7, OT + OH + 13, DR - DL - 14, { size: 9.5, bold: false, maxLines: Math.floor((FB - OT - OH - 6) / 11.5), lh: 11.5 });
+
+  /* arte */
+  const AT = FB + 13, AH = 35, AB = PH - 86;
+  s.rect(L, AT, R - L, AH, { fill: SAL });
+  s.cell("ARTE", L, AT, R - L, AH, { size: 20 });
+  s.rect(L, AT, R - L, AH, { stroke: BLK, lw: 1.4 });
+  s.rect(L, AT + AH, R - L, AB - AT - AH, { stroke: BLK, lw: 1.4 });
+  if (artFile) {
+    const bx = L + 6, by = AT + AH + 6, bw = R - L - 12, bh = AB - by - 6;
+    const url = URL.createObjectURL(artFile);
+    try {
+      const im = await jpeg(url, 1600);
+      const k = Math.min(bw / im.w, bh / im.h);
+      const dw = im.w * k, dh = im.h * k;
+      s.img(im.bytes, im.w, im.h, bx + (bw - dw) / 2, by + (bh - dh) / 2, dw, dh);
+    } finally { URL.revokeObjectURL(url); }
+  }
+  const autor = $("#feitopor").value.trim();
+  s.text("O.S. FEITA POR: " + (autor ? autor.toUpperCase() : "___________________"), L, AB + 11, { size: 8.5, maxW: 300 });
+  s.text(br($("#narede").value), R, AB + 11, { size: 8.5, align: "right", color: RED });
+  return s.build();
+}
+
 /* ---------------- download ---------------- */
 let downloads = null;
 if (window.claude && window.claude.use) {
@@ -2543,7 +2659,7 @@ if (window.claude && window.claude.use) {
 function fileName() {
   const c = ($("#cliente").value || "CLIENTE").toUpperCase().replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40) || "CLIENTE";
   const d = ($("#narede").value || iso(new Date())).split("-").reverse().join("-");
-  return "O.S CAMISA - " + c + " - " + d + ".pdf";
+  return (osTipo === "servico" ? "ORDEM DE SERVIÇO" : "O.S CAMISA") + " - " + c + " - " + d + ".pdf";
 }
 $("#gen").addEventListener("click", async () => {
   const btn = $("#gen");
@@ -2552,7 +2668,7 @@ $("#gen").addEventListener("click", async () => {
     const numero = await numeroParaOS();
     const bytes = await buildOS(numero);
     const blob = new Blob([bytes], { type: "application/pdf" });
-    const name = numero ? fileName().replace(/^O\.S CAMISA/, "O.S CAMISA " + numero.replace("/", "-")) : fileName();
+    const name = numero ? fileName().replace(/^(O\.S CAMISA|ORDEM DE SERVIÇO)/, m => m + " " + numero.replace("/", "-")) : fileName();
     if (downloads) {
       try {
         await downloads.save({ filename: name, data: blob });
@@ -4289,8 +4405,24 @@ function mostraModoOs() {
   const h = osEditId ? historico.find(x => (x.id || x.quando) === osEditId) : null;
   if (osEditId && !h && modoHist === "nuvem") { osEditId = null; guardarOsEdit(); }
   if (!$("#view-os").hidden) $("#titulo").textContent = osModo !== "form" ? "O.S Camisa"
-    : osEditId ? "O.S. " + (h && h.numero && h.numero !== "…" ? h.numero : "(enviando…)") : "Nova O.S.";
+    : osEditId ? (osTipo === "servico" ? "Ordem de Serviço " : "O.S. ") + (h && h.numero && h.numero !== "…" ? h.numero : "(enviando…)")
+    : osTipo === "servico" ? "Nova ordem de serviço" : "Nova O.S. de camisa";
 }
+
+/* modelo da O.S. aberta no formulário: "camisa" ou "servico" (ordem de serviço comum) */
+let osTipo = "camisa";
+try { if (localStorage.getItem("amz_os_tipo") === "servico") osTipo = "servico"; } catch (e) {}
+function aplicarTipoOs() {
+  const sv = osTipo === "servico";
+  $("#os-form").classList.toggle("modo-servico", sv);
+  $("#os-tipo-tag").textContent = sv ? "Ordem de serviço" : "O.S. de camisa";
+  $("#os-arte-titulo").textContent = sv ? "Arte" : "Arte da camisa";
+  $("#total2-box").hidden = sv;
+  if (sv && typeof uniformeLigado !== "undefined" && uniformeLigado) ligarUniforme(false);
+  try { localStorage.setItem("amz_os_tipo", osTipo); } catch (e) {}
+  mostraModoOs();
+}
+function definirTipoOs(t) { osTipo = t === "servico" ? "servico" : "camisa"; aplicarTipoOs(); }
 
 let osModo = "lista";
 try { if (localStorage.getItem("amz_os_modo") === "form") osModo = "form"; } catch (e) {}
@@ -4312,22 +4444,48 @@ function mostrarFormOs() { osModo = "form"; window.scrollTo(0, 0); aplicarModoOs
 function mostrarListaOs() { osModo = "lista"; window.scrollTo(0, 0); aplicarModoOs(true); renderOsHist(); }
 
 function osTemConteudo() {
+  if (osTipo === "servico") return !!($("#cliente").value.trim() || $("#obs").value.trim() || $("#sv-material").value.trim() || $("#sv-quantidade").value.trim() || $("#sv-tecido").value.trim() || artFile);
   return !!($("#cliente").value.trim() || $("#obs").value.trim() || $("#tecido").value || SIZES.some(s => qty(s) > 0) || artFile);
 }
-$("#os-novo").addEventListener("click", () => {
-  if (osModo === "form" && !osEditId) { $("#cliente").focus(); return; }
-  const rascunho = !osEditId && osTemConteudo();
+/* "Nova O.S." pergunta qual modelo criar */
+function novaOS(tipo) {
+  const rascunho = !osEditId && tipo === osTipo && osTemConteudo();
   if (osEditId || !rascunho) { $("#clear").click(); say(""); }
+  definirTipoOs(tipo);
   mostrarFormOs();
   setTimeout(() => $("#cliente").focus(), 60);
-  if (rascunho) say("Continuando a O.S. que estava em andamento. Use “Limpar” para começar do zero.");
+  if (rascunho) say("Continuando a " + (tipo === "servico" ? "ordem de serviço" : "O.S. de camisa") + " que estava em andamento. Use “Limpar” para começar do zero.");
+}
+const fecharEscolha = () => fecharModal($("#os-escolha"));
+$("#os-novo").addEventListener("click", () => {
+  abrirModal($("#os-escolha"));
+  setTimeout(() => { const b = document.querySelector('#os-escolha .os-escolha-op[data-tipo="' + osTipo + '"]'); if (b) b.focus(); }, 60);
 });
+document.querySelectorAll("#os-escolha .os-escolha-op").forEach(b => b.addEventListener("click", () => { fecharEscolha(); novaOS(b.dataset.tipo); }));
+$("#os-escolha-x").addEventListener("click", fecharEscolha);
+$("#os-escolha").addEventListener("mousedown", e => { if (e.target.id === "os-escolha") fecharEscolha(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#os-escolha").hidden) fecharEscolha(); });
 $("#os-consultar").addEventListener("click", () => { mostrarListaOs(); setTimeout(() => $("#os-busca").focus(), 60); });
 $("#os-fechar").addEventListener("click", mostrarListaOs);
 /* Limpar começa uma O.S. nova */
-$("#clear").addEventListener("click", () => { osEditId = null; osArteMudou = false; guardarOsEdit(); mostraModoOs(); });
+$("#clear").addEventListener("click", () => { osEditId = null; osArteMudou = false; ["sv-material", "sv-quantidade", "sv-tecido"].forEach(i => $("#" + i).value = ""); guardarOsEdit(); mostraModoOs(); });
 
 function montarRegOS() {
+  if (osTipo === "servico") {
+    const qtdTxt = $("#sv-quantidade").value.trim();
+    return {
+      cliente: $("#cliente").value.trim(),
+      quem: $("#feitopor").value.trim(),
+      pecas: parseInt((qtdTxt.match(/\d+/) || ["0"])[0], 10) || 0,
+      time: false,
+      dados: {
+        modelo: "servico",
+        narede: $("#narede").value, entregar: $("#entregar").value,
+        material: $("#sv-material").value.trim(), quantidade: qtdTxt, tecido: $("#sv-tecido").value.trim(),
+        obs: $("#obs").value, tamanhos: {}, modelosRC: [], time: []
+      }
+    };
+  }
   return {
     cliente: $("#cliente").value.trim(),
     quem: $("#feitopor").value.trim(),
@@ -4343,7 +4501,7 @@ function montarRegOS() {
   };
 }
 $("#os-salvar").addEventListener("click", () => {
-  if (!osTemConteudo() && !(uniformeLigado && time.some(j => j.nome))) { say("A O.S. está vazia. Preencha o cliente ou os tamanhos antes de salvar.", "err"); return; }
+  if (!osTemConteudo() && !(uniformeLigado && time.some(j => j.nome))) { say(osTipo === "servico" ? "A ordem de serviço está vazia. Preencha o cliente ou o material antes de salvar." : "A O.S. está vazia. Preencha o cliente ou os tamanhos antes de salvar.", "err"); return; }
   const nova = !(osEditId && historico.some(x => (x.id || x.quando) === osEditId));
   const comArte = osArteMudou && artFile;
   registrarOS(montarRegOS()).then(() => {
@@ -4363,13 +4521,14 @@ async function numeroParaOS() {
   return "";
 }
 $("#os-ver").addEventListener("click", async () => {
-  if (!osTemConteudo() && !(uniformeLigado && time.some(j => j.nome))) { say("A O.S. está vazia. Preencha o cliente ou os tamanhos antes.", "err"); return; }
+  if (!osTemConteudo() && !(uniformeLigado && time.some(j => j.nome))) { say(osTipo === "servico" ? "A ordem de serviço está vazia. Preencha o cliente ou o material antes." : "A O.S. está vazia. Preencha o cliente ou os tamanhos antes.", "err"); return; }
   const btn = $("#os-ver"); btn.disabled = true; say("Montando a O.S…");
   try {
     const numero = await numeroParaOS();
     const bytes = await buildOS(numero);
     say("");
-    verPdf(bytes, "O.S. de camisa" + (numero ? " nº " + numero : ""), (numero ? "O.S CAMISA " + numero.replace("/", "-") + " - " : "O.S CAMISA - ") + ($("#cliente").value.trim() || "cliente") + ".pdf");
+    const nomeMod = osTipo === "servico" ? "ORDEM DE SERVIÇO" : "O.S CAMISA";
+    verPdf(bytes, (osTipo === "servico" ? "Ordem de serviço" : "O.S. de camisa") + (numero ? " nº " + numero : ""), (numero ? nomeMod + " " + numero.replace("/", "-") + " - " : nomeMod + " - ") + ($("#cliente").value.trim() || "cliente") + ".pdf");
   } catch (e) { console.error(e); say("Não foi possível montar a O.S.", "err"); }
   finally { btn.disabled = false; }
 });
@@ -4434,7 +4593,10 @@ function abrirOS(id) {
   $("#clear").click(); say("");
   $("#cliente").value = h.cliente || "";
   $("#feitopor").value = h.quem || "";
-  ["tipocamisa", "tecido", "gola", "corgola"].forEach(c => { $("#" + c).value = d[c] || ""; montaChips(c); });
+  definirTipoOs(d.modelo === "servico" ? "servico" : "camisa");
+  if (osTipo === "servico") {
+    $("#sv-material").value = d.material || ""; $("#sv-quantidade").value = d.quantidade || ""; $("#sv-tecido").value = d.tecido || "";
+  } else ["tipocamisa", "tecido", "gola", "corgola"].forEach(c => { $("#" + c).value = d[c] || ""; montaChips(c); });
   $("#obs").value = d.obs || "";
   if (d.narede) $("#narede").value = d.narede;
   if (d.entregar) { $("#entregar").value = d.entregar; wd(); }
@@ -4451,7 +4613,7 @@ function abrirOS(id) {
   mostrarFormOs();
   const faltou = false;
   const semTam = [...new Set(foraDaLista)];
-  say("O.S. " + h.numero + " aberta." + (mods.length ? " Os modelos RC desta O.S. foram somados na grade de tamanhos." : "") +
+  say((osTipo === "servico" ? "Ordem de serviço " : "O.S. ") + h.numero + " aberta." + (mods.length ? " Os modelos RC desta O.S. foram somados na grade de tamanhos." : "") +
       (semTam.length ? " Atenção: os tamanhos " + semTam.join(", ") + " desta O.S. não estão na lista atual — adicione em “Editar tamanhos” e abra de novo." : ""), faltou || semTam.length ? "err" : "ok");
   /* traz a arte da camisa que foi salva com a O.S. */
   const tok = ++osArteTok;
@@ -4482,6 +4644,7 @@ document.querySelectorAll("#os-periodo button").forEach(b => b.addEventListener(
 }));
 $("#os-st").addEventListener("change", renderOsHist);
 $("#os-busca").addEventListener("input", renderOsHist);
+$("#os-mod").addEventListener("change", renderOsHist);
 
 function renderOsHist() {
   const de = $("#os-de").value ? new Date($("#os-de").value) : null;
@@ -4494,7 +4657,9 @@ function renderOsHist() {
     if (de && d < de) return false;
     if (ate && d > ate) return false;
     if (st === "atrasadas" ? !atrasada(h) : (st && (h.status || "producao") !== st)) return false;
-    if (q && !semAcentoTxt([h.numero, h.cliente, h.quem].join(" ")).includes(q)) return false;
+    const mod = $("#os-mod").value;
+    if (mod && ((h.dados && h.dados.modelo === "servico") ? "servico" : "camisa") !== mod) return false;
+    if (q && !semAcentoTxt([h.numero, h.cliente, h.quem, h.dados && h.dados.material].join(" ")).includes(q)) return false;
     return true;
   });
   const pecas = lista.reduce((a, h) => a + (h.pecas || 0), 0);
@@ -4506,7 +4671,7 @@ function renderOsHist() {
     const s = h.status || "producao";
     return '<tr class="' + (atrasada(h) ? "atrasada " : "") + (s === "entregue" ? "entregue" : "") + '">' +
       '<td class="num">' + escapa(h.numero) + '</td>' +
-      '<td class="cli">' + escapa(h.cliente || "Sem cliente") + (h.time ? ' <span class="quem">· time</span>' : "") + (h.pendente ? ' <span class="quem">· aguardando envio</span>' : "") + '</td>' +
+      '<td class="cli">' + escapa(h.cliente || "Sem cliente") + (h.dados && h.dados.modelo === "servico" ? '<span class="modelo">Serviço</span>' + (h.dados.material ? ' <span class="quem">· ' + escapa(h.dados.material) + '</span>' : "") : "") + (h.time ? ' <span class="quem">· time</span>' : "") + (h.pendente ? ' <span class="quem">· aguardando envio</span>' : "") + '</td>' +
       '<td class="num">' + (h.pecas || 0) + '</td>' +
       '<td class="ent">' + dataCurta(h.entrega) + (atrasada(h) ? " · atrasada" : "") + '</td>' +
       '<td><select class="st ' + s + '" data-id="' + idDe(h) + '" aria-label="Status da O.S. ' + escapa(h.numero) + '">' +
@@ -4526,6 +4691,7 @@ function renderOsHist() {
   if (!$("#os-form").hidden) mostraModoOs();
 }
 window.osAoAbrir = () => { aplicarModoOs(false); renderOsHist(); };
+aplicarTipoOs();
 aplicarPeriodoOs("mes");
 window.osPronto = true;
 
