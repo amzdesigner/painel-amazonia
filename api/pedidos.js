@@ -10,9 +10,14 @@
  * PATCH  /api/pedidos?id=12         → muda fila, ordem, arquivado e/ou dados
  * DELETE /api/pedidos?id=12         → exclui um pedido
  *
- * Toda chamada precisa do cabeçalho "x-painel-senha" igual à variável PAINEL_SENHA da Vercel.
+ * Toda chamada precisa estar logada (cabeçalho "x-painel-token", ver api/login.js).
+ * Usuários da produção (não ADM): só veem os pedidos que já saíram do atendimento, sem nenhum valor,
+ * e só podem mudar a fila / ordem / arquivar (e as miniaturas). Não criam, não editam e não excluem.
+ * Toda mudança (de qualquer usuário) vai para a auditoria (api/auditoria.js).
  */
 import { neon } from "@neondatabase/serverless";
+import { exigirSessao } from "./_auth.js";
+import { auditar, NOMES_FILA } from "./_auditoria.js";
 
 function acharUrlBanco() {
   const env = process.env;
@@ -110,6 +115,29 @@ function minisDoBanco(txt) {
   if (txt.startsWith("[")) { try { return JSON.parse(txt); } catch (e) { return []; } }
   return [{ img: txt, rotulo: "" }];
 }
+/* tira tudo que é valor de venda (para quem não é ADM) */
+const CAMPOS_VALOR = ["preco", "precoUnit", "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo"];
+function semValores(p) {
+  CAMPOS_VALOR.forEach(c => { delete p[c]; });
+  if (Array.isArray(p.itens)) p.itens = p.itens.map(it => {
+    const i = Object.assign({}, it); delete i.preco; delete i.precoUnit;
+    if (i.camisa) {
+      try { const c = typeof i.camisa === "string" ? JSON.parse(i.camisa) : i.camisa; delete c.unit; delete c.valor; i.camisa = JSON.stringify(c); }
+      catch (e) { i.camisa = ""; }
+    }
+    return i;
+  });
+  return p;
+}
+/* o que mudou nos dados do pedido (para a auditoria) */
+const ROTULOS = { cliente: "cliente", contato: "contato", telefone: "telefone", itens: "materiais", prazo: "prazo", prioridade: "prioridade",
+  preco: "valor", atendente: "atendente", obs: "observação", metodoPag: "forma de pagamento", condPag: "condição de pagamento",
+  entrada: "entrada", pagoEm: "data do pagamento", restantePago: "restante", restanteMetodo: "forma do restante" };
+function oQueMudou(antes, depois) {
+  const a = antes || {}, d = depois || {};
+  return Object.keys(ROTULOS).filter(k => JSON.stringify(a[k] ?? "") !== JSON.stringify(d[k] ?? "")).map(k => ROTULOS[k]);
+}
+const nomeFila = f => NOMES_FILA[f] || f;
 function formata(r) {
   return Object.assign({}, r.dados || {}, {
     id: String(r.id), numero: String(r.id), fila: r.fila, ordem: Number(r.ordem), arquivado: r.arquivado,
@@ -122,14 +150,19 @@ function formata(r) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!process.env.PAINEL_SENHA) return res.status(500).json({ erro: "Falta configurar PAINEL_SENHA na Vercel." });
-  if (req.headers["x-painel-senha"] !== process.env.PAINEL_SENHA) return res.status(401).json({ erro: "Senha incorreta." });
+  const sessao = exigirSessao(req, res, ["adm", "producao"]);
+  if (!sessao) return;
+  const adm = sessao.papel === "adm";
 
   try {
     await prepararBanco();
     const corpo = () => (typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {}));
 
+    if (!adm && req.method !== "GET" && req.method !== "PATCH") return res.status(403).json({ erro: "Seu usuário não pode criar nem excluir pedidos." });
+    const saida = adm ? formata : r => semValores(formata(r));
+
     if (req.method === "GET") {
+      if (!adm && req.query.relatorio === "1") return res.status(403).json({ erro: "Seu usuário não tem acesso aos relatórios." });
       /* relatório: pedidos com pagamento (entrada/à vista ou restante) no período, arquivados inclusive */
       if (req.query.relatorio === "1") {
         const de = String(req.query.de || "").slice(0, 10), ate = String(req.query.ate || de).slice(0, 10);
@@ -143,8 +176,8 @@ export default async function handler(req, res) {
       if (req.query.arte === "1") {
         const id = parseInt(req.query.id, 10);
         if (!id) return res.status(400).json({ erro: "Informe o id." });
-        const [r] = await sql`SELECT arte FROM pedidos WHERE id = ${id}::bigint`;
-        if (!r) return res.status(404).json({ erro: "Pedido não encontrado." });
+        const [r] = await sql`SELECT arte, fila FROM pedidos WHERE id = ${id}::bigint`;
+        if (!r || (!adm && r.fila === "atendimento")) return res.status(404).json({ erro: "Pedido não encontrado." });
         return res.status(200).json({ artes: artesDoBanco(r.arte) });
       }
       /* a lista não traz as imagens, só se o pedido tem arte */
@@ -153,7 +186,8 @@ export default async function handler(req, res) {
                     FROM pedidos WHERE arquivado ORDER BY atualizado_em DESC LIMIT 200`
         : await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
                     FROM pedidos WHERE NOT arquivado ORDER BY fila, ordem LIMIT 2000`;
-      return res.status(200).json({ itens: linhas.map(formata) });
+      /* produção não vê a coluna de atendimento (vendas) */
+      return res.status(200).json({ itens: linhas.filter(r => adm || r.fila !== "atendimento").map(saida) });
     }
 
     if (req.method === "POST") {
@@ -170,6 +204,7 @@ export default async function handler(req, res) {
         INSERT INTO pedidos (fila, ordem, dados, arte, miniatura)
         VALUES (${fila}::text, ${ordem}::float8, ${JSON.stringify(d)}::jsonb, ${arte || null}::text, ${mini || null}::text)
         RETURNING *`;
+      await auditar(sql, sessao, "criou", { pedidoId: linha.id, cliente: d.cliente, detalhe: "Em " + nomeFila(fila) + (d.material ? " · " + d.material : "") });
       return res.status(201).json({ item: formata(linha) });
     }
 
@@ -179,6 +214,14 @@ export default async function handler(req, res) {
       const b = corpo();
       const fila = b.fila == null ? null : (FILAS.includes(b.fila) ? b.fila : undefined);
       if (fila === undefined) return res.status(400).json({ erro: "Fila inválida." });
+      const [atual] = await sql`SELECT fila, arquivado, ordem, dados FROM pedidos WHERE id = ${id}::bigint`;
+      if (!atual) return res.status(404).json({ erro: "Pedido não encontrado." });
+      if (!adm) {
+        /* produção: só move entre as filas de produção, muda a ordem, arquiva e atualiza miniaturas */
+        if (b.dados != null || b.artes !== undefined || b.arte !== undefined) return res.status(403).json({ erro: "Seu usuário não pode editar o pedido." });
+        if (fila === "atendimento") return res.status(403).json({ erro: "Seu usuário não pode mandar pedidos para o atendimento." });
+        if (atual.fila === "atendimento") return res.status(404).json({ erro: "Pedido não encontrado." });
+      }
       const ordem = b.ordem == null || !Number.isFinite(Number(b.ordem)) ? null : Number(b.ordem);
       const arquivado = b.arquivado == null ? null : !!b.arquivado;
       let dados = null;
@@ -205,13 +248,25 @@ export default async function handler(req, res) {
         WHERE id = ${id}::bigint
         RETURNING *`;
       if (!linha) return res.status(404).json({ erro: "Pedido não encontrado." });
-      return res.status(200).json({ item: formata(linha) });
+
+      /* auditoria: o que essa pessoa fez */
+      const dAntes = atual.dados || {}, dDepois = linha.dados || {};
+      const cli = dDepois.cliente || dAntes.cliente || "";
+      if (fila && fila !== atual.fila) await auditar(sql, sessao, "moveu", { pedidoId: id, cliente: cli, detalhe: nomeFila(atual.fila) + " → " + nomeFila(fila) });
+      if (arquivado === true && !atual.arquivado) await auditar(sql, sessao, "arquivou", { pedidoId: id, cliente: cli, detalhe: "Saiu do quadro (" + nomeFila(linha.fila) + ")" });
+      if (arquivado === false && atual.arquivado) await auditar(sql, sessao, "desarquivou", { pedidoId: id, cliente: cli, detalhe: "Voltou para " + nomeFila(linha.fila) });
+      if (dados) { const m = oQueMudou(dAntes, dDepois); if (m.length) await auditar(sql, sessao, "editou", { pedidoId: id, cliente: cli, detalhe: "Mudou: " + m.join(", ") }); }
+      if (mexeArte) await auditar(sql, sessao, "artes", { pedidoId: id, cliente: cli, detalhe: "Trocou as artes do pedido" });
+      if (ordem != null && !(fila && fila !== atual.fila) && arquivado == null && Number(atual.ordem) !== ordem)
+        await auditar(sql, sessao, "reordenou", { pedidoId: id, cliente: cli, detalhe: "Mudou a posição em " + nomeFila(linha.fila) });
+      return res.status(200).json({ item: saida(linha) });
     }
 
     if (req.method === "DELETE") {
       const id = parseInt(req.query.id, 10);
       if (!id) return res.status(400).json({ erro: "Informe o id." });
-      await sql`DELETE FROM pedidos WHERE id = ${id}::bigint`;
+      const [apagado] = await sql`DELETE FROM pedidos WHERE id = ${id}::bigint RETURNING fila, dados`;
+      if (apagado) await auditar(sql, sessao, "excluiu", { pedidoId: id, cliente: (apagado.dados || {}).cliente || "", detalhe: "Estava em " + nomeFila(apagado.fila) });
       return res.status(200).json({ ok: true });
     }
 

@@ -9,10 +9,12 @@
  * DELETE /api/historico?id=123           → remove um registro
  * DELETE /api/historico?tudo=1&tipo=os   → apaga todos os registros daquele tipo
  *
- * Toda chamada precisa do cabeçalho "x-painel-senha" igual à variável PAINEL_SENHA da Vercel.
+ * Toda chamada precisa estar logada (cabeçalho "x-painel-token", ver api/login.js).
+ * Só o usuário ADM tem acesso.
  * As tabelas são criadas sozinhas na primeira chamada.
  */
 import { neon } from "@neondatabase/serverless";
+import { exigirSessao } from "./_auth.js";
 
 /* aceita o nome padrão e também nomes com prefixo (ex.: STORAGE_DATABASE_URL, NEON_POSTGRES_URL) */
 function acharUrlBanco() {
@@ -90,8 +92,7 @@ function formata(r) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!process.env.PAINEL_SENHA) return res.status(500).json({ erro: "Falta configurar PAINEL_SENHA na Vercel." });
-  if (req.headers["x-painel-senha"] !== process.env.PAINEL_SENHA) return res.status(401).json({ erro: "Senha incorreta." });
+  if (!exigirSessao(req, res, ["adm"])) return;
 
   try {
     await prepararBanco();

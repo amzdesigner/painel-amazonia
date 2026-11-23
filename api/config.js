@@ -2,12 +2,14 @@
  * Painel Amazônia Gráfica · configurações compartilhadas (Neon Postgres)
  *
  * GET  /api/config?chave=malharia   → { valor } (null se ainda não foi salva)
- * chaves aceitas: malharia (tabela de preços) e tamanhos_os (tamanhos que vão na O.S.)
+ * chaves aceitas: malharia (tabela de preços) tamanhos_os (tamanhos que vão na O.S.) e atualcard (valores da calculadora Atual Card)
  * PUT  /api/config                  → { chave, valor } grava a configuração
  *
- * Toda chamada precisa do cabeçalho "x-painel-senha" igual à variável PAINEL_SENHA da Vercel.
+ * Toda chamada precisa estar logada (cabeçalho "x-painel-token", ver api/login.js).
+ * Só o usuário ADM tem acesso.
  */
 import { neon } from "@neondatabase/serverless";
+import { exigirSessao } from "./_auth.js";
 
 function acharUrlBanco() {
   const env = process.env;
@@ -19,7 +21,7 @@ function acharUrlBanco() {
 }
 const URL_BANCO = acharUrlBanco();
 const sql = URL_BANCO ? neon(URL_BANCO) : null;
-const CHAVES = ["malharia", "tamanhos_os"];
+const CHAVES = ["malharia", "tamanhos_os", "atualcard"];
 
 let preparado = null;
 function prepararBanco() {
@@ -36,8 +38,7 @@ function prepararBanco() {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!process.env.PAINEL_SENHA) return res.status(500).json({ erro: "Falta configurar PAINEL_SENHA na Vercel." });
-  if (req.headers["x-painel-senha"] !== process.env.PAINEL_SENHA) return res.status(401).json({ erro: "Senha incorreta." });
+  if (!exigirSessao(req, res, ["adm"])) return;
   try {
     await prepararBanco();
     if (req.method === "GET") {
