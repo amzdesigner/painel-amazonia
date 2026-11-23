@@ -38,7 +38,7 @@ function prepararBanco() {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!exigirSessao(req, res, ["adm"])) return;
+  if (!(await exigirSessao(req, res, ["adm"]))) return;
   try {
     await prepararBanco();
     if (req.method === "GET") {

@@ -92,7 +92,7 @@ function formata(r) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!exigirSessao(req, res, ["adm"])) return;
+  if (!(await exigirSessao(req, res, ["adm"]))) return;
 
   try {
     await prepararBanco();
@@ -142,7 +142,7 @@ export default async function handler(req, res) {
           RETURNING ultimo, ano
         )
         INSERT INTO historico (tipo, numero, cliente, pagador, pecas, valor, vias, quem, uniforme, dados, arte)
-        SELECT ${tipo}::text, lpad(c.ultimo::text, 3, '0') || '/' || c.ano::text,
+        SELECT ${tipo}::text, lpad(c.ultimo::text, greatest(3, length(c.ultimo::text)), '0') || '/' || c.ano::text,
                ${texto(b.cliente, 120)}::text, ${texto(b.pagador, 120)}::text, ${inteiro(b.pecas)}::int, ${valor}::numeric,
                ${Math.max(1, inteiro(b.vias))}::int, ${texto(b.quem, 80)}::text, ${!!b.time}::boolean, ${dados}::jsonb,
                ${arte.valor}::text

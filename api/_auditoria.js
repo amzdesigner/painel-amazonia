@@ -26,6 +26,7 @@ export function prepararAuditoria(sql) {
         detalhe TEXT NOT NULL DEFAULT ''
       )`;
       await sql`CREATE INDEX IF NOT EXISTS auditoria_quando ON auditoria (quando)`;
+      await sql`ALTER TABLE auditoria ADD COLUMN IF NOT EXISTS pedido_numero TEXT NOT NULL DEFAULT ''`;
     })().catch(e => { pronto = null; throw e; });
   }
   return pronto;
@@ -41,9 +42,9 @@ export async function auditar(sql, sessao, acao, info) {
   try {
     await prepararAuditoria(sql);
     const i = info || {};
-    await sql`INSERT INTO auditoria (usuario, papel, acao, pedido_id, cliente, detalhe)
+    await sql`INSERT INTO auditoria (usuario, papel, acao, pedido_id, pedido_numero, cliente, detalhe)
       VALUES (${String((sessao && sessao.usuario) || "?").slice(0, 40)}::text, ${String((sessao && sessao.papel) || "").slice(0, 20)}::text,
-              ${String(acao).slice(0, 40)}::text, ${i.pedidoId ? Number(i.pedidoId) : null}::bigint,
+              ${String(acao).slice(0, 40)}::text, ${i.pedidoId ? Number(i.pedidoId) : null}::bigint, ${String(i.pedidoNumero || "").slice(0, 20)}::text,
               ${String(i.cliente || "").slice(0, 120)}::text, ${String(i.detalhe || "").slice(0, 400)}::text)`;
     if (Math.random() < 0.1) await limparAuditoria(sql);
   } catch (e) { console.error("auditoria:", e); }

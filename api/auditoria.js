@@ -25,7 +25,7 @@ const sql = url ? neon(url) : null;
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!exigirSessao(req, res, ["adm"])) return;
+  if (!(await exigirSessao(req, res, ["adm"]))) return;
   if (req.method !== "GET") { res.setHeader("Allow", "GET"); return res.status(405).json({ erro: "Método não permitido." }); }
   try {
     await prepararAuditoria(sql);
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
       agora: new Date().toISOString(),
       itens: linhas.map(r => ({
         id: String(r.id), quando: r.quando, usuario: r.usuario, papel: r.papel, acao: r.acao,
-        pedidoId: r.pedido_id == null ? "" : String(r.pedido_id), cliente: r.cliente, detalhe: r.detalhe
+        pedidoId: r.pedido_id == null ? "" : String(r.pedido_id), pedidoNumero: r.pedido_numero || "", cliente: r.cliente, detalhe: r.detalhe
       }))
     });
   } catch (e) {

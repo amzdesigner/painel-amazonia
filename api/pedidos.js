@@ -48,6 +48,25 @@ function prepararBanco() {
       await sql`CREATE INDEX IF NOT EXISTS pedidos_ativos ON pedidos (arquivado, fila, ordem)`;
       await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS arte TEXT`;
       await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS miniatura TEXT`;
+      /* numeração dos pedidos por ano: 01/2026, 02/2026… (mesma tabela de contadores das O.S.) */
+      await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS numero TEXT`;
+      await sql`CREATE TABLE IF NOT EXISTS contadores (tipo TEXT NOT NULL, ano INTEGER NOT NULL, ultimo INTEGER NOT NULL, PRIMARY KEY (tipo, ano))`;
+      /* pedidos antigos, sem número: numera pela ordem em que foram criados */
+      await sql`
+        UPDATE pedidos p SET numero = lpad((x.base + x.n)::text, greatest(2, length((x.base + x.n)::text)), '0') || '/' || x.ano::text
+        FROM (
+          SELECT s.id, s.ano, s.n, coalesce(c.ultimo, 0) AS base
+          FROM (SELECT id, EXTRACT(YEAR FROM criado_em AT TIME ZONE 'America/Manaus')::int AS ano,
+                       row_number() OVER (PARTITION BY EXTRACT(YEAR FROM criado_em AT TIME ZONE 'America/Manaus') ORDER BY id) AS n
+                FROM pedidos WHERE numero IS NULL) s
+          LEFT JOIN contadores c ON c.tipo = 'pedido' AND c.ano = s.ano
+        ) x
+        WHERE p.id = x.id AND p.numero IS NULL`;
+      await sql`
+        INSERT INTO contadores (tipo, ano, ultimo)
+        SELECT 'pedido', split_part(numero, '/', 2)::int, max(split_part(numero, '/', 1)::int)
+        FROM pedidos WHERE numero ~ '^[0-9]+/[0-9]{4}$' GROUP BY 2
+        ON CONFLICT (tipo, ano) DO UPDATE SET ultimo = GREATEST(contadores.ultimo, EXCLUDED.ultimo)`;
     })().catch(e => { preparado = null; throw e; });
   }
   return preparado;
@@ -140,7 +159,7 @@ function oQueMudou(antes, depois) {
 const nomeFila = f => NOMES_FILA[f] || f;
 function formata(r) {
   return Object.assign({}, r.dados || {}, {
-    id: String(r.id), numero: String(r.id), fila: r.fila, ordem: Number(r.ordem), arquivado: r.arquivado,
+    id: String(r.id), numero: r.numero || String(r.id), fila: r.fila, ordem: Number(r.ordem), arquivado: r.arquivado,
     temArte: r.tem_arte != null ? !!r.tem_arte : !!r.arte,
     miniaturas: minisDoBanco(r.miniatura),
     criado: new Date(r.criado_em).toISOString(), atualizado: new Date(r.atualizado_em).toISOString()
@@ -150,7 +169,7 @@ function formata(r) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  const sessao = exigirSessao(req, res, ["adm", "producao"]);
+  const sessao = await exigirSessao(req, res, ["adm", "producao"]);
   if (!sessao) return;
   const adm = sessao.papel === "adm";
 
@@ -167,7 +186,7 @@ export default async function handler(req, res) {
       if (req.query.relatorio === "1") {
         const de = String(req.query.de || "").slice(0, 10), ate = String(req.query.ate || de).slice(0, 10);
         if (!/^\d{4}-\d{2}-\d{2}$/.test(de) || !/^\d{4}-\d{2}-\d{2}$/.test(ate)) return res.status(400).json({ erro: "Datas inválidas." });
-        const linhas = await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
+        const linhas = await sql`SELECT id, numero, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
           FROM pedidos
           WHERE (dados->>'pagoEm' BETWEEN ${de}::text AND ${ate}::text) OR (dados->>'restantePagoEm' BETWEEN ${de}::text AND ${ate}::text)
           ORDER BY criado_em LIMIT 3000`;
@@ -182,9 +201,9 @@ export default async function handler(req, res) {
       }
       /* a lista não traz as imagens, só se o pedido tem arte */
       const linhas = req.query.entregues === "1"
-        ? await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
+        ? await sql`SELECT id, numero, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
                     FROM pedidos WHERE arquivado ORDER BY atualizado_em DESC LIMIT 200`
-        : await sql`SELECT id, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
+        : await sql`SELECT id, numero, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
                     FROM pedidos WHERE NOT arquivado ORDER BY fila, ordem LIMIT 2000`;
       /* produção não vê a coluna de atendimento (vendas) */
       return res.status(200).json({ itens: linhas.filter(r => adm || r.fila !== "atendimento").map(saida) });
@@ -200,11 +219,21 @@ export default async function handler(req, res) {
       if (arte === false) return res.status(400).json({ erro: "Artes inválidas ou pesadas demais (máx. 12 imagens)." });
       const mini = lerMiniatura(b);
       if (mini === false) return res.status(400).json({ erro: "Miniatura inválida." });
+      /* número sequencial por ano (fuso de Manaus): 01/2026, 02/2026… */
       const [linha] = await sql`
-        INSERT INTO pedidos (fila, ordem, dados, arte, miniatura)
-        VALUES (${fila}::text, ${ordem}::float8, ${JSON.stringify(d)}::jsonb, ${arte || null}::text, ${mini || null}::text)
+        WITH ano AS (SELECT EXTRACT(YEAR FROM now() AT TIME ZONE 'America/Manaus')::int AS a),
+        c AS (
+          INSERT INTO contadores (tipo, ano, ultimo)
+          SELECT 'pedido', a, 1 FROM ano
+          ON CONFLICT (tipo, ano) DO UPDATE SET ultimo = contadores.ultimo + 1
+          RETURNING ultimo, ano
+        )
+        INSERT INTO pedidos (fila, ordem, dados, arte, miniatura, numero)
+        SELECT ${fila}::text, ${ordem}::float8, ${JSON.stringify(d)}::jsonb, ${arte || null}::text, ${mini || null}::text,
+               lpad(c.ultimo::text, greatest(2, length(c.ultimo::text)), '0') || '/' || c.ano::text
+        FROM c
         RETURNING *`;
-      await auditar(sql, sessao, "criou", { pedidoId: linha.id, cliente: d.cliente, detalhe: "Em " + nomeFila(fila) + (d.material ? " · " + d.material : "") });
+      await auditar(sql, sessao, "criou", { pedidoId: linha.id, pedidoNumero: linha.numero, cliente: d.cliente, detalhe: "Em " + nomeFila(fila) + (d.material ? " · " + d.material : "") });
       return res.status(201).json({ item: formata(linha) });
     }
 
@@ -252,21 +281,21 @@ export default async function handler(req, res) {
       /* auditoria: o que essa pessoa fez */
       const dAntes = atual.dados || {}, dDepois = linha.dados || {};
       const cli = dDepois.cliente || dAntes.cliente || "";
-      if (fila && fila !== atual.fila) await auditar(sql, sessao, "moveu", { pedidoId: id, cliente: cli, detalhe: nomeFila(atual.fila) + " → " + nomeFila(fila) });
-      if (arquivado === true && !atual.arquivado) await auditar(sql, sessao, "arquivou", { pedidoId: id, cliente: cli, detalhe: "Saiu do quadro (" + nomeFila(linha.fila) + ")" });
-      if (arquivado === false && atual.arquivado) await auditar(sql, sessao, "desarquivou", { pedidoId: id, cliente: cli, detalhe: "Voltou para " + nomeFila(linha.fila) });
-      if (dados) { const m = oQueMudou(dAntes, dDepois); if (m.length) await auditar(sql, sessao, "editou", { pedidoId: id, cliente: cli, detalhe: "Mudou: " + m.join(", ") }); }
-      if (mexeArte) await auditar(sql, sessao, "artes", { pedidoId: id, cliente: cli, detalhe: "Trocou as artes do pedido" });
+      if (fila && fila !== atual.fila) await auditar(sql, sessao, "moveu", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: nomeFila(atual.fila) + " → " + nomeFila(fila) });
+      if (arquivado === true && !atual.arquivado) await auditar(sql, sessao, "arquivou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Saiu do quadro (" + nomeFila(linha.fila) + ")" });
+      if (arquivado === false && atual.arquivado) await auditar(sql, sessao, "desarquivou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Voltou para " + nomeFila(linha.fila) });
+      if (dados) { const m = oQueMudou(dAntes, dDepois); if (m.length) await auditar(sql, sessao, "editou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Mudou: " + m.join(", ") }); }
+      if (mexeArte) await auditar(sql, sessao, "artes", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Trocou as artes do pedido" });
       if (ordem != null && !(fila && fila !== atual.fila) && arquivado == null && Number(atual.ordem) !== ordem)
-        await auditar(sql, sessao, "reordenou", { pedidoId: id, cliente: cli, detalhe: "Mudou a posição em " + nomeFila(linha.fila) });
+        await auditar(sql, sessao, "reordenou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Mudou a posição em " + nomeFila(linha.fila) });
       return res.status(200).json({ item: saida(linha) });
     }
 
     if (req.method === "DELETE") {
       const id = parseInt(req.query.id, 10);
       if (!id) return res.status(400).json({ erro: "Informe o id." });
-      const [apagado] = await sql`DELETE FROM pedidos WHERE id = ${id}::bigint RETURNING fila, dados`;
-      if (apagado) await auditar(sql, sessao, "excluiu", { pedidoId: id, cliente: (apagado.dados || {}).cliente || "", detalhe: "Estava em " + nomeFila(apagado.fila) });
+      const [apagado] = await sql`DELETE FROM pedidos WHERE id = ${id}::bigint RETURNING fila, dados, numero`;
+      if (apagado) await auditar(sql, sessao, "excluiu", { pedidoId: id, pedidoNumero: apagado.numero, cliente: (apagado.dados || {}).cliente || "", detalhe: "Estava em " + nomeFila(apagado.fila) });
       return res.status(200).json({ ok: true });
     }
 
