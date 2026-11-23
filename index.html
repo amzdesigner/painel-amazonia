@@ -381,6 +381,7 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .aud-a.editou,.aud-a.artes,.aud-a.reordenou{background:rgba(245,158,11,.16);color:#f59e0b}
 .aud-a.excluiu,.aud-a.senha-errada{background:rgba(239,68,68,.16);color:#f87171}
 .aud-a.entrou{background:rgba(139,92,246,.16);color:#a78bfa}
+.aud-a.usuarios{background:rgba(20,184,166,.16);color:#2dd4bf}
 :root.claro .aud-a.moveu{color:#1d4ed8}:root.claro .aud-a.criou{color:#15803d}:root.claro .aud-a.editou,:root.claro .aud-a.artes,:root.claro .aud-a.reordenou{color:#b45309}
 :root.claro .aud-a.excluiu,:root.claro .aud-a.senha-errada{color:#b91c1c}:root.claro .aud-a.entrou{color:#6d28d9}:root.claro .aud-a.arquivou,:root.claro .aud-a.desarquivou{color:#475569}
 .aud-ped{border:0;background:transparent;color:var(--accent);font:inherit;font-weight:700;cursor:pointer;padding:0;text-align:left}
@@ -388,6 +389,38 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .aud-ped small{display:block;color:var(--muted);font-weight:500;font-size:12px}
 .aud-tab tr.novo td{animation:audNovo 2.4s ease-out}
 @keyframes audNovo{from{background:rgba(34,197,94,.22)}to{background:transparent}}
+/* ---------- USUÁRIOS ---------- */
+#view-usr{display:flex;flex-direction:column;gap:16px}
+.usr-topo{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.usr-topo .hint{flex:1 1 420px;margin:0;font-size:13.5px;line-height:1.5}
+.usr-topo .btn{display:inline-flex;align-items:center;gap:8px}
+.usr-topo .btn svg{width:18px;height:18px}
+.usr-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.usr-card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:12px}
+.usr-card.off{opacity:.6}
+.usr-cab{display:flex;align-items:center;gap:12px}
+.usr-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;background:var(--card-2);border:1.5px solid var(--line-2);flex:none}
+.usr-card.adm .usr-av{border-color:var(--brand);color:var(--brand)}
+.usr-nome{font-weight:800;font-size:17px;letter-spacing:.03em;word-break:break-word}
+.usr-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px}
+.usr-tag{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:6px;padding:2px 7px;background:var(--card-2);color:var(--muted)}
+.usr-tag.adm{background:color-mix(in srgb,var(--brand) 18%,transparent);color:var(--brand)}
+.usr-tag.eu{background:var(--accent-soft);color:var(--accent)}
+.usr-tag.off{background:rgba(239,68,68,.15);color:#f87171}
+.usr-info{font-size:12.5px;color:var(--muted)}
+.usr-acoes{display:flex;gap:8px;flex-wrap:wrap}
+.usr-acoes .btn{flex:1 1 auto;min-height:40px;padding:8px 12px;font-size:13.5px}
+.usr-box{max-width:520px}
+.usr-senha{display:flex;gap:8px}
+.usr-senha input{flex:1;min-width:0;font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.04em}
+#usr-nome{text-transform:uppercase;letter-spacing:.04em}
+.usr-papeis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.usr-papeis{grid-template-columns:1fr}}
+.usr-papel{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line-2);border-radius:12px;padding:12px;cursor:pointer;background:var(--card-2)}
+.usr-papel:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.usr-papel input{margin-top:3px;accent-color:var(--accent);width:18px;height:18px}
+.usr-papel b{display:block;font-size:15px}
+.usr-papel small{display:block;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.35}
 /* ---------- PEDIDOS: kanban ---------- */
 .modo-kb .content{max-width:none}
 .kb-barra{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -905,6 +938,7 @@ body.modal-aberto{overflow:hidden}
       <button type="button" data-view="recibo" id="nav-recibo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v18l2.5-1.6L10 21l2-1.6L14 21l2.5-1.6L19 21V3H5Z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>RECIBO</span></button>
       <button type="button" data-view="calc" id="nav-calc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7v3h-7z"/><path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 16.5h.01M12 16.5h.01M15.5 16.5h.01"/></svg><span>CALCULADORA ATUALCARD</span></button>
       <button type="button" data-view="aud" id="nav-aud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="M12 8v4l2.5 2"/></svg><span>AUDITORIA</span></button>
+      <button type="button" data-view="usr" id="nav-usr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M19 8v6M16 11h6"/></svg><span>USUÁRIOS</span></button>
       <button type="button" data-view="time" id="nav-time" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 10h18M3 15h18M9 5v14M15 5v14"/></svg><span>LISTA DO TIME</span></button>
     </nav>
     <div class="rule"></div>
@@ -1032,6 +1066,17 @@ body.modal-aberto{overflow:hidden}
         </section>
       </div>
 
+      <!-- ================= USUÁRIOS (só ADM) ================= -->
+      <div id="view-usr" hidden>
+        <div class="usr-topo">
+          <p class="hint">Crie quem pode entrar no painel e escolha o nível. <b>ADM</b> vê e faz tudo. <b>Produção</b> só vê os pedidos a partir da Fila do designer, sem valores.
+          Trocar a senha, o nível ou desativar alguém tira essa pessoa do painel na hora (ela entra de novo com os dados novos).</p>
+          <button class="btn primary" type="button" id="usr-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Novo usuário</button>
+        </div>
+        <div class="usr-grade" id="usr-lista"></div>
+        <p class="hint" id="usr-msg"></p>
+      </div>
+
       <!-- ================= AUDITORIA (só ADM) ================= -->
       <div id="view-aud" hidden>
         <div class="aud-topo">
@@ -1043,7 +1088,7 @@ body.modal-aberto{overflow:hidden}
           <label class="f"><span>Usuário</span><select id="aud-usuario" class="sel"><option value="">Todos</option><option value="_producao">Só a produção (sem ADM)</option></select></label>
           <label class="f"><span>O que fez</span><select id="aud-acao" class="sel"><option value="">Tudo</option></select></label>
           <label class="f"><span>Dia</span><select id="aud-dia" class="sel"><option value="">Últimos 7 dias</option></select></label>
-          <label class="f"><span>Buscar</span><input type="search" id="aud-busca" placeholder="Nº do pedido ou cliente" autocomplete="off"></label>
+          <label class="f"><span>Buscar</span><input type="search" id="aud-busca" placeholder="Nº do pedido (ex.: 03/2026) ou cliente" autocomplete="off"></label>
         </div>
         <div class="card aud-card">
           <div class="tblwrap">
@@ -1239,7 +1284,7 @@ body.modal-aberto{overflow:hidden}
               <label class="f"><span>Quantidade</span><input type="text" id="sv-quantidade" placeholder="Ex.: 2 unidades" autocomplete="off"></label>
               <label class="f"><span>Tecido</span><input type="text" id="sv-tecido" placeholder="Se tiver (ex.: lona fosca, oxford…)" autocomplete="off"></label>
             </div>
-            <label class="f so-camisa"><span>O.S. referente ao pedido nº</span><input type="text" id="os-pedido" inputmode="numeric" placeholder="Ex.: 3 (deixe vazio se não tiver pedido)" autocomplete="off"></label>
+            <label class="f so-camisa"><span>O.S. referente ao pedido nº</span><input type="text" id="os-pedido" placeholder="Ex.: 03/2026 (deixe vazio se não tiver pedido)" autocomplete="off"></label>
             <div class="f so-camisa"><span>Tipo de camisa</span><div class="chips" id="ch-tipocamisa"></div><input type="hidden" id="tipocamisa"></div>
             <div class="f so-camisa"><span>Tecido</span><div class="chips" id="ch-tecido"></div><input type="hidden" id="tecido"></div>
             <div class="f so-camisa"><span>Tipo de gola</span><div class="chips" id="ch-gola"></div><input type="hidden" id="gola"></div>
@@ -1638,6 +1683,24 @@ body.modal-aberto{overflow:hidden}
     </div>
   </div>
 
+  <div class="modal" id="usr-modal" hidden role="dialog" aria-modal="true" aria-labelledby="usr-titulo">
+    <form class="modal-box usr-box" id="usr-form" novalidate autocomplete="off">
+      <div class="modal-cab"><h2 id="usr-titulo">Novo usuário</h2><button class="btn-x" type="button" id="usr-x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo">
+        <label class="f" id="usr-nome-box"><span>Nome de usuário</span><input type="text" id="usr-nome" maxlength="20" autocapitalize="characters" spellcheck="false" placeholder="Ex.: MARCOS"></label>
+        <label class="f"><span id="usr-senha-rot">Senha</span>
+          <span class="usr-senha"><input type="text" id="usr-senha" maxlength="64" autocomplete="new-password" spellcheck="false" placeholder="Pelo menos 4 caracteres"><button class="btn" type="button" id="usr-gerar">Gerar</button></span></label>
+        <div class="f" id="usr-papel-box"><span>Nível de acesso</span>
+          <div class="usr-papeis">
+            <label class="usr-papel"><input type="radio" name="usr-papel" value="producao" checked><span><b>Produção</b><small>Só pedidos (sem atendimento e sem valores)</small></span></label>
+            <label class="usr-papel"><input type="radio" name="usr-papel" value="adm"><span><b>ADM</b><small>Tudo, inclusive valores e usuários</small></span></label>
+          </div>
+        </div>
+        <p class="login-erro" id="usr-erro" role="alert"></p>
+      </div>
+      <div class="modal-pe"><span class="espaco"></span><button class="btn" type="button" id="usr-cancelar">Cancelar</button><button class="btn primary" type="submit" id="usr-salvar">Criar usuário</button></div>
+    </form>
+  </div>
   <div class="modal" id="os-escolha" hidden role="dialog" aria-modal="true" aria-labelledby="os-escolha-titulo">
     <div class="modal-box os-escolha-box">
       <div class="modal-cab"><h2 id="os-escolha-titulo">Qual O.S. você quer criar?</h2><button class="btn-x" type="button" id="os-escolha-x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
@@ -1887,7 +1950,10 @@ function carregarPdfJs() {
   return pdfjsProm;
 }
 let pdfVez = 0;
+/* nome de arquivo não pode ter "/" (os números são 01/2026) */
+const nomeArquivo = n => String(n || "arquivo").replace(/[\/\\:*?"<>|]+/g, "-");
 async function verPdf(bytes, titulo, nome, imprimirJa) {
+  nome = nomeArquivo(nome);
   const vez = ++pdfVez;
   if (pdfPrev.url) URL.revokeObjectURL(pdfPrev.url);
   const blob = new Blob([bytes], { type: "application/pdf" });
@@ -2019,7 +2085,7 @@ const shell = document.getElementById("shell");
    O histórico segue sendo gravado nos bastidores. */
 const MOSTRAR_VISAO = true;
 document.getElementById("nav-visao").hidden = !MOSTRAR_VISAO;
-const TITULOS = { mal: "Malharia", visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo", calc: "Calculadora Atual Card", aud: "Auditoria" };
+const TITULOS = { mal: "Malharia", visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo", calc: "Calculadora Atual Card", aud: "Auditoria", usr: "Usuários" };
 function irPara(v) {
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.view === v));
   document.getElementById("view-visao").hidden = v !== "visao";
@@ -2034,6 +2100,7 @@ function irPara(v) {
   document.getElementById("view-mal").hidden = v !== "mal";
   document.getElementById("view-calc").hidden = v !== "calc";
   document.getElementById("view-aud").hidden = v !== "aud";
+  document.getElementById("view-usr").hidden = v !== "usr";
   document.getElementById("top-mal").hidden = v !== "mal";
   document.getElementById("bar-mal").hidden = v !== "mal";
   document.getElementById("top-rel").hidden = v !== "rel";
@@ -2041,7 +2108,7 @@ function irPara(v) {
   document.getElementById("top-prod").hidden = v !== "prod";
   document.getElementById("top-ped").hidden = v !== "ped";
   document.body.classList.toggle("modo-kb", v === "ped");
-  document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod" || v === "calc" || v === "aud";
+  document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod" || v === "calc" || v === "aud" || v === "usr";
   document.getElementById("bar-os").hidden = v === "recibo" || v === "visao" || v === "orc" || v === "rel" || v === "mal";
   document.getElementById("bar-orc").hidden = v !== "orc";
   document.getElementById("bar-recibo").hidden = v !== "recibo";
@@ -2064,6 +2131,7 @@ function irPara(v) {
   if (v === "mal" && window.malAoAbrir) window.malAoAbrir();
   if (v === "calc" && window.calcAoAbrir) window.calcAoAbrir();
   if (window.audAoMudar) window.audAoMudar(v === "aud");
+  if (v === "usr" && window.usrAoAbrir) window.usrAoAbrir();
   guardar("amz_view", v);
 }
 document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => irPara(b.dataset.view)));
@@ -2825,6 +2893,7 @@ $("#gen").addEventListener("click", async () => {
 });
 const IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 async function salvarLocal(blob, name) {
+  name = nomeArquivo(name);
   const rotulo = /\.pdf$/i.test(name) ? "PDF" : "Arquivo";
   /* dentro do Claude: usa o download do próprio app */
   if (downloads) {
@@ -3298,7 +3367,7 @@ if (lido("amz_view") === "recibo") irPara("recibo");
 let historico = [];
 let modoHist = "verificando";            /* verificando | nuvem | senha | local */
 /* ---- sessão de login: quem está usando o painel e qual o nível ---- */
-const USUARIOS_LOGIN = ["ADM", "GIL", "GENILSON", "ANGELO", "SIMRI"];
+let USUARIOS_LOGIN = ["ADM", "GIL", "GENILSON", "ANGELO", "SIMRI"];   /* troca pela lista do banco ao abrir */
 let sessao = null;                         /* { token, usuario, papel: "adm" | "producao", exp, previa? } */
 try { const s = JSON.parse(localStorage.getItem("amz_sessao") || "null"); if (s && s.usuario && s.exp > Date.now()) sessao = s; } catch (e) {}
 try { localStorage.removeItem("amz_senha"); } catch (e) {}
@@ -4981,7 +5050,7 @@ async function criarPedido(dados, fila) {
   } else {
     let seq = 0; try { seq = (parseInt(localStorage.getItem("amz_ped_seq") || "0", 10) || 0) + 1; localStorage.setItem("amz_ped_seq", String(seq)); } catch (e) {}
     const agora = new Date().toISOString();
-    const p = Object.assign({}, dados, { id: "l_" + Date.now(), numero: String(seq || pedLocal.length + 1), fila, ordem, arquivado: false, criado: agora, atualizado: agora, temArte: !!(dados.artes && dados.artes.length) });
+    const p = Object.assign({}, dados, { id: "l_" + Date.now(), numero: String(seq || pedLocal.length + 1).padStart(2, "0") + "/" + new Date().getFullYear(), fila, ordem, arquivado: false, criado: agora, atualizado: agora, temArte: !!(dados.artes && dados.artes.length) });
     pedLocal.push(p); salvarPedLocal();
     pedidos.push(p); pedChegou = p.id;
   }
@@ -7571,12 +7640,18 @@ const nomeVias = q => q === "impressor" ? "via impressor" : q === "atendente" ? 
 window.renderVisao=renderVisao;
 /* ================= AUDITORIA (só ADM) ================= */
 (function () {
-  const ACOES = { moveu: "Moveu de fila", arquivou: "Arquivou", desarquivou: "Voltou do arquivo", criou: "Criou pedido", editou: "Editou pedido",
+  const ACOES = { usuarios: "Usuários", moveu: "Moveu de fila", arquivou: "Arquivou", desarquivou: "Voltou do arquivo", criou: "Criou pedido", editou: "Editou pedido",
     artes: "Trocou artes", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
   let itens = [], ultimoId = 0, timer = null, ativa = false, novos = new Set(), carregando = false;
   const $a = id => document.getElementById(id);
   $a("aud-acao").innerHTML = '<option value="">Tudo</option>' + Object.entries(ACOES).map(([k, v]) => '<option value="' + k + '">' + v + '</option>').join("");
-  $a("aud-usuario").innerHTML = '<option value="">Todos</option><option value="_producao">Só a produção (sem ADM)</option>' + USUARIOS_LOGIN.map(u => '<option value="' + u + '">' + u + '</option>').join("");
+  window.audUsuarios = () => {
+    const sel = $a("aud-usuario"), atual = sel.value;
+    const nomes = [...new Set(USUARIOS_LOGIN.concat(itens.map(i => i.usuario)))].filter(Boolean);
+    sel.innerHTML = '<option value="">Todos</option><option value="_producao">Só a produção (sem ADM)</option>' + nomes.map(u => '<option value="' + escapa(u) + '">' + escapa(u) + '</option>').join("");
+    sel.value = atual;
+  };
+  window.audUsuarios();
 
   async function apiAud(query) {
     const r = await fetch("/api/auditoria" + (query || ""), { headers: cabecalhoAuth(), cache: "no-store" });
@@ -7600,7 +7675,7 @@ window.renderVisao=renderVisao;
       if (u === "_producao" ? i.papel === "adm" : (u && i.usuario !== u)) return false;
       if (ac && i.acao !== ac) return false;
       if (dia && diaISO(new Date(i.quando)) !== dia) return false;
-      if (q && !(String(i.pedidoId) === q || semAcentoTxt(i.cliente || "").includes(q) || semAcentoTxt(i.detalhe || "").includes(q))) return false;
+      if (q && !(String(i.pedidoId) === q || String(i.pedidoNumero || "").startsWith(q) || semAcentoTxt(i.cliente || "").includes(q) || semAcentoTxt(i.detalhe || "").includes(q))) return false;
       return true;
     });
   }
@@ -7627,7 +7702,7 @@ window.renderVisao=renderVisao;
         '<td class="hr">' + doisD(d.getHours()) + ":" + doisD(d.getMinutes()) + ":" + doisD(d.getSeconds()) + '</td>' +
         '<td><span class="aud-u' + (i.papel === "adm" ? " adm" : "") + '">' + escapa(i.usuario) + '</span></td>' +
         '<td><span class="aud-a ' + escapa(cls) + '">' + escapa(ACOES[i.acao] || i.acao) + '</span></td>' +
-        '<td>' + (i.pedidoId ? '<button type="button" class="aud-ped" data-id="' + escapa(i.pedidoId) + '">#' + escapa(i.pedidoId) + (i.cliente ? '<small>' + escapa(i.cliente) + '</small>' : "") + '</button>' : '<span class="hint">—</span>') + '</td>' +
+        '<td>' + (i.pedidoId ? '<button type="button" class="aud-ped" data-id="' + escapa(i.pedidoId) + '">#' + escapa(i.pedidoNumero || i.pedidoId) + (i.cliente ? '<small>' + escapa(i.cliente) + '</small>' : "") + '</button>' : '<span class="hint">—</span>') + '</td>' +
         '<td>' + escapa(i.detalhe || "") + '</td></tr>';
     });
     $a("aud-lista").innerHTML = html;
@@ -7642,7 +7717,8 @@ window.renderVisao=renderVisao;
       if (p) { abrirDetalhe(p); return; }
       await new Promise(r => setTimeout(r, 250));
     }
-    say("O pedido #" + id + " não está no quadro (pode ter sido arquivado ou excluído).", "err");
+    const r = itens.find(x => x.pedidoId === String(id));
+    say("O pedido #" + ((r && r.pedidoNumero) || id) + " não está no quadro (pode ter sido arquivado ou excluído).", "err");
   }
   async function carregar(inicio) {
     if (carregando) return;
@@ -7657,7 +7733,7 @@ window.renderVisao=renderVisao;
       itens = itens.filter(i => new Date(i.quando).getTime() >= limite);
       if (itens.length) ultimoId = Math.max(ultimoId, ...itens.map(i => Number(i.id)));
       $a("aud-vivo").classList.remove("off");
-      if (inicio || chegou.length) { renderDias(); render(); }
+      if (inicio || chegou.length) { renderDias(); window.audUsuarios(); render(); }
     } catch (e) {
       $a("aud-vivo").classList.add("off");
       if (e.semApi || modoHist === "local") {
@@ -7678,6 +7754,131 @@ window.renderVisao=renderVisao;
   $a("aud-busca").addEventListener("input", render);
 })();
 
+/* ================= USUÁRIOS (só ADM) ================= */
+(function () {
+  const $u = id => document.getElementById(id);
+  let lista = [], eu = "", editando = null;   /* editando: null = novo · { usuario, modo: "senha" } */
+  async function apiUsr(metodo, query, corpo) {
+    const r = await fetch("/api/usuarios" + (query || ""), {
+      method: metodo, cache: "no-store",
+      headers: Object.assign(cabecalhoAuth(), corpo ? { "Content-Type": "application/json" } : {}),
+      body: corpo ? JSON.stringify(corpo) : undefined
+    });
+    if (!(r.headers.get("content-type") || "").includes("application/json")) { const e = new Error("sem api"); e.semApi = true; throw e; }
+    const j = await r.json();
+    if (!r.ok) { if (r.status === 401 && window.sessaoExpirou) window.sessaoExpirou(); const e = new Error(j.erro || "erro"); e.status = r.status; e.msg = j.erro; throw e; }
+    return j;
+  }
+  const quando = iso => { if (!iso) return "nunca entrou"; const d = new Date(iso); return "último acesso " + d.toLocaleDateString("pt-BR") + " às " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); };
+  function render() {
+    $u("usr-lista").innerHTML = lista.map(u => {
+      const adm = u.papel === "adm", souEu = u.usuario === eu;
+      return '<div class="usr-card' + (adm ? " adm" : "") + (u.ativo ? "" : " off") + '" data-u="' + escapa(u.usuario) + '">' +
+        '<div class="usr-cab"><span class="usr-av" aria-hidden="true">' + escapa(u.usuario.slice(0, 1)) + '</span><div><div class="usr-nome">' + escapa(u.usuario) + '</div>' +
+        '<div class="usr-tags"><span class="usr-tag' + (adm ? " adm" : "") + '">' + (adm ? "ADM" : "Produção") + '</span>' + (souEu ? '<span class="usr-tag eu">Você</span>' : "") + (u.ativo ? "" : '<span class="usr-tag off">Desativado</span>') + '</div></div></div>' +
+        '<div class="usr-info">' + escapa(quando(u.ultimoLogin)) + '</div>' +
+        '<div class="usr-acoes"><button class="btn" type="button" data-a="senha">Trocar senha</button>' +
+        (souEu ? "" : '<button class="btn" type="button" data-a="papel">' + (adm ? "Tornar Produção" : "Tornar ADM") + '</button>' +
+          '<button class="btn" type="button" data-a="ativo">' + (u.ativo ? "Desativar" : "Reativar") + '</button>' +
+          '<button class="btn danger" type="button" data-a="apagar">Apagar</button>') + '</div></div>';
+    }).join("");
+    $u("usr-lista").querySelectorAll(".usr-card").forEach(c => c.querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", () => acao(c.dataset.u, b.dataset.a))));
+  }
+  async function carregar() {
+    $u("usr-msg").textContent = "Carregando…";
+    try {
+      const j = await apiUsr("GET");
+      lista = j.itens || []; eu = j.eu || (sessao && sessao.usuario) || "";
+      USUARIOS_LOGIN = lista.filter(u => u.ativo).map(u => u.usuario);
+      $u("usr-msg").textContent = lista.length + (lista.length === 1 ? " usuário." : " usuários.");
+      render();
+    } catch (e) {
+      lista = []; render();
+      $u("usr-msg").textContent = e.semApi || modoHist === "local"
+        ? "Os usuários ficam no banco de dados: esta aba funciona no painel publicado na Vercel."
+        : "Não consegui carregar os usuários: " + (e.msg || "sem conexão") + ".";
+    }
+  }
+  window.usrAoAbrir = () => { if (!ehProducao()) carregar(); };
+
+  function gerarSenha() {
+    const a = "23456789"; let s = "";
+    const r = new Uint32Array(6); crypto.getRandomValues(r);
+    r.forEach(n => s += a[n % a.length]);
+    return s;
+  }
+  function abrirForm(modo, u) {
+    editando = modo === "novo" ? null : { usuario: u.usuario, modo };
+    $u("usr-titulo").textContent = modo === "novo" ? "Novo usuário" : "Trocar a senha de " + u.usuario;
+    $u("usr-nome-box").hidden = modo !== "novo";
+    $u("usr-papel-box").hidden = modo !== "novo";
+    $u("usr-senha-rot").textContent = modo === "novo" ? "Senha" : "Nova senha";
+    $u("usr-salvar").textContent = modo === "novo" ? "Criar usuário" : "Salvar senha";
+    $u("usr-nome").value = ""; $u("usr-senha").value = ""; $u("usr-erro").textContent = "";
+    document.querySelector('input[name="usr-papel"][value="producao"]').checked = true;
+    abrirModal($u("usr-modal"));
+    setTimeout(() => (modo === "novo" ? $u("usr-nome") : $u("usr-senha")).focus(), 60);
+  }
+  const fechar = () => fecharModal($u("usr-modal"));
+  $u("usr-novo").addEventListener("click", () => abrirForm("novo"));
+  $u("usr-x").addEventListener("click", fechar);
+  $u("usr-cancelar").addEventListener("click", fechar);
+  $u("usr-modal").addEventListener("mousedown", e => { if (e.target.id === "usr-modal") fechar(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$u("usr-modal").hidden) fechar(); });
+  $u("usr-gerar").addEventListener("click", () => { $u("usr-senha").value = gerarSenha(); $u("usr-senha").focus(); });
+  $u("usr-nome").addEventListener("input", () => { $u("usr-erro").textContent = ""; });
+  $u("usr-senha").addEventListener("input", () => { $u("usr-erro").textContent = ""; });
+
+  $u("usr-form").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const senha = $u("usr-senha").value;
+    const btn = $u("usr-salvar"), erro = $u("usr-erro");
+    if (!editando) {
+      const nome = $u("usr-nome").value.trim().toUpperCase().replace(/\s+/g, " ");
+      if (!/^[A-Z0-9À-Ý][A-Z0-9À-Ý ._-]{1,19}$/.test(nome)) { erro.textContent = "Nome de usuário: de 2 a 20 letras ou números."; $u("usr-nome").focus(); return; }
+      if (lista.some(u => u.usuario === nome)) { erro.textContent = "Já existe um usuário com esse nome."; $u("usr-nome").focus(); return; }
+    }
+    if (senha.length < 4) { erro.textContent = "A senha precisa ter pelo menos 4 caracteres."; $u("usr-senha").focus(); return; }
+    btn.disabled = true;
+    try {
+      if (!editando) {
+        const papel = document.querySelector('input[name="usr-papel"]:checked').value;
+        const nome = $u("usr-nome").value.trim().toUpperCase().replace(/\s+/g, " ");
+        await apiUsr("POST", "", { usuario: nome, senha, papel });
+        say("Usuário " + nome + " criado. Ele já pode entrar com a senha " + senha + ".", "ok");
+      } else {
+        await apiUsr("PATCH", "?usuario=" + encodeURIComponent(editando.usuario), { senha });
+        say("Senha de " + editando.usuario + " trocada" + (editando.usuario === eu ? "." : ". Se estava logado, vai precisar entrar de novo."), "ok");
+      }
+      fechar(); carregar();
+    } catch (e) { erro.textContent = e.msg || "Não consegui salvar (sem conexão)."; }
+    finally { btn.disabled = false; }
+  });
+
+  async function acao(nome, a) {
+    const u = lista.find(x => x.usuario === nome); if (!u) return;
+    if (a === "senha") return abrirForm("senha", u);
+    try {
+      if (a === "papel") {
+        const novo = u.papel === "adm" ? "producao" : "adm";
+        if (!(await confirmar(novo === "adm" ? "Dar acesso total (ADM) para " + nome + "?" : "Tirar o acesso de ADM de " + nome + "?",
+          { titulo: "Mudar nível", detalhe: novo === "adm" ? "Ele vai ver valores, relatórios, clientes e poder mexer nos usuários." : "Ele vai ver só os pedidos, sem valores.", sim: novo === "adm" ? "Tornar ADM" : "Tornar Produção", nao: "Voltar" }))) return;
+        await apiUsr("PATCH", "?usuario=" + encodeURIComponent(nome), { papel: novo });
+        say(nome + " agora é " + (novo === "adm" ? "ADM" : "Produção") + ".", "ok");
+      } else if (a === "ativo") {
+        if (u.ativo && !(await confirmar("Desativar " + nome + "?", { titulo: "Desativar usuário", detalhe: "Ele sai do painel na hora e não consegue mais entrar até ser reativado.", sim: "Desativar", nao: "Voltar", perigo: true }))) return;
+        await apiUsr("PATCH", "?usuario=" + encodeURIComponent(nome), { ativo: !u.ativo });
+        say(nome + (u.ativo ? " desativado." : " reativado."), "ok");
+      } else if (a === "apagar") {
+        if (!(await confirmar("Apagar o usuário " + nome + "?", { titulo: "Apagar usuário", detalhe: "Não dá para desfazer. O histórico da auditoria dele continua.", sim: "Apagar", nao: "Voltar", perigo: true }))) return;
+        await apiUsr("DELETE", "?usuario=" + encodeURIComponent(nome));
+        say("Usuário " + nome + " apagado.", "ok");
+      }
+      carregar();
+    } catch (e) { say(e.msg || "Não consegui fazer isso agora (sem conexão).", "err"); }
+  }
+})();
+
 /* ================= LOGIN e níveis de acesso ================= */
 (function () {
   const tela = document.getElementById("login");
@@ -7692,9 +7893,16 @@ window.renderVisao=renderVisao;
     : "Cada pessoa entra com o próprio usuário. Toque em “Sair” ao terminar.";
 
   const chips = document.getElementById("login-users");
-  chips.innerHTML = USUARIOS_LOGIN.map(u => '<button type="button" data-u="' + u + '">' + u + '</button>').join("");
   const marcaChip = () => chips.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.u === inpU.value.trim().toUpperCase()));
-  chips.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { inpU.value = b.dataset.u; marcaChip(); erro.textContent = ""; inpS.value = ""; inpS.focus(); }));
+  function montaChipsLogin() {
+    chips.innerHTML = USUARIOS_LOGIN.map(u => '<button type="button" data-u="' + escapa(u) + '">' + escapa(u) + '</button>').join("");
+    chips.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { inpU.value = b.dataset.u; marcaChip(); erro.textContent = ""; inpS.value = ""; inpS.focus(); }));
+    marcaChip();
+  }
+  montaChipsLogin();
+  /* usuários criados na aba USUÁRIOS aparecem aqui */
+  fetch("/api/login?nomes=1", { cache: "no-store" }).then(r => (r.headers.get("content-type") || "").includes("application/json") ? r.json() : null)
+    .then(j => { if (j && Array.isArray(j.nomes) && j.nomes.length) { USUARIOS_LOGIN = j.nomes; montaChipsLogin(); if (window.audUsuarios) window.audUsuarios(); } }).catch(() => {});
   inpU.addEventListener("input", () => { marcaChip(); erro.textContent = ""; });
   inpS.addEventListener("input", () => { erro.textContent = ""; });
   document.getElementById("login-olho").addEventListener("click", () => {
