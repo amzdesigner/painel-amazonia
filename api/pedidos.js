@@ -86,6 +86,8 @@ function prepararBanco() {
 
 const CAMPOS = ["cliente", "clienteId", "contato", "telefone", "material", "produtoId", "precoUnit", "descricao", "medidas",
   "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes",
+  /* de qual gráfica é o pedido: "amazonia" ou "soares" */
+  "empresa",
   /* pagamento */
   "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo"];
 /* cada material do pedido */
