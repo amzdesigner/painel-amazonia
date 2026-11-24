@@ -543,6 +543,16 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kb-alerta b{color:#d98a00}
 .kb-resumo{margin:0;color:var(--muted);font-size:13.5px}
 .kb-resumo b{color:var(--text)}
+/* barrinha para andar pelas filas (tablet) */
+.kb-nav{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;width:min(560px,calc(100vw - 48px));padding:10px 16px;border-radius:999px;background:rgba(40,40,46,.82);border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 30px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:flex;align-items:center}
+.kb-nav[hidden]{display:none}
+.kb-nav input{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent;margin:0;cursor:pointer;touch-action:none}
+.kb-nav input::-webkit-slider-runnable-track{height:12px;border-radius:999px;background:rgba(255,255,255,.28)}
+.kb-nav input::-moz-range-track{height:12px;border-radius:999px;background:rgba(255,255,255,.28)}
+.kb-nav input::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-9px;border-radius:50%;background:#fff;border:3px solid #111;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.kb-nav input::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid #111;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.kb.navegando{scroll-snap-type:none}
+#view-ped{padding-bottom:64px}
 .kb{display:flex;gap:14px;overflow-x:auto;padding:14px 2px 14px;align-items:stretch;scroll-snap-type:x proximity;min-height:calc(100vh - 170px)}
 .kb-col{--cor:#888;flex:0 0 288px;display:flex;flex-direction:column;background:var(--card-2);border:1px solid var(--line);border-radius:16px;scroll-snap-align:start;position:relative;overflow:hidden}
 .kb-col::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--cor)}
@@ -1293,6 +1303,7 @@ body.modal-aberto{overflow:hidden}
         </div>
         <p class="kb-alerta" id="ped-alerta" hidden>⚠ O arquivo <b>api/pedidos.js</b> no GitHub está desatualizado, por isso as prévias das artes não aparecem nos cards. Envie o <b>api/pedidos.js</b> do último zip para dentro da pasta <b>api</b> do repositório e dê Commit.</p>
         <div class="kb" id="kb" aria-label="Quadro de pedidos"></div>
+        <div class="kb-nav" id="kb-nav" hidden><input type="range" id="kb-nav-r" min="0" max="1000" step="1" value="0" aria-label="Andar pelas filas (esquerda e direita)"></div>
       </div>
 
       <!-- ================= RELATÓRIOS ================= -->
@@ -5575,6 +5586,28 @@ document.addEventListener("pointerdown", e => {
   if (e.target.closest && e.target.closest(".kc-des")) return;
   document.querySelectorAll(".kc-des-menu:not([hidden])").forEach(m => { m.hidden = true; const c = m.closest(".kc"); if (c) c.classList.remove("menu-aberto"); const b = c && c.querySelector(".kc-des-bt"); if (b) b.setAttribute("aria-expanded", "false"); });
 });
+/* barrinha de navegação das filas: a bolinha vai para a esquerda e para a direita */
+(function () {
+  const kb = document.getElementById("kb"), nav = document.getElementById("kb-nav"), r = document.getElementById("kb-nav-r");
+  let mexendo = false, solta = null;
+  const max = () => Math.max(0, kb.scrollWidth - kb.clientWidth);
+  function atualizar() {
+    const vis = !document.getElementById("view-ped").hidden && max() > 8 && !document.querySelector(".modal:not([hidden])");
+    nav.hidden = !vis;
+    if (vis && !mexendo) r.value = String(Math.round(kb.scrollLeft / max() * 1000));
+  }
+  window.atualizarNavFilas = atualizar;
+  r.addEventListener("input", () => {
+    mexendo = true; kb.classList.add("navegando");
+    kb.scrollLeft = Number(r.value) / 1000 * max();
+    clearTimeout(solta); solta = setTimeout(() => { mexendo = false; kb.classList.remove("navegando"); }, 400);
+  });
+  kb.addEventListener("scroll", () => { if (!mexendo) atualizar(); }, { passive: true });
+  window.addEventListener("resize", atualizar);
+  new MutationObserver(() => requestAnimationFrame(atualizar)).observe(kb, { childList: true });
+  new MutationObserver(() => requestAnimationFrame(atualizar)).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["hidden"] });
+  setTimeout(atualizar, 500);
+})();
 /* de qual gráfica é o pedido (sem marcação = Amazônia) e o filtro do quadro */
 const empresaDe = p => (p && p.empresa === "soares") ? "soares" : "amazonia";
 let filtroEmpresa = (() => { try { const v = localStorage.getItem("amz_filtro_emp") || ""; return ["", "amazonia", "soares"].includes(v) ? v : ""; } catch (e) { return ""; } })();
