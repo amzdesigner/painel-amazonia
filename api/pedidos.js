@@ -19,6 +19,7 @@
 import { neon } from "@neondatabase/serverless";
 import { exigirSessao, pode } from "./_auth.js";
 import { auditar, NOMES_FILA } from "./_auditoria.js";
+import { filasAtuais } from "./_filas.js";
 
 function acharUrlBanco() {
   const env = process.env;
@@ -31,7 +32,6 @@ function acharUrlBanco() {
 const URL_BANCO = acharUrlBanco();
 const sql = URL_BANCO ? neon(URL_BANCO) : null;
 
-const FILAS = ["atendimento", "designer", "impressao", "acabamento", "costura", "pronto", "entregue"];
 
 let preparado = null;
 function prepararBanco() {
@@ -157,7 +157,8 @@ function oQueMudou(antes, depois) {
   const a = antes || {}, d = depois || {};
   return Object.keys(ROTULOS).filter(k => JSON.stringify(a[k] ?? "") !== JSON.stringify(d[k] ?? "")).map(k => ROTULOS[k]);
 }
-const nomeFila = f => NOMES_FILA[f] || f;
+let nomesExtras = {};
+const nomeFila = f => NOMES_FILA[f] || nomesExtras[f] || f;
 function formata(r) {
   return Object.assign({}, r.dados || {}, {
     id: String(r.id), numero: r.numero || String(r.id), fila: r.fila, ordem: Number(r.ordem), arquivado: r.arquivado,
@@ -177,6 +178,10 @@ export default async function handler(req, res) {
   const veValores = sessao.adm || sessao.valores;
   /* filas do quadro que essa pessoa vê (hierarquia); produção nunca vê o atendimento */
   const veFila = f => (sessao.adm || !sessao.filas || sessao.filas.includes(f)) && (adm || f !== "atendimento");
+  /* filas atuais (padrão + as criadas pelo ADM) */
+  const listaFilas = await filasAtuais(sql);
+  const FILAS = listaFilas.map(f => f.id);
+  nomesExtras = {}; listaFilas.forEach(f => { if (!f.padrao) nomesExtras[f.id] = f.nome; });
 
   try {
     await prepararBanco();

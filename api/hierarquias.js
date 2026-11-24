@@ -13,6 +13,7 @@
  * PATCH  /api/hierarquias?id=atendente  { nome?, abas?, pedidos?, valores? }
  * DELETE /api/hierarquias?id=atendente            → só se nenhum usuário usar
  */
+import { filasAtuais } from "./_filas.js";
 import { exigirSessao, prepararUsuarios, sqlUsuarios as sql, listarHierarquias, limpaHierarquia, esquecerHierarquias, ABAS } from "./_auth.js";
 import { auditar } from "./_auditoria.js";
 
@@ -21,8 +22,9 @@ const NOMES_ABA = { visao: "Visão geral", ped: "Pedidos", rel: "Relatórios", p
 const limpaNomeH = v => String(v || "").trim().toUpperCase().replace(/\s+/g, " ").slice(0, 30);
 const idDe = nome => nome.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 30);
 const NOMES_FILA = { atendimento: "Atendimento", designer: "Designer", impressao: "Impressão", acabamento: "Acabamento", costura: "Costura", pronto: "Pronto", entregue: "Entregue" };
+let NOMES_EXTRAS = {};
 const resumo = h => h.abas.map(a => NOMES_ABA[a] || a).join(", ") + (h.abas.includes("ped") ? " · pedidos " + (h.pedidos === "completo" ? "completo" : "produção") + (h.valores ? " com valores" : " sem valores") +
-  (h.filas ? " · só as filas: " + h.filas.map(f => NOMES_FILA[f] || f).join(", ") : " · todas as filas") : "");
+  (h.filas ? " · só as filas: " + h.filas.map(f => NOMES_FILA[f] || NOMES_EXTRAS[f] || f).join(", ") : " · todas as filas") : "");
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
@@ -31,12 +33,15 @@ export default async function handler(req, res) {
   const corpo = () => { const b = req.body || {}; if (typeof b === "string") { try { return JSON.parse(b || "{}"); } catch (e) { return {}; } } return b; };
   try {
     await prepararUsuarios();
+    const listaFilas = await filasAtuais(sql);
+    const idsFilas = listaFilas.map(f => f.id);
+    NOMES_EXTRAS = {}; listaFilas.forEach(f => { if (!f.padrao) NOMES_EXTRAS[f.id] = f.nome; });
     if (req.method === "GET") return res.status(200).json({ itens: await listarHierarquias(), abas: ABAS });
 
     if (req.method === "POST") {
       const b = corpo(), nome = limpaNomeH(b.nome), id = idDe(nome);
       if (!nome || !id || id === "adm") return res.status(400).json({ erro: "Dê um nome para a hierarquia (ex.: ATENDENTE)." });
-      const h = limpaHierarquia(b);
+      const h = limpaHierarquia(b, idsFilas);
       if (!h.abas.length) return res.status(400).json({ erro: "Marque pelo menos uma aba." });
       const l = await sql`INSERT INTO hierarquias (id, nome, abas, pedidos, valores, filas) VALUES (${id}::text, ${nome}::text, ${JSON.stringify(h.abas)}::jsonb, ${h.pedidos}::text, ${h.valores}::boolean, ${h.filas ? JSON.stringify(h.filas) : null}::jsonb)
                           ON CONFLICT (id) DO NOTHING RETURNING id`;
@@ -55,7 +60,7 @@ export default async function handler(req, res) {
       const nome = b.nome != null ? limpaNomeH(b.nome) : atual.nome;
       if (!nome) return res.status(400).json({ erro: "Dê um nome para a hierarquia." });
       const h = limpaHierarquia({ abas: b.abas != null ? b.abas : atual.abas, pedidos: b.pedidos != null ? b.pedidos : atual.pedidos, valores: b.valores != null ? b.valores : atual.valores,
-        filas: b.filas !== undefined ? b.filas : atual.filas });
+        filas: b.filas !== undefined ? b.filas : atual.filas }, idsFilas);
       if (!h.abas.length) return res.status(400).json({ erro: "Marque pelo menos uma aba." });
       await sql`UPDATE hierarquias SET nome = ${nome}::text, abas = ${JSON.stringify(h.abas)}::jsonb, pedidos = ${h.pedidos}::text, valores = ${h.valores}::boolean,
                 filas = ${h.filas ? JSON.stringify(h.filas) : null}::jsonb, atualizado_em = now()

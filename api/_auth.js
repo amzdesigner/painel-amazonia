@@ -115,13 +115,14 @@ function confere(linha, senha) {
 }
 
 /* ---------- hierarquias ---------- */
-export function limpaHierarquia(b) {
+export function limpaHierarquia(b, idsFilas) {
+  const FILAS = Array.isArray(idsFilas) && idsFilas.length ? idsFilas : FILAS_PED;
   const abas = Array.isArray(b.abas) ? [...new Set(b.abas.filter(a => ABAS.includes(a)))] : [];
   const pedidos = b.pedidos === "completo" ? "completo" : "producao";
   /* filas que ele vê no quadro; "producao" nunca vê o atendimento; todas marcadas = sem limite (null) */
-  let filas = Array.isArray(b.filas) ? [...new Set(b.filas.filter(f => FILAS_PED.includes(f)))] : null;
+  let filas = Array.isArray(b.filas) ? [...new Set(b.filas.filter(f => FILAS.includes(f)))] : null;
   if (filas && pedidos === "producao") filas = filas.filter(f => f !== "atendimento");
-  const todas = FILAS_PED.filter(f => pedidos === "completo" || f !== "atendimento");
+  const todas = FILAS.filter(f => pedidos === "completo" || f !== "atendimento");
   if (filas && (!filas.length || todas.every(f => filas.includes(f)))) filas = null;
   return { abas, pedidos, valores: !!b.valores, filas };
 }
