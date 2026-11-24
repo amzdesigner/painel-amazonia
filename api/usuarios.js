@@ -10,11 +10,11 @@
  * Tudo vai para a auditoria.
  */
 import {
-  exigirSessao, prepararUsuarios, sqlUsuarios as sql, limpaNome, nomeValido, senhaValida, gerarHash, PAPEIS, esquecerCache
+  exigirSessao, prepararUsuarios, sqlUsuarios as sql, limpaNome, nomeValido, senhaValida, gerarHash, esquecerCache, permissoes, papelExiste, listarHierarquias
 } from "./_auth.js";
 import { auditar } from "./_auditoria.js";
 
-const NOME_PAPEL = { adm: "Administrador", producao: "Produção" };
+const nomePapel = async p => p === "adm" ? "ADM" : ((await permissoes(p)) || {}).nome || p;
 const formata = r => ({
   usuario: r.usuario, papel: r.papel, ativo: r.ativo,
   criadoEm: r.criado_em ? new Date(r.criado_em).toISOString() : "",
@@ -32,19 +32,20 @@ export default async function handler(req, res) {
 
     if (req.method === "GET") {
       const l = await sql`SELECT * FROM usuarios ORDER BY (papel = 'adm') DESC, usuario`;
-      return res.status(200).json({ itens: l.map(formata), eu: sessao.usuario });
+      return res.status(200).json({ itens: l.map(formata), eu: sessao.usuario, hierarquias: await listarHierarquias() });
     }
 
     if (req.method === "POST") {
       const b = corpo();
-      const usuario = limpaNome(b.usuario), papel = PAPEIS.includes(b.papel) ? b.papel : "producao";
+      const usuario = limpaNome(b.usuario), papel = String(b.papel || "producao");
+      if (!(await papelExiste(papel))) return res.status(400).json({ erro: "Hierarquia inválida." });
       if (!nomeValido(usuario)) return res.status(400).json({ erro: "Nome de usuário inválido. Use de 2 a 20 letras ou números." });
       if (!senhaValida(b.senha)) return res.status(400).json({ erro: "A senha precisa ter pelo menos 4 caracteres." });
       const h = gerarHash(b.senha);
       const l = await sql`INSERT INTO usuarios (usuario, papel, algo, sal, hash) VALUES (${usuario}::text, ${papel}::text, ${h.algo}::text, ${h.sal}::text, ${h.hash}::text)
                           ON CONFLICT (usuario) DO NOTHING RETURNING *`;
       if (!l.length) return res.status(409).json({ erro: "Já existe um usuário com esse nome." });
-      await auditar(sql, sessao, "usuarios", { detalhe: "Criou o usuário " + usuario + " (" + NOME_PAPEL[papel] + ")" });
+      await auditar(sql, sessao, "usuarios", { detalhe: "Criou o usuário " + usuario + " (" + await nomePapel(papel) + ")" });
       return res.status(201).json({ item: formata(l[0]) });
     }
 
@@ -59,11 +60,11 @@ export default async function handler(req, res) {
       const mud = [];
       let papel = atual.papel, ativo = atual.ativo, h = null;
       if (b.papel != null) {
-        if (!PAPEIS.includes(b.papel)) return res.status(400).json({ erro: "Nível inválido." });
+        if (!(await papelExiste(String(b.papel)))) return res.status(400).json({ erro: "Hierarquia inválida." });
         if (b.papel !== atual.papel) {
           if (euMesmo) return res.status(400).json({ erro: "Você não pode mudar o seu próprio nível." });
           if (atual.papel === "adm" && atual.ativo && await admsAtivos() <= 1) return res.status(400).json({ erro: "Precisa ficar pelo menos um ADM." });
-          papel = b.papel; mud.push("nível para " + NOME_PAPEL[papel]);
+          papel = String(b.papel); mud.push("hierarquia para " + await nomePapel(papel));
         }
       }
       if (b.ativo != null && !!b.ativo !== atual.ativo) {

@@ -10,7 +10,7 @@
  * Só o usuário ADM tem acesso.
  */
 import { neon } from "@neondatabase/serverless";
-import { exigirSessao } from "./_auth.js";
+import { exigirSessao, pode } from "./_auth.js";
 
 function acharUrlBanco() {
   const env = process.env;
@@ -59,7 +59,11 @@ function formata(r) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!(await exigirSessao(req, res, ["adm"]))) return;
+  /* produtos têm preço: só quem cadastra, orça ou vende (pedidos completos) */
+  const sessao = await exigirSessao(req, res, null);
+  if (!sessao) return;
+  if (!(pode(sessao, ["prod", "orc"]) || (sessao.pedidos === "completo" && pode(sessao, ["ped"])))) return res.status(403).json({ erro: "Seu usuário não tem acesso a isso." });
+  if (req.method !== "GET" && !pode(sessao, ["prod"])) return res.status(403).json({ erro: "Seu usuário não pode mudar produtos." });
 
   try {
     await prepararBanco();

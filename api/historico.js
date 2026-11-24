@@ -14,7 +14,11 @@
  * As tabelas são criadas sozinhas na primeira chamada.
  */
 import { neon } from "@neondatabase/serverless";
-import { exigirSessao } from "./_auth.js";
+import { exigirSessao, pode } from "./_auth.js";
+/* que aba dá acesso a cada tipo de registro (Visão Geral vê e muda o status de todos) */
+const ABA_TIPO = { os: ["os"], orcamento: ["orc"], recibo: ["recibo"], venda: ["rel"] };
+const podeVer = (s, tipo) => pode(s, (ABA_TIPO[tipo] || []).concat("visao"));
+const podeMexer = (s, tipo) => pode(s, ABA_TIPO[tipo] || []);
 
 /* aceita o nome padrão e também nomes com prefixo (ex.: STORAGE_DATABASE_URL, NEON_POSTGRES_URL) */
 function acharUrlBanco() {
@@ -92,7 +96,9 @@ function formata(r) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!(await exigirSessao(req, res, ["adm"]))) return;
+  const sessao = await exigirSessao(req, res, ["visao", "rel", "os", "orc", "recibo"]);
+  if (!sessao) return;
+  const negado = () => res.status(403).json({ erro: "Seu usuário não tem acesso a isso." });
 
   try {
     await prepararBanco();
@@ -101,21 +107,23 @@ export default async function handler(req, res) {
       if (req.query.arte === "1") {
         const id = parseInt(req.query.id, 10);
         if (!id) return res.status(400).json({ erro: "Informe o id." });
-        const [linha] = await sql`SELECT arte FROM historico WHERE id = ${id}::bigint`;
+        const [linha] = await sql`SELECT arte, tipo FROM historico WHERE id = ${id}::bigint`;
         if (!linha) return res.status(404).json({ erro: "Registro não encontrado." });
+        if (!podeVer(sessao, linha.tipo)) return negado();
         return res.status(200).json({ arte: linha.arte || "" });
       }
       const linhas = await sql`
         SELECT id, tipo, numero, cliente, pagador, pecas, valor, vias, quem, uniforme, dados, criado_em, status,
                (arte IS NOT NULL) AS tem_arte
         FROM historico ORDER BY criado_em DESC LIMIT 500`;
-      return res.status(200).json({ itens: linhas.map(formata) });
+      return res.status(200).json({ itens: linhas.filter(r => podeVer(sessao, r.tipo)).map(formata) });
     }
 
     if (req.method === "POST") {
       const b = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
       const tipo = TIPOS.includes(b.tipo) ? b.tipo : null;
       if (!tipo) return res.status(400).json({ erro: "Tipo inválido." });
+      if (!podeMexer(sessao, tipo)) return negado();
       const valor = Math.max(0, Math.min(1e9, Number(b.valor) || 0));
       const dados = b.dados && typeof b.dados === "object" ? JSON.stringify(b.dados) : null;
       if (dados && dados.length > 200000) return res.status(413).json({ erro: "Registro grande demais." });
@@ -157,6 +165,11 @@ export default async function handler(req, res) {
       const b = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
       const status = b.status == null ? null : (STATUS.includes(b.status) ? b.status : undefined);
       if (status === undefined) return res.status(400).json({ erro: "Status inválido." });
+      const [reg] = await sql`SELECT tipo FROM historico WHERE id = ${id}::bigint`;
+      if (!reg) return res.status(404).json({ erro: "Registro não encontrado." });
+      /* pela Visão Geral só dá para mudar o status; o resto precisa da aba do tipo */
+      const soStatus = Object.keys(b).every(k => k === "status");
+      if (!(podeMexer(sessao, reg.tipo) || (soStatus && podeVer(sessao, reg.tipo)))) return negado();
       const cliente = b.cliente == null ? null : texto(b.cliente, 120);
       const valor = b.valor == null ? null : Math.max(0, Math.min(1e9, Number(b.valor) || 0));
       const pecas = b.pecas == null ? null : inteiro(b.pecas);
@@ -185,6 +198,7 @@ export default async function handler(req, res) {
 
     if (req.method === "DELETE") {
       if (req.query.tudo === "1") {
+        if (!sessao.adm) return negado();
         const tipo = TIPOS.includes(req.query.tipo) ? req.query.tipo : null;
         if (!tipo) return res.status(400).json({ erro: "Informe o tipo para apagar." });
         await sql`DELETE FROM historico WHERE tipo = ${tipo}::text`;
@@ -192,6 +206,8 @@ export default async function handler(req, res) {
       }
       const id = parseInt(req.query.id, 10);
       if (!id) return res.status(400).json({ erro: "Informe o id." });
+      const [reg] = await sql`SELECT tipo FROM historico WHERE id = ${id}::bigint`;
+      if (reg && !podeMexer(sessao, reg.tipo)) return negado();
       await sql`DELETE FROM historico WHERE id = ${id}::bigint`;
       return res.status(200).json({ ok: true });
     }

@@ -12,7 +12,7 @@
  * Só o usuário ADM tem acesso.
  */
 import { neon } from "@neondatabase/serverless";
-import { exigirSessao } from "./_auth.js";
+import { exigirSessao, pode } from "./_auth.js";
 
 function acharUrlBanco() {
   const env = process.env;
@@ -63,7 +63,13 @@ function formata(r) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!(await exigirSessao(req, res, ["adm"]))) return;
+  /* lista: quem usa clientes em algum formulário · gravar: Clientes, Orçamento ou pedidos completos · apagar: só a aba Clientes */
+  const sessao = await exigirSessao(req, res, null);
+  if (!sessao) return;
+  const pedCompleto = sessao.pedidos === "completo" && pode(sessao, ["ped"]);
+  if (!(pode(sessao, ["cli", "orc", "recibo", "os"]) || pedCompleto)) return res.status(403).json({ erro: "Seu usuário não tem acesso a isso." });
+  const gravar = pode(sessao, ["cli", "orc"]) || pedCompleto;
+  if (req.method === "DELETE" ? !pode(sessao, ["cli"]) : (req.method !== "GET" && !gravar)) return res.status(403).json({ erro: "Seu usuário não pode mudar clientes." });
 
   try {
     await prepararBanco();

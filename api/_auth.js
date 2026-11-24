@@ -3,9 +3,13 @@
  *
  * Não é uma rota: as outras funções da pasta api usam este arquivo para saber quem está logado.
  *
- * Níveis:
- *   "adm"      → vê e faz tudo no painel (inclusive criar e mudar usuários, na aba USUÁRIOS)
- *   "producao" → só a aba PEDIDOS, sem a coluna Atendimento e sem nenhum valor de venda
+ * Níveis (hierarquias):
+ *   "adm"      → vê e faz tudo no painel (inclusive usuários e hierarquias) — fixo, não dá para mudar
+ *   as outras ficam na tabela "hierarquias" e o ADM monta pela aba USUÁRIOS → HIERARQUIA:
+ *     abas    → quais abas do menu a pessoa vê (visao, ped, rel, prod, mal, os, cli, orc, recibo, calc, aud)
+ *     pedidos → "producao" (só move entre as filas a partir do designer) ou "completo" (vê o atendimento, cria e edita)
+ *     valores → se vê os valores de venda nos pedidos
+ *   A primeira hierarquia ("producao" = PRODUÇÃO) vem pronta: só PEDIDOS, modo produção, sem valores.
  *
  * Os usuários ficam no banco (tabela "usuarios"). Na primeira vez, o banco recebe os usuários iniciais abaixo.
  * As senhas nunca ficam guardadas: só um "resumo" (scrypt com sal; os iniciais usam SHA-256).
@@ -24,7 +28,8 @@ const INICIAIS = {
   ANGELO:   { papel: "producao", hash: "b6f4a3b00df01707e4183dd9fbdbfe2e9b712ce9a108140c87bd68cf3067aaa5" },
   SIMRI:    { papel: "producao", hash: "e7b6ccb81fbf9973531ec94b7ee283aea3509afa9bdaf893a9bcdff5fe27d51f" }
 };
-export const PAPEIS = ["adm", "producao"];
+export const ABAS = ["visao", "ped", "rel", "prod", "mal", "os", "cli", "orc", "recibo", "calc", "aud"];
+const PERM_ADM = { nome: "ADM", abas: ABAS.slice(), pedidos: "completo", valores: true };
 export const SESSAO_HORAS = 16;
 
 function acharUrlBanco() {
@@ -65,6 +70,17 @@ export function prepararUsuarios() {
         atualizado_em TIMESTAMPTZ NOT NULL DEFAULT now(),
         ultimo_login  TIMESTAMPTZ
       )`;
+      await sql`CREATE TABLE IF NOT EXISTS hierarquias (
+        id            TEXT PRIMARY KEY,
+        nome          TEXT NOT NULL,
+        abas          JSONB NOT NULL DEFAULT '[]'::jsonb,
+        pedidos       TEXT NOT NULL DEFAULT 'producao',
+        valores       BOOLEAN NOT NULL DEFAULT FALSE,
+        criado_em     TIMESTAMPTZ NOT NULL DEFAULT now(),
+        atualizado_em TIMESTAMPTZ NOT NULL DEFAULT now()
+      )`;
+      await sql`INSERT INTO hierarquias (id, nome, abas, pedidos, valores) VALUES ('producao', 'PRODUÇÃO', '["ped"]'::jsonb, 'producao', false)
+                ON CONFLICT (id) DO NOTHING`;
       const [c] = await sql`SELECT count(*)::int AS n FROM usuarios`;
       if (!c || !Number(c.n)) {
         for (const [u, d] of Object.entries(INICIAIS)) {
@@ -94,6 +110,33 @@ function confere(linha, senha) {
   const h = crypto.scryptSync(senha, linha.sal, 32).toString("hex");
   return igual(h, linha.hash);
 }
+
+/* ---------- hierarquias ---------- */
+export function limpaHierarquia(b) {
+  const abas = Array.isArray(b.abas) ? [...new Set(b.abas.filter(a => ABAS.includes(a)))] : [];
+  return { abas, pedidos: b.pedidos === "completo" ? "completo" : "producao", valores: !!b.valores };
+}
+export async function listarHierarquias() {
+  await prepararUsuarios();
+  const l = await sql`SELECT h.*, (SELECT count(*)::int FROM usuarios u WHERE u.papel = h.id) AS usuarios FROM hierarquias h ORDER BY h.nome`;
+  return l.map(h => ({ id: h.id, nome: h.nome, abas: Array.isArray(h.abas) ? h.abas : [], pedidos: h.pedidos, valores: h.valores, usuarios: Number(h.usuarios) || 0 }));
+}
+const cacheH = new Map();
+export async function permissoes(papel) {
+  if (papel === "adm") return PERM_ADM;
+  const c = cacheH.get(papel);
+  if (c && c.ate > Date.now()) return c.p;
+  await prepararUsuarios();
+  const [h] = await sql`SELECT * FROM hierarquias WHERE id = ${papel}::text`;
+  const p = h ? { nome: h.nome, abas: Array.isArray(h.abas) ? h.abas : [], pedidos: h.pedidos, valores: h.valores } : null;
+  cacheH.set(papel, { p, ate: Date.now() + 15000 });
+  return p;
+}
+export function esquecerHierarquias() { cacheH.clear(); }
+export async function papelExiste(papel) { return papel === "adm" || !!(await permissoes(papel)); }
+
+/* a sessão pode usar alguma destas abas? (ADM pode tudo) */
+export const pode = (s, abas) => !!s && (s.adm || (abas || []).some(a => s.abas.includes(a)));
 
 /* lista de nomes ativos (para os botões da tela de login) */
 export async function nomesAtivos() {
@@ -156,16 +199,20 @@ export async function lerSessao(req) {
   if (!d || !d.exp || d.exp < Date.now()) return null;
   const u = await usuarioAtual(d.u);
   if (!u || !u.ativo || u.papel !== d.p || (Number(u.versao) || 1) !== (d.v || 1)) return null;
-  return { usuario: d.u, papel: d.p };
+  const perm = await permissoes(u.papel);
+  if (!perm) return null;
+  return { usuario: d.u, papel: d.p, adm: d.p === "adm", nomePapel: perm.nome, abas: perm.abas, pedidos: perm.pedidos, valores: perm.valores };
 }
 
-/* para as rotas: responde 500/401/403 e devolve null se não puder seguir */
-export async function exigirSessao(req, res, papeis) {
+/* para as rotas: responde 500/401/403 e devolve null se não puder seguir.
+   "abas": a sessão precisa ter pelo menos uma delas (ADM sempre pode); ["adm"] = só ADM; null = qualquer pessoa logada */
+export async function exigirSessao(req, res, abas) {
   if (!segredo()) { res.status(500).json({ erro: "Falta configurar PAINEL_SENHA na Vercel." }); return null; }
   if (!sql) { res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" }); return null; }
   let s;
   try { s = await lerSessao(req); } catch (e) { console.error(e); res.status(500).json({ erro: "Erro no banco de dados." }); return null; }
   if (!s) { res.status(401).json({ erro: "Sessão expirada. Entre de novo." }); return null; }
-  if (papeis && !papeis.includes(s.papel)) { res.status(403).json({ erro: "Seu usuário não tem acesso a isso." }); return null; }
+  const ok = !abas || s.adm || (!(abas.length === 1 && abas[0] === "adm") && pode(s, abas));
+  if (!ok) { res.status(403).json({ erro: "Seu usuário não tem acesso a isso." }); return null; }
   return s;
 }

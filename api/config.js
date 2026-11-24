@@ -9,7 +9,10 @@
  * Só o usuário ADM tem acesso.
  */
 import { neon } from "@neondatabase/serverless";
-import { exigirSessao } from "./_auth.js";
+import { exigirSessao, pode } from "./_auth.js";
+/* que abas leem / gravam cada configuração */
+const LER = { malharia: ["mal", "orc", "_pedCompleto"], tamanhos_os: ["os", "ped"], atualcard: ["calc"] };
+const GRAVAR = { malharia: ["mal"], tamanhos_os: ["os"], atualcard: ["calc"] };
 
 function acharUrlBanco() {
   const env = process.env;
@@ -38,18 +41,23 @@ function prepararBanco() {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!(await exigirSessao(req, res, ["adm"]))) return;
+  const sessao = await exigirSessao(req, res, null);
+  if (!sessao) return;
+  const negado = () => res.status(403).json({ erro: "Seu usuário não tem acesso a isso." });
   try {
     await prepararBanco();
     if (req.method === "GET") {
       const chave = String(req.query.chave || "");
       if (!CHAVES.includes(chave)) return res.status(400).json({ erro: "Chave inválida." });
+      const ler = LER[chave].filter(a => a !== "_pedCompleto");
+      if (!(pode(sessao, ler) || (LER[chave].includes("_pedCompleto") && sessao.pedidos === "completo" && pode(sessao, ["ped"])))) return negado();
       const [r] = await sql`SELECT valor, atualizado_em FROM config WHERE chave = ${chave}::text`;
       return res.status(200).json({ valor: r ? r.valor : null, atualizado: r ? new Date(r.atualizado_em).toISOString() : null });
     }
     if (req.method === "PUT" || req.method === "POST") {
       const b = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
       if (!CHAVES.includes(b.chave)) return res.status(400).json({ erro: "Chave inválida." });
+      if (!pode(sessao, GRAVAR[b.chave])) return negado();
       if (!b.valor || typeof b.valor !== "object") return res.status(400).json({ erro: "Valor inválido." });
       const txt = JSON.stringify(b.valor);
       if (txt.length > 200000) return res.status(413).json({ erro: "Configuração grande demais." });

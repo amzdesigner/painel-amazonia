@@ -25,7 +25,7 @@ const sql = url ? neon(url) : null;
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  if (!(await exigirSessao(req, res, ["adm"]))) return;
+  if (!(await exigirSessao(req, res, ["aud"]))) return;
   if (req.method !== "GET") { res.setHeader("Allow", "GET"); return res.status(405).json({ erro: "Método não permitido." }); }
   try {
     await prepararAuditoria(sql);

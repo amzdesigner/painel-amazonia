@@ -16,7 +16,7 @@
  * Toda mudança (de qualquer usuário) vai para a auditoria (api/auditoria.js).
  */
 import { neon } from "@neondatabase/serverless";
-import { exigirSessao } from "./_auth.js";
+import { exigirSessao, pode } from "./_auth.js";
 import { auditar, NOMES_FILA } from "./_auditoria.js";
 
 function acharUrlBanco() {
@@ -169,19 +169,22 @@ function formata(r) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
-  const sessao = await exigirSessao(req, res, ["adm", "producao"]);
+  const sessao = await exigirSessao(req, res, ["ped", "visao", "rel"]);
   if (!sessao) return;
-  const adm = sessao.papel === "adm";
+  /* "adm" aqui = acesso completo aos pedidos (vê o atendimento, cria, edita, exclui) */
+  const adm = sessao.adm || (sessao.pedidos === "completo" && sessao.abas.includes("ped"));
+  const veValores = sessao.adm || sessao.valores;
 
   try {
     await prepararBanco();
     const corpo = () => (typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {}));
 
     if (!adm && req.method !== "GET" && req.method !== "PATCH") return res.status(403).json({ erro: "Seu usuário não pode criar nem excluir pedidos." });
-    const saida = adm ? formata : r => semValores(formata(r));
+    if (req.method !== "GET" && !pode(sessao, ["ped"])) return res.status(403).json({ erro: "Seu usuário não tem acesso aos pedidos." });
+    const saida = veValores ? formata : r => semValores(formata(r));
 
     if (req.method === "GET") {
-      if (!adm && req.query.relatorio === "1") return res.status(403).json({ erro: "Seu usuário não tem acesso aos relatórios." });
+      if (req.query.relatorio === "1" && !pode(sessao, ["rel"])) return res.status(403).json({ erro: "Seu usuário não tem acesso aos relatórios." });
       /* relatório: pedidos com pagamento (entrada/à vista ou restante) no período, arquivados inclusive */
       if (req.query.relatorio === "1") {
         const de = String(req.query.de || "").slice(0, 10), ate = String(req.query.ate || de).slice(0, 10);
