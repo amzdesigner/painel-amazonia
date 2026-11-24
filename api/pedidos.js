@@ -15,6 +15,16 @@
  * e só podem mudar a fila / ordem / arquivar (e as miniaturas). Não criam, não editam e não excluem.
  * Toda mudança (de qualquer usuário) vai para a auditoria (api/auditoria.js).
  * PATCH { designer: "CLAYTON" } escolhe quem faz a arte (qualquer usuário com acesso aos pedidos; "" tira).
+ *
+ * APROVAÇÃO DA ARTE (arte criada ou recriada pela gráfica): o pedido não sai da Fila do designer
+ * para a produção enquanto a arte não for aprovada. Uma aprovação basta:
+ *   - o cliente aprovou (com o print da conversa), ou
+ *   - um revisor (ADM ou hierarquia com "aprova artes", ex.: Gráfica Soares) aprovou — e quem recriou não aprova a própria arte.
+ * GET   /api/pedidos?id=12&aprov=1      → { item, imgs: { original, recriada, print } }
+ * GET   /api/pedidos?revisar=1          → pedidos com arte esperando revisão (só revisores)
+ * PATCH /api/pedidos?id=12&aprov=1  { acao, ... }
+ *       acao: imagens {original?, recriada?} · enviar · aprovar · corrigir {comentario} · cliente {print, recebidoPor}
+ *             · reabrir · exigir · dispensar (só ADM)
  */
 import { neon } from "@neondatabase/serverless";
 import { exigirSessao, pode } from "./_auth.js";
@@ -49,6 +59,7 @@ function prepararBanco() {
       await sql`CREATE INDEX IF NOT EXISTS pedidos_ativos ON pedidos (arquivado, fila, ordem)`;
       await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS arte TEXT`;
       await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS miniatura TEXT`;
+      await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS aprov_img TEXT`;
       /* numeração dos pedidos por ano: 01/2026, 02/2026… (mesma tabela de contadores das O.S.) */
       await sql`ALTER TABLE pedidos ADD COLUMN IF NOT EXISTS numero TEXT`;
       await sql`CREATE TABLE IF NOT EXISTS contadores (tipo TEXT NOT NULL, ano INTEGER NOT NULL, ultimo INTEGER NOT NULL, PRIMARY KEY (tipo, ano))`;
@@ -135,6 +146,26 @@ function minisDoBanco(txt) {
   if (txt.startsWith("[")) { try { return JSON.parse(txt); } catch (e) { return []; } }
   return [{ img: txt, rotulo: "" }];
 }
+/* ---------- aprovação da arte ---------- */
+const ARTES_CRIADAS = ["criar", "recriar", "zero"];
+const MAX_IMG_APROV = 2500000;
+function exigeAuto(d) {
+  return (d.itens || []).some(i => { try { const c = typeof i.camisa === "string" ? JSON.parse(i.camisa || "null") : i.camisa; return !!c && ARTES_CRIADAS.includes(c.arte); } catch (e) { return false; } });
+}
+/* guarda (ou cria) o estado da aprovação ao salvar o pedido */
+function aprovAoSalvar(antes, d) {
+  const auto = exigeAuto(d);
+  if (antes && typeof antes === "object") {
+    const a = JSON.parse(JSON.stringify(antes));
+    a.auto = auto; a.exige = !a.dispensada && (auto || !!a.manual);
+    return a;
+  }
+  return auto ? { exige: true, auto: true, manual: false, status: "pendente", historico: [] } : undefined;
+}
+const bloqueiaFila = (aprov, fila) => !!(aprov && aprov.exige && aprov.status !== "aprovada" && fila !== "atendimento" && fila !== "designer");
+const MSG_BLOQ = "A arte deste pedido foi criada/recriada e ainda não foi aprovada. Aprove a arte antes de mandar para a produção.";
+function imgsAprov(txt) { if (!txt) return {}; if (typeof txt === "object") return Object.assign({}, txt); try { return JSON.parse(txt) || {}; } catch (e) { return {}; } }
+
 /* tira tudo que é valor de venda (para quem não é ADM) */
 const CAMPOS_VALOR = ["preco", "precoUnit", "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo"];
 function semValores(p) {
@@ -177,7 +208,11 @@ export default async function handler(req, res) {
   const adm = sessao.adm || (sessao.pedidos === "completo" && sessao.abas.includes("ped"));
   const veValores = sessao.adm || sessao.valores;
   /* filas do quadro que essa pessoa vê (hierarquia); produção nunca vê o atendimento */
-  const veFila = f => (sessao.adm || !sessao.filas || sessao.filas.includes(f)) && (adm || f !== "atendimento");
+  const veFila = f => (sessao.adm || !sessao.filas || sessao.filas.includes(f)) && (adm || sessao.verAtendimento || f !== "atendimento");
+  /* TABLET (Produção): só vê */
+  if (sessao.somenteVer && req.method !== "GET") return res.status(403).json({ erro: "O TABLET só mostra os pedidos. Toque em “Trocar usuário” e entre com o seu usuário para mexer." });
+  /* quem revisa e aprova artes: ADM ou hierarquia com "aprova artes" (ex.: Gráfica Soares) */
+  const revisor = sessao.adm || !!sessao.aprovaArte;
   /* filas atuais (padrão + as criadas pelo ADM) */
   const listaFilas = await filasAtuais(sql);
   const FILAS = listaFilas.map(f => f.id);
@@ -203,6 +238,20 @@ export default async function handler(req, res) {
           ORDER BY criado_em LIMIT 3000`;
         return res.status(200).json({ itens: linhas.map(formata) });
       }
+      if (req.query.revisar === "1") {
+        if (!revisor) return res.status(403).json({ erro: "Seu usuário não revisa artes." });
+        const linhas = await sql`SELECT id, numero, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
+          FROM pedidos WHERE NOT arquivado AND dados->'aprov'->>'status' = 'revisao' ORDER BY atualizado_em LIMIT 200`;
+        return res.status(200).json({ itens: linhas.map(saida) });
+      }
+      if (req.query.aprov === "1") {
+        const id = parseInt(req.query.id, 10);
+        if (!id) return res.status(400).json({ erro: "Informe o id." });
+        const [r] = await sql`SELECT id, numero, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte, aprov_img
+          FROM pedidos WHERE id = ${id}::bigint`;
+        if (!r || !(veFila(r.fila) || revisor)) return res.status(404).json({ erro: "Pedido não encontrado." });
+        return res.status(200).json({ item: saida(r), imgs: imgsAprov(r.aprov_img) });
+      }
       if (req.query.arte === "1") {
         const id = parseInt(req.query.id, 10);
         if (!id) return res.status(400).json({ erro: "Informe o id." });
@@ -225,6 +274,8 @@ export default async function handler(req, res) {
       const d = limpa(b);
       if (!d.cliente) return res.status(400).json({ erro: "Informe o cliente." });
       const fila = FILAS.includes(b.fila) ? b.fila : "atendimento";
+      const ap = aprovAoSalvar(null, d); if (ap) d.aprov = ap;
+      if (bloqueiaFila(d.aprov, fila)) return res.status(409).json({ erro: MSG_BLOQ, bloqueio: "arte" });
       const ordem = Number.isFinite(Number(b.ordem)) ? Number(b.ordem) : Date.now();
       const arte = lerArtes(b);
       if (arte === false) return res.status(400).json({ erro: "Artes inválidas ou pesadas demais (máx. 12 imagens)." });
@@ -246,6 +297,100 @@ export default async function handler(req, res) {
         RETURNING *`;
       await auditar(sql, sessao, "criou", { pedidoId: linha.id, pedidoNumero: linha.numero, cliente: d.cliente, detalhe: "Em " + nomeFila(fila) + (d.material ? " · " + d.material : "") });
       return res.status(201).json({ item: formata(linha) });
+    }
+
+    if (req.method === "PATCH" && req.query.aprov === "1") {
+      const id = parseInt(req.query.id, 10);
+      if (!id) return res.status(400).json({ erro: "Informe o id." });
+      const b = corpo();
+      const [atual] = await sql`SELECT fila, arquivado, dados, numero, aprov_img FROM pedidos WHERE id = ${id}::bigint`;
+      if (!atual || !(veFila(atual.fila) || revisor)) return res.status(404).json({ erro: "Pedido não encontrado." });
+      const d = atual.dados || {};
+      const a = d.aprov && typeof d.aprov === "object" ? JSON.parse(JSON.stringify(d.aprov)) : { exige: false, auto: false, manual: false, status: "pendente", historico: [] };
+      const imgs = imgsAprov(atual.aprov_img);
+      const eu = sessao.usuario, agora = new Date().toISOString();
+      const hist = (acao, texto) => { a.historico = (a.historico || []).concat([{ acao, usuario: eu, em: agora, texto: texto || "" }]).slice(-60); };
+      const erro = (st, msg) => res.status(st).json({ erro: msg });
+      const imgBoa = v => typeof v === "string" && imgOk(v) && v.length <= MAX_IMG_APROV;
+      let mexeImgs = false, detalhe = "";
+      switch (String(b.acao || "")) {
+        case "imagens": {
+          if (a.status === "aprovada") return erro(409, "A arte já foi aprovada. Use “Nova versão” para trocar a arte.");
+          if (a.status === "revisao") return erro(409, "A arte está em revisão: as imagens ficam travadas até o revisor aprovar ou pedir correção.");
+          for (const k of ["original", "recriada"]) if (b[k] !== undefined) {
+            if (b[k] === null || b[k] === "") delete imgs[k];
+            else if (!imgBoa(b[k])) return erro(400, "Imagem inválida ou pesada demais.");
+            else imgs[k] = b[k];
+            mexeImgs = true;
+          }
+          a.temOriginal = !!imgs.original; a.temRecriada = !!imgs.recriada;
+          detalhe = "Anexou a arte " + (b.recriada !== undefined && b.original !== undefined ? "original e a recriada" : b.recriada !== undefined ? "recriada" : "original do cliente");
+          hist("imagens", detalhe);
+          break;
+        }
+        case "enviar":
+          if (!a.exige) return erro(400, "Esse pedido não precisa de aprovação de arte.");
+          if (!imgs.original || !imgs.recriada) return erro(400, "Coloque a arte que o cliente enviou e a arte recriada antes de mandar para revisão.");
+          if (a.status === "aprovada") return erro(409, "A arte já foi aprovada.");
+          a.status = "revisao"; a.autor = eu; a.enviadoEm = agora; a.versao = (Number(a.versao) || 0) + 1; a.comentario = "";
+          detalhe = "Mandou a arte recriada para revisão (versão " + a.versao + ")"; hist("enviar", "Versão " + a.versao);
+          break;
+        case "aprovar":
+          if (!revisor) return erro(403, "Só o ADM ou quem aprova artes (ex.: Gráfica Soares) pode aprovar.");
+          if (a.status !== "revisao") return erro(409, "Essa arte não está esperando revisão.");
+          if (a.autor && a.autor === eu) return erro(403, "Quem recriou a arte não pode aprovar a própria arte. Peça para outro revisor.");
+          Object.assign(a, { status: "aprovada", via: "revisao", aprovadoPor: eu, aprovadoEm: agora, comentario: String(b.comentario || "").slice(0, 500) });
+          detalhe = "Aprovou a arte recriada para produção (revisão)"; hist("aprovar", a.comentario);
+          break;
+        case "corrigir": {
+          if (!revisor) return erro(403, "Só o ADM ou quem aprova artes pode pedir correção.");
+          if (a.status !== "revisao") return erro(409, "Essa arte não está esperando revisão.");
+          if (a.autor && a.autor === eu) return erro(403, "Quem recriou a arte não pode revisar a própria arte.");
+          const c = String(b.comentario || "").trim().slice(0, 500);
+          if (!c) return erro(400, "Escreva o que precisa corrigir.");
+          Object.assign(a, { status: "correcao", comentario: c, revisadoPor: eu, revisadoEm: agora });
+          detalhe = "Pediu correção na arte: " + c; hist("corrigir", c);
+          break;
+        }
+        case "cliente": {
+          if (!a.exige) return erro(400, "Esse pedido não precisa de aprovação de arte.");
+          if (a.status === "aprovada") return erro(409, "A arte já foi aprovada.");
+          if (!imgs.original || !imgs.recriada) return erro(400, "Coloque a arte que o cliente enviou e a arte recriada antes de registrar a aprovação do cliente.");
+          if (!imgBoa(b.print)) return erro(400, "Cole o print da conversa em que o cliente aprovou.");
+          imgs.print = b.print; mexeImgs = true;
+          const quem = String(b.recebidoPor || eu).trim().toUpperCase().slice(0, 40) || eu;
+          Object.assign(a, { status: "aprovada", via: "cliente", aprovadoPor: eu, aprovadoEm: agora, recebidoPor: quem, comentario: String(b.comentario || "").slice(0, 500) });
+          if (!a.autor) a.autor = eu;
+          detalhe = "Registrou a aprovação do cliente (print anexado; recebida por " + quem + ")"; hist("cliente", "Recebida por " + quem);
+          break;
+        }
+        case "reabrir":
+          if (a.status !== "aprovada" && a.status !== "correcao") return erro(409, "Não há aprovação para reabrir.");
+          if (a.status === "aprovada") { delete imgs.print; mexeImgs = true; }
+          ["via", "aprovadoPor", "aprovadoEm", "recebidoPor"].forEach(k => delete a[k]);
+          a.status = "pendente"; a.comentario = "";
+          detalhe = "Abriu uma nova versão da arte (a aprovação anterior deixou de valer)"; hist("reabrir");
+          break;
+        case "exigir":
+          if (!adm) return erro(403, "Seu usuário não pode mudar isso.");
+          a.manual = true; a.dispensada = false; a.exige = true; if (!a.status) a.status = "pendente";
+          detalhe = "Marcou a arte como recriada (precisa de aprovação)"; hist("exigir");
+          break;
+        case "dispensar":
+          if (!sessao.adm) return erro(403, "Só o ADM pode dispensar a aprovação.");
+          a.dispensada = true; a.exige = false; a.manual = false;
+          detalhe = "Dispensou a aprovação da arte"; hist("dispensar", String(b.comentario || "").slice(0, 300));
+          break;
+        default: return erro(400, "Ação inválida.");
+      }
+      const novos = Object.assign({}, d, { aprov: a });
+      const txtImgs = JSON.stringify(imgs);
+      if (txtImgs.length > MAX_IMG_APROV * 3 + 1000) return erro(413, "Imagens pesadas demais.");
+      const [linha] = await sql`UPDATE pedidos SET dados = ${JSON.stringify(novos)}::jsonb,
+          aprov_img = CASE WHEN ${mexeImgs}::boolean THEN ${txtImgs}::text ELSE aprov_img END, atualizado_em = now()
+        WHERE id = ${id}::bigint RETURNING *`;
+      await auditar(sql, sessao, "arte", { pedidoId: id, pedidoNumero: linha.numero, cliente: d.cliente || "", detalhe });
+      return res.status(200).json({ item: saida(linha) });
     }
 
     if (req.method === "PATCH") {
@@ -271,6 +416,7 @@ export default async function handler(req, res) {
         const d = limpa(b.dados);
         if (!d.cliente) return res.status(400).json({ erro: "Informe o cliente." });
         if (antesDados.designer && d.designer == null) d.designer = antesDados.designer;   /* editar o pedido não apaga o designer */
+        const ap = aprovAoSalvar(antesDados.aprov, d); if (ap) d.aprov = ap;               /* a aprovação só muda pelas ações próprias */
         dados = JSON.stringify(d);
       }
       /* designer da arte */
@@ -278,6 +424,9 @@ export default async function handler(req, res) {
       const designer = mexeDesigner ? String(b.designer || "").trim().toUpperCase().slice(0, 40) : "";
       if (mexeDesigner && !dados) dados = JSON.stringify(Object.assign({}, antesDados, { designer }));
       else if (mexeDesigner) dados = JSON.stringify(Object.assign(JSON.parse(dados), { designer }));
+      /* arte criada/recriada sem aprovação: não vai para a produção */
+      const aprovFinal = dados ? JSON.parse(dados).aprov : antesDados.aprov;
+      if (fila && fila !== atual.fila && bloqueiaFila(aprovFinal, fila)) return res.status(409).json({ erro: MSG_BLOQ, bloqueio: "arte" });
       const arte = lerArtes(b);
       if (arte === false) return res.status(400).json({ erro: "Artes inválidas ou pesadas demais (máx. 12 imagens)." });
       const mexeArte = arte !== undefined;

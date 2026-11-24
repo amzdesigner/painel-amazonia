@@ -10,6 +10,7 @@
  *     pedidos → "producao" (só move entre as filas a partir do designer) ou "completo" (vê o atendimento, cria e edita)
  *     valores → se vê os valores de venda nos pedidos
  *     filas   → quais filas do quadro de pedidos ele vê (vazio = todas; ex.: costureira só "costura")
+ *     aprovaArte → pode revisar e aprovar artes recriadas/criadas (o ADM sempre pode)
  *   A primeira hierarquia ("producao" = PRODUÇÃO) vem pronta: só PEDIDOS, modo produção, sem valores.
  *
  * Os usuários ficam no banco (tabela "usuarios"). Na primeira vez, o banco recebe os usuários iniciais abaixo.
@@ -31,8 +32,11 @@ const INICIAIS = {
 };
 export const ABAS = ["visao", "ped", "rel", "prod", "mal", "os", "cli", "orc", "recibo", "calc", "aud"];
 export const FILAS_PED = ["atendimento", "designer", "impressao", "acabamento", "costura", "pronto", "entregue"];
-const PERM_ADM = { nome: "ADM", abas: ABAS.slice(), pedidos: "completo", valores: true, filas: FILAS_PED.slice() };
+const PERM_ADM = { nome: "ADM", abas: ABAS.slice(), pedidos: "completo", valores: true, filas: FILAS_PED.slice(), aprovaArte: true };
 export const SESSAO_HORAS = 16;
+/* TABLET (Produção): entra sem senha, só VÊ os pedidos (todas as filas, sem valores, sem mexer em nada) */
+export const USUARIO_TABLET = "TABLET", PAPEL_TABLET = "tablet", TABLET_HORAS = 24 * 7;
+export const PERM_TABLET = { nome: "TABLET (Produção)", abas: ["ped"], pedidos: "producao", valores: false, filas: null, aprovaArte: false, somenteVer: true, verAtendimento: true };
 
 function acharUrlBanco() {
   const env = process.env;
@@ -84,6 +88,7 @@ export function prepararUsuarios() {
       await sql`INSERT INTO hierarquias (id, nome, abas, pedidos, valores) VALUES ('producao', 'PRODUÇÃO', '["ped"]'::jsonb, 'producao', false)
                 ON CONFLICT (id) DO NOTHING`;
       await sql`ALTER TABLE hierarquias ADD COLUMN IF NOT EXISTS filas JSONB`;
+      await sql`ALTER TABLE hierarquias ADD COLUMN IF NOT EXISTS aprova_arte BOOLEAN NOT NULL DEFAULT FALSE`;
       const [c] = await sql`SELECT count(*)::int AS n FROM usuarios`;
       if (!c || !Number(c.n)) {
         for (const [u, d] of Object.entries(INICIAIS)) {
@@ -97,7 +102,7 @@ export function prepararUsuarios() {
 }
 
 export const limpaNome = v => String(v || "").trim().toUpperCase().replace(/\s+/g, " ");
-export const nomeValido = u => /^[A-Z0-9À-Ý][A-Z0-9À-Ý ._-]{1,19}$/.test(u);
+export const nomeValido = u => /^[A-Z0-9À-Ý][A-Z0-9À-Ý ._-]{1,19}$/.test(u) && u !== USUARIO_TABLET;
 export const senhaValida = s => typeof s === "string" && s.length >= 4 && s.length <= 64;
 
 export function gerarHash(senha) {
@@ -124,13 +129,13 @@ export function limpaHierarquia(b, idsFilas) {
   if (filas && pedidos === "producao") filas = filas.filter(f => f !== "atendimento");
   const todas = FILAS.filter(f => pedidos === "completo" || f !== "atendimento");
   if (filas && (!filas.length || todas.every(f => filas.includes(f)))) filas = null;
-  return { abas, pedidos, valores: !!b.valores, filas };
+  return { abas, pedidos, valores: !!b.valores, filas, aprovaArte: !!b.aprovaArte };
 }
 export async function listarHierarquias() {
   await prepararUsuarios();
   const l = await sql`SELECT h.*, (SELECT count(*)::int FROM usuarios u WHERE u.papel = h.id) AS usuarios FROM hierarquias h ORDER BY h.nome`;
   return l.map(h => ({ id: h.id, nome: h.nome, abas: Array.isArray(h.abas) ? h.abas : [], pedidos: h.pedidos, valores: h.valores,
-    filas: Array.isArray(h.filas) && h.filas.length ? h.filas : null, usuarios: Number(h.usuarios) || 0 }));
+    filas: Array.isArray(h.filas) && h.filas.length ? h.filas : null, aprovaArte: !!h.aprova_arte, usuarios: Number(h.usuarios) || 0 }));
 }
 const cacheH = new Map();
 export async function permissoes(papel) {
@@ -140,7 +145,7 @@ export async function permissoes(papel) {
   await prepararUsuarios();
   const [h] = await sql`SELECT * FROM hierarquias WHERE id = ${papel}::text`;
   const p = h ? { nome: h.nome, abas: Array.isArray(h.abas) ? h.abas : [], pedidos: h.pedidos, valores: h.valores,
-    filas: Array.isArray(h.filas) && h.filas.length ? h.filas : null } : null;
+    filas: Array.isArray(h.filas) && h.filas.length ? h.filas : null, aprovaArte: !!h.aprova_arte } : null;
   cacheH.set(papel, { p, ate: Date.now() + 15000 });
   return p;
 }
@@ -182,8 +187,8 @@ export async function papelDe(usuario) {
   } catch (e) { return null; }
 }
 
-export function criarToken(usuario, papel, versao) {
-  const exp = Date.now() + SESSAO_HORAS * 3600 * 1000;
+export function criarToken(usuario, papel, versao, horas) {
+  const exp = Date.now() + (horas || SESSAO_HORAS) * 3600 * 1000;
   const corpo = b64(JSON.stringify({ u: usuario, p: papel, v: versao || 1, exp }));
   return { token: corpo + "." + assinar(corpo), exp };
 }
@@ -209,11 +214,15 @@ export async function lerSessao(req) {
   let d;
   try { d = JSON.parse(Buffer.from(corpo, "base64url").toString("utf8")); } catch (e) { return null; }
   if (!d || !d.exp || d.exp < Date.now()) return null;
+  if (d.u === USUARIO_TABLET && d.p === PAPEL_TABLET) {
+    const t = PERM_TABLET;
+    return { usuario: USUARIO_TABLET, papel: PAPEL_TABLET, adm: false, nomePapel: t.nome, abas: t.abas.slice(), pedidos: t.pedidos, valores: false, filas: null, aprovaArte: false, somenteVer: true, verAtendimento: true };
+  }
   const u = await usuarioAtual(d.u);
   if (!u || !u.ativo || u.papel !== d.p || (Number(u.versao) || 1) !== (d.v || 1)) return null;
   const perm = await permissoes(u.papel);
   if (!perm) return null;
-  return { usuario: d.u, papel: d.p, adm: d.p === "adm", nomePapel: perm.nome, abas: perm.abas, pedidos: perm.pedidos, valores: perm.valores, filas: perm.filas || null };
+  return { usuario: d.u, papel: d.p, adm: d.p === "adm", nomePapel: perm.nome, abas: perm.abas, pedidos: perm.pedidos, valores: perm.valores, filas: perm.filas || null, aprovaArte: !!perm.aprovaArte };
 }
 
 /* para as rotas: responde 500/401/403 e devolve null se não puder seguir.

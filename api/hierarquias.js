@@ -24,7 +24,7 @@ const idDe = nome => nome.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 const NOMES_FILA = { atendimento: "Atendimento", designer: "Designer", impressao: "Impressão", acabamento: "Acabamento", costura: "Costura", pronto: "Pronto", entregue: "Entregue" };
 let NOMES_EXTRAS = {};
 const resumo = h => h.abas.map(a => NOMES_ABA[a] || a).join(", ") + (h.abas.includes("ped") ? " · pedidos " + (h.pedidos === "completo" ? "completo" : "produção") + (h.valores ? " com valores" : " sem valores") +
-  (h.filas ? " · só as filas: " + h.filas.map(f => NOMES_FILA[f] || NOMES_EXTRAS[f] || f).join(", ") : " · todas as filas") : "");
+  (h.filas ? " · só as filas: " + h.filas.map(f => NOMES_FILA[f] || NOMES_EXTRAS[f] || f).join(", ") : " · todas as filas") : "") + (h.aprovaArte ? " · aprova artes" : "");
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       if (!nome || !id || id === "adm") return res.status(400).json({ erro: "Dê um nome para a hierarquia (ex.: ATENDENTE)." });
       const h = limpaHierarquia(b, idsFilas);
       if (!h.abas.length) return res.status(400).json({ erro: "Marque pelo menos uma aba." });
-      const l = await sql`INSERT INTO hierarquias (id, nome, abas, pedidos, valores, filas) VALUES (${id}::text, ${nome}::text, ${JSON.stringify(h.abas)}::jsonb, ${h.pedidos}::text, ${h.valores}::boolean, ${h.filas ? JSON.stringify(h.filas) : null}::jsonb)
+      const l = await sql`INSERT INTO hierarquias (id, nome, abas, pedidos, valores, filas, aprova_arte) VALUES (${id}::text, ${nome}::text, ${JSON.stringify(h.abas)}::jsonb, ${h.pedidos}::text, ${h.valores}::boolean, ${h.filas ? JSON.stringify(h.filas) : null}::jsonb, ${h.aprovaArte}::boolean)
                           ON CONFLICT (id) DO NOTHING RETURNING id`;
       if (!l.length) return res.status(409).json({ erro: "Já existe uma hierarquia com esse nome." });
       esquecerHierarquias();
@@ -60,10 +60,10 @@ export default async function handler(req, res) {
       const nome = b.nome != null ? limpaNomeH(b.nome) : atual.nome;
       if (!nome) return res.status(400).json({ erro: "Dê um nome para a hierarquia." });
       const h = limpaHierarquia({ abas: b.abas != null ? b.abas : atual.abas, pedidos: b.pedidos != null ? b.pedidos : atual.pedidos, valores: b.valores != null ? b.valores : atual.valores,
-        filas: b.filas !== undefined ? b.filas : atual.filas }, idsFilas);
+        filas: b.filas !== undefined ? b.filas : atual.filas, aprovaArte: b.aprovaArte != null ? b.aprovaArte : atual.aprova_arte }, idsFilas);
       if (!h.abas.length) return res.status(400).json({ erro: "Marque pelo menos uma aba." });
       await sql`UPDATE hierarquias SET nome = ${nome}::text, abas = ${JSON.stringify(h.abas)}::jsonb, pedidos = ${h.pedidos}::text, valores = ${h.valores}::boolean,
-                filas = ${h.filas ? JSON.stringify(h.filas) : null}::jsonb, atualizado_em = now()
+                filas = ${h.filas ? JSON.stringify(h.filas) : null}::jsonb, aprova_arte = ${h.aprovaArte}::boolean, atualizado_em = now()
                 WHERE id = ${id}::text`;
       esquecerHierarquias();
       await auditar(sql, sessao, "usuarios", { detalhe: "Mudou a hierarquia " + nome + ": " + resumo(h) });
