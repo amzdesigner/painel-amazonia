@@ -39,6 +39,25 @@ body{color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans
 
 /* ============ estrutura ============ */
 .shell{display:flex;min-height:100vh;min-height:100dvh}
+/* zoom da página (botões − / +): compensa as alturas de tela cheia */
+html[data-zoom] .shell{min-height:calc(100vh / var(--zoom));min-height:calc(100dvh / var(--zoom))}
+html[data-zoom] .side{height:calc(100vh / var(--zoom));height:calc(100dvh / var(--zoom))}
+html[data-zoom] .kb{min-height:calc(100vh / var(--zoom) - 170px)}
+html[data-zoom] .pdf-box{height:calc(96vh / var(--zoom))}
+html[data-zoom] .modal{min-height:calc(100vh / var(--zoom));min-height:calc(100dvh / var(--zoom))}
+.zoom-box{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden;flex:none}
+.zoom-box button{min-width:44px;height:42px;border:0;background:none;color:var(--text);font:inherit;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 8px}
+.zoom-box button svg{width:18px;height:18px}
+.zoom-box #zoom-val{min-width:58px;border-left:1px solid var(--line);border-right:1px solid var(--line);font-variant-numeric:tabular-nums;font-size:13px}
+.zoom-box button:hover{background:var(--card-2)}
+.zoom-box button:disabled{opacity:.35;cursor:default}
+@media (max-width:1400px){
+  .top{gap:10px}
+  .zoom-box button{min-width:34px;height:38px;padding:0 6px}
+  .zoom-box #zoom-val{min-width:46px;font-size:12px}
+  .usuario-nome small{display:none}
+}
+@media (max-width:900px){.zoom-box #zoom-val{display:none}.zoom-box button{min-width:36px}}
 .side{width:258px;flex:0 0 258px;background:var(--sb);display:flex;flex-direction:column;gap:6px;padding:18px 16px;position:sticky;top:env(safe-area-inset-top,0px);height:100vh;height:100dvh;transition:width .18s,flex-basis .18s}
 .logo{padding:6px 4px 2px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;min-height:58px}
 .logo img{display:block;width:100%;max-width:200px}
@@ -322,9 +341,6 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .login-corpo .f > span{font-size:14px}
 #login input[type=text],#login input[type=password]{font-size:22px;min-height:64px;padding:14px 18px;border-radius:14px;font-weight:600}
 #login-usuario{text-transform:uppercase;letter-spacing:.04em}
-.login-users{display:flex;flex-wrap:wrap;gap:10px}
-.login-users button{flex:1 1 auto;min-width:96px;min-height:56px;border-radius:14px;border:1.5px solid var(--line-2);background:var(--card-2);color:var(--text);font:700 17px Inter,system-ui,sans-serif;letter-spacing:.04em;cursor:pointer;touch-action:manipulation}
-.login-users button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 .login-senha{position:relative}
 .login-senha input{padding-right:70px!important}
 .login-olho{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:52px;height:48px;border-radius:12px;border:0;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -681,6 +697,53 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .cm-tbl td.un.manual{color:var(--accent);font-weight:800}
 .cm-tag{display:inline-block;margin-left:6px;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
 .cm-volta{border:0;background:none;color:var(--muted);font:inherit;font-size:11.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:2px 4px}
+/* aprovação da arte */
+.kc-apv{display:inline-flex;align-items:center;gap:5px;border:1px solid transparent;border-radius:7px;padding:2px 8px;font:inherit;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+.kc-apv svg{width:13px;height:13px}
+.kc-apv.pend{background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55}
+.kc-apv.rev{background:#3b82f622;color:#60a5fa;border-color:#3b82f655}
+.kc-apv.cor{background:#ef444422;color:#f87171;border-color:#ef444455}
+.kc-apv.ok{background:#22c55e22;color:#22c55e;border-color:#22c55e55}
+.apv-box{max-width:1080px}
+.apv-status{border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.apv-status svg{width:22px;height:22px;flex:none;margin-top:1px}
+.kc-apv svg,.det-apv-btn svg,#ped-revisar svg{flex:none}
+#ped-revisar svg{width:18px;height:18px}
+.apv-status small{display:block;font-weight:500;color:var(--muted);margin-top:3px}
+.apv-status.pend{background:#f59e0b1c;border:1px solid #f59e0b55}
+.apv-status.rev{background:#3b82f61c;border:1px solid #3b82f655}
+.apv-status.cor{background:#ef44441c;border:1px solid #ef444455}
+.apv-status.ok{background:#22c55e1c;border:1px solid #22c55e55}
+.apv-status.nao{background:var(--card-2);border:1px solid var(--line)}
+.apv-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.apv-lado{border:1px solid var(--line);border-radius:14px;background:var(--card-2);padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.apv-lado h4{margin:0;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.apv-lado h4 b{color:var(--text)}
+.apv-img{border-radius:10px;background:#fff;min-height:220px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in}
+.apv-img img{max-width:100%;max-height:420px;display:block;object-fit:contain}
+.apv-img.vazio{background:var(--card);border:2px dashed var(--line);color:var(--muted);font-size:13px;cursor:default;text-align:center;padding:16px}
+.apv-bts{display:flex;gap:8px;flex-wrap:wrap}
+.apv-bts .btn{min-height:40px;padding:8px 12px;font-size:13px}
+.apv-lado .colar-zona{min-height:54px}
+.apv-acoes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.apv-card{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--card)}
+.apv-card h4{margin:0;font-size:15px}
+.apv-card p{margin:0;font-size:13px;color:var(--muted)}
+.apv-card textarea{min-height:70px}
+.apv-card .apv-print{max-height:160px;border-radius:8px;align-self:flex-start;cursor:zoom-in}
+.apv-card.unico{grid-column:1/-1}
+.apv-hist{margin:14px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.apv-hist b{color:var(--text)}
+.apv-zoom{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}
+.apv-zoom img{max-width:100%;max-height:100%;background:#fff;border-radius:8px}
+.rev-lista{display:flex;flex-direction:column;gap:8px}
+.rev-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card-2)}
+.rev-item .tx{flex:1;min-width:0}
+.rev-item small{display:block;color:var(--muted)}
+#ped-revisar .n{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px;background:#3b82f6;color:#fff;font-size:12px;font-weight:800;padding:0 6px;margin-left:2px}
+.det-apv-btn{display:inline-flex;align-items:center;gap:8px}
+.det-apv-btn svg{width:18px;height:18px}
+@media (max-width:760px){.apv-cols,.apv-acoes{grid-template-columns:1fr}}
 .fl-lista{display:flex;flex-direction:column;gap:8px;margin:12px 0 6px}
 .fl-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card-2);flex-wrap:wrap}
 .fl-item .fl-dot{width:14px;height:14px;border-radius:50%;flex:none}
@@ -1020,7 +1083,6 @@ body.modal-aberto{overflow:hidden}
     <div class="login-corpo">
       <h2>Entrar</h2>
       <label class="f"><span>Nome de usuário</span><input type="text" id="login-usuario" autocomplete="username" autocapitalize="characters" spellcheck="false" placeholder="Seu usuário"></label>
-      <div class="login-users" id="login-users" aria-label="Escolher usuário"></div>
       <label class="f"><span>Senha</span><span class="login-senha"><input type="password" id="login-senha" autocomplete="current-password" placeholder="Sua senha"><button type="button" class="login-olho" id="login-olho" aria-label="Mostrar senha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></span></label>
       <p class="login-erro" id="login-erro" role="alert"></p>
       <button class="btn primary" type="submit" id="login-entrar">Entrar</button>
@@ -1056,6 +1118,7 @@ body.modal-aberto{overflow:hidden}
       <button class="icobtn" type="button" id="menu" aria-label="Abrir ou fechar o menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <h1 id="titulo">O.S Camisa</h1>
       <div class="top-acoes" id="top-ped" hidden>
+        <button class="btn" type="button" id="ped-revisar" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.4 1.8 3-.2.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.2L12 21l-2.4-1.8-3 .2-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .2z"/><path d="m9 12 2 2 4-4"/></svg><span>Artes para revisar</span><span class="n" id="ped-revisar-n">0</span></button>
         <button class="btn" type="button" id="ped-filas" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><path d="M19.5 8v8M15.5 12h8"/></svg><span>Filas</span></button>
         <button class="btn" type="button" id="ped-entregues-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/><path d="m9 13 2 2 4-4"/></svg><span>Arquivados</span></button>
         <button class="btn primary" type="button" id="ped-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo pedido</span></button>
@@ -1087,6 +1150,11 @@ body.modal-aberto{overflow:hidden}
       <div class="usuario-box" id="usuario-box" hidden>
         <span class="usuario-nome"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span id="usuario-nome"></span><small id="usuario-papel"></small></span>
         <button class="btn" type="button" id="sair">Sair</button>
+      </div>
+      <div class="zoom-box" role="group" aria-label="Tamanho da página">
+        <button type="button" id="zoom-menos" aria-label="Diminuir a página" title="Diminuir a página"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button>
+        <button type="button" id="zoom-val" title="Voltar para 100%" aria-label="Tamanho da página: 100%. Toque para voltar a 100%">100%</button>
+        <button type="button" id="zoom-mais" aria-label="Aumentar a página" title="Aumentar a página"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg></button>
       </div>
       <div class="toggle">
         <button class="switch" type="button" id="tema" role="switch" aria-checked="true" aria-label="Alternar tema claro e escuro"><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="temaIco"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></i></button>
@@ -1843,6 +1911,7 @@ body.modal-aberto{overflow:hidden}
               <small class="hint">Ex.: a costureira vê só a Fila da costura. Com todas marcadas, ele vê o quadro inteiro.</small>
             </div>
             <label class="hier-check"><input type="checkbox" id="hier-valores"><span><b>Ver valores de venda nos pedidos</b><small>Preços, total, pagamento e a via do atendente.</small></span></label>
+            <label class="hier-check"><input type="checkbox" id="hier-aprova"><span><b>Pode aprovar artes recriadas</b><small>Revisa a arte recriada ao lado da arte do cliente e libera para a produção (ex.: Gráfica Soares). Ninguém aprova a própria arte.</small></span></label>
           </div>
           <p class="login-erro" id="hier-erro" role="alert"></p>
           <div class="acts"><button class="btn" type="button" id="hier-voltar">Voltar</button><button class="btn primary" type="submit" id="hier-salvar">Salvar hierarquia</button></div>
@@ -1920,6 +1989,7 @@ body.modal-aberto{overflow:hidden}
           <button class="btn" type="button" id="det-ver">Visualizar</button>
           <button class="btn blue" type="button" id="det-pdf">Baixar PDF</button>
           <button class="btn" type="button" id="det-imprimir">Imprimir</button>
+          <button class="btn det-apv-btn" type="button" id="det-apv" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.4 1.8 3-.2.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.2L12 21l-2.4-1.8-3 .2-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .2z"/><path d="m9 12 2 2 4-4"/></svg><span>Aprovação da arte</span></button>
           <button class="btn det-os-btn" type="button" id="det-os"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg>O.S da Camisa</button>
         </div>
         <span class="espaco"></span>
@@ -2012,6 +2082,19 @@ body.modal-aberto{overflow:hidden}
         <button class="btn primary" type="submit" id="pm-salvar">Criar pedido</button>
       </div>
     </form>
+  </div>
+
+  <div class="modal" id="apv-modal" hidden role="dialog" aria-modal="true" aria-labelledby="apv-titulo">
+    <div class="modal-box apv-box">
+      <div class="modal-cab"><h2 id="apv-titulo">Aprovação da arte</h2><button class="btn-x" type="button" id="apv-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo" id="apv-corpo"></div>
+    </div>
+  </div>
+  <div class="modal" id="rev-modal" hidden role="dialog" aria-modal="true" aria-labelledby="rev-titulo">
+    <div class="modal-box">
+      <div class="modal-cab"><h2 id="rev-titulo">Artes para revisar</h2><button class="btn-x" type="button" id="rev-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo"><div class="rev-lista" id="rev-lista"></div><p class="hint">Quem recriou a arte não pode aprovar a própria arte. Uma aprovação basta: a sua (revisão) ou a do cliente com o print.</p></div>
+    </div>
   </div>
 
   <div class="modal" id="filas-modal" hidden role="dialog" aria-modal="true" aria-labelledby="fl-titulo">
@@ -2337,6 +2420,24 @@ document.getElementById("tema").addEventListener("click", () => aplicarTema(!doc
 function guardar(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 function lido(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 aplicarTema(lido("amz_tema") === "claro");
+/* ================= zoom da página (fica guardado neste aparelho) ================= */
+const ZOOM_MIN = 50, ZOOM_MAX = 150, ZOOM_PASSO = 10;
+function aplicarZoom(z) {
+  z = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Math.round((Number(z) || 100) / 5) * 5));
+  const h = document.documentElement;
+  if (z === 100) { h.style.zoom = ""; h.removeAttribute("data-zoom"); h.style.removeProperty("--zoom"); }
+  else { h.style.zoom = String(z / 100); h.setAttribute("data-zoom", z); h.style.setProperty("--zoom", String(z / 100)); }
+  const v = document.getElementById("zoom-val");
+  v.textContent = z + "%"; v.setAttribute("aria-label", "Tamanho da página: " + z + "%. Toque para voltar a 100%");
+  document.getElementById("zoom-menos").disabled = z <= ZOOM_MIN;
+  document.getElementById("zoom-mais").disabled = z >= ZOOM_MAX;
+  guardar("amz_zoom", String(z));
+  return z;
+}
+let zoomAtual = aplicarZoom(lido("amz_zoom") || 100);
+document.getElementById("zoom-menos").addEventListener("click", () => { zoomAtual = aplicarZoom(zoomAtual - ZOOM_PASSO); });
+document.getElementById("zoom-mais").addEventListener("click", () => { zoomAtual = aplicarZoom(zoomAtual + ZOOM_PASSO); });
+document.getElementById("zoom-val").addEventListener("click", () => { zoomAtual = aplicarZoom(100); });
 if (lido("amz_mini") === "1") shell.classList.add("mini");
 
 
@@ -5231,6 +5332,7 @@ async function carregarPedidos(silencioso) {
   }
   if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden) renderKB();
   completarMiniaturas();
+  if (typeof contarRevisao === "function") contarRevisao();
 }
 /* pedidos com arte mas sem miniatura (feitos antes, ou salvos com o servidor antigo): gera e guarda */
 let completandoMinis = false;
@@ -5344,6 +5446,7 @@ function moverPedido(id, fila, indice) {
   const ordem = ant && prox ? (ant.ordem + prox.ordem) / 2 : ant ? ant.ordem + 1024 : prox ? prox.ordem - 1024 : 1024;
   const p = pedidos.find(x => x.id === id);
   if (!p || (p.fila === fila && Math.abs(p.ordem - ordem) < 1e-9)) { renderKB(); return; }
+  if (p.fila !== fila && artePrende(p, fila)) { renderKB(); avisoArtePresa(p); return; }
   const mudouFila = p.fila !== fila;
   if (mudouFila) pedChegou = id;
   atualizarPedido(id, { fila, ordem });
@@ -5404,6 +5507,7 @@ function cardPedido(p, fila, idxFila) {
       (p.obs ? '<span class="kc-info" title="' + escapa(p.obs) + '">' + ICO_OBS + '</span>' : "") +
       (!minis.length && (p.temArte || p.arte || (p.artes && p.artes.length)) ? '<span class="kc-info" title="Tem arte anexada">' + ICO_ARTE + '</span>' : "") +
       (valor && !semValores() ? '<span class="kc-valor">' + fmtReal(valor) + '</span>' : "") + '</div>' +
+    (p.aprov && p.aprov.exige ? '<div class="kc-tags">' + chipAprov(p) + '</div>' : "") +
     ((p.contato || p.telefone) ? '<p class="kc-contato">' + ICO_PES + '<span>' + escapa([p.contato, p.telefone].filter(Boolean).join(" · ")) + '</span></p>' : "") +
     (fila.id === "designer"
       ? '<div class="kc-des"><button type="button" class="kc-des-bt' + (p.designer ? " on" : "") + '" aria-haspopup="true" aria-expanded="false">' + ICO_PINCEL +
@@ -5458,6 +5562,7 @@ function cardPedido(p, fila, idxFila) {
   el.querySelector(".kc-ok input").addEventListener("change", ev => {
     if (!ev.target.checked) return;
     if (!podeGravarPed()) { ev.target.checked = false; return; }
+    if (!ultimo && artePrende(p, FILAS[idxFila + 1].id)) { ev.target.checked = false; avisoArtePresa(p); return; }
     el.classList.add("saindo");
     setTimeout(() => {
       if (ultimo) {
@@ -5472,6 +5577,7 @@ function cardPedido(p, fila, idxFila) {
     }, 240);
   });
   el.addEventListener("click", ev => {
+    if (ev.target.closest(".kc-apv")) { ev.stopPropagation(); abrirAprov(p.id); return; }
     if (ev.target.closest(".kc-ok") || ev.target.closest(".kc-seta") || ev.target.closest(".kc-des") || Date.now() - pedSoltouEm < 300) return;
     abrirDetalhe(p, el);
   });
@@ -5677,6 +5783,14 @@ $("#pm-form").addEventListener("submit", async ev => {
   Object.assign(dados, pagamentoDoForm());
 
   const fila = $("#pm-fila").value;
+  {
+    const antes = pedEditId ? (pedidos.find(x => x.id === pedEditId) || {}).aprov : null;
+    const criada = itens.some(i => { const c = lerCamisa(i.camisa); return c && ["criar", "recriar", "zero"].includes(c.arte); });
+    const exige = antes ? !antes.dispensada && (criada || antes.manual) : criada;
+    if (exige && (!antes || antes.status !== "aprovada") && fila !== "atendimento" && fila !== "designer") {
+      say("Esse pedido tem arte criada/recriada: ele fica na Fila do designer até a arte ser aprovada.", "err"); $("#pm-fila").value = "designer"; return;
+    }
+  }
   const btn = $("#pm-salvar"); btn.disabled = true;
   try {
     if (pedEditId) {
@@ -5737,6 +5851,197 @@ async function abrirEntregues() {
   abrirModal($("#ent-modal"));
 }
 $("#ped-entregues-btn").addEventListener("click", abrirEntregues);
+
+/* ---------- aprovação da arte criada / recriada ---------- */
+const podeAprovarArte = () => ehAdm() || !!permAtual().aprovaArte;
+const ICO_SELO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.4 1.8 3-.2.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.2L12 21l-2.4-1.8-3 .2-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .2z"/><path d="m9 12 2 2 4-4"/></svg>';
+const ST_APROV = { pendente: ["pend", "Arte: aguardando aprovação"], revisao: ["rev", "Arte em revisão"], correcao: ["cor", "Arte: correção pedida"], aprovada: ["ok", "Arte aprovada"] };
+function chipAprov(p) {
+  const a = p.aprov || {}, st = ST_APROV[a.status] || ST_APROV.pendente;
+  return '<button type="button" class="kc-apv ' + st[0] + '" title="Abrir a aprovação da arte">' + ICO_SELO + escapa(st[1]) + '</button>';
+}
+function textoAprov(a) {
+  if (!a || !a.exige) return "Sem aprovação";
+  if (a.status === "aprovada") return "Aprovada " + (a.via === "cliente" ? "pelo cliente (print; recebida por " + (a.recebidoPor || a.aprovadoPor) + ")" : "na revisão por " + a.aprovadoPor) + " em " + dataHora(a.aprovadoEm);
+  if (a.status === "revisao") return "Em revisão (recriada por " + (a.autor || "—") + ")";
+  if (a.status === "correcao") return "Correção pedida por " + (a.revisadoPor || "—") + ": " + (a.comentario || "");
+  return "Aguardando a arte recriada e a aprovação";
+}
+const artePrende = (p, fila) => !!(p && p.aprov && p.aprov.exige && p.aprov.status !== "aprovada" && fila !== "atendimento" && fila !== "designer");
+function avisoArtePresa(p) {
+  say("Pedido #" + p.numero + ": a arte foi criada/recriada e ainda não foi aprovada. Aprove a arte (cliente com print ou revisão) para seguir para a produção.", "err");
+  abrirAprov(p.id);
+}
+let apvPed = null, apvImgs = {}, apvPrint = "", apvCarregando = false;
+async function abrirAprov(id) {
+  if (modoHist !== "nuvem") { say("A aprovação de arte funciona no painel publicado (com o banco).", "err"); return; }
+  if (apvCarregando) return;
+  apvCarregando = true;
+  try {
+    const r = await apiPed("GET", "?id=" + encodeURIComponent(id) + "&aprov=1");
+    apvPed = r.item; apvImgs = r.imgs || {}; apvPrint = "";
+    const i = pedidos.findIndex(x => x.id === apvPed.id); if (i >= 0) pedidos[i] = Object.assign({}, pedidos[i], apvPed);
+    renderAprov();
+    abrirModal($("#apv-modal"));
+  } catch (e) { say("Não consegui abrir a aprovação da arte: " + (e.msg || "sem conexão") + ".", "err"); }
+  finally { apvCarregando = false; }
+}
+window.abrirAprov = abrirAprov;
+async function acaoAprov(acao, extra, ok) {
+  try {
+    const r = await apiPed("PATCH", "?id=" + encodeURIComponent(apvPed.id) + "&aprov=1", Object.assign({ acao }, extra || {}));
+    apvPed = r.item;
+    const i = pedidos.findIndex(x => x.id === apvPed.id); if (i >= 0) pedidos[i] = r.item;
+    if (extra) ["original", "recriada", "print"].forEach(k => { if (extra[k] !== undefined) { if (extra[k]) apvImgs[k] = extra[k]; else delete apvImgs[k]; } });
+    if (acao === "reabrir") delete apvImgs.print;
+    apvPrint = "";
+    renderAprov(); renderKB(); contarRevisao();
+    if (detPed && detPed.id === apvPed.id && !$("#det-modal").hidden) abrirDetalhe(pedidos.find(x => x.id === apvPed.id) || apvPed);
+    if (ok) say(ok, "ok");
+    return true;
+  } catch (e) { say(e.msg || "Não consegui salvar agora.", "err"); return false; }
+}
+function zoomImg(src) {
+  const d = document.createElement("div"); d.className = "apv-zoom"; d.innerHTML = '<img alt="">'; d.querySelector("img").src = src;
+  d.addEventListener("click", () => d.remove()); document.body.appendChild(d);
+}
+async function arteDoPedidoParaAprov() {
+  let artes = artesCompletasLocais(apvPed);
+  if (!artes.length && apvPed.temArte) { try { artes = ((await apiPed("GET", "?id=" + encodeURIComponent(apvPed.id) + "&arte=1")).artes || []).filter(a => a && a.img); } catch (e) {} }
+  return artes;
+}
+function renderAprov() {
+  const p = apvPed, a = p.aprov || {}, eu = sessao ? sessao.usuario : "";
+  const exige = !!a.exige, st = a.status || "pendente", aprovada = exige && st === "aprovada";
+  $("#apv-titulo").textContent = "Aprovação da arte · Pedido #" + p.numero + " · " + (p.cliente || "");
+  const corpo = $("#apv-corpo"); corpo.innerHTML = "";
+  /* situação */
+  const cls = !exige ? "nao" : (ST_APROV[st] || ST_APROV.pendente)[0];
+  const tit = !exige ? (a.dispensada ? "Aprovação dispensada pelo ADM" : "Este pedido não precisa de aprovação de arte")
+    : st === "aprovada" ? "Arte aprovada para produção" : st === "revisao" ? "Arte recriada esperando revisão" : st === "correcao" ? "Correção pedida na arte" : "Aguardando a arte recriada e a aprovação";
+  const sub = !exige ? (pedCompleto() ? "Se a gráfica recriou ou criou a arte, marque abaixo para exigir a aprovação antes da produção." : "")
+    : st === "aprovada" ? textoAprov(a)
+    : st === "revisao" ? "Recriada por " + (a.autor || "—") + (a.enviadoEm ? " em " + dataHora(a.enviadoEm) : "") + ". Um revisor (ADM ou Gráfica Soares) aprova — ou registre a aprovação do cliente com o print."
+    : st === "correcao" ? "“" + (a.comentario || "") + "” — " + (a.revisadoPor || "") + ". Troque a arte recriada e mande de novo para revisão."
+    : "Coloque a arte que o cliente enviou e a arte recriada. Depois mande para revisão ou registre a aprovação do cliente.";
+  corpo.insertAdjacentHTML("beforeend", '<div class="apv-status ' + cls + '">' + ICO_SELO + '<div>' + escapa(tit) + (sub ? '<small>' + escapa(sub) + '</small>' : "") + '</div></div>');
+  if (!exige) {
+    const bt = [];
+    if (pedCompleto()) bt.push('<button class="btn primary" type="button" data-a="exigir">Arte recriada: exigir aprovação</button>');
+    corpo.insertAdjacentHTML("beforeend", '<div class="apv-bts">' + bt.join("") + '</div>');
+    corpo.querySelectorAll("[data-a=exigir]").forEach(b => b.addEventListener("click", () => acaoAprov("exigir", null, "Agora o pedido só segue para a produção depois da arte aprovada.")));
+    ligarHist(corpo, a);
+    return;
+  }
+  /* as duas artes lado a lado */
+  const podeTrocar = !aprovada && st !== "revisao";   /* em revisão as artes ficam travadas */
+  const lado = (k, titulo, ajuda) =>
+    '<div class="apv-lado" data-k="' + k + '"><h4><b>' + titulo + '</b></h4>' +
+    (apvImgs[k] ? '<div class="apv-img"><img alt="' + escapa(titulo) + '"></div>' : '<div class="apv-img vazio">' + escapa(ajuda) + '</div>') +
+    (podeTrocar ? '<div class="colar-zona" contenteditable="true" spellcheck="false" role="textbox" aria-label="Colar ' + escapa(titulo) + '" data-texto="Clique aqui e aperte Ctrl+V"></div>' +
+      '<div class="apv-bts"><button class="btn" type="button" data-colar>Colar imagem</button><button class="btn" type="button" data-arq>Anexar arquivo</button>' +
+      (apvPed.temArte ? '<button class="btn" type="button" data-ped>Usar arte do pedido</button>' : "") +
+      (apvImgs[k] ? '<button class="btn danger" type="button" data-tira>Tirar</button>' : "") + '<input type="file" accept="image/*" hidden></div>' : "") + '</div>';
+  corpo.insertAdjacentHTML("beforeend", '<div class="apv-cols">' + lado("original", "Arte que o cliente enviou", "Ainda sem a arte original do cliente.") + lado("recriada", "Arte recriada pela gráfica", "Ainda sem a arte recriada.") + '</div>');
+  corpo.querySelectorAll(".apv-lado").forEach(el => {
+    const k = el.dataset.k, im = el.querySelector(".apv-img img");
+    if (im) { im.src = apvImgs[k]; im.parentElement.addEventListener("click", () => zoomImg(apvImgs[k])); }
+    if (!podeTrocar) return;
+    const usar = async f => { try { const url = await reduzirArte(f); await acaoAprov("imagens", { [k]: url }, k === "original" ? "Arte do cliente guardada." : "Arte recriada guardada."); } catch (e) { say("Não consegui ler essa imagem.", "err"); } };
+    ligarZonaColar(el.querySelector(".colar-zona"), usar);
+    ligarBotaoColar(el.querySelector("[data-colar]"), el.querySelector(".colar-zona"), usar);
+    const inp = el.querySelector("input[type=file]");
+    el.querySelector("[data-arq]").addEventListener("click", () => inp.click());
+    inp.addEventListener("change", () => { const f = inp.files && inp.files[0]; inp.value = ""; if (f) usar(f); });
+    const bp = el.querySelector("[data-ped]"); if (bp) bp.addEventListener("click", async () => {
+      const artes = await arteDoPedidoParaAprov();
+      if (!artes.length) { say("Esse pedido não tem arte anexada.", "err"); return; }
+      const idx = Number(el.dataset.idx || 0) % artes.length; el.dataset.idx = idx + 1;
+      await acaoAprov("imagens", { [k]: artes[idx].img }, "Arte " + (idx + 1) + " do pedido colocada" + (artes.length > 1 ? " (toque de novo para usar a próxima)." : "."));
+    });
+    const bt = el.querySelector("[data-tira]"); if (bt) bt.addEventListener("click", () => acaoAprov("imagens", { [k]: "" }));
+  });
+  /* ações */
+  const cards = [];
+  if (aprovada) {
+    cards.push('<div class="apv-card unico"><h4>Aprovada ' + (a.via === "cliente" ? "pelo cliente" : "na revisão") + '</h4><p>' + escapa(textoAprov(a)) + (a.comentario ? " · “" + escapa(a.comentario) + "”" : "") + '</p>' +
+      (a.via === "cliente" && apvImgs.print ? '<img class="apv-print" alt="Print da aprovação do cliente">' : "") +
+      '<div class="apv-bts"><button class="btn" type="button" data-a="reabrir">Nova versão da arte (a aprovação deixa de valer)</button></div></div>');
+  } else {
+    /* revisão interna */
+    if (st === "revisao") {
+      if (podeAprovarArte() && a.autor !== eu)
+        cards.push('<div class="apv-card"><h4>Revisão (' + escapa(eu) + ')</h4><p>Compare as duas artes. Aprovando, o pedido pode seguir para a produção.</p>' +
+          '<textarea id="apv-coment" placeholder="Comentário (obrigatório para pedir correção)"></textarea>' +
+          '<div class="apv-bts"><button class="btn primary" type="button" data-a="aprovar">Aprovar para produção</button><button class="btn danger" type="button" data-a="corrigir">Pedir correção</button></div></div>');
+      else cards.push('<div class="apv-card"><h4>Esperando revisão</h4><p>' + (a.autor === eu ? "Você recriou esta arte, então a revisão precisa ser de outro usuário (ADM ou Gráfica Soares)." : "Um revisor (ADM ou Gráfica Soares) precisa aprovar.") + '</p></div>');
+    } else {
+      cards.push('<div class="apv-card"><h4>Mandar para revisão</h4><p>Um revisor (ADM ou Gráfica Soares) compara as duas artes e aprova. Quem recriou não aprova a própria arte.</p>' +
+        '<div class="apv-bts"><button class="btn primary" type="button" data-a="enviar"' + (apvImgs.original && apvImgs.recriada ? "" : " disabled") + '>Enviar para revisão</button></div>' +
+        (apvImgs.original && apvImgs.recriada ? "" : '<p>Coloque as duas artes para liberar o envio.</p>') + '</div>');
+    }
+    /* aprovação do cliente */
+    cards.push('<div class="apv-card"><h4>O cliente aprovou</h4><p>Cole o print da conversa em que o cliente diz que aprovou a arte recriada.</p>' +
+      (apvPrint ? '<img class="apv-print" alt="Print da aprovação">' : '<div class="colar-zona" id="apv-print-zona" contenteditable="true" spellcheck="false" role="textbox" aria-label="Colar o print da aprovação" data-texto="Clique aqui e aperte Ctrl+V (print)"></div>') +
+      '<div class="apv-bts"><button class="btn" type="button" id="apv-print-colar">Colar print</button><button class="btn" type="button" id="apv-print-arq">Anexar print</button><input type="file" accept="image/*" hidden id="apv-print-inp"></div>' +
+      '<label class="f"><span>Quem recebeu a aprovação</span><input type="text" id="apv-recebido" value="' + escapa(eu) + '"></label>' +
+      '<div class="apv-bts"><button class="btn primary" type="button" data-a="cliente"' + (apvPrint && apvImgs.recriada && apvImgs.original ? "" : " disabled") + '>Registrar aprovação do cliente</button></div>' +
+      (apvImgs.recriada && apvImgs.original ? "" : '<p>Coloque as duas artes (a do cliente e a recriada) primeiro.</p>') + '</div>');
+  }
+  corpo.insertAdjacentHTML("beforeend", '<div class="apv-acoes">' + cards.join("") + '</div>');
+  corpo.querySelectorAll(".apv-print").forEach(im => { im.src = aprovada ? apvImgs.print : apvPrint; im.addEventListener("click", () => zoomImg(im.src)); });
+  const zp = $("#apv-print-zona");
+  const usarPrint = async f => { try { apvPrint = await reduzirArte(f); renderAprov(); } catch (e) { say("Não consegui ler essa imagem.", "err"); } };
+  if (zp) ligarZonaColar(zp, usarPrint);
+  if ($("#apv-print-colar")) {
+    ligarBotaoColar($("#apv-print-colar"), zp, usarPrint);
+    $("#apv-print-arq").addEventListener("click", () => $("#apv-print-inp").click());
+    $("#apv-print-inp").addEventListener("change", e => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (f) usarPrint(f); });
+  }
+  corpo.querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", async () => {
+    const ac = b.dataset.a;
+    if (ac === "enviar") return acaoAprov("enviar", null, "Arte mandada para revisão.");
+    if (ac === "aprovar") return acaoAprov("aprovar", { comentario: ($("#apv-coment") || {}).value || "" }, "Arte aprovada. O pedido já pode seguir para a produção.");
+    if (ac === "corrigir") { const c = (($("#apv-coment") || {}).value || "").trim(); if (!c) { say("Escreva o que precisa corrigir.", "err"); $("#apv-coment").focus(); return; } return acaoAprov("corrigir", { comentario: c }, "Correção pedida. A arte voltou para o designer."); }
+    if (ac === "cliente") return acaoAprov("cliente", { print: apvPrint, recebidoPor: $("#apv-recebido").value }, "Aprovação do cliente registrada com o print.");
+    if (ac === "reabrir") { if (!(await confirmar("Abrir uma nova versão da arte?", { titulo: "Nova versão", detalhe: "A aprovação atual deixa de valer e o pedido fica preso no designer até aprovarem de novo.", perigo: false }))) return; return acaoAprov("reabrir", null, "Nova versão aberta."); }
+  }));
+  if (ehAdm() && !aprovada) {
+    corpo.insertAdjacentHTML("beforeend", '<div class="apv-bts" style="margin-top:12px"><button class="btn" type="button" id="apv-dispensar">Dispensar aprovação (ADM)</button></div>');
+    $("#apv-dispensar").addEventListener("click", async () => { if (!(await confirmar("Dispensar a aprovação da arte deste pedido?", { titulo: "Dispensar aprovação", detalhe: "Fica registrado na auditoria." }))) return; acaoAprov("dispensar", null, "Aprovação dispensada."); });
+  }
+  ligarHist(corpo, a);
+}
+function ligarHist(corpo, a) {
+  const NOMES = { imagens: "anexou arte", enviar: "mandou para revisão", aprovar: "aprovou (revisão)", corrigir: "pediu correção", cliente: "registrou a aprovação do cliente", reabrir: "abriu nova versão", exigir: "exigiu aprovação", dispensar: "dispensou a aprovação" };
+  const h = (a.historico || []).slice().reverse();
+  if (!h.length) return;
+  corpo.insertAdjacentHTML("beforeend", '<p class="c-sec" style="margin-top:16px">Histórico</p><ul class="apv-hist">' +
+    h.map(x => '<li>' + escapa(dataHora(x.em)) + ' · <b>' + escapa(x.usuario) + '</b> ' + escapa(NOMES[x.acao] || x.acao) + (x.texto ? ' — ' + escapa(x.texto) : "") + '</li>').join("") + '</ul>');
+}
+$("#apv-fechar").addEventListener("click", () => fecharModal($("#apv-modal")));
+$("#det-apv").addEventListener("click", () => { if (detPed) abrirAprov(detPed.id); });
+/* revisores: contador e lista de artes para revisar */
+let revItens = [];
+async function contarRevisao() {
+  const b = $("#ped-revisar");
+  if (!sessao || modoHist !== "nuvem" || !podeAprovarArte()) { b.hidden = true; return; }
+  try { revItens = (await apiPed("GET", "?revisar=1")).itens || []; } catch (e) { return; }
+  const eu = sessao.usuario, pendentes = revItens.filter(p => !p.aprov || p.aprov.autor !== eu);
+  $("#ped-revisar-n").textContent = pendentes.length;
+  b.hidden = false; b.classList.toggle("primary", pendentes.length > 0);
+  if (!$("#rev-modal").hidden) renderRevisao();
+}
+function renderRevisao() {
+  const eu = sessao ? sessao.usuario : "";
+  $("#rev-lista").innerHTML = revItens.length ? revItens.map(p =>
+    '<div class="rev-item"><div class="tx"><b>#' + escapa(p.numero) + ' · ' + escapa(p.cliente || "") + '</b><small>Recriada por ' + escapa((p.aprov || {}).autor || "—") + ((p.aprov || {}).enviadoEm ? " · " + escapa(dataHora(p.aprov.enviadoEm)) : "") + ((p.aprov || {}).autor === eu ? " · você recriou (outro revisor aprova)" : "") + '</small></div>' +
+    '<button class="btn primary" type="button" data-id="' + escapa(p.id) + '">Revisar</button></div>').join("")
+    : '<p class="hint" style="margin:0">Nenhuma arte esperando revisão. 🎉</p>';
+  $("#rev-lista").querySelectorAll("[data-id]").forEach(b => b.addEventListener("click", () => { fecharModal($("#rev-modal")); abrirAprov(b.dataset.id); }));
+}
+$("#ped-revisar").addEventListener("click", async () => { await contarRevisao(); renderRevisao(); abrirModal($("#rev-modal")); });
+$("#rev-fechar").addEventListener("click", () => fecharModal($("#rev-modal")));
 
 /* ---------- filas personalizadas (só ADM) ---------- */
 const CORES_FILA = ["#8b5cf6", "#3b82f6", "#06b6d4", "#14b8a6", "#22c55e", "#84cc16", "#eab308", "#f59e0b", "#f97316", "#ef4444", "#ec4899", "#64748b"];
@@ -6797,7 +7102,8 @@ function renderDetalhe() {
   });
   $("#det-obs-sec").hidden = !p.obs;
   $("#det-obs").textContent = p.obs || "";
-  const info = [["Etapa", f.nome]].concat(semValores() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Designer", p.designer || "—"], ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
+  const info = [["Etapa", f.nome]].concat(semValores() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Designer", p.designer || "—"]])
+    .concat(p.aprov && p.aprov.exige ? [["Arte", textoAprov(p.aprov)]] : []).concat([ ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
   const c = (typeof clientes !== "undefined" ? clientes : []).find(x => (p.clienteId && x.id === p.clienteId) || (x.nome || "").toLowerCase() === (p.cliente || "").toLowerCase());
   if (c) {
     if (c.razao && c.razao !== c.nome) info.push(["Razão social", c.razao]);
@@ -6822,6 +7128,7 @@ document.querySelectorAll("#det-tam button").forEach(b => b.addEventListener("cl
 function abrirDetalhe(p, origem) {
   detPed = p; detIdx = kcArteIdx.get(p.id) || 0; detMinis = minisDe(p); detArtes = null; detCarregando = null;
   $("#det-os").hidden = !podeAba("os");
+  $("#det-apv").hidden = !((p.aprov && p.aprov.exige) || (pedCompleto() && (p.fila === "atendimento" || p.fila === "designer")) || (p.aprov && p.aprov.dispensada && ehAdm()));
   /* artes em tamanho real: locais já estão no pedido; no banco, busca agora */
   const locais = artesCompletasLocais(p);
   if (locais.length) detArtes = locais;
@@ -8544,7 +8851,7 @@ window.renderVisao=renderVisao;
 /* ================= AUDITORIA (só ADM) ================= */
 (function () {
   const ACOES = { usuarios: "Usuários", designer: "Designer da arte", moveu: "Moveu de fila", arquivou: "Arquivou", desarquivou: "Voltou do arquivo", criou: "Criou pedido", editou: "Editou pedido",
-    artes: "Trocou artes", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
+    artes: "Trocou artes", arte: "Aprovação de arte", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
   let itens = [], ultimoId = 0, timer = null, ativa = false, novos = new Set(), carregando = false;
   const $a = id => document.getElementById(id);
   $a("aud-acao").innerHTML = '<option value="">Tudo</option>' + Object.entries(ACOES).map(([k, v]) => '<option value="' + k + '">' + v + '</option>').join("");
@@ -8791,6 +9098,7 @@ window.renderVisao=renderVisao;
         '<div class="ab">' + h.abas.map(a => '<span>' + escapa(NOME_ABA[a] || a) + '</span>').join("") +
         (h.abas.includes("ped") ? '<span class="' + (h.valores ? "v" : "nv") + '">' + (h.pedidos === "completo" ? "Pedidos completo" : "Pedidos: só produção") + (h.valores ? " · com valores" : " · sem valores") + '</span>' +
           '<span>' + (h.filas ? "Filas: " + h.filas.map(f => (FILAS.find(x => x.id === f) || { nome: f }).nome.replace(/^Fila d[ao] /, "").replace(/^Pedido /, "")).join(", ") : "Todas as filas") + '</span>' : "") + '</div>' +
+        (h.aprovaArte ? '<div class="ab"><span class="v">Aprova artes</span></div>' : "") +
         '<small>' + h.usuarios + (h.usuarios === 1 ? " usuário" : " usuários") + '</small></div>' +
         '<div class="bts"><button class="btn" type="button" data-h="editar">Editar</button><button class="btn danger" type="button" data-h="apagar">Apagar</button></div></div>').join("");
     $u("hier-lista").querySelectorAll(".hier-item[data-id]").forEach(el => {
@@ -8816,6 +9124,7 @@ window.renderVisao=renderVisao;
     document.querySelectorAll('input[name="hier-pedidos"]').forEach(r => r.onchange = ajustaAtend);
     ajustaAtend();
     $u("hier-valores").checked = !!(h && h.valores);
+    $u("hier-aprova").checked = !!(h && h.aprovaArte);
     const mostraPed = () => { $u("hier-ped").hidden = !$u("hier-abas").querySelector('input[value="ped"]').checked; };
     $u("hier-abas").querySelectorAll("input").forEach(i => i.addEventListener("change", () => { mostraPed(); $u("hier-erro").textContent = ""; }));
     mostraPed();
@@ -8844,7 +9153,7 @@ window.renderVisao=renderVisao;
     if (!abas.length) { erro.textContent = "Marque pelo menos uma aba."; return; }
     const filas = [...$u("hier-filas").querySelectorAll("input:checked:not(:disabled)")].map(i => i.value);
     if (abas.includes("ped") && !filas.length) { erro.textContent = "Marque pelo menos uma fila do quadro de pedidos."; return; }
-    const corpo = { nome, abas, pedidos: document.querySelector('input[name="hier-pedidos"]:checked').value, valores: $u("hier-valores").checked, filas };
+    const corpo = { nome, abas, pedidos: document.querySelector('input[name="hier-pedidos"]:checked').value, valores: $u("hier-valores").checked, filas, aprovaArte: $u("hier-aprova").checked };
     const btn = $u("hier-salvar"); btn.disabled = true;
     try {
       if (hierEdit) await apiHier("PATCH", "?id=" + encodeURIComponent(hierEdit), corpo);
@@ -8894,18 +9203,7 @@ window.renderVisao=renderVisao;
     ? "Prévia: aqui a senha não é conferida. No painel publicado na Vercel, é."
     : "Cada pessoa entra com o próprio usuário. Toque em “Sair” ao terminar.";
 
-  const chips = document.getElementById("login-users");
-  const marcaChip = () => chips.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.u === inpU.value.trim().toUpperCase()));
-  function montaChipsLogin() {
-    chips.innerHTML = USUARIOS_LOGIN.map(u => '<button type="button" data-u="' + escapa(u) + '">' + escapa(u) + '</button>').join("");
-    chips.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { inpU.value = b.dataset.u; marcaChip(); erro.textContent = ""; inpS.value = ""; inpS.focus(); }));
-    marcaChip();
-  }
-  montaChipsLogin();
-  /* usuários criados na aba USUÁRIOS aparecem aqui */
-  fetch("/api/login?nomes=1", { cache: "no-store" }).then(r => (r.headers.get("content-type") || "").includes("application/json") ? r.json() : null)
-    .then(j => { if (j && Array.isArray(j.nomes) && j.nomes.length) { USUARIOS_LOGIN = j.nomes; montaChipsLogin(); if (window.audUsuarios) window.audUsuarios(); } }).catch(() => {});
-  inpU.addEventListener("input", () => { marcaChip(); erro.textContent = ""; });
+  inpU.addEventListener("input", () => { erro.textContent = ""; });
   inpS.addEventListener("input", () => { erro.textContent = ""; });
   document.getElementById("login-olho").addEventListener("click", () => {
     const ver = inpS.type === "password"; inpS.type = ver ? "text" : "password";
@@ -8920,7 +9218,6 @@ window.renderVisao=renderVisao;
     erro.textContent = msg || "";
     inpS.value = ""; inpS.type = "password";
     if (sessao && sessao.usuario) inpU.value = sessao.usuario;
-    marcaChip();
     setTimeout(() => (inpU.value ? inpS : inpU).focus(), 60);
   }
   window.mostrarLogin = mostrarLogin;
@@ -8929,7 +9226,7 @@ window.renderVisao=renderVisao;
     const u = sessao && sessao.usuario;
     sessao = null; try { localStorage.removeItem("amz_sessao"); } catch (e) {}
     mostrarLogin("Sua sessão expirou. Entre de novo.");
-    if (u) inpU.value = u, marcaChip();
+    if (u) inpU.value = u;
   };
 
   function aplicarPapel() {
