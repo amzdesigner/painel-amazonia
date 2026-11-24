@@ -355,6 +355,31 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .usuario-nome small{font-weight:600;color:var(--muted);font-size:11.5px;letter-spacing:.05em}
 #sair{min-height:40px;padding:8px 14px}
 @media (max-width:760px){.usuario-nome small{display:none}}
+/* TABLET (Produção): só ver */
+.login-tablet{display:flex;align-items:center;gap:16px;width:100%;min-height:84px;padding:14px 20px;border-radius:16px;border:2px solid #22c55e;background:rgba(34,197,94,.12);color:var(--text);font:inherit;text-align:left;cursor:pointer;margin-bottom:6px;touch-action:manipulation}
+.login-tablet:hover,.login-tablet:active{background:rgba(34,197,94,.22)}
+.login-tablet svg{width:38px;height:38px;flex:none;color:#22c55e}
+.login-tablet b{display:block;font-size:20px;letter-spacing:.03em}
+.login-tablet small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.login-ou{display:flex;align-items:center;gap:10px;margin:14px 0 4px;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.login-ou::before,.login-ou::after{content:"";flex:1;height:1px;background:var(--line)}
+.troca-wrap{position:relative;display:inline-flex}
+.troca-btn{display:inline-flex;align-items:center;gap:8px;border-color:#22c55e;color:var(--text)}
+.troca-btn svg{width:17px;height:17px;flex:none}
+.troca-pop{position:absolute;right:0;top:calc(100% + 8px);z-index:120;width:300px;max-width:calc(100vw - 24px);background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.45);padding:14px;display:flex;flex-direction:column;gap:10px}
+.troca-pop[hidden]{display:none}
+.troca-tit{margin:0;font-weight:800;font-size:15px}
+.troca-tit small{display:block;font-weight:600;color:var(--muted);font-size:12px;margin-top:2px}
+.troca-pop input{min-height:46px;font-size:16px}
+.troca-bts{display:flex;gap:8px;justify-content:flex-end}
+.troca-bts .btn{flex:1}
+.troca-tablet{display:flex;align-items:center;justify-content:center;gap:8px;border-color:#22c55e}
+.troca-tablet svg{width:18px;height:18px}
+.somente-ver .kc-ok,.somente-ver .kc-prox,.somente-ver .kc-seta,.somente-ver .kc-des,.somente-ver #det-editar,.somente-ver #det-apv,.somente-ver #det-os,.somente-ver .det-os button,.somente-ver .pi-enviar-os{display:none!important}
+.somente-ver .kc{cursor:pointer}
+.tablet-faixa{display:none}
+.somente-ver .tablet-faixa{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:8px 12px;border-radius:10px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.4);font-size:13px;font-weight:600}
+
 /* produção (não ADM): só PEDIDOS, sem valores e sem a coluna de atendimento */
 .so-uma-aba .side,.so-uma-aba #menu,
 .papel-producao #ped-novo,.papel-producao #ped-entregues-btn,.papel-producao .det-os,.papel-producao #det-editar,.papel-producao .kb-add,
@@ -1081,6 +1106,8 @@ body.modal-aberto{overflow:hidden}
   <form class="login-box" id="login-form" autocomplete="on" novalidate>
     <div class="login-topo"><img id="login-logo" alt="Amazônia Gráfica e Comunicação Visual"><p>Painel da gráfica</p></div>
     <div class="login-corpo">
+      <button class="login-tablet" type="button" id="login-tablet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><span><b>TABLET (Produção)</b><small>Só para ver as filas · sem senha</small></span></button>
+      <div class="login-ou"><span>ou entre com o seu usuário</span></div>
       <h2>Entrar</h2>
       <label class="f"><span>Nome de usuário</span><input type="text" id="login-usuario" autocomplete="username" autocapitalize="characters" spellcheck="false" placeholder="Seu usuário"></label>
       <label class="f"><span>Senha</span><span class="login-senha"><input type="password" id="login-senha" autocomplete="current-password" placeholder="Sua senha"><button type="button" class="login-olho" id="login-olho" aria-label="Mostrar senha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></span></label>
@@ -1149,6 +1176,17 @@ body.modal-aberto{overflow:hidden}
       </div>
       <div class="usuario-box" id="usuario-box" hidden>
         <span class="usuario-nome"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span id="usuario-nome"></span><small id="usuario-papel"></small></span>
+        <span class="troca-wrap">
+          <button class="btn troca-btn" type="button" id="troca-btn" hidden aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 21H3v-5"/><path d="M3 21l7-7"/></svg><span>Trocar usuário</span></button>
+          <form class="troca-pop" id="troca-pop" hidden autocomplete="off" novalidate role="dialog" aria-label="Trocar usuário">
+            <p class="troca-tit">Trocar usuário <small>só usuários da PRODUÇÃO</small></p>
+            <label class="f"><span>Usuário</span><input type="text" id="troca-usuario" autocapitalize="characters" spellcheck="false" placeholder="Seu usuário" autocomplete="off"></label>
+            <label class="f"><span>Senha</span><input type="password" id="troca-senha" placeholder="Sua senha" autocomplete="off"></label>
+            <p class="login-erro" id="troca-erro" role="alert"></p>
+            <div class="troca-bts"><button class="btn" type="button" id="troca-cancelar">Cancelar</button><button class="btn primary" type="submit" id="troca-entrar">Entrar</button></div>
+            <button class="btn troca-tablet" type="button" id="troca-tablet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><span>Voltar para TABLET (só ver)</span></button>
+          </form>
+        </span>
         <button class="btn" type="button" id="sair">Sair</button>
       </div>
       <div class="zoom-box" role="group" aria-label="Tamanho da página">
@@ -3657,8 +3695,10 @@ const ehProducao = pedRestrito;
 function veFila(f) {
   if (!sessao || ehAdm()) return true;
   const l = permAtual().filas;
-  return (!l || !l.length || l.includes(f)) && (pedCompleto() || f !== "atendimento");
+  return (!l || !l.length || l.includes(f)) && (pedCompleto() || !!permAtual().verAtendimento || f !== "atendimento");
 }
+/* TABLET (Produção): só vê, não mexe em nada */
+const somenteVer = () => !!(sessao && permAtual().somenteVer);
 function primeiraAba() { const l = permAtual().abas; return ["ped", "os", "orc", "recibo", "cli", "prod", "mal", "rel", "calc", "visao", "aud"].find(a => l.includes(a)) || "ped"; }
 function cabecalhoAuth() { return { "x-painel-token": (sessao && sessao.token) || "" }; }
 let senhaPainel = "";
@@ -5306,6 +5346,7 @@ async function apiPed(metodo, query, corpo) {
   return j;
 }
 function podeGravarPed() {
+  if (somenteVer()) { say("O TABLET só mostra os pedidos. Toque em “Trocar usuário” e entre com o seu usuário para mexer.", "err"); return false; }
   if (modoHist === "nuvem" || modoHist === "local") return true;
   say("Entre com a senha da equipe para mexer nos pedidos.", "err");
   if (modoHist === "senha") pedirSenha("");
@@ -5577,7 +5618,7 @@ function cardPedido(p, fila, idxFila) {
     }, 240);
   });
   el.addEventListener("click", ev => {
-    if (ev.target.closest(".kc-apv")) { ev.stopPropagation(); abrirAprov(p.id); return; }
+    if (ev.target.closest(".kc-apv") && !somenteVer()) { ev.stopPropagation(); abrirAprov(p.id); return; }
     if (ev.target.closest(".kc-ok") || ev.target.closest(".kc-seta") || ev.target.closest(".kc-des") || Date.now() - pedSoltouEm < 300) return;
     abrirDetalhe(p, el);
   });
@@ -5586,6 +5627,8 @@ function cardPedido(p, fila, idxFila) {
 }
 function renderKB() {
   const kb = $("#kb"); if (!kb) return;
+  let fx = document.getElementById("tablet-faixa");
+  if (!fx) { fx = document.createElement("div"); fx.id = "tablet-faixa"; fx.className = "tablet-faixa"; fx.innerHTML = 'TABLET (Produção): aqui só dá para ver os pedidos. Para dar OK, toque em <b>&nbsp;Trocar usuário&nbsp;</b> e entre com o seu usuário.'; kb.parentNode.insertBefore(fx, kb); }
   const bf = $("#ped-filas"); if (bf) bf.hidden = !ehAdm();
   const q = semAcentoTxt(($("#ped-busca").value || "").trim());
   const scroll = kb.scrollLeft;
@@ -5628,7 +5671,7 @@ let pedDrag = null, pedSoltouEm = 0;
 document.addEventListener("touchmove", e => { if (pedDrag) e.preventDefault(); }, { passive: false });
 $("#kb").addEventListener("pointerdown", e => {
   const card = e.target.closest(".kc");
-  if (!card || e.button > 0 || e.target.closest(".kc-ok") || e.target.closest(".kc-seta") || e.target.closest(".kc-des")) return;
+  if (!card || e.button > 0 || e.target.closest(".kc-ok") || e.target.closest(".kc-seta") || e.target.closest(".kc-des") || somenteVer()) return;
   const toque = e.pointerType === "touch";
   const x0 = e.clientX, y0 = e.clientY;
   let ultimo = e, timer = null;
@@ -9235,6 +9278,10 @@ window.renderVisao=renderVisao;
     raiz.classList.toggle("sem-valores", semValores());
     raiz.classList.toggle("sem-aba-os", !!sessao && !podeAba("os"));
     raiz.classList.toggle("so-uma-aba", !!sessao && perm.abas.length === 1);
+    raiz.classList.toggle("somente-ver", somenteVer());
+    const tb = document.getElementById("troca-btn");
+    if (tb) tb.hidden = !(sessao && !sessao.previa && (sessao.papel === "tablet" || sessao.papel === "producao"));
+    const vt = document.getElementById("troca-tablet"); if (vt) vt.hidden = !!(sessao && sessao.papel === "tablet");
     /* menu da esquerda: só as abas da hierarquia (USUÁRIOS só para o ADM) */
     document.querySelectorAll(".nav button[data-view]").forEach(b => { b.hidden = !!sessao && !podeAba(b.dataset.view); });
     document.getElementById("usuario-box").hidden = !sessao;
@@ -9277,6 +9324,56 @@ window.renderVisao=renderVisao;
     } catch (e) {
       erro.textContent = "Sem conexão com o servidor. Confira a internet e tente de novo.";
     } finally { btn.disabled = false; btn.textContent = "Entrar"; }
+  });
+
+  /* ---------- TABLET (Produção) e troca de usuário na mesma página ---------- */
+  async function entrarTablet(aviso) {
+    const r = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tablet: true }), cache: "no-store" });
+    const tipo = r.headers.get("content-type") || "";
+    if (!tipo.includes("application/json")) {
+      if (previa) { entrouCom({ token: "", usuario: "TABLET", papel: "tablet", exp: Date.now() + 16 * 3600e3, previa: true, perm: { nome: "TABLET (Produção)", abas: ["ped"], pedidos: "producao", valores: false, filas: null, somenteVer: true, verAtendimento: true } }); return true; }
+      throw new Error("O servidor do painel não respondeu.");
+    }
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.erro || "Não foi possível entrar.");
+    entrouCom({ token: j.token, usuario: j.usuario, papel: j.papel, exp: j.exp, perm: j.perm || null });
+    if (aviso) say(aviso, "ok");
+    return true;
+  }
+  document.getElementById("login-tablet").addEventListener("click", async () => {
+    const b = document.getElementById("login-tablet"); b.disabled = true; erro.textContent = "";
+    try { await entrarTablet(); } catch (e) { erro.textContent = e.message || "Sem conexão com o servidor."; }
+    finally { b.disabled = false; }
+  });
+  const pop = document.getElementById("troca-pop"), tBtn = document.getElementById("troca-btn");
+  const tU = document.getElementById("troca-usuario"), tS = document.getElementById("troca-senha"), tErro = document.getElementById("troca-erro");
+  function abrirTroca(abrir) {
+    pop.hidden = !abrir; tBtn.setAttribute("aria-expanded", abrir ? "true" : "false");
+    if (abrir) { tU.value = ""; tS.value = ""; tErro.textContent = ""; setTimeout(() => tU.focus(), 30); }
+  }
+  tBtn.addEventListener("click", ev => { ev.stopPropagation(); abrirTroca(pop.hidden); });
+  document.getElementById("troca-cancelar").addEventListener("click", () => abrirTroca(false));
+  pop.addEventListener("click", ev => ev.stopPropagation());
+  document.addEventListener("click", () => { if (!pop.hidden) abrirTroca(false); });
+  document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !pop.hidden) abrirTroca(false); });
+  [tU, tS].forEach(i => i.addEventListener("input", () => { tErro.textContent = ""; }));
+  pop.addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const usuario = tU.value.trim().toUpperCase(), senha = tS.value;
+    if (!usuario) { tErro.textContent = "Digite o usuário."; tU.focus(); return; }
+    if (!senha) { tErro.textContent = "Digite a senha."; tS.focus(); return; }
+    const b = document.getElementById("troca-entrar"); b.disabled = true; b.textContent = "Entrando…";
+    try {
+      const r = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ usuario, senha, soProducao: true }), cache: "no-store" });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { tErro.textContent = j.erro || "Não foi possível entrar."; tS.select(); return; }
+      abrirTroca(false);
+      entrouCom({ token: j.token, usuario: j.usuario, papel: j.papel, exp: j.exp, perm: j.perm || null });
+    } catch (e) { tErro.textContent = "Sem conexão com o servidor."; }
+    finally { b.disabled = false; b.textContent = "Entrar"; }
+  });
+  document.getElementById("troca-tablet").addEventListener("click", async () => {
+    try { abrirTroca(false); await entrarTablet("Voltou para o TABLET (só ver)."); } catch (e) { say(e.message || "Sem conexão.", "err"); }
   });
 
   document.getElementById("sair").addEventListener("click", async () => {
