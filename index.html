@@ -383,6 +383,7 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .aud-a.excluiu,.aud-a.senha-errada{background:rgba(239,68,68,.16);color:#f87171}
 .aud-a.entrou{background:rgba(139,92,246,.16);color:#a78bfa}
 .aud-a.usuarios{background:rgba(20,184,166,.16);color:#2dd4bf}
+.aud-a.designer{background:rgba(236,72,153,.15);color:#f472b6}
 :root.claro .aud-a.moveu{color:#1d4ed8}:root.claro .aud-a.criou{color:#15803d}:root.claro .aud-a.editou,:root.claro .aud-a.artes,:root.claro .aud-a.reordenou{color:#b45309}
 :root.claro .aud-a.excluiu,:root.claro .aud-a.senha-errada{color:#b91c1c}:root.claro .aud-a.entrou{color:#6d28d9}:root.claro .aud-a.arquivou,:root.claro .aud-a.desarquivou{color:#475569}
 .aud-ped{border:0;background:transparent;color:var(--accent);font:inherit;font-weight:700;cursor:pointer;padding:0;text-align:left}
@@ -443,6 +444,12 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .hier-aba svg{width:18px;height:18px;flex:none;color:var(--muted)}
 .hier-ped{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:14px;margin-top:4px}
 .hier-ped .f{gap:8px}
+.hier-filas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.hier-fila{display:flex;align-items:center;gap:9px;border:1.5px solid var(--line-2);border-radius:11px;padding:9px 11px;cursor:pointer;background:var(--card-2);font-weight:600;font-size:13.5px}
+.hier-fila i{width:10px;height:10px;border-radius:50%;flex:none}
+.hier-fila:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.hier-fila:has(input:disabled){opacity:.45;cursor:not-allowed}
+.hier-fila input{width:19px;height:19px;accent-color:var(--accent);flex:none}
 .hier-check{display:flex;gap:10px;align-items:flex-start;cursor:pointer;border:1.5px solid var(--line-2);border-radius:12px;padding:12px;background:var(--card-2)}
 .hier-check:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
 .hier-check b{display:block;font-size:14.5px}.hier-check small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
@@ -498,6 +505,23 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kc-setas .kc-seta svg{width:18px;height:18px}
 .kc-setas .kc-seta:hover{background:rgba(20,20,20,.85)}
 .kc-thumb{margin-bottom:10px}
+.kc.menu-aberto{z-index:30}
+.kc-des{position:relative;margin:8px 0 2px}
+.kc-des-bt{width:100%;display:flex;align-items:center;gap:8px;min-height:42px;padding:8px 12px;border-radius:10px;border:1.5px dashed color-mix(in srgb,var(--cor) 70%,transparent);background:color-mix(in srgb,var(--cor) 10%,transparent);color:var(--text);font:700 13.5px Inter,system-ui,sans-serif;cursor:pointer;touch-action:manipulation;text-align:left}
+.kc-des-bt.on{border-style:solid}
+.kc-des-bt svg{width:17px;height:17px;flex:none;color:var(--cor)}
+.kc-des-bt span{flex:1;min-width:0}
+.kc-des-bt b{letter-spacing:.03em}
+.kc-des-bt i{font-style:normal;color:var(--muted);font-size:12px}
+.kc-des-menu{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:40;background:var(--card);border:1px solid var(--line-2);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.4);padding:6px;display:flex;flex-direction:column;gap:4px}
+.kc-des-menu[hidden]{display:none}
+.kc-des-menu button{min-height:46px;border:0;border-radius:9px;background:transparent;color:var(--text);font:700 15px Inter,system-ui,sans-serif;text-align:left;padding:10px 12px;cursor:pointer;touch-action:manipulation}
+.kc-des-menu button:hover,.kc-des-menu button:focus-visible{background:var(--card-2)}
+.kc-des-menu button.on{background:var(--accent-soft);color:var(--accent)}
+.kc-des-menu button.on::after{content:" ✓"}
+.kc-des-menu button.tira{font-weight:600;font-size:13px;color:#e04848}
+.kc-des-tag svg{color:var(--muted)}
+.kc-des-tag b{color:var(--text);letter-spacing:.03em}
 .kc-topo{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:11.5px;color:var(--muted);font-weight:700}
 .kc-num{font-variant-numeric:tabular-nums}
 .kc-urg{background:rgba(224,72,72,.15);color:#e04848;border-radius:6px;padding:1px 6px;font-size:10.5px;letter-spacing:.05em}
@@ -736,7 +760,17 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .mal-linha button{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:#e04848;font-size:18px;cursor:pointer;flex:none}
 .mal-estado.sujo{color:#d98a00}
 .mal-duas{align-items:start}
+.mal-empresas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mal-empresas button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:18px 20px;border-radius:16px;border:2px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;text-align:left;font:inherit}
+.mal-empresas button b{font-size:17px;letter-spacing:.02em}
+.mal-empresas button small{color:var(--muted);font-size:13px}
+.mal-empresas button.on{border-color:var(--blue,#1f6feb);background:var(--card-2);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue,#1f6feb) 18%,transparent)}
+.mal-empresas button.on small{color:var(--text)}
+.mal-escolha{margin:2px 2px 0}
+.mal-tab-nome{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);font-size:12px;font-weight:800;letter-spacing:.03em;vertical-align:middle}
+@media (max-width:600px){.mal-empresas{grid-template-columns:1fr}}
 .seg-vias button{padding:8px 11px}
+.pm-pdf-tam{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line-2);border-radius:8px;padding:6px 9px;white-space:nowrap}
 .pm-pdf{flex-wrap:wrap}
 .pi-total{min-height:48px;display:flex;align-items:center;padding:0 12px;border-radius:9px;background:var(--card);border:1.5px dashed var(--line);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
 .pm-itens{display:flex;flex-direction:column;gap:12px}
@@ -1226,9 +1260,15 @@ body.modal-aberto{overflow:hidden}
       <!-- ================= MALHARIA (preços das camisas) ================= -->
       <div id="view-mal" class="cols" hidden>
         <div class="sub-abas" role="tablist" aria-label="Produtos"><button type="button" data-ir="prod">Produtos</button><button type="button" data-ir="mal" class="on">Malharia</button></div>
-        <p class="hint mal-intro">Aqui ficam os tipos de camisa, preços, tamanhos e tecidos usados no botão <b>Pedido de camisa</b> dos pedidos. Mudou aqui e salvou, os próximos pedidos já usam os valores novos (pedidos antigos mantêm o preço combinado).</p>
+        <p class="hint mal-intro">Cada empresa tem a sua tabela: tipos de camisa, preços, tamanhos, tecidos e golas usados no botão <b>Pedido de camisa</b> dos pedidos (lá você escolhe qual tabela usar). Mudou aqui e salvou, os próximos pedidos já usam os valores novos (pedidos antigos mantêm o preço combinado).</p>
+        <div class="mal-empresas" id="mal-empresas" role="tablist" aria-label="Tabela de preços">
+          <button type="button" data-tab="amazonia" role="tab"><b>AMAZÔNIA GRÁFICA</b><small>Tabela de preços da Amazônia Gráfica</small></button>
+          <button type="button" data-tab="soares" role="tab"><b>GRÁFICA SOARES</b><small>Tabela de preços da Gráfica Soares</small></button>
+        </div>
+        <p class="hint mal-escolha" id="mal-escolha">Escolha acima qual tabela de preços você quer ver ou editar.</p>
+        <div id="mal-editor" hidden>
         <section class="card">
-          <h2>Tipos de camisa</h2>
+          <h2>Tipos de camisa <span class="mal-tab-nome" data-tabnome></span></h2>
           <div class="body">
             <div id="mal-tipos" class="mal-tipos"></div>
             <button class="btn pm-add-item" type="button" id="mal-add-tipo">+ Adicionar tipo de camisa</button>
@@ -1251,6 +1291,15 @@ body.modal-aberto{overflow:hidden}
               <button class="btn pm-add-item" type="button" id="mal-add-tecido">+ Adicionar tecido</button>
             </div>
           </section>
+        </div>
+        <section class="card">
+          <h2>Gola <span class="mal-tab-nome" data-tabnome></span></h2>
+          <div class="body">
+            <p class="hint" style="margin-top:0">Tipo de gola e o preço somado por peça. Deixe 0 para a gola não mudar o preço.</p>
+            <div id="mal-golas" class="mal-linhas"></div>
+            <button class="btn pm-add-item" type="button" id="mal-add-gola">+ Adicionar tipo de gola</button>
+          </div>
+        </section>
         </div>
       </div>
 
@@ -1745,6 +1794,10 @@ body.modal-aberto{overflow:hidden}
               <label class="usr-papel"><input type="radio" name="hier-pedidos" value="producao" checked><span><b>Só a produção</b><small>Vê a partir da Fila do designer e só move os pedidos de fila (botão OK). Não cria nem edita.</small></span></label>
               <label class="usr-papel"><input type="radio" name="hier-pedidos" value="completo"><span><b>Completo</b><small>Vê o Atendimento, cria, edita e exclui pedidos.</small></span></label>
             </div>
+            <div class="f"><span>Filas do quadro que ele vê</span>
+              <div class="hier-filas" id="hier-filas"></div>
+              <small class="hint">Ex.: a costureira vê só a Fila da costura. Com todas marcadas, ele vê o quadro inteiro.</small>
+            </div>
             <label class="hier-check"><input type="checkbox" id="hier-valores"><span><b>Ver valores de venda nos pedidos</b><small>Preços, total, pagamento e a via do atendente.</small></span></label>
           </div>
           <p class="login-erro" id="hier-erro" role="alert"></p>
@@ -1819,8 +1872,7 @@ body.modal-aberto{overflow:hidden}
       </div>
       <div class="modal-pe">
         <div class="pm-pdf">
-          <div class="seg" id="det-tam" role="radiogroup" aria-label="Tamanho do PDF"><button type="button" data-t="A4" class="on" role="radio" aria-checked="true">A4</button><button type="button" data-t="A5" role="radio" aria-checked="false">A5</button></div>
-<div class="seg seg-vias" role="radiogroup" aria-label="Vias do pedido"><button type="button" data-v="ambas" role="radio">2 vias</button><button type="button" data-v="impressor" role="radio">Impressor</button><button type="button" data-v="atendente" role="radio">Atendente</button></div>
+          <span class="pm-pdf-tam">Pedido em A5</span>
           <button class="btn" type="button" id="det-ver">Visualizar</button>
           <button class="btn blue" type="button" id="det-pdf">Baixar PDF</button>
           <button class="btn" type="button" id="det-imprimir">Imprimir</button>
@@ -1850,10 +1902,11 @@ body.modal-aberto{overflow:hidden}
         </div>
         <div class="pm-camisa" id="pm-camisa" hidden>
           <div class="pm-camisa-cab"><h3>Venda de camisa</h3><button class="btn-x" type="button" id="cm-fechar" aria-label="Fechar venda de camisa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="f"><span>Tabela de preços</span><div class="seg cm-seg" id="cm-tabela"></div></div>
           <div class="f"><span>Tipo de camisa</span><div class="seg cm-seg" id="cm-tipo"></div></div>
           <div class="f"><span>Tecido</span><div class="seg cm-seg" id="cm-tecido"></div></div>
+          <div class="f"><span>Tipo de gola</span><div class="seg cm-seg" id="cm-gola"></div></div>
           <div class="grid-c">
-            <label class="f"><span>Tipo de gola</span><input type="text" id="cm-gola" list="cm-golas" placeholder="Redonda, gola V, polo…" autocomplete="off"><datalist id="cm-golas"><option value="REDONDA"></option><option value="GOLA V"></option><option value="POLO"></option></datalist></label>
             <label class="f"><span>Cor da gola</span><input type="text" id="cm-corgola" placeholder="Ex.: branca" autocomplete="off"></label>
           </div>
           <div class="f"><span>Arte</span><div class="seg cm-seg" id="cm-arte"></div></div>
@@ -1906,8 +1959,7 @@ body.modal-aberto{overflow:hidden}
         <button class="btn danger" type="button" id="pm-excluir" hidden>Excluir</button>
         <span class="espaco"></span>
         <div class="pm-pdf">
-          <div class="seg" id="pm-tam" role="radiogroup" aria-label="Tamanho do PDF"><button type="button" data-t="A4" class="on" role="radio" aria-checked="true">A4</button><button type="button" data-t="A5" role="radio" aria-checked="false">A5</button></div>
-<div class="seg seg-vias" role="radiogroup" aria-label="Vias do pedido"><button type="button" data-v="ambas" role="radio">2 vias</button><button type="button" data-v="impressor" role="radio">Impressor</button><button type="button" data-v="atendente" role="radio">Atendente</button></div>
+          <span class="pm-pdf-tam">Pedido em A5</span>
           <button class="btn" type="button" id="pm-ver">Visualizar</button>
           <button class="btn blue" type="button" id="pm-pdf">Baixar PDF</button>
         </div>
@@ -3428,8 +3480,8 @@ const TODAS_ABAS = ["visao", "ped", "rel", "prod", "mal", "os", "cli", "orc", "r
 const ehAdm = () => !!sessao && sessao.papel === "adm";
 function permAtual() {
   if (!sessao) return { nome: "", abas: [], pedidos: "producao", valores: false };
-  if (ehAdm()) return { nome: "ADMINISTRADOR", abas: TODAS_ABAS.concat("usr"), pedidos: "completo", valores: true };
-  return sessao.perm || { nome: "PRODUÇÃO", abas: ["ped"], pedidos: "producao", valores: false };
+  if (ehAdm()) return { nome: "ADMINISTRADOR", abas: TODAS_ABAS.concat("usr"), pedidos: "completo", valores: true, filas: null };
+  return sessao.perm || { nome: "PRODUÇÃO", abas: ["ped"], pedidos: "producao", valores: false, filas: null };
 }
 const podeAba = v => permAtual().abas.includes(v);
 const podeAlguma = l => l.some(podeAba);
@@ -3437,6 +3489,12 @@ const pedRestrito = () => !!sessao && !ehAdm() && permAtual().pedidos !== "compl
 const pedCompleto = () => podeAba("ped") && !pedRestrito();
 const semValores = () => !!sessao && !ehAdm() && !permAtual().valores;
 const ehProducao = pedRestrito;
+/* fila do quadro de pedidos que o usuário vê (hierarquia → filas) */
+function veFila(f) {
+  if (!sessao || ehAdm()) return true;
+  const l = permAtual().filas;
+  return (!l || !l.length || l.includes(f)) && (pedCompleto() || f !== "atendimento");
+}
 function primeiraAba() { const l = permAtual().abas; return ["ped", "os", "orc", "recibo", "cli", "prod", "mal", "rel", "calc", "visao", "aud"].find(a => l.includes(a)) || "ped"; }
 function cabecalhoAuth() { return { "x-painel-token": (sessao && sessao.token) || "" }; }
 let senhaPainel = "";
@@ -5140,7 +5198,7 @@ async function atualizarPedido(id, campos) {
   /* atualiza na tela primeiro, grava em seguida */
   if (antes) {
     if (campos.dados) Object.assign(antes, campos.dados);
-    ["fila", "ordem", "arquivado"].forEach(k => { if (campos[k] != null) antes[k] = campos[k]; });
+    ["fila", "ordem", "arquivado", "designer"].forEach(k => { if (campos[k] != null) antes[k] = campos[k]; });
     if (campos.artes !== undefined) antes.temArte = campos.artes.length > 0;
     if (campos.miniaturas !== undefined) { antes.miniaturas = campos.miniaturas; delete antes.miniatura; }
     antes.atualizado = new Date().toISOString();
@@ -5156,7 +5214,7 @@ async function atualizarPedido(id, campos) {
       const l = pedLocal.find(p => p.id === id);
       if (l) {
         if (campos.dados) Object.assign(l, campos.dados);
-        ["fila", "ordem", "arquivado"].forEach(k => { if (campos[k] != null) l[k] = campos[k]; });
+        ["fila", "ordem", "arquivado", "designer"].forEach(k => { if (campos[k] != null) l[k] = campos[k]; });
         if (campos.artes !== undefined) { delete l.arte; if (campos.artes.length) l.artes = campos.artes; else delete l.artes; l.temArte = campos.artes.length > 0; }
         if (campos.miniaturas !== undefined) { l.miniaturas = campos.miniaturas; delete l.miniatura; }
         l.atualizado = new Date().toISOString();
@@ -5217,6 +5275,13 @@ function chipsMateriais(p) {
   return h;
 }
 function textoPed(p) { return semAcentoTxt([p.numero, p.cliente, p.contato, p.material, p.descricao, p.atendente].join(" ")); }
+/* designers que podem ser escolhidos na Fila do designer */
+const DESIGNERS = ["CLAYTON", "ANDREW"];
+const ICO_PINCEL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.4 2.6a2 2 0 0 1 2.9 2.9L11 15.8 8.2 13z"/><path d="M8.2 13C5.5 13 4 15 4 17c0 1.5-.8 2.5-2 3 4.5 1 9-.5 9-4.2"/></svg>';
+document.addEventListener("pointerdown", e => {
+  if (e.target.closest && e.target.closest(".kc-des")) return;
+  document.querySelectorAll(".kc-des-menu:not([hidden])").forEach(m => { m.hidden = true; const c = m.closest(".kc"); if (c) c.classList.remove("menu-aberto"); const b = c && c.querySelector(".kc-des-bt"); if (b) b.setAttribute("aria-expanded", "false"); });
+});
 function cardPedido(p, fila, idxFila) {
   const el = document.createElement("article");
   el.className = "kc" + (p.prioridade === "urgente" ? " urg" : "") + (pedChegou === p.id ? " chegou" : "");
@@ -5240,6 +5305,12 @@ function cardPedido(p, fila, idxFila) {
       (!minis.length && (p.temArte || p.arte || (p.artes && p.artes.length)) ? '<span class="kc-info" title="Tem arte anexada">' + ICO_ARTE + '</span>' : "") +
       (valor && !semValores() ? '<span class="kc-valor">' + fmtReal(valor) + '</span>' : "") + '</div>' +
     ((p.contato || p.telefone) ? '<p class="kc-contato">' + ICO_PES + '<span>' + escapa([p.contato, p.telefone].filter(Boolean).join(" · ")) + '</span></p>' : "") +
+    (fila.id === "designer"
+      ? '<div class="kc-des"><button type="button" class="kc-des-bt' + (p.designer ? " on" : "") + '" aria-haspopup="true" aria-expanded="false">' + ICO_PINCEL +
+          '<span>' + (p.designer ? "Designer: <b>" + escapa(p.designer) + "</b>" : "Designer") + '</span><i aria-hidden="true">▾</i></button>' +
+        '<div class="kc-des-menu" role="menu" hidden>' + DESIGNERS.map(d => '<button type="button" role="menuitemradio" aria-checked="' + (p.designer === d) + '" data-d="' + d + '"' + (p.designer === d ? ' class="on"' : "") + '>' + escapa(d.charAt(0) + d.slice(1).toLowerCase()) + '</button>').join("") +
+          (p.designer ? '<button type="button" role="menuitem" data-d="" class="tira">Tirar designer</button>' : "") + '</div></div>'
+      : (p.designer ? '<p class="kc-contato kc-des-tag">' + ICO_PINCEL + '<span>Designer: <b>' + escapa(p.designer) + '</b></span></p>' : "")) +
     '<div class="kc-pe"><label class="kc-ok"><input type="checkbox" aria-label="' + (ultimo ? "Arquivar pedido " + escapa(p.numero) : "OK: mandar pedido " + escapa(p.numero) + " para " + escapa(FILAS[idxFila + 1].nome)) + '">' + (ultimo ? "ARQUIVAR" : "OK") + '</label>' +
     '<span class="kc-prox">' + (ultimo ? "tira do quadro" : "→ " + escapa(FILAS[idxFila + 1].nome)) + '</span></div>';
   if (minis.length) {
@@ -5261,6 +5332,29 @@ function cardPedido(p, fila, idxFila) {
     });
     mostra();
   }
+  /* escolher o designer da arte */
+  const desBt = el.querySelector(".kc-des-bt");
+  if (desBt) {
+    const menu = el.querySelector(".kc-des-menu");
+    const fechar = () => { menu.hidden = true; desBt.setAttribute("aria-expanded", "false"); el.classList.remove("menu-aberto"); };
+    desBt.addEventListener("pointerdown", ev => ev.stopPropagation());
+    desBt.addEventListener("click", ev => {
+      ev.stopPropagation();
+      const abrir = menu.hidden;
+      document.querySelectorAll(".kc-des-menu:not([hidden])").forEach(m => { m.hidden = true; m.closest(".kc").classList.remove("menu-aberto"); });
+      menu.hidden = !abrir; desBt.setAttribute("aria-expanded", String(abrir)); el.classList.toggle("menu-aberto", abrir);
+      if (abrir) setTimeout(() => (menu.querySelector(".on") || menu.querySelector("button")).focus(), 0);
+    });
+    menu.addEventListener("pointerdown", ev => ev.stopPropagation());
+    menu.addEventListener("keydown", ev => { if (ev.key === "Escape") { fechar(); desBt.focus(); } });
+    menu.querySelectorAll("button").forEach(b => b.addEventListener("click", async ev => {
+      ev.stopPropagation(); fechar();
+      const novo = b.dataset.d;
+      if (novo === (p.designer || "")) return;
+      await atualizarPedido(p.id, { designer: novo });
+      say(novo ? "Pedido #" + p.numero + " com o designer " + novo + "." : "Designer tirado do pedido #" + p.numero + ".", "ok");
+    }));
+  }
   el.querySelector(".kc-ok input").addEventListener("change", ev => {
     if (!ev.target.checked) return;
     if (!podeGravarPed()) { ev.target.checked = false; return; }
@@ -5278,7 +5372,7 @@ function cardPedido(p, fila, idxFila) {
     }, 240);
   });
   el.addEventListener("click", ev => {
-    if (ev.target.closest(".kc-ok") || ev.target.closest(".kc-seta") || Date.now() - pedSoltouEm < 300) return;
+    if (ev.target.closest(".kc-ok") || ev.target.closest(".kc-seta") || ev.target.closest(".kc-des") || Date.now() - pedSoltouEm < 300) return;
     abrirDetalhe(p, el);
   });
   el.addEventListener("keydown", ev => { if ((ev.key === "Enter" || ev.key === " ") && ev.target === el) { ev.preventDefault(); abrirDetalhe(p, el); } });
@@ -5292,7 +5386,7 @@ function renderKB() {
   let total = 0, urg = 0, atr = 0;
   const hoje = hojeISO();
   FILAS.forEach((f, i) => {
-    if (ehProducao() && f.id === "atendimento") return;   /* produção não vê a coluna de vendas */
+    if (!veFila(f.id)) return;   /* só as filas da hierarquia (produção nunca vê o atendimento) */
     const col = document.createElement("section");
     col.className = "kb-col"; col.dataset.fila = f.id; col.style.setProperty("--cor", f.cor);
     const itens = pedidos.filter(p => p.fila === f.id && (!q || textoPed(p).includes(q))).sort((a, b) => a.ordem - b.ordem);
@@ -5312,7 +5406,7 @@ function renderKB() {
     }
     kb.appendChild(col);
   });
-  pedidos.filter(p => !(ehProducao() && p.fila === "atendimento")).forEach(p => { total++; if (p.prioridade === "urgente") urg++; if (p.prazo && p.prazo < hoje && p.fila !== "pronto" && p.fila !== "entregue") atr++; });
+  pedidos.filter(p => veFila(p.fila)).forEach(p => { total++; if (p.prioridade === "urgente") urg++; if (p.prazo && p.prazo < hoje && p.fila !== "pronto" && p.fila !== "entregue") atr++; });
   $("#ped-resumo").innerHTML = total
     ? "<b>" + total + "</b> " + (total === 1 ? "pedido" : "pedidos") + " no quadro" + (urg ? " · <b>" + urg + "</b> urgente" + (urg > 1 ? "s" : "") : "") + (atr ? " · <b style=\"color:#e04848\">" + atr + "</b> atrasado" + (atr > 1 ? "s" : "") : "")
     : "Quadro vazio.";
@@ -5326,7 +5420,7 @@ let pedDrag = null, pedSoltouEm = 0;
 document.addEventListener("touchmove", e => { if (pedDrag) e.preventDefault(); }, { passive: false });
 $("#kb").addEventListener("pointerdown", e => {
   const card = e.target.closest(".kc");
-  if (!card || e.button > 0 || e.target.closest(".kc-ok") || e.target.closest(".kc-seta")) return;
+  if (!card || e.button > 0 || e.target.closest(".kc-ok") || e.target.closest(".kc-seta") || e.target.closest(".kc-des")) return;
   const toque = e.pointerType === "touch";
   const x0 = e.clientX, y0 = e.clientY;
   let ultimo = e, timer = null;
@@ -6162,7 +6256,7 @@ $("#pm-ver").addEventListener("click", async () => {
     const d = viasDoForm();
     const bytes = await buildViasPdf(d, pmTam, pmVias);
     const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
-    say(""); verPdf(bytes, "Pedido" + (d.numero ? " nº " + d.numero : "") + " · " + d.cliente + " (" + nomeVias(pmVias) + ", " + pmTam + ")", "Pedido" + (d.numero ? " nº " + d.numero : "") + " - " + cli + " (" + nomeVias(pmVias) + ", " + pmTam + ").pdf");
+    say(""); verPdf(bytes, "Pedido" + (d.numero ? " nº " + d.numero : "") + " · " + d.cliente, "Pedido" + (d.numero ? " nº " + d.numero : "") + " - " + cli + ".pdf");
   } catch (err) { console.error(err); say("Não foi possível montar o pedido.", "err"); }
   finally { btn.disabled = false; }
 });
@@ -6174,7 +6268,7 @@ $("#pm-pdf").addEventListener("click", async () => {
     const d = viasDoForm();
     const bytes = await buildViasPdf(d, pmTam, pmVias);
     const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
-    const nome = "Pedido" + (d.numero ? " nº " + d.numero : "") + " - " + cli + " (" + nomeVias(pmVias) + ", " + pmTam + ").pdf";
+    const nome = "Pedido" + (d.numero ? " nº " + d.numero : "") + " - " + cli + ".pdf";
     await salvarLocal(new Blob([bytes], { type: "application/pdf" }), nome);
     if (!pedEditId) say("PDF gerado. O pedido ainda não foi criado: clique em “Criar pedido” para guardar.");
   } catch (err) { console.error(err); say("Não foi possível gerar o PDF do pedido.", "err"); }
@@ -6495,7 +6589,7 @@ function renderDetalhe() {
   });
   $("#det-obs-sec").hidden = !p.obs;
   $("#det-obs").textContent = p.obs || "";
-  const info = [["Etapa", f.nome]].concat(semValores() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
+  const info = [["Etapa", f.nome]].concat(semValores() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Designer", p.designer || "—"], ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
   const c = (typeof clientes !== "undefined" ? clientes : []).find(x => (p.clienteId && x.id === p.clienteId) || (x.nome || "").toLowerCase() === (p.cliente || "").toLowerCase());
   if (c) {
     if (c.razao && c.razao !== c.nome) info.push(["Razão social", c.razao]);
@@ -6582,7 +6676,7 @@ $("#det-ver").addEventListener("click", async () => {
     const d = viasDoPedido(p, detArtes || []);
     const bytes = await buildViasPdf(d, detTam, pmVias);
     const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
-    say(""); verPdf(bytes, "Pedido nº " + d.numero + " · " + d.cliente + " (" + nomeVias(pmVias) + ", " + detTam + ")", "Pedido nº " + d.numero + " - " + cli + " (" + nomeVias(pmVias) + ", " + detTam + ").pdf");
+    say(""); verPdf(bytes, "Pedido nº " + d.numero + " · " + d.cliente, "Pedido nº " + d.numero + " - " + cli + ".pdf");
   } catch (err) { console.error(err); say("Não foi possível montar o pedido.", "err"); }
   finally { btn.disabled = false; }
 });
@@ -6594,7 +6688,7 @@ $("#det-imprimir").addEventListener("click", async () => {
     const d = viasDoPedido(p, detArtes || []);
     const bytes = await buildViasPdf(d, detTam, pmVias);
     const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
-    say(""); verPdf(bytes, "Pedido nº " + d.numero + " · " + d.cliente, "Pedido nº " + d.numero + " - " + cli + " (" + nomeVias(pmVias) + ", " + detTam + ").pdf", true);
+    say(""); verPdf(bytes, "Pedido nº " + d.numero + " · " + d.cliente, "Pedido nº " + d.numero + " - " + cli + ".pdf", true);
   } catch (err) { console.error(err); say("Não foi possível preparar a impressão.", "err"); }
   finally { btn.disabled = false; }
 });
@@ -6606,7 +6700,7 @@ $("#det-pdf").addEventListener("click", async () => {
     const d = viasDoPedido(p, detArtes || []);
     const bytes = await buildViasPdf(d, detTam, pmVias);
     const cli = d.cliente.replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
-    await salvarLocal(new Blob([bytes], { type: "application/pdf" }), "Pedido nº " + d.numero + " - " + cli + " (" + nomeVias(pmVias) + ", " + detTam + ").pdf");
+    await salvarLocal(new Blob([bytes], { type: "application/pdf" }), "Pedido nº " + d.numero + " - " + cli + ".pdf");
   } catch (err) { console.error(err); say("Não foi possível gerar o PDF do pedido.", "err"); }
   finally { btn.disabled = false; }
 });
@@ -6625,18 +6719,21 @@ let CAMISA = {
 let CAMISA_TIPOS = [["curta", "Manga curta"], ["longa", "Manga longa"], ["raglan", "Manga raglan"], ["polo", "Polo"], ["uniforme", "Uniforme (camisa + short)"]];
 let ACRESCIMO_TAM = { GG: 10, XG: 15, EXG: 20 };
 let TECIDOS_CAMISA = [["MICRODRY", 0], ["MALHA PP", 0], ["AERODRY", 10], ["COLMEIA", 10]];
+let GOLAS_CAMISA = [["REDONDA", 0], ["GOLA V", 0], ["POLO", 0]];
+const EMPRESAS_MAL = [["amazonia", "AMAZÔNIA GRÁFICA"], ["soares", "GRÁFICA SOARES"]];
+const nomeTabelaMal = id => (EMPRESAS_MAL.find(e => e[0] === id) || EMPRESAS_MAL[0])[1];
 const ARTE_CAMISA = [["tem", "Cliente já tem a arte"], ["recriar", "Recriar a arte do cliente"], ["zero", "Criar do zero"]];
 const nomeArteCamisa = v => (ARTE_CAMISA.find(a => a[0] === v) || [, ""])[1];
 
-function precoUnitCamisa(tipo, tam, total, tecido) {
+function precoUnitCamisa(tipo, tam, total, tecido, gola) {
   const t = CAMISA[tipo]; if (!t) return 0;
-  const tec = (TECIDOS_CAMISA.find(x => x[0] === tecido) || [, 0])[1];
+  const tec = (TECIDOS_CAMISA.find(x => x[0] === tecido) || [, 0])[1] + (GOLAS_CAMISA.find(x => x[0] === gola) || [, 0])[1];
   if (t.porTamanho) return (t.porTamanho[tam] || 0) + tec;
   const f = t.faixas.find(([de, ate]) => total >= de && total <= ate);
   if (!f) return 0;
   return f[2] + (t.acrescimo !== false ? (ACRESCIMO_TAM[tam] || 0) : 0) + tec;
 }
-let cm = null;
+let cm = null, cmUltimaTabela = "amazonia";
 function segCamisa(id, opcoes, valor, aoMudar) {
   const box = $("#" + id); box.innerHTML = "";
   opcoes.forEach(([v, rot, extra]) => {
@@ -6647,21 +6744,28 @@ function segCamisa(id, opcoes, valor, aoMudar) {
   });
 }
 function renderCamisa() {
-  if (cm._ini) delete cm._ini; else lerGolaCamisa();   /* não perde a gola digitada ao trocar tipo/tecido */
+  if (cm._ini) delete cm._ini; else lerGolaCamisa();   /* não perde a cor da gola digitada ao trocar tipo/tecido */
+  if (!EMPRESAS_MAL.some(e => e[0] === cm.tabela)) cm.tabela = "amazonia";
+  usarTabelaMal(cm.tabela);
+  segCamisa("cm-tabela", EMPRESAS_MAL, cm.tabela, v => { cm.tabela = v; renderCamisa(); });
   if (!CAMISA[cm.tipo]) cm.tipo = CAMISA_TIPOS[0][0];
   const t = CAMISA[cm.tipo];
   segCamisa("cm-tipo", CAMISA_TIPOS, cm.tipo, v => { cm.tipo = v; renderCamisa(); });
+  const golas = GOLAS_CAMISA.slice();
+  if (cm.gola && !golas.some(g => g[0] === cm.gola)) golas.push([cm.gola, 0]);
+  if (!cm.gola && golas.length) cm.gola = golas[0][0];
+  segCamisa("cm-gola", golas.map(([v, a]) => [v, v, a ? "+R$ " + reais(a) : ""]), cm.gola, v => { cm.gola = v; renderCamisa(); });
   const tecidos = TECIDOS_CAMISA.filter(x => !t.tecidos || t.tecidos.includes(x[0]));
   if (!tecidos.some(x => x[0] === cm.tecido)) cm.tecido = tecidos.length ? tecidos[0][0] : "";
   segCamisa("cm-tecido", tecidos.map(([v, a]) => [v, v, a ? "+R$ " + a : ""]), cm.tecido, v => { cm.tecido = v; renderCamisa(); });
   segCamisa("cm-arte", ARTE_CAMISA, cm.arte, v => { cm.arte = v; renderCamisa(); });
-  $("#cm-gola").value = cm.gola || ""; $("#cm-corgola").value = cm.corgola || "";
+  $("#cm-corgola").value = cm.corgola || "";
   const total = t.tamanhos.reduce((a, tm) => a + (parseInt(cm.qtd[tm], 10) || 0), 0);
   const corpo = $("#cm-grade"); corpo.innerHTML = "";
   let soma = 0;
   t.tamanhos.forEach(tm => {
     const q = parseInt(cm.qtd[tm], 10) || 0;
-    const un = precoUnitCamisa(cm.tipo, tm, Math.max(total, 1), cm.tecido);
+    const un = precoUnitCamisa(cm.tipo, tm, Math.max(total, 1), cm.tecido, cm.gola);
     const sub = q * un; soma += sub;
     const tr = document.createElement("tr");
     tr.innerHTML = '<td>' + tm + '</td><td><input type="text" inputmode="numeric" data-t="' + tm + '" value="' + (q || "") + '" placeholder="0" aria-label="Quantidade ' + tm + '"></td>' +
@@ -6680,23 +6784,27 @@ function renderCamisa() {
   let msg = "";
   if (t.minimo && total > 0 && total < t.minimo) msg = (t.rotulo || "Esse tipo") + " tem pedido mínimo de " + t.minimo + " unidades.";
   else if (t.faixas && total) { const f = t.faixas.find(([de, ate]) => total >= de && total <= ate); if (f) msg = total + " peças: preço da faixa " + (f[1] === Infinity ? "acima de " + (f[0] - 1) : f[0] + " a " + f[1]) + " unidades (" + fmtReal(f[2]) + " por peça" + (t.acrescimo !== false && Object.keys(ACRESCIMO_TAM).length ? ", mais o acréscimo de " + Object.keys(ACRESCIMO_TAM).join("/") : "") + ")."; }
+  msg = "Tabela " + nomeTabelaMal(cm.tabela) + (msg ? " · " + msg : ".");
   av.textContent = msg; av.hidden = !msg;
   av.style.background = t.minimo && total > 0 && total < t.minimo ? "" : "var(--card-2)";
   av.style.color = t.minimo && total > 0 && total < t.minimo ? "" : "var(--muted)";
   $("#cm-ok").textContent = cm.uid ? "Atualizar no pedido" : "Adicionar ao pedido";
 }
-["cm-gola", "cm-corgola"].forEach(id => ["input", "change", "blur"].forEach(ev => $("#" + id).addEventListener(ev, e => { if (cm) cm[id === "cm-gola" ? "gola" : "corgola"] = e.target.value.trim().toUpperCase(); })));
-function lerGolaCamisa() { if (!cm) return; cm.gola = $("#cm-gola").value.trim().toUpperCase(); cm.corgola = $("#cm-corgola").value.trim().toUpperCase(); }
+["input", "change", "blur"].forEach(ev => $("#cm-corgola").addEventListener(ev, e => { if (cm) cm.corgola = e.target.value.trim().toUpperCase(); }));
+function lerGolaCamisa() { if (!cm) return; cm.corgola = $("#cm-corgola").value.trim().toUpperCase(); }
 function abrirCamisa(uid) {
   const it = uid ? pmItens.find(i => i.uid === uid) : null;
-  cm = it && it.camisa ? JSON.parse(JSON.stringify(it.camisa)) : { tipo: CAMISA_TIPOS[0][0], tecido: TECIDOS_CAMISA.length ? TECIDOS_CAMISA[0][0] : "", gola: "REDONDA", corgola: "", arte: "tem", qtd: {} };
+  const tabIni = it && it.camisa ? (it.camisa.tabela || "amazonia") : (cmUltimaTabela || "amazonia");
+  usarTabelaMal(tabIni);
+  cm = it && it.camisa ? JSON.parse(JSON.stringify(it.camisa)) : { tabela: tabIni, tipo: CAMISA_TIPOS[0][0], tecido: TECIDOS_CAMISA.length ? TECIDOS_CAMISA[0][0] : "", gola: GOLAS_CAMISA.length ? GOLAS_CAMISA[0][0] : "REDONDA", corgola: "", arte: "tem", qtd: {} };
+  cm.tabela = tabIni;
   cm.uid = it ? uid : null;
   cm._ini = true;
   renderCamisa();
   $("#pm-camisa").hidden = false;
   $("#pm-camisa").scrollIntoView({ behavior: "smooth", block: "start" });
 }
-function fecharCamisa() { $("#pm-camisa").hidden = true; cm = null; }
+function fecharCamisa() { $("#pm-camisa").hidden = true; cm = null; usarTabelaMal("amazonia"); }
 $("#pm-camisa-btn").addEventListener("click", () => abrirCamisa(null));
 ["cm-fechar", "cm-cancelar"].forEach(id => $("#" + id).addEventListener("click", fecharCamisa));
 $("#cm-ok").addEventListener("click", () => {
@@ -6708,9 +6816,10 @@ $("#cm-ok").addEventListener("click", () => {
   if (!cm.total) { say("Informe a quantidade de pelo menos um tamanho.", "err"); return; }
   if (t.minimo && cm.total < t.minimo) { say((t.rotulo || "Esse tipo") + " tem pedido mínimo de " + t.minimo + " unidades.", "err"); return; }
   const tams = t.tamanhos.filter(tm => parseInt(cm.qtd[tm], 10) > 0);
-  const camisa = { tipo: cm.tipo, nome: t.nome, tecido: cm.tecido, gola: cm.gola || "", corgola: cm.corgola || "", arte: cm.arte,
+  const camisa = { tabela: cm.tabela, tipo: cm.tipo, nome: t.nome, tecido: cm.tecido, gola: cm.gola || "", corgola: cm.corgola || "", arte: cm.arte,
     qtd: tams.reduce((o, tm) => (o[tm] = parseInt(cm.qtd[tm], 10), o), {}),
-    unit: tams.reduce((o, tm) => (o[tm] = precoUnitCamisa(cm.tipo, tm, cm.total, cm.tecido), o), {}) };
+    unit: tams.reduce((o, tm) => (o[tm] = precoUnitCamisa(cm.tipo, tm, cm.total, cm.tecido, cm.gola), o), {}) };
+  cmUltimaTabela = cm.tabela;
   let it = cm.uid ? pmItens.find(i => i.uid === cm.uid) : null;
   if (it && it.camisa) { camisa.osId = it.camisa.osId; camisa.osNumero = it.camisa.osNumero; }
   if (!it) {
@@ -7305,10 +7414,32 @@ const MALHARIA_PADRAO = {
     { id: "uniforme", rotulo: "Uniforme (camisa + short)", nome: "UNIFORME PERSONALIZADO (CAMISA + SHORT)", modo: "tamanho", porTamanho: { P: 65, M: 70, G: 75, GG: 85, XG: 90, EXG: 95 }, faixas: [], tamanhos: ["P", "M", "G", "GG", "XG", "EXG"], minimo: 0, acrescimo: false, tecidos: ["MICRODRY", "MALHA PP", "AERODRY"] }
   ],
   acrescimos: [{ tam: "GG", add: 10 }, { tam: "XG", add: 15 }, { tam: "EXG", add: 20 }],
-  tecidos: [{ nome: "MICRODRY", add: 0 }, { nome: "MALHA PP", add: 0 }, { nome: "AERODRY", add: 10 }, { nome: "COLMEIA", add: 10 }]
+  tecidos: [{ nome: "MICRODRY", add: 0 }, { nome: "MALHA PP", add: 0 }, { nome: "AERODRY", add: 10 }, { nome: "COLMEIA", add: 10 }],
+  golas: [{ nome: "REDONDA", add: 0 }, { nome: "GOLA V", add: 0 }, { nome: "POLO", add: 0 }]
 };
 const clone = o => JSON.parse(JSON.stringify(o));
-let malCfg = clone(MALHARIA_PADRAO), malEd = null, malSujo = false;
+/* cada empresa tem a sua tabela: { tabelas: { amazonia: {...}, soares: {...} } }
+   (a tabela antiga, de uma empresa só, vira a da Amazônia e serve de ponto de partida para a da Soares) */
+function normalizaMal(v) {
+  const tabs = v && v.tabelas ? v.tabelas : (v && Array.isArray(v.tipos) ? { amazonia: v } : {});
+  const ok = c => c && Array.isArray(c.tipos) && c.tipos.length;
+  const base = ok(tabs.amazonia) ? tabs.amazonia : MALHARIA_PADRAO;
+  const out = {};
+  EMPRESAS_MAL.forEach(([id]) => {
+    const c = clone(ok(tabs[id]) ? tabs[id] : base);
+    if (!Array.isArray(c.acrescimos)) c.acrescimos = [];
+    if (!Array.isArray(c.tecidos)) c.tecidos = clone(MALHARIA_PADRAO.tecidos);
+    if (!Array.isArray(c.golas)) c.golas = clone(MALHARIA_PADRAO.golas);
+    out[id] = c;
+  });
+  return { tabelas: out };
+}
+let malTodas = normalizaMal(null), malEdTodas = null, malTab = "", malCfg = malTodas.tabelas.amazonia, malEd = null, malSujo = false;
+let tabelaAplicada = "";
+function usarTabelaMal(id) {
+  if (!malTodas.tabelas[id]) id = "amazonia";
+  aplicarMalharia(malTodas.tabelas[id]); tabelaAplicada = id;
+}
 const malAbertos = new Set();
 
 /* transforma a tabela editável no formato usado pelo "Pedido de camisa" */
@@ -7327,6 +7458,7 @@ function aplicarMalharia(cfg) {
   CAMISA_TIPOS = (cfg.tipos || []).map(t => [t.id, t.rotulo || t.nome]);
   ACRESCIMO_TAM = {}; (cfg.acrescimos || []).forEach(a => { if (a.tam) ACRESCIMO_TAM[String(a.tam).toUpperCase()] = Number(a.add) || 0; });
   TECIDOS_CAMISA = (cfg.tecidos || []).filter(x => x.nome).map(x => [String(x.nome).toUpperCase(), Number(x.add) || 0]);
+  GOLAS_CAMISA = (cfg.golas || []).filter(x => x.nome).map(x => [String(x.nome).toUpperCase(), Number(x.add) || 0]);
 }
 async function apiCfg(metodo, query, corpo) {
   const r = await fetch("/api/config" + (query || ""), {
@@ -7343,9 +7475,9 @@ async function carregarMalharia() {
   let v = null;
   if (modoHist === "nuvem") { try { v = (await apiCfg("GET", "?chave=malharia")).valor; } catch (e) { if (!e.semApi) say("Não consegui carregar a tabela da malharia: " + (e.msg || "sem conexão") + ".", "err"); } }
   else if (modoHist === "local") { try { v = JSON.parse(localStorage.getItem("amz_malharia") || "null"); } catch (e) {} }
-  malCfg = v && Array.isArray(v.tipos) && v.tipos.length ? v : clone(MALHARIA_PADRAO);
-  aplicarMalharia(malCfg);
-  if (!malSujo) { malEd = clone(malCfg); if (!$("#view-mal").hidden) renderMalharia(); }
+  malTodas = normalizaMal(v);
+  if (!cm) usarTabelaMal("amazonia");
+  if (!malSujo) { malEdTodas = clone(malTodas); malEd = malTab ? malEdTodas.tabelas[malTab] : null; if (!$("#view-mal").hidden) renderMalharia(); }
 }
 window.carregarMalharia = carregarMalharia;
 
@@ -7365,7 +7497,13 @@ function todosTamanhos() {
   return [...set];
 }
 function renderMalharia() {
-  if (!malEd) malEd = clone(malCfg);
+  if (!malEdTodas) malEdTodas = clone(malTodas);
+  document.querySelectorAll("#mal-empresas [data-tab]").forEach(b => { b.classList.toggle("on", b.dataset.tab === malTab); b.setAttribute("aria-selected", b.dataset.tab === malTab ? "true" : "false"); });
+  $("#mal-editor").hidden = !malTab; $("#mal-escolha").hidden = !!malTab; $("#mal-novo").disabled = !malTab;
+  marcaSujo(malSujo);
+  if (!malTab) return;
+  malEd = malEdTodas.tabelas[malTab];
+  document.querySelectorAll("[data-tabnome]").forEach(e => e.textContent = nomeTabelaMal(malTab));
   const box = $("#mal-tipos"); box.innerHTML = "";
   malEd.tipos.forEach((t, k) => {
     const d = document.createElement("details"); d.className = "mal-tipo"; d.open = malAbertos.has(t.id);
@@ -7470,14 +7608,32 @@ function renderMalharia() {
     });
     tc.appendChild(l);
   });
+  /* golas */
+  const gc = $("#mal-golas"); gc.innerHTML = "";
+  malEd.golas.forEach((x, i) => {
+    const l = document.createElement("div"); l.className = "mal-linha";
+    l.innerHTML = '<input type="text" class="nome" placeholder="Tipo de gola (ex.: GOLA V)" aria-label="Tipo de gola"><span class="rs">+ R$</span><input type="text" class="val" inputmode="decimal" placeholder="0,00" aria-label="Preço da gola"><button type="button" aria-label="Remover">×</button>';
+    const [n, v] = l.querySelectorAll("input"); n.value = x.nome || ""; v.value = x.add ? reais(x.add) : "";
+    n.addEventListener("input", () => { x.nome = n.value.toUpperCase(); marcaSujo(true); });
+    v.addEventListener("input", () => { x.add = parseReal(v.value); marcaSujo(true); });
+    l.querySelector("button").addEventListener("click", () => {
+      if (malEd.golas.length === 1) { say("Precisa ficar pelo menos um tipo de gola.", "err"); return; }
+      malEd.golas.splice(i, 1); marcaSujo(true); renderMalharia();
+    });
+    gc.appendChild(l);
+  });
   marcaSujo(malSujo);
 }
+document.querySelectorAll("#mal-empresas [data-tab]").forEach(b => b.addEventListener("click", () => {
+  malTab = b.dataset.tab; malAbertos.clear(); renderMalharia();
+}));
+$("#mal-add-gola").addEventListener("click", () => { malEd.golas.push({ nome: "", add: 0 }); marcaSujo(true); renderMalharia(); const l = $("#mal-golas").lastElementChild; if (l) l.querySelector("input").focus(); });
 function novoTipo() {
   const t = { id: "t" + Date.now().toString(36), rotulo: "Novo tipo", nome: "CAMISA NOVA", modo: "faixas", faixas: [{ de: 1, ate: "", preco: 0 }], tamanhos: ["P", "M", "G", "GG"], minimo: 0, acrescimo: true, tecidos: [] };
   malEd.tipos.push(t); malAbertos.add(t.id); marcaSujo(true); renderMalharia();
   const ult = $("#mal-tipos").lastElementChild; if (ult) { ult.scrollIntoView({ behavior: "smooth", block: "center" }); const i = ult.querySelector('[data-c="rotulo"]'); if (i) { i.focus(); i.select(); } }
 }
-$("#mal-novo").addEventListener("click", novoTipo);
+$("#mal-novo").addEventListener("click", () => { if (malTab) novoTipo(); else say("Escolha primeiro a tabela (Amazônia Gráfica ou Gráfica Soares).", "err"); });
 $("#mal-add-tipo").addEventListener("click", novoTipo);
 $("#mal-add-acres").addEventListener("click", () => { malEd.acrescimos.push({ tam: "", add: 0 }); marcaSujo(true); renderMalharia(); const l = $("#mal-acres").lastElementChild; if (l) l.querySelector("input").focus(); });
 $("#mal-add-tecido").addEventListener("click", () => { malEd.tecidos.push({ nome: "", add: 0 }); marcaSujo(true); renderMalharia(); const l = $("#mal-tecidos").lastElementChild; if (l) l.querySelector("input").focus(); });
@@ -7485,6 +7641,9 @@ function validarMalharia(cfg) {
   cfg.acrescimos = cfg.acrescimos.filter(a => String(a.tam || "").trim());
   cfg.tecidos = cfg.tecidos.filter(x => String(x.nome || "").trim());
   if (!cfg.tecidos.length) return "Cadastre pelo menos um tecido.";
+  cfg.golas = (cfg.golas || []).filter(x => String(x.nome || "").trim()).map(x => ({ nome: String(x.nome).trim().toUpperCase(), add: Number(x.add) || 0 }));
+  if (!cfg.golas.length) return "Cadastre pelo menos um tipo de gola.";
+  if (new Set(cfg.golas.map(x => x.nome)).size !== cfg.golas.length) return "Tem tipo de gola repetido.";
   for (const t of cfg.tipos) {
     const n = t.rotulo || t.nome || "sem nome";
     if (!String(t.rotulo || "").trim() || !String(t.nome || "").trim()) return "Preencha os dois nomes do tipo “" + n + "”.";
@@ -7501,27 +7660,30 @@ function validarMalharia(cfg) {
 }
 $("#mal-salvar").addEventListener("click", async () => {
   document.activeElement && document.activeElement.blur && document.activeElement.blur();
-  const cfg = clone(malEd);
-  const erro = validarMalharia(cfg);
-  if (erro) { say(erro, "err"); return; }
+  const cfg = clone(malEdTodas);
+  for (const [id, nome] of EMPRESAS_MAL) {
+    const erro = validarMalharia(cfg.tabelas[id]);
+    if (erro) { if (malTab !== id) { malTab = id; renderMalharia(); } say(nome + ": " + erro, "err"); return; }
+  }
   const btn = $("#mal-salvar"); btn.disabled = true;
   try {
     if (modoHist === "nuvem") await apiCfg("PUT", "", { chave: "malharia", valor: cfg });
     else if (modoHist === "local") localStorage.setItem("amz_malharia", JSON.stringify(cfg));
     else { say("Entre com a senha da equipe para salvar.", "err"); pedirSenha(""); return; }
-    malCfg = cfg; malEd = clone(cfg); aplicarMalharia(malCfg);
+    malTodas = cfg; malEdTodas = clone(cfg); if (!cm) usarTabelaMal("amazonia");
     marcaSujo(false); renderMalharia();
-    say("Tabela da malharia salva. Os próximos pedidos de camisa já usam esses valores.", "ok");
+    say("Tabelas da malharia salvas. Os próximos pedidos de camisa já usam esses valores.", "ok");
   } catch (e) { say("Não consegui salvar: " + (e.msg || "sem conexão") + ".", "err"); }
   finally { btn.disabled = false; }
 });
-$("#mal-desfazer").addEventListener("click", () => { malEd = clone(malCfg); marcaSujo(false); renderMalharia(); say("Alterações desfeitas."); });
+$("#mal-desfazer").addEventListener("click", () => { malEdTodas = clone(malTodas); marcaSujo(false); renderMalharia(); say("Alterações desfeitas."); });
 $("#mal-padrao").addEventListener("click", async () => {
-  if (!(await confirmar("Voltar para a tabela original de preços?", { titulo: "Tabela original", detalhe: "Só muda depois que você clicar em Salvar.", perigo: false }))) return;
-  malEd = clone(MALHARIA_PADRAO); marcaSujo(true); renderMalharia();
+  if (!malTab) { say("Escolha primeiro a tabela (Amazônia Gráfica ou Gráfica Soares).", "err"); return; }
+  if (!(await confirmar("Voltar a tabela da " + nomeTabelaMal(malTab) + " para os preços originais?", { titulo: "Tabela original", detalhe: "Só muda depois que você clicar em Salvar. A outra tabela não muda.", perigo: false }))) return;
+  malEdTodas.tabelas[malTab] = clone(MALHARIA_PADRAO); marcaSujo(true); renderMalharia();
 });
 document.querySelectorAll(".sub-abas [data-ir]").forEach(b => b.addEventListener("click", () => irPara(b.dataset.ir)));
-window.malAoAbrir = () => { if (!malEd) malEd = clone(malCfg); renderMalharia(); };
+window.malAoAbrir = () => { if (!malEdTodas) malEdTodas = clone(malTodas); renderMalharia(); };
 aplicarMalharia(malCfg);
 
 
@@ -7542,7 +7704,7 @@ function dataPedido(criado) { const q = criado ? new Date(criado) : new Date(); 
 function viasDoForm() {
   const p = pedEditId ? pedidos.find(x => x.id === pedEditId) : null;
   return Object.assign({
-    numero: p ? p.numero : "", data: dataPedido(p && p.criado),
+    numero: p ? p.numero : "", data: dataPedido(p && p.criado), designer: p ? (p.designer || "") : "",
     cliente: $("#pm-cliente").value.trim(), contato: $("#pm-contato").value.trim(), telefone: fmtTel($("#pm-telefone").value),
     atendente: $("#pm-atendente").value.trim(), prioridade: pedPrio, prazo: $("#pm-prazo").value, obs: $("#pm-obs").value.trim(),
     itens: itensParaSalvar(), artes: pmArtes.map(a => ({ img: a.img, item: a.item || "" }))
@@ -7551,19 +7713,187 @@ function viasDoForm() {
 function viasDoPedido(p, artes) {
   return {
     numero: p.numero || "", data: dataPedido(p.criado), cliente: p.cliente || "", contato: p.contato || "", telefone: p.telefone || "",
-    atendente: p.atendente || "", prioridade: p.prioridade || "normal", prazo: p.prazo || "", obs: p.obs || "",
+    atendente: p.atendente || "", designer: p.designer || "", prioridade: p.prioridade || "normal", prazo: p.prazo || "", obs: p.obs || "",
     itens: itensDoPedido(p), artes: (artes || []).map(a => ({ img: a.img, item: a.item || "" })),
     metodoPag: p.metodoPag || "", condPag: p.condPag || "", entrada: p.entrada || "", restantePago: p.restantePago || ""
   };
 }
 const ordinal = n => n + "º";
+async function buildViasPdf(v) { return buildPedidoPdf(v); }
 function unitItem(it) {
   if (it.camisa) return "por tamanho";
   const u = parseReal(it.precoUnit), q = parseReal(it.quantidade), t = parseReal(it.preco);
   if (u && (!q || !t || Math.abs(u * q - t) < 0.01)) return fmtReal(u);
   return q && t ? fmtReal(t / q) : (t ? fmtReal(t) : "");
 }
-async function buildViasPdf(v, tam, quais) {
+/* ===== impressão do pedido: uma via só, A5 (modelo da gráfica) ===== */
+const ORDEM_TAM = ["PP", "P", "M", "G", "GG", "XG", "XXG", "EXG", "G1", "G2", "G3", "G4"];
+function camisaDoItem(it) {
+  if (!it || !it.camisa) return null;
+  if (typeof it.camisa === "object") return it.camisa;
+  try { return JSON.parse(it.camisa); } catch (e) { return null; }
+}
+function gradeCamisa(c) {
+  const q = (c && c.qtd) || {};
+  const tams = Object.keys(q).filter(t => (parseInt(q[t], 10) || 0) > 0)
+    .sort((a, b) => (ORDEM_TAM.indexOf(a) + 1 || 99) - (ORDEM_TAM.indexOf(b) + 1 || 99));
+  return tams.map(t => (parseInt(q[t], 10) || 0) + " " + t).join("  |  ");
+}
+const dataBR = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || ""); return m ? m[3] + "/" + m[2] + "/" + m[1] : (iso || ""); };
+async function buildPedidoPdf(v) {
+  const antes = [PW, PH];
+  PW = 419.53; PH = 595.28;                       /* A5 em pé */
+  const ocultar = typeof semValores === "function" && semValores();
+  try {
+    const s = new Sheet();
+    const PRETO = [20, 24, 33], CINZA = [96, 104, 118], LINHA = [205, 210, 218], FAIXA = [238, 241, 245], BORDA = [150, 156, 166];
+    const X0 = 16, X1 = PW - 16, Y0 = 16, L = X0 + 16, R = X1 - 16;
+    const lg = await jpeg(LOGO, 900);
+    const itens = (v.itens || []).filter(it => (it.material || it.descricao || it.preco || it.quantidade || it.camisa));
+    const total = itens.reduce((t, it) => t + parseReal(it.preco), 0);
+    const C_QTD = L + 6, C_DESC = L + 40, C_UNIT = R - 66, C_TOT = R - 4;
+    const larguraDesc = C_UNIT - 52 - C_DESC;
+
+    let y, paginaIni;
+    const cartao = fim => s.rrect(X0, paginaIni, X1 - X0, fim - paginaIni, 9, { stroke: BORDA, lw: 0.9 });
+    function cabecalho(continua) {
+      paginaIni = Y0; y = Y0 + 14;
+      const lw = 70, lh = lw * lg.h / lg.w;
+      s.img(lg.bytes, lg.w, lg.h, L, y, lw, lh);
+      s.text("PEDIDO", L + lw + 12, y + 15, { size: 17, color: PRETO });
+      s.text("AMAZÔNIA GRÁFICA" + (continua ? "  ·  continuação" : ""), L + lw + 12, y + 28, { size: 7, bold: false, color: CINZA });
+      if (v.numero) s.text("Nº " + v.numero, R, y + 15, { size: 12, color: PRETO, maxW: 95, align: "right" });
+      y = Math.max(y + lh, y + 34) + 9;
+      s.line(L, y, R, y, 0.8, [120, 126, 136]);
+      y += 4;
+    }
+    function cabTabela() {
+      s.rect(L, y, R - L, 19, { fill: FAIXA });
+      const b = y + 12.5;
+      s.text("QTD.", C_QTD, b, { size: 7.5, color: PRETO });
+      s.text("DESCRIÇÃO", C_DESC, b, { size: 7.5, color: PRETO });
+      if (!ocultar) { s.text("UNIT.", C_UNIT, b, { size: 7.5, color: PRETO, align: "right" }); s.text("TOTAL", C_TOT, b, { size: 7.5, color: PRETO, align: "right" }); }
+      y += 19;
+    }
+    const LIMITE = () => PH - 26;
+    function quebra(alturaPrecisa) {
+      if (y + alturaPrecisa <= LIMITE() - 70) return false;
+      cartao(y + 8); s.novaPagina(); cabecalho(true); cabTabela(); return true;
+    }
+
+    cabecalho(false);
+    /* cliente e datas */
+    y += 18;
+    s.text("CLIENTE:", L, y, { size: 8, color: PRETO });
+    s.text(v.cliente || "-", L + 48, y + 0.5, { size: 12, color: PRETO, maxW: R - L - 48 });
+    y += 19;
+    s.text("DATA:", L, y, { size: 8, color: PRETO });
+    s.text(v.data || "", L + 40, y, { size: 8.5, bold: false, color: PRETO });
+    const XE = L + 170;
+    s.text("ENTREGA:", XE, y, { size: 8, color: PRETO });
+    s.text(dataBR(v.prazo) || "—", XE + 55, y, { size: 8.5, color: PRETO });
+    if (v.prioridade === "urgente") s.text("URGENTE", R, y, { size: 8, color: [200, 30, 36], align: "right" });
+    y += 12;
+
+    /* materiais */
+    cabTabela();
+    itens.forEach(it => {
+      const c = camisaDoItem(it);
+      const qtd = c ? Object.values(c.qtd || {}).reduce((t, x) => t + (parseInt(x, 10) || 0), 0) : (parseReal(it.quantidade) || (it.quantidade ? it.quantidade : 1));
+      const titulo = (it.material || (c ? "Camisas" : "Material")).trim();
+      /* camisa: tipo, tecido e gola (a descrição automática repete a grade, que já vai embaixo) */
+      const sub = c
+        ? [c.nome || (CAMISA[c.tipo] || {}).nome, c.tecido, c.gola && ("gola " + c.gola), c.corgola && ("cor da gola " + c.corgola)].filter(Boolean).join(" · ")
+        : [it.descricao, it.medidas].filter(Boolean).join(" · ");
+      const linhasSub = sub ? quebraLinhas(sub, 6.8, false, larguraDesc).slice(0, 4) : [];
+      const h = Math.max(30, 17 + linhasSub.length * 8.6 + 8);
+      quebra(h);
+      const b = y + 15;
+      s.text(String(qtd), C_QTD + 2, b, { size: 10.5, color: PRETO });
+      s.text(titulo, C_DESC, b, { size: 8.8, color: PRETO, maxW: larguraDesc + 40 });
+      linhasSub.forEach((l, i) => s.text(l, C_DESC, b + 10 + i * 8.6, { size: 6.8, bold: false, color: [60, 66, 78] }));
+      if (!ocultar) {
+        const t = parseReal(it.preco);
+        let u = unitItem(it);
+        if (c) { const qq = qtd || 0; u = qq && t ? fmtReal(t / qq) : ""; }
+        if (u) s.text(u, C_UNIT, b, { size: 7.8, bold: false, color: PRETO, align: "right" });
+        if (t) s.text(fmtReal(t), C_TOT, b, { size: 8.3, color: PRETO, align: "right" });
+      }
+      y += h;
+      s.line(L, y, R, y, 0.6, LINHA);
+    });
+    if (!itens.length) { s.text("Nenhum material informado.", C_DESC, y + 15, { size: 8, bold: false, color: CINZA }); y += 26; }
+
+    /* grade de tamanhos (camisas) */
+    const grades = itens.map(it => ({ it, c: camisaDoItem(it) })).filter(x => x.c && gradeCamisa(x.c));
+    if (grades.length) {
+      quebra(18 + grades.length * 14);
+      y += 17;
+      s.text("GRADE DE TAMANHOS:", L, y, { size: 8, color: PRETO });
+      grades.forEach((g, i) => {
+        y += 14;
+        const pre = grades.length > 1 ? ((g.it.material || "Camisas") + ": ") : "";
+        s.text(pre + gradeCamisa(g.c), L, y, { size: 9.5, color: PRETO, maxW: R - L });
+      });
+    }
+    /* observação */
+    if (v.obs) {
+      const ls = quebraLinhas(v.obs, 7.5, false, R - L - 80).slice(0, 4);
+      quebra(14 + ls.length * 9.5);
+      y += 15;
+      s.text("OBSERVAÇÃO:", L, y, { size: 8, color: PRETO });
+      ls.forEach((l, i) => s.text(l, L + 64, y + i * 9.5, { size: 7.5, bold: false, color: PRETO }));
+      y += (ls.length - 1) * 9.5;
+    }
+
+    /* referência visual (artes) */
+    const artes = (v.artes || []).filter(a => a && a.img).slice(0, 4);
+    const RODAPE = 78;
+    if (artes.length) {
+      if (LIMITE() - RODAPE - (y + 22) < 90) { cartao(y + 8); s.novaPagina(); cabecalho(true); }
+      y += 17;
+      s.text("REFERÊNCIA VISUAL:", L, y, { size: 8, color: PRETO });
+      y += 7;
+      const espH = Math.min(230, LIMITE() - RODAPE - y - 6), espW = (R - L) * (artes.length === 1 ? 0.78 : 1);
+      const gap = 8, col = artes.length, wCada = (espW - gap * (col - 1)) / col;
+      const ims = [];
+      for (const a of artes) { try { ims.push(await jpeg(a.img, 1200)); } catch (e) {} }
+      let hMax = 0;
+      const tam = ims.map(im => { const k = Math.min(wCada / im.w, espH / im.h); hMax = Math.max(hMax, im.h * k); return [im.w * k, im.h * k]; });
+      const largTot = tam.reduce((t, d) => t + d[0], 0) + gap * (tam.length - 1);
+      let x = L + (R - L - largTot) / 2;
+      ims.forEach((im, i) => { s.img(im.bytes, im.w, im.h, x, y + (hMax - tam[i][1]) / 2, tam[i][0], tam[i][1]); x += tam[i][0] + gap; });
+      y += hMax;
+    }
+
+    /* rodapé: total, pagamento, vendedor e designer */
+    if (y + RODAPE > LIMITE()) { cartao(y + 8); s.novaPagina(); cabecalho(true); }
+    y += 14;
+    s.line(L, y, R, y, 0.8, [120, 126, 136]);
+    y += 21;
+    if (!ocultar) {
+      s.text("VALOR TOTAL:", L, y, { size: 11, color: PRETO });
+      s.text(fmtReal(total), R, y, { size: 12.5, color: PRETO, align: "right" });
+    } else s.text("VALOR TOTAL:  —", L, y, { size: 11, color: CINZA });
+    y += 17;
+    const pag = ocultar ? "" : (typeof textoPagamento === "function" ? textoPagamento(v, total) : "");
+    const campo = (rot, val, x, larg) => {
+      s.text(rot, x, y, { size: 7, bold: false, color: PRETO });
+      const xv = x + textW(rot, 7, false) + 4;
+      if (val) s.text(val, xv, y, { size: 7.5, color: PRETO, maxW: larg - (xv - x) });
+      else s.line(xv, y + 1.5, x + larg, y + 1.5, 0.6, [60, 60, 60]);
+    };
+    campo("Pagamento/entrada:", pag && pag !== "A pagar" ? pag : "", L, 210);
+    y += 14;
+    campo("Vendedor(a):", (v.atendente || "").toUpperCase(), L, 120);
+    campo("Designer:", (v.designer || "").toUpperCase(), L + 132, 100);
+    y += 11;
+    cartao(y);
+    return s.build();
+  } finally { [PW, PH] = antes; }
+}
+/* antigo (2 vias) — mantido só por compatibilidade; o painel usa buildPedidoPdf */
+async function buildViasPdfAntigo(v, tam, quais) {
   const antes = [PW, PH];
   const a5 = tam === "A5";
   PW = a5 ? 419.53 : 595.28; PH = a5 ? 595.28 : 841.89;
@@ -7717,7 +8047,7 @@ const nomeVias = q => q === "impressor" ? "via impressor" : q === "atendente" ? 
 window.renderVisao=renderVisao;
 /* ================= AUDITORIA (só ADM) ================= */
 (function () {
-  const ACOES = { usuarios: "Usuários", moveu: "Moveu de fila", arquivou: "Arquivou", desarquivou: "Voltou do arquivo", criou: "Criou pedido", editou: "Editou pedido",
+  const ACOES = { usuarios: "Usuários", designer: "Designer da arte", moveu: "Moveu de fila", arquivou: "Arquivou", desarquivou: "Voltou do arquivo", criou: "Criou pedido", editou: "Editou pedido",
     artes: "Trocou artes", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
   let itens = [], ultimoId = 0, timer = null, ativa = false, novos = new Set(), carregando = false;
   const $a = id => document.getElementById(id);
@@ -7963,7 +8293,8 @@ window.renderVisao=renderVisao;
       '<div class="hier-item fixo"><div class="tx"><b>ADM</b><small>Vê e faz tudo, inclusive Usuários e Hierarquia. Não dá para mudar.</small></div></div>' +
       hierarquias.map(h => '<div class="hier-item" data-id="' + escapa(h.id) + '"><div class="tx"><b>' + escapa(h.nome) + '</b>' +
         '<div class="ab">' + h.abas.map(a => '<span>' + escapa(NOME_ABA[a] || a) + '</span>').join("") +
-        (h.abas.includes("ped") ? '<span class="' + (h.valores ? "v" : "nv") + '">' + (h.pedidos === "completo" ? "Pedidos completo" : "Pedidos: só produção") + (h.valores ? " · com valores" : " · sem valores") + '</span>' : "") + '</div>' +
+        (h.abas.includes("ped") ? '<span class="' + (h.valores ? "v" : "nv") + '">' + (h.pedidos === "completo" ? "Pedidos completo" : "Pedidos: só produção") + (h.valores ? " · com valores" : " · sem valores") + '</span>' +
+          '<span>' + (h.filas ? "Filas: " + h.filas.map(f => (FILAS.find(x => x.id === f) || { nome: f }).nome.replace(/^Fila d[ao] /, "").replace(/^Pedido /, "")).join(", ") : "Todas as filas") + '</span>' : "") + '</div>' +
         '<small>' + h.usuarios + (h.usuarios === 1 ? " usuário" : " usuários") + '</small></div>' +
         '<div class="bts"><button class="btn" type="button" data-h="editar">Editar</button><button class="btn danger" type="button" data-h="apagar">Apagar</button></div></div>').join("");
     $u("hier-lista").querySelectorAll(".hier-item[data-id]").forEach(el => {
@@ -7979,6 +8310,15 @@ window.renderVisao=renderVisao;
     $u("hier-nome").value = h ? h.nome : "";
     $u("hier-abas").innerHTML = TODAS_ABAS.map(a => '<label class="hier-aba"><input type="checkbox" value="' + a + '"' + (h && h.abas.includes(a) ? " checked" : "") + '>' + ICONE_ABA(a) + '<span>' + escapa(NOME_ABA[a]) + '</span></label>').join("");
     document.querySelector('input[name="hier-pedidos"][value="' + (h && h.pedidos === "completo" ? "completo" : "producao") + '"]').checked = true;
+    $u("hier-filas").innerHTML = FILAS.map(f => '<label class="hier-fila"><input type="checkbox" value="' + f.id + '"' + (!h || !h.filas || h.filas.includes(f.id) ? " checked" : "") + '><i style="background:' + f.cor + '"></i><span>' + escapa(f.nome) + '</span></label>').join("");
+    const ajustaAtend = () => {
+      const prod = document.querySelector('input[name="hier-pedidos"]:checked').value === "producao";
+      const at = $u("hier-filas").querySelector('input[value="atendimento"]');
+      at.disabled = prod; if (prod) at.checked = false; else if (!h) at.checked = true;
+      at.closest(".hier-fila").title = prod ? "Só a produção nunca vê o Atendimento" : "";
+    };
+    document.querySelectorAll('input[name="hier-pedidos"]').forEach(r => r.onchange = ajustaAtend);
+    ajustaAtend();
     $u("hier-valores").checked = !!(h && h.valores);
     const mostraPed = () => { $u("hier-ped").hidden = !$u("hier-abas").querySelector('input[value="ped"]').checked; };
     $u("hier-abas").querySelectorAll("input").forEach(i => i.addEventListener("change", () => { mostraPed(); $u("hier-erro").textContent = ""; }));
@@ -8006,7 +8346,9 @@ window.renderVisao=renderVisao;
     if (!nome) { erro.textContent = "Dê um nome para a hierarquia (ex.: ATENDENTE)."; $u("hier-nome").focus(); return; }
     if (nome === "ADM") { erro.textContent = "ADM já existe e vê tudo. Use outro nome."; return; }
     if (!abas.length) { erro.textContent = "Marque pelo menos uma aba."; return; }
-    const corpo = { nome, abas, pedidos: document.querySelector('input[name="hier-pedidos"]:checked').value, valores: $u("hier-valores").checked };
+    const filas = [...$u("hier-filas").querySelectorAll("input:checked:not(:disabled)")].map(i => i.value);
+    if (abas.includes("ped") && !filas.length) { erro.textContent = "Marque pelo menos uma fila do quadro de pedidos."; return; }
+    const corpo = { nome, abas, pedidos: document.querySelector('input[name="hier-pedidos"]:checked').value, valores: $u("hier-valores").checked, filas };
     const btn = $u("hier-salvar"); btn.disabled = true;
     try {
       if (hierEdit) await apiHier("PATCH", "?id=" + encodeURIComponent(hierEdit), corpo);
