@@ -23,7 +23,7 @@
  * GET   /api/pedidos?id=12&aprov=1      → { item, imgs: { original, recriada, print } }
  * GET   /api/pedidos?revisar=1          → pedidos com arte esperando revisão (só revisores)
  * PATCH /api/pedidos?id=12&aprov=1  { acao, ... }
- *       acao: imagens {original?, recriada?} · enviar · aprovar · corrigir {comentario} · cliente {print, recebidoPor}
+ *       acao: imagens {original?, recriada?} · atualizar {recriada} · enviar · aprovar · corrigir {comentario} · cliente {print, recebidoPor}
  *             · reabrir · exigir · dispensar (só ADM)
  */
 import { neon } from "@neondatabase/serverless";
@@ -328,6 +328,19 @@ export default async function handler(req, res) {
           a.temOriginal = !!imgs.original; a.temRecriada = !!imgs.recriada;
           detalhe = "Anexou a arte " + (b.recriada !== undefined && b.original !== undefined ? "original e a recriada" : b.recriada !== undefined ? "recriada" : "original do cliente");
           hist("imagens", detalhe);
+          break;
+        }
+        case "atualizar": {   /* troca a arte recriada (nova versão): volta para revisão */
+          if (!imgBoa(b.recriada)) return erro(400, "Imagem inválida ou pesada demais.");
+          const eraAprov = a.status === "aprovada";
+          imgs.recriada = b.recriada; if (eraAprov) delete imgs.print; mexeImgs = true;
+          ["via", "aprovadoPor", "aprovadoEm", "recebidoPor"].forEach(k => delete a[k]);
+          a.temRecriada = true; a.temOriginal = !!imgs.original; a.comentario = "";
+          a.versao = (Number(a.versao) || 0) + 1;
+          if (a.exige && imgs.original) { a.status = "revisao"; a.autor = eu; a.enviadoEm = agora; }
+          else if (a.exige) a.status = "pendente";
+          detalhe = "Atualizou a arte recriada (versão " + a.versao + ")" + (eraAprov ? "; a aprovação anterior deixou de valer" : "") + (a.status === "revisao" ? " e mandou para revisão" : "");
+          hist("atualizar", "Versão " + a.versao + (eraAprov ? " (aprovação anterior cancelada)" : ""));
           break;
         }
         case "enviar":
