@@ -3,9 +3,10 @@
  *
  * POST /api/login  { usuario, senha }  → { token, usuario, papel, exp }
  * GET  /api/login  (com o cabeçalho x-painel-token) → { usuario, papel } se a sessão ainda vale
+ * GET  /api/login?producao=1 (TABLET/produção/ADM logado) → { nomes } usuários da hierarquia PRODUÇÃO
  * Entradas e senhas erradas vão para a auditoria.
  */
-import { conferirLogin, criarToken, lerSessao, papelDe, limpaNome, permissoes, sqlUsuarios as sql, USUARIO_TABLET, PAPEL_TABLET, TABLET_HORAS, PERM_TABLET } from "./_auth.js";
+import { conferirLogin, criarToken, lerSessao, papelDe, limpaNome, permissoes, sqlUsuarios as sql, prepararUsuarios, USUARIO_TABLET, PAPEL_TABLET, TABLET_HORAS, PERM_TABLET } from "./_auth.js";
 import { auditar } from "./_auditoria.js";
 
 export default async function handler(req, res) {
@@ -16,6 +17,13 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
       const s = await lerSessao(req);
       if (!s) return res.status(401).json({ erro: "Sessão expirada. Entre de novo." });
+      /* lista dos usuários da PRODUÇÃO (para o "Trocar usuário" do tablet) */
+      if (req.query && req.query.producao === "1") {
+        if (!(s.adm || s.papel === "tablet" || s.papel === "producao")) return res.status(403).json({ erro: "Sem acesso." });
+        await prepararUsuarios();
+        const l = await sql`SELECT usuario FROM usuarios WHERE ativo AND papel = 'producao' ORDER BY usuario`;
+        return res.status(200).json({ nomes: l.map(r => r.usuario) });
+      }
       return res.status(200).json({ usuario: s.usuario, papel: s.papel, perm: { nome: s.nomePapel, abas: s.abas, pedidos: s.pedidos, valores: s.valores, filas: s.filas, aprovaArte: s.aprovaArte, somenteVer: !!s.somenteVer, verAtendimento: !!s.verAtendimento } });
     }
     if (req.method === "POST") {
