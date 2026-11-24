@@ -673,6 +673,22 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .pm-camisa-cab .btn-x{width:34px;height:34px;box-shadow:none}
 .cm-seg{flex-wrap:wrap}
 .cm-seg button small{opacity:.75;font-weight:600;margin-left:4px}
+.cm-lapis{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;margin-left:6px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;vertical-align:middle;flex:none}
+.cm-lapis svg{width:15px;height:15px}
+.cm-lapis:hover{color:var(--text)}
+.cm-tbl td .cm-cel{display:inline-flex;align-items:center;gap:2px}
+.cm-tbl td input.cm-ed{width:96px;min-height:34px;padding:4px 8px;font-weight:800}
+.cm-tbl td.un.manual{color:var(--accent);font-weight:800}
+.cm-tag{display:inline-block;margin-left:6px;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.cm-volta{border:0;background:none;color:var(--muted);font:inherit;font-size:11.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:2px 4px}
+.pi-camisa.sem-os{background:var(--card-2);color:var(--muted);border:1px solid var(--line)}
+.pi-enviar-os{border:1px solid var(--accent);background:transparent;color:var(--accent);font:inherit;font-size:12px;font-weight:800;border-radius:8px;padding:4px 10px;cursor:pointer;margin-right:6px}
+.det-os.pendente{border-style:dashed}
+.cm-arte-linha{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.cm-taxa{display:flex;align-items:center;gap:8px;padding:6px 8px 6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.cm-taxa span{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap}
+.cm-taxa input{width:110px;min-height:38px;padding:6px 10px;font-weight:800;font-variant-numeric:tabular-nums}
+.cm-taxa button{border:0;background:none;color:var(--muted);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-decoration:underline;padding:4px 6px}
 .cm-tbl{min-width:420px}
 .cm-tbl td{padding:6px 12px;font-variant-numeric:tabular-nums}
 .cm-tbl td:first-child{font-weight:800}
@@ -1909,16 +1925,16 @@ body.modal-aberto{overflow:hidden}
           <div class="grid-c">
             <label class="f"><span>Cor da gola</span><input type="text" id="cm-corgola" placeholder="Ex.: branca" autocomplete="off"></label>
           </div>
-          <div class="f"><span>Arte</span><div class="seg cm-seg" id="cm-arte"></div></div>
+          <div class="f"><span>Arte</span><div class="cm-arte-linha"><div class="seg cm-seg" id="cm-arte"></div><label class="cm-taxa" id="cm-taxa-box" hidden><span>Criação da arte + R$</span><input type="text" id="cm-taxa" inputmode="decimal" placeholder="0,00" aria-label="Valor da criação da arte"><button type="button" id="cm-taxa-zero">Sem cobrar</button></label></div></div>
           <div class="f"><span>Tamanhos e preços</span>
             <div class="tblwrap"><table class="tbl cm-tbl"><thead><tr><th>Tamanho</th><th>Quantidade</th><th>Preço unit.</th><th>Subtotal</th></tr></thead><tbody id="cm-grade"></tbody></table></div>
           </div>
           <p class="cm-aviso" id="cm-aviso" hidden></p>
           <div class="cm-rodape">
             <div class="cm-total"><span>Total da camisa · <em id="cm-qtd">0 peças</em></span><b id="cm-total">R$ 0,00</b></div>
-            <div class="cm-bts"><button class="btn" type="button" id="cm-cancelar">Cancelar</button><button class="btn blue" type="button" id="cm-os"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 14h6M12 11v6"/></svg>Enviar para O.S de camisa</button><button class="btn primary" type="button" id="cm-ok">Adicionar ao pedido</button></div>
+            <div class="cm-bts"><button class="btn" type="button" id="cm-cancelar">Cancelar</button><button class="btn primary" type="button" id="cm-ok">Adicionar ao pedido</button></div>
           </div>
-          <p class="hint">Os preços ficam só neste pedido. Ao salvar, o painel cria a <b>O.S. de camisa sem preço</b> para a produção e manda o pedido para a fila do designer. <b>Enviar para O.S de camisa</b> faz tudo isso na hora e já abre a O.S. preenchida (tamanhos, tipo, tecido, gola e arte) para imprimir.</p>
+          <p class="hint">Use o lápis para mudar o nome de um tamanho ou o preço unitário só nesta venda. Ao clicar em <b>Adicionar ao pedido</b> o painel pergunta se a camisa já vai para a <b>O.S de camisa</b> (sem preço, com arte, tamanhos, tecido e gola). Se não for agora, o botão <b>Enviar para O.S de camisa</b> fica no pedido para usar depois.</p>
         </div>
         <div class="grid-c">
           <label class="f"><span>Prazo de entrega</span><input type="date" id="pm-prazo"></label>
@@ -5850,8 +5866,9 @@ function renderItensPed(focar) {
     const el = document.createElement("div");
     el.className = "pm-item";
     el.innerHTML =
-      '<div class="pm-item-cab"><span>Material ' + (i + 1) + (it.camisa ? '<span class="pi-camisa">CAMISA' + (it.camisa.osNumero ? " · O.S. " + escapa(it.camisa.osNumero) : "") + '</span>' : "") + '</span>' +
+      '<div class="pm-item-cab"><span>Material ' + (i + 1) + (it.camisa ? '<span class="pi-camisa' + (it.camisa.semOS && !it.camisa.osId ? " sem-os" : "") + '">CAMISA' + (it.camisa.osNumero ? " · O.S. " + escapa(it.camisa.osNumero) : (it.camisa.semOS && !it.camisa.osId ? " · sem O.S." : "")) + '</span>' : "") + '</span>' +
       (it.camisa ? '<button type="button" class="pi-camisa-edit">Editar camisa</button>' : "") +
+      (it.camisa && it.camisa.semOS && !it.camisa.osId ? '<button type="button" class="pi-enviar-os">Enviar para O.S de camisa</button>' : "") +
       '<button type="button" class="pm-item-x" aria-label="Excluir material ' + (i + 1) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg>Excluir material</button></div>' +
       '<div class="f o-cli-wrap"><span>Produto ou material</span><input type="text" class="pi-material" placeholder="Escolha um produto cadastrado ou escreva o material" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false"><div class="o-sug" role="listbox" hidden></div></div>' +
       '<div class="o-cli-info pi-info" hidden></div>' +
@@ -5905,6 +5922,7 @@ function renderItensPed(focar) {
     });
     q("unit").addEventListener("blur", () => { if (q("unit").value.trim()) { it.unit = q("unit").value = reais(parseReal(q("unit").value)); recalcItem(it); mostraTotal(); atualizaTotalPed(); } });
     const ec = el.querySelector(".pi-camisa-edit"); if (ec) ec.addEventListener("click", () => abrirCamisa(it.uid));
+    const eo = el.querySelector(".pi-enviar-os"); if (eo) eo.addEventListener("click", () => enviarCamisaParaOS(it.uid));
     const x = el.querySelector(".pm-item-x");
     if (x) x.addEventListener("click", async () => {
       const nome = (it.material || "").trim() || "Material " + (i + 1);
@@ -6580,6 +6598,14 @@ function renderDetalhe() {
       '<div class="det-mat-val">' + (parseReal(i.preco) ? fmtReal(parseReal(i.preco)) : "—") + '</div></div>';
   }).join("") + '<div class="det-total"><span>Total do pedido</span><b>' + fmtReal(total) + '</b></div>'
     : '<p class="hint" style="margin:0">Nenhum material informado.</p>';
+  its.forEach(i => {
+    let c = i.camisa; if (typeof c === "string") { try { c = JSON.parse(c); } catch (e) { c = null; } }
+    if (!c || c.osId || !c.semOS) return;
+    const div = document.createElement("div"); div.className = "det-os pendente";
+    div.innerHTML = '<span>Camisa ainda <b>sem O.S.</b> · ' + escapa(cm_resumo(c)) + '</span>' + (pedCompleto() ? '<button type="button">Enviar para O.S de camisa</button>' : "");
+    const b = div.querySelector("button"); if (b) b.addEventListener("click", () => enviarOSDoDetalhe(p, i.uid, b));
+    $("#det-materiais").appendChild(div);
+  });
   const osCamisas = its.map(i => { let c = i.camisa; if (typeof c === "string") { try { c = JSON.parse(c); } catch (e) { c = null; } } return c && c.osId ? { c, uid: i.uid } : null; }).filter(Boolean);
   osCamisas.forEach(({ c, uid }) => {
     const div = document.createElement("div"); div.className = "det-os";
@@ -6722,9 +6748,15 @@ let TECIDOS_CAMISA = [["MICRODRY", 0], ["MALHA PP", 0], ["AERODRY", 10], ["COLME
 let GOLAS_CAMISA = [["REDONDA", 0], ["GOLA V", 0], ["POLO", 0]];
 const EMPRESAS_MAL = [["amazonia", "AMAZÔNIA GRÁFICA"], ["soares", "GRÁFICA SOARES"]];
 const nomeTabelaMal = id => (EMPRESAS_MAL.find(e => e[0] === id) || EMPRESAS_MAL[0])[1];
-const ARTE_CAMISA = [["tem", "Cliente já tem a arte"], ["recriar", "Recriar a arte do cliente"], ["zero", "Criar do zero"]];
-const nomeArteCamisa = v => (ARTE_CAMISA.find(a => a[0] === v) || [, ""])[1];
+const ARTE_CAMISA = [["tem", "Cliente já tem a arte"], ["criar", "Criar arte"]];
+const TAXA_ARTE_PADRAO = 50;
+const NOMES_ARTE = { tem: "Cliente já tem a arte", criar: "Criar arte", recriar: "Recriar a arte do cliente", zero: "Criar do zero" };
+const nomeArteCamisa = v => NOMES_ARTE[v] || "";
+const taxaArteCamisa = c => c && c.arte === "criar" ? (Number(c.taxaArte) || 0) : 0;
 
+/* preço unitário da venda: o editado à mão (lápis) ou o da tabela */
+function unitCm(tm, total) { return cm.precoManual && cm.precoManual[tm] != null ? cm.precoManual[tm] : precoUnitCamisa(cm.tipo, tm, total, cm.tecido, cm.gola); }
+const rotuloTam = tm => (cm && cm.rotTam && cm.rotTam[tm]) || tm;
 function precoUnitCamisa(tipo, tam, total, tecido, gola) {
   const t = CAMISA[tipo]; if (!t) return 0;
   const tec = (TECIDOS_CAMISA.find(x => x[0] === tecido) || [, 0])[1] + (GOLAS_CAMISA.find(x => x[0] === gola) || [, 0])[1];
@@ -6758,28 +6790,63 @@ function renderCamisa() {
   const tecidos = TECIDOS_CAMISA.filter(x => !t.tecidos || t.tecidos.includes(x[0]));
   if (!tecidos.some(x => x[0] === cm.tecido)) cm.tecido = tecidos.length ? tecidos[0][0] : "";
   segCamisa("cm-tecido", tecidos.map(([v, a]) => [v, v, a ? "+R$ " + a : ""]), cm.tecido, v => { cm.tecido = v; renderCamisa(); });
-  segCamisa("cm-arte", ARTE_CAMISA, cm.arte, v => { cm.arte = v; renderCamisa(); });
+  if (cm.arte === "recriar" || cm.arte === "zero") { cm.arte = "criar"; if (cm.taxaArte == null) cm.taxaArte = 0; }   /* pedidos antigos */
+  if (!NOMES_ARTE[cm.arte]) cm.arte = "tem";
+  segCamisa("cm-arte", ARTE_CAMISA, cm.arte, v => {
+    cm.arte = v;
+    if (v === "criar" && cm.taxaArte == null) cm.taxaArte = TAXA_ARTE_PADRAO;
+    renderCamisa();
+    if (v === "criar") { const i = $("#cm-taxa"); i.focus(); i.select(); }
+  });
+  $("#cm-taxa-box").hidden = cm.arte !== "criar";
+  if (document.activeElement !== $("#cm-taxa")) $("#cm-taxa").value = cm.taxaArte ? reais(cm.taxaArte) : "";
   $("#cm-corgola").value = cm.corgola || "";
   const total = t.tamanhos.reduce((a, tm) => a + (parseInt(cm.qtd[tm], 10) || 0), 0);
   const corpo = $("#cm-grade"); corpo.innerHTML = "";
   let soma = 0;
+  cm.rotTam = cm.rotTam || {}; cm.precoManual = cm.precoManual || {};
   t.tamanhos.forEach(tm => {
     const q = parseInt(cm.qtd[tm], 10) || 0;
-    const un = precoUnitCamisa(cm.tipo, tm, Math.max(total, 1), cm.tecido, cm.gola);
+    const manual = cm.precoManual[tm] != null;
+    const un = unitCm(tm, Math.max(total, 1));
     const sub = q * un; soma += sub;
+    const rot = rotuloTam(tm);
     const tr = document.createElement("tr");
-    tr.innerHTML = '<td>' + tm + '</td><td><input type="text" inputmode="numeric" data-t="' + tm + '" value="' + (q || "") + '" placeholder="0" aria-label="Quantidade ' + tm + '"></td>' +
-      '<td class="un">' + (un ? fmtReal(un) : "—") + '</td><td class="sub">' + (q ? fmtReal(sub) : "—") + '</td>';
+    tr.innerHTML = '<td><span class="cm-cel"><b>' + escapa(rot) + '</b><button type="button" class="cm-lapis" data-edtam="' + escapa(tm) + '" aria-label="Editar o tamanho ' + escapa(rot) + '" title="Editar tamanho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button></span></td>' +
+      '<td><input type="text" inputmode="numeric" data-t="' + escapa(tm) + '" value="' + (q || "") + '" placeholder="0" aria-label="Quantidade ' + escapa(rot) + '"></td>' +
+      '<td class="un' + (manual ? " manual" : "") + '"><span class="cm-cel">' + (un ? fmtReal(un) : "—") + '<button type="button" class="cm-lapis" data-edun="' + escapa(tm) + '" aria-label="Editar o preço unitário do ' + escapa(rot) + '" title="Editar preço unitário"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>' +
+        (manual ? '<button type="button" class="cm-volta" data-volta="' + escapa(tm) + '" title="Voltar ao preço da tabela">tabela</button>' : "") + '</span></td>' +
+      '<td class="sub">' + (q ? fmtReal(sub) : "—") + '</td>';
     corpo.appendChild(tr);
   });
+  const editarCel = (btn, valor, aoSalvar, num) => {
+    const cel = btn.closest("td"), box = cel.querySelector(".cm-cel");
+    const inp = document.createElement("input"); inp.type = "text"; inp.className = "cm-ed"; inp.value = valor;
+    if (num) inp.inputMode = "decimal";
+    box.replaceWith(inp); inp.focus(); inp.select();
+    let feito = false;
+    const fim = ok => { if (feito) return; feito = true; if (ok) aoSalvar(inp.value.trim()); renderCamisa(); };
+    inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); fim(true); } else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); fim(false); } });
+    inp.addEventListener("blur", () => fim(true));
+  };
+  corpo.querySelectorAll("[data-edtam]").forEach(b => b.addEventListener("click", () => {
+    const tm = b.dataset.edtam;
+    editarCel(b, rotuloTam(tm), v => { v = v.toUpperCase().slice(0, 20); if (!v || v === tm) delete cm.rotTam[tm]; else cm.rotTam[tm] = v; }, false);
+  }));
+  corpo.querySelectorAll("[data-edun]").forEach(b => b.addEventListener("click", () => {
+    const tm = b.dataset.edun;
+    editarCel(b, reais(unitCm(tm, Math.max(total, 1))), v => { if (!v) delete cm.precoManual[tm]; else cm.precoManual[tm] = Math.round(parseReal(v) * 100) / 100; }, true);
+  }));
+  corpo.querySelectorAll("[data-volta]").forEach(b => b.addEventListener("click", () => { delete cm.precoManual[b.dataset.volta]; renderCamisa(); }));
   corpo.querySelectorAll("input").forEach(inp => inp.addEventListener("change", () => {
     cm.qtd[inp.dataset.t] = String(parseInt(soDig(inp.value), 10) || "");
     renderCamisa();
     const prox = $("#cm-grade").querySelector('input[data-t="' + inp.dataset.t + '"]'); if (prox) prox.focus();
   }));
-  cm.total = total; cm.valor = soma;
-  $("#cm-qtd").textContent = total + (total === 1 ? " peça" : " peças");
-  $("#cm-total").textContent = fmtReal(soma);
+  const taxa = taxaArteCamisa(cm);
+  cm.total = total; cm.valor = soma + taxa;
+  $("#cm-qtd").textContent = total + (total === 1 ? " peça" : " peças") + (taxa ? " + criação da arte " + fmtReal(taxa) : (cm.arte === "criar" ? " · criação da arte sem cobrar" : ""));
+  $("#cm-total").textContent = fmtReal(cm.valor);
   const av = $("#cm-aviso");
   let msg = "";
   if (t.minimo && total > 0 && total < t.minimo) msg = (t.rotulo || "Esse tipo") + " tem pedido mínimo de " + t.minimo + " unidades.";
@@ -6790,6 +6857,9 @@ function renderCamisa() {
   av.style.color = t.minimo && total > 0 && total < t.minimo ? "" : "var(--muted)";
   $("#cm-ok").textContent = cm.uid ? "Atualizar no pedido" : "Adicionar ao pedido";
 }
+$("#cm-taxa").addEventListener("input", () => { if (!cm) return; cm.taxaArte = parseReal($("#cm-taxa").value) || 0; renderCamisa(); });
+$("#cm-taxa").addEventListener("blur", () => { if (cm) $("#cm-taxa").value = cm.taxaArte ? reais(cm.taxaArte) : ""; });
+$("#cm-taxa-zero").addEventListener("click", ev => { ev.preventDefault(); if (!cm) return; cm.taxaArte = 0; $("#cm-taxa").value = ""; renderCamisa(); });
 ["input", "change", "blur"].forEach(ev => $("#cm-corgola").addEventListener(ev, e => { if (cm) cm.corgola = e.target.value.trim().toUpperCase(); }));
 function lerGolaCamisa() { if (!cm) return; cm.corgola = $("#cm-corgola").value.trim().toUpperCase(); }
 function abrirCamisa(uid) {
@@ -6798,6 +6868,8 @@ function abrirCamisa(uid) {
   usarTabelaMal(tabIni);
   cm = it && it.camisa ? JSON.parse(JSON.stringify(it.camisa)) : { tabela: tabIni, tipo: CAMISA_TIPOS[0][0], tecido: TECIDOS_CAMISA.length ? TECIDOS_CAMISA[0][0] : "", gola: GOLAS_CAMISA.length ? GOLAS_CAMISA[0][0] : "REDONDA", corgola: "", arte: "tem", qtd: {} };
   cm.tabela = tabIni;
+  cm.rotTam = cm.rotTam || {}; cm.precoManual = cm.precoManual || {};
+  Object.entries(cm.rotTam).forEach(([orig, rot]) => { if (cm.qtd[rot] != null && orig !== rot) { cm.qtd[orig] = cm.qtd[rot]; delete cm.qtd[rot]; } });
   cm.uid = it ? uid : null;
   cm._ini = true;
   renderCamisa();
@@ -6807,21 +6879,26 @@ function abrirCamisa(uid) {
 function fecharCamisa() { $("#pm-camisa").hidden = true; cm = null; usarTabelaMal("amazonia"); }
 $("#pm-camisa-btn").addEventListener("click", () => abrirCamisa(null));
 ["cm-fechar", "cm-cancelar"].forEach(id => $("#" + id).addEventListener("click", fecharCamisa));
-$("#cm-ok").addEventListener("click", () => {
+/* põe a camisa no pedido; devolve o uid do material (ou null se faltou algo) */
+function adicionarCamisa(semOS) {
   document.activeElement && document.activeElement.blur && document.activeElement.blur();
-  $("#cm-grade").querySelectorAll("input").forEach(inp => cm.qtd[inp.dataset.t] = String(parseInt(soDig(inp.value), 10) || ""));
+  $("#cm-grade").querySelectorAll("input[data-t]").forEach(inp => cm.qtd[inp.dataset.t] = String(parseInt(soDig(inp.value), 10) || ""));
   lerGolaCamisa();
   renderCamisa();
   const t = CAMISA[cm.tipo];
-  if (!cm.total) { say("Informe a quantidade de pelo menos um tamanho.", "err"); return; }
-  if (t.minimo && cm.total < t.minimo) { say((t.rotulo || "Esse tipo") + " tem pedido mínimo de " + t.minimo + " unidades.", "err"); return; }
+  if (!cm.total) { say("Informe a quantidade de pelo menos um tamanho.", "err"); return null; }
+  if (t.minimo && cm.total < t.minimo) { say((t.rotulo || "Esse tipo") + " tem pedido mínimo de " + t.minimo + " unidades.", "err"); return null; }
   const tams = t.tamanhos.filter(tm => parseInt(cm.qtd[tm], 10) > 0);
-  const camisa = { tabela: cm.tabela, tipo: cm.tipo, nome: t.nome, tecido: cm.tecido, gola: cm.gola || "", corgola: cm.corgola || "", arte: cm.arte,
-    qtd: tams.reduce((o, tm) => (o[tm] = parseInt(cm.qtd[tm], 10), o), {}),
-    unit: tams.reduce((o, tm) => (o[tm] = precoUnitCamisa(cm.tipo, tm, cm.total, cm.tecido, cm.gola), o), {}) };
+  const rotTam = {}, precoManual = {};
+  tams.forEach(tm => { if (cm.rotTam[tm]) rotTam[tm] = cm.rotTam[tm]; if (cm.precoManual[tm] != null) precoManual[tm] = cm.precoManual[tm]; });
+  const camisa = { tabela: cm.tabela, tipo: cm.tipo, nome: t.nome, tecido: cm.tecido, gola: cm.gola || "", corgola: cm.corgola || "", arte: cm.arte, taxaArte: taxaArteCamisa(cm),
+    qtd: tams.reduce((o, tm) => (o[rotuloTam(tm)] = (o[rotuloTam(tm)] || 0) + parseInt(cm.qtd[tm], 10), o), {}),
+    unit: tams.reduce((o, tm) => (o[rotuloTam(tm)] = unitCm(tm, cm.total), o), {}),
+    rotTam, precoManual };
   cmUltimaTabela = cm.tabela;
   let it = cm.uid ? pmItens.find(i => i.uid === cm.uid) : null;
   if (it && it.camisa) { camisa.osId = it.camisa.osId; camisa.osNumero = it.camisa.osNumero; }
+  if (semOS && !camisa.osId) camisa.semOS = true;
   if (!it) {
     const vazio = pmItens.find(i => !String(i.material).trim() && !String(i.descricao).trim() && !parseReal(i.preco));
     it = vazio || itemPedVazio(); if (!vazio) pmItens.push(it);
@@ -6830,26 +6907,40 @@ $("#cm-ok").addEventListener("click", () => {
     camisa, prod: null, produtoId: "", precoUnit: "", unit: "", precoManual: true,
     material: t.nome,
     descricao: [cm.tecido, cm.gola ? "gola " + cm.gola + (cm.corgola ? " " + cm.corgola : "") : "", "arte: " + nomeArteCamisa(cm.arte).toLowerCase()].filter(Boolean).join(" · "),
-    medidas: tams.map(tm => tm + " " + camisa.qtd[tm]).join(" · "),
+    medidas: tams.map(tm => rotuloTam(tm) + " " + parseInt(cm.qtd[tm], 10)).join(" · "),
     quantidade: String(cm.total),
     preco: reais(cm.valor)
   });
-  cmUltimoUid = it.uid;
-  /* camisa sempre passa pelo designer (arte do cliente, recriar ou criar do zero) */
+  /* camisa sempre passa pelo designer (arte do cliente ou criar arte) */
   if ($("#pm-fila").value === "atendimento") $("#pm-fila").value = "designer";
   fecharCamisa();
   renderItensPed();
-  say("Camisa no pedido: " + cm_resumo(camisa) + ". Ao salvar, a O.S. sem preço é criada.", "ok");
-});
-/* "Enviar para O.S de camisa": põe a camisa no pedido, salva o pedido e abre a O.S. (sem preço) preenchida */
-let cmUltimoUid = null, pmAbrirOSDepois = null;
-$("#cm-os").addEventListener("click", () => {
-  cmUltimoUid = null;
-  $("#cm-ok").click();
-  if (!$("#pm-camisa").hidden || !cmUltimoUid) return;      /* faltou algo na camisa: o aviso já apareceu */
-  if (!$("#pm-cliente").value.trim()) { say("Informe o nome do cliente para enviar a O.S. de camisa.", "err"); $("#pm-cliente").focus(); return; }
-  pmAbrirOSDepois = cmUltimoUid;
+  return it.uid;
+}
+/* manda uma camisa do pedido aberto para a O.S.: salva o pedido e abre a O.S. preenchida */
+function enviarCamisaParaOS(uid) {
+  const it = pmItens.find(i => i.uid === uid); if (!it || !it.camisa) return;
+  delete it.camisa.semOS;
+  renderItensPed();
+  if (!$("#pm-cliente").value.trim()) { say("Informe o nome do cliente e salve o pedido: a O.S. de camisa é criada junto.", "err"); $("#pm-cliente").focus(); return; }
+  pmAbrirOSDepois = uid;
   $("#pm-form").requestSubmit();
+}
+let pmAbrirOSDepois = null;
+$("#cm-ok").addEventListener("click", async () => {
+  const jaTemOS = cm && cm.uid && (pmItens.find(i => i.uid === cm.uid) || {}).camisa && pmItens.find(i => i.uid === cm.uid).camisa.osId;
+  if (jaTemOS) { const uid = adicionarCamisa(false); if (uid) say("Camisa atualizada. Ao salvar, a O.S. de camisa também é atualizada.", "ok"); return; }
+  /* confere antes de perguntar */
+  $("#cm-grade").querySelectorAll("input[data-t]").forEach(inp => cm.qtd[inp.dataset.t] = String(parseInt(soDig(inp.value), 10) || ""));
+  renderCamisa();
+  const t = CAMISA[cm.tipo];
+  if (!cm.total) { say("Informe a quantidade de pelo menos um tamanho.", "err"); return; }
+  if (t.minimo && cm.total < t.minimo) { say((t.rotulo || "Esse tipo") + " tem pedido mínimo de " + t.minimo + " unidades.", "err"); return; }
+  const sim = await confirmar("Deseja enviar para O.S de camisa?", { titulo: "O.S de camisa", detalhe: "Sim: salva o pedido e abre a O.S de camisa já preenchida com arte, tamanhos, tecido e gola. Não: a camisa fica só no pedido, com o botão “Enviar para O.S de camisa” para usar depois.", sim: "Sim, enviar", nao: "Não", perigo: false });
+  const uid = adicionarCamisa(!sim);
+  if (!uid) return;
+  if (sim) enviarCamisaParaOS(uid);
+  else say("Camisa no pedido. Quando quiser, use “Enviar para O.S de camisa” no material.", "ok");
 });
 async function abrirOSDepoisDeSalvar(uid, pedido, dados) {
   const it = (dados.itens || []).find(i => i.uid === uid);
@@ -6898,6 +6989,7 @@ async function sincronizarOSCamisa(pedido, dados, artes, artesMudaram) {
   for (const it of dados.itens || []) {
     if (!it.camisa) continue;
     let c; try { c = JSON.parse(it.camisa); } catch (e) { continue; }
+    if (c.semOS && !c.osId) continue;   /* escolheu não enviar para a O.S. (ainda) */
     const existente = c.osId ? historico.find(h => (h.id || h.quando) === c.osId) : null;
     const reg = regOSCamisa(c, dados, pedido.numero, existente && existente.dados);
     /* arte do pedido (a ligada a esta camisa, ou a primeira) vai para a O.S. */
@@ -6917,6 +7009,30 @@ async function sincronizarOSCamisa(pedido, dados, artes, artesMudaram) {
   }
   delete dados._pedidoId;
   if (mudou) await atualizarPedido(pedido.id, { dados });
+}
+/* botão do detalhe: cria a O.S. de uma camisa que ficou "sem O.S." e abre preenchida */
+const CAMPOS_DADOS_PED = ["cliente", "clienteId", "contato", "telefone", "material", "produtoId", "precoUnit", "descricao", "medidas", "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes",
+  "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo", "designer"];
+async function enviarOSDoDetalhe(p, uid, btn) {
+  if (btn) btn.disabled = true;
+  try {
+    const dados = {}; CAMPOS_DADOS_PED.forEach(k => { if (p[k] != null) dados[k] = p[k]; });
+    dados.itens = itensDoPedido(p).map(i => Object.assign({}, i));
+    const it = dados.itens.find(i => i.uid === uid); if (!it) return;
+    let c; try { c = typeof it.camisa === "string" ? JSON.parse(it.camisa) : it.camisa; } catch (e) { return; }
+    delete c.semOS; it.camisa = JSON.stringify(c);
+    dados.itens.forEach(i => { if (i.camisa && typeof i.camisa !== "string") i.camisa = JSON.stringify(i.camisa); });
+    let artes = detArtes;
+    if (!artes && p.temArte && modoHist === "nuvem") { try { artes = (await apiPed("GET", "?id=" + encodeURIComponent(p.id) + "&arte=1")).artes; } catch (e) {} }
+    artes = artes || artesCompletasLocais(p) || [];
+    await atualizarPedido(p.id, { dados });
+    const ped = pedidos.find(x => x.id === p.id) || p;
+    await sincronizarOSCamisa(ped, dados, artes, true);
+    const c2 = JSON.parse(dados.itens.find(i => i.uid === uid).camisa);
+    detArtes = artes;
+    await abrirOSDoPedido(c2, ped, uid);
+  } catch (e) { say("Não consegui enviar para a O.S.: " + (e.msg || e.message || "sem conexão") + ".", "err"); }
+  finally { if (btn) btn.disabled = false; }
 }
 /* abre a O.S. ligada ao pedido, já com a arte do material anexada */
 async function abrirOSDoPedido(c, pedido, uid) {
@@ -7803,7 +7919,8 @@ async function buildPedidoPdf(v) {
       const titulo = (it.material || (c ? "Camisas" : "Material")).trim();
       /* camisa: tipo, tecido e gola (a descrição automática repete a grade, que já vai embaixo) */
       const sub = c
-        ? [c.nome || (CAMISA[c.tipo] || {}).nome, c.tecido, c.gola && ("gola " + c.gola), c.corgola && ("cor da gola " + c.corgola)].filter(Boolean).join(" · ")
+        ? [c.nome || (CAMISA[c.tipo] || {}).nome, c.tecido, c.gola && ("gola " + c.gola), c.corgola && ("cor da gola " + c.corgola),
+           taxaArteCamisa(c) ? "criação da arte" + (ocultar ? "" : " " + fmtReal(taxaArteCamisa(c))) : ""].filter(Boolean).join(" · ")
         : [it.descricao, it.medidas].filter(Boolean).join(" · ");
       const linhasSub = sub ? quebraLinhas(sub, 6.8, false, larguraDesc).slice(0, 4) : [];
       const h = Math.max(30, 17 + linhasSub.length * 8.6 + 8);
@@ -7815,7 +7932,7 @@ async function buildPedidoPdf(v) {
       if (!ocultar) {
         const t = parseReal(it.preco);
         let u = unitItem(it);
-        if (c) { const qq = qtd || 0; u = qq && t ? fmtReal(t / qq) : ""; }
+        if (c) { const qq = qtd || 0, tc = t - taxaArteCamisa(c); u = qq && tc > 0 ? fmtReal(tc / qq) : ""; }
         if (u) s.text(u, C_UNIT, b, { size: 7.8, bold: false, color: PRETO, align: "right" });
         if (t) s.text(fmtReal(t), C_TOT, b, { size: 8.3, color: PRETO, align: "right" });
       }
