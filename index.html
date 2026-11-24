@@ -453,6 +453,9 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .usr-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .usr-card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:12px}
 .usr-card.off{opacity:.6}
+.usr-apv{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 12px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer}
+.usr-apv input{width:18px;height:18px;accent-color:#3b82f6}
+.usr-tag.apv{background:#3b82f622;color:#60a5fa}
 .usr-cab{display:flex;align-items:center;gap:12px}
 .usr-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;background:var(--card-2);border:1.5px solid var(--line-2);flex:none}
 .usr-card.adm .usr-av{border-color:var(--brand);color:var(--brand)}
@@ -9248,16 +9251,18 @@ window.renderVisao=renderVisao;
       const adm = u.papel === "adm", souEu = u.usuario === eu;
       return '<div class="usr-card' + (adm ? " adm" : "") + (u.ativo ? "" : " off") + '" data-u="' + escapa(u.usuario) + '">' +
         '<div class="usr-cab"><span class="usr-av" aria-hidden="true">' + escapa(u.usuario.slice(0, 1)) + '</span><div><div class="usr-nome">' + escapa(u.usuario) + '</div>' +
-        '<div class="usr-tags"><span class="usr-tag' + (adm ? " adm" : "") + '">' + escapa(nomeHier(u.papel)) + '</span>' + (souEu ? '<span class="usr-tag eu">Você</span>' : "") + (u.ativo ? "" : '<span class="usr-tag off">Desativado</span>') + '</div></div></div>' +
+        '<div class="usr-tags"><span class="usr-tag' + (adm ? " adm" : "") + '">' + escapa(nomeHier(u.papel)) + '</span>' + (souEu ? '<span class="usr-tag eu">Você</span>' : "") + (u.ativo ? "" : '<span class="usr-tag off">Desativado</span>') + (u.aprovaArte || adm || (hierarquias.find(h => h.id === u.papel) || {}).aprovaArte ? '<span class="usr-tag apv">Aprova artes</span>' : "") + '</div></div></div>' +
         '<div class="usr-info">' + escapa(quando(u.ultimoLogin)) + '</div>' +
         '<div class="usr-acoes"><button class="btn" type="button" data-a="senha">Trocar senha</button>' +
         (souEu ? "" : '<select class="sel usr-sel" data-a="papel" aria-label="Hierarquia de ' + escapa(u.usuario) + '">' +
           [["adm", "ADM"]].concat(hierarquias.map(h => [h.id, h.nome])).map(([id, n]) => '<option value="' + escapa(id) + '"' + (id === u.papel ? " selected" : "") + '>' + escapa(n) + '</option>').join("") + '</select>' +
+          (adm ? "" : '<label class="usr-apv"><input type="checkbox" data-a="aprova"' + (u.aprovaArte ? " checked" : "") + (((hierarquias.find(h => h.id === u.papel) || {}).aprovaArte) ? " checked disabled title=\"Já liberado pela hierarquia\"" : "") + '><span>Pode aprovar artes</span></label>') +
           '<button class="btn" type="button" data-a="ativo">' + (u.ativo ? "Desativar" : "Reativar") + '</button>' +
           '<button class="btn danger" type="button" data-a="apagar">Apagar</button>') + '</div></div>';
     }).join("");
     $u("usr-lista").querySelectorAll(".usr-card").forEach(c => c.querySelectorAll("[data-a]").forEach(b => {
       if (b.tagName === "SELECT") b.addEventListener("change", () => acao(c.dataset.u, "papel", b.value, b));
+      else if (b.type === "checkbox") b.addEventListener("change", () => acao(c.dataset.u, "aprova", b.checked, b));
       else b.addEventListener("click", () => acao(c.dataset.u, b.dataset.a));
     }));
   }
@@ -9424,6 +9429,9 @@ window.renderVisao=renderVisao;
         if (!(await confirmar("Colocar " + nome + " na hierarquia " + nomeHier(novo) + "?", { titulo: "Mudar hierarquia", detalhe: det + " Se estiver logado, ele vai precisar entrar de novo.", sim: "Mudar", nao: "Voltar" }))) { if (sel) sel.value = u.papel; return; }
         await apiUsr("PATCH", "?usuario=" + encodeURIComponent(nome), { papel: novo });
         say(nome + " agora é " + nomeHier(novo) + ".", "ok");
+      } else if (a === "aprova") {
+        await apiUsr("PATCH", "?usuario=" + encodeURIComponent(nome), { aprovaArte: !!valor });
+        say(valor ? nome + " agora pode aprovar artes (aparece “Artes para revisar” para ele ao entrar de novo ou recarregar)." : nome + " não aprova mais artes.", "ok");
       } else if (a === "ativo") {
         if (u.ativo && !(await confirmar("Desativar " + nome + "?", { titulo: "Desativar usuário", detalhe: "Ele sai do painel na hora e não consegue mais entrar até ser reativado.", sim: "Desativar", nao: "Voltar", perigo: true }))) return;
         await apiUsr("PATCH", "?usuario=" + encodeURIComponent(nome), { ativo: !u.ativo });
