@@ -681,6 +681,33 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .cm-tbl td.un.manual{color:var(--accent);font-weight:800}
 .cm-tag{display:inline-block;margin-left:6px;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
 .cm-volta{border:0;background:none;color:var(--muted);font:inherit;font-size:11.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:2px 4px}
+.fl-lista{display:flex;flex-direction:column;gap:8px;margin:12px 0 6px}
+.fl-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card-2);flex-wrap:wrap}
+.fl-item .fl-dot{width:14px;height:14px;border-radius:50%;flex:none}
+.fl-item b{font-size:14.5px}
+.fl-item .fl-pad{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fl-item.nova{border-style:dashed;border-color:var(--accent)}
+.fl-item input[type=text]{flex:1;min-width:160px;min-height:40px;padding:6px 10px;font-weight:700}
+.fl-item select{min-height:40px;padding:6px 10px;max-width:220px}
+.fl-item .fl-ord{display:flex;gap:4px}
+.fl-item .fl-ord button,.fl-item .fl-rm{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:16px;cursor:pointer}
+.fl-item .fl-rm{color:#e04848;font-size:18px}
+.fl-item .fl-n{font-size:12px;color:var(--muted)}
+.fl-nova{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;align-items:end}
+.fl-nova .f:nth-child(3){grid-column:1/-1}
+.fl-nova #fl-add{grid-column:1/-1;justify-self:start}
+.fl-nova select,.fl-item select{min-height:46px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card-2);color:var(--text);font:inherit;font-weight:600;width:100%}
+.fl-item select{width:auto;min-height:40px}
+.fl-cores{display:flex;gap:8px;flex-wrap:wrap}
+.fl-cores button{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;box-shadow:0 0 0 1px var(--line)}
+.fl-cores button.on{border-color:var(--text)}
+.fl-mini{display:flex;gap:6px}
+.fl-mini button{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer}
+.fl-mini button.on{border-color:var(--text)}
+@media (max-width:600px){.fl-nova{grid-template-columns:1fr}}
+.det-os-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);border-color:var(--accent);color:#fff}
+.det-os-btn svg{width:18px;height:18px}
+.det-os-btn:disabled{opacity:.6}
 .pi-camisa.sem-os{background:var(--card-2);color:var(--muted);border:1px solid var(--line)}
 .pi-enviar-os{border:1px solid var(--accent);background:transparent;color:var(--accent);font:inherit;font-size:12px;font-weight:800;border-radius:8px;padding:4px 10px;cursor:pointer;margin-right:6px}
 .det-os.pendente{border-style:dashed}
@@ -1029,6 +1056,7 @@ body.modal-aberto{overflow:hidden}
       <button class="icobtn" type="button" id="menu" aria-label="Abrir ou fechar o menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <h1 id="titulo">O.S Camisa</h1>
       <div class="top-acoes" id="top-ped" hidden>
+        <button class="btn" type="button" id="ped-filas" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><path d="M19.5 8v8M15.5 12h8"/></svg><span>Filas</span></button>
         <button class="btn" type="button" id="ped-entregues-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/><path d="m9 13 2 2 4-4"/></svg><span>Arquivados</span></button>
         <button class="btn primary" type="button" id="ped-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo pedido</span></button>
       </div>
@@ -1892,6 +1920,7 @@ body.modal-aberto{overflow:hidden}
           <button class="btn" type="button" id="det-ver">Visualizar</button>
           <button class="btn blue" type="button" id="det-pdf">Baixar PDF</button>
           <button class="btn" type="button" id="det-imprimir">Imprimir</button>
+          <button class="btn det-os-btn" type="button" id="det-os"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg>O.S da Camisa</button>
         </div>
         <span class="espaco"></span>
         <button class="btn" type="button" id="det-fechar2">Fechar</button>
@@ -1983,6 +2012,24 @@ body.modal-aberto{overflow:hidden}
         <button class="btn primary" type="submit" id="pm-salvar">Criar pedido</button>
       </div>
     </form>
+  </div>
+
+  <div class="modal" id="filas-modal" hidden role="dialog" aria-modal="true" aria-labelledby="fl-titulo">
+    <div class="modal-box">
+      <div class="modal-cab"><h2 id="fl-titulo">Filas do quadro</h2><button class="btn-x" type="button" id="fl-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo">
+        <p class="hint" style="margin-top:0">As filas padrão não podem ser apagadas. Crie filas novas e escolha depois de qual fila ela entra: o <b>OK</b> do card manda o pedido para a próxima fila, nesta ordem.</p>
+        <div class="fl-lista" id="fl-lista"></div>
+        <p class="c-sec">Nova fila</p>
+        <div class="fl-nova">
+          <label class="f"><span>Nome da fila</span><input type="text" id="fl-nome" maxlength="40" placeholder="Ex.: Fila da sublimação" autocomplete="off"></label>
+          <label class="f"><span>Entra depois de</span><select id="fl-depois"></select></label>
+          <div class="f"><span>Cor</span><div class="fl-cores" id="fl-cores"></div></div>
+          <button class="btn primary" type="button" id="fl-add">+ Adicionar fila</button>
+        </div>
+      </div>
+      <div class="modal-pe"><span class="cnt" id="fl-estado"></span><span class="espaco"></span><button class="btn" type="button" id="fl-cancelar">Cancelar</button><button class="btn primary" type="button" id="fl-salvar">Salvar filas</button></div>
+    </div>
   </div>
 
   <div class="modal" id="ent-modal" hidden role="dialog" aria-modal="true" aria-labelledby="ent-titulo">
@@ -3652,6 +3699,7 @@ function carregarExtras() {
   if (window.carregarProdutos && (podeAlguma(["prod", "orc"]) || pedCompleto())) carregarProdutos();
   if (window.carregarMalharia && (podeAlguma(["mal", "orc"]) || pedCompleto())) carregarMalharia();
   if (window.carregarTamanhosOS && podeAlguma(["os", "ped"])) carregarTamanhosOS();
+  if (window.carregarFilas && podeAlguma(["ped", "visao", "rel"])) carregarFilas();
 }
 async function carregarNuvem() {
   if (!sessao) return;
@@ -5089,7 +5137,7 @@ $("#topo-btn").addEventListener("click", () => {
 
 
 /* ================= PEDIDOS (KANBAN) ================= */
-const FILAS = [
+const FILAS_PADRAO = [
   { id: "atendimento", nome: "Atendimento", cor: "#8b5cf6" },
   { id: "designer", nome: "Fila do designer", cor: "#3b82f6" },
   { id: "impressao", nome: "Fila da impressão", cor: "#06b6d4" },
@@ -5098,6 +5146,42 @@ const FILAS = [
   { id: "pronto", nome: "Pedido pronto", cor: "#22c55e" },
   { id: "entregue", nome: "Pedido entregue", cor: "#64748b" }
 ];
+/* filas do quadro: as padrão + as criadas pelo ADM (configuração "filas": { extras: [{ id, nome, cor, depois }] }) */
+const FILAS = FILAS_PADRAO.map(f => Object.assign({ padrao: true }, f));
+let filasCfg = { extras: [] };
+function montarFilas(cfg) {
+  const lista = FILAS_PADRAO.map(f => Object.assign({ padrao: true }, f));
+  const extras = (cfg && Array.isArray(cfg.extras) ? cfg.extras : []).filter(e => e && e.id && e.nome).slice();
+  let mudou = true;
+  while (extras.length && mudou) {
+    mudou = false;
+    for (let i = 0; i < extras.length; i++) {
+      const e = extras[i], k = lista.findIndex(f => f.id === e.depois);
+      if (k < 0) continue;
+      let pos = k + 1;
+      while (pos < lista.length && !lista[pos].padrao && lista[pos].depois === e.depois) pos++;
+      lista.splice(pos, 0, { id: e.id, nome: e.nome, cor: e.cor || "#94a3b8", depois: e.depois });
+      extras.splice(i, 1); i--; mudou = true;
+    }
+  }
+  extras.forEach(e => lista.splice(lista.length - 1, 0, { id: e.id, nome: e.nome, cor: e.cor || "#94a3b8", depois: e.depois }));
+  return lista;
+}
+function aplicarFilas(cfg) {
+  filasCfg = cfg && Array.isArray(cfg.extras) ? { extras: cfg.extras } : { extras: [] };
+  FILAS.splice(0, FILAS.length, ...montarFilas(filasCfg));
+  const sel = document.getElementById("pm-fila");
+  if (sel) { const v = sel.value; sel.innerHTML = FILAS.map(f => '<option value="' + f.id + '">' + escapa(f.nome) + '</option>').join(""); if (FILAS.some(f => f.id === v)) sel.value = v; }
+}
+async function carregarFilas() {
+  let v = null;
+  if (modoHist === "nuvem") { try { v = (await apiCfg("GET", "?chave=filas")).valor; } catch (e) { return; } }
+  else if (modoHist === "local") { try { v = JSON.parse(localStorage.getItem("amz_filas") || "null"); } catch (e) {} }
+  const antes = JSON.stringify(filasCfg);
+  aplicarFilas(v);
+  if (JSON.stringify(filasCfg) !== antes && typeof renderKB === "function") renderKB();
+}
+window.carregarFilas = carregarFilas;
 const MATERIAIS = ["LONA", "ADESIVO", "ACM", "PVC", "BANNER", "PLACA", "CAMISA", "FAIXA", "IMPRESSOS", "OUTRO"];
 const filaInfo = id => FILAS.find(f => f.id === id) || FILAS[0];
 
@@ -5396,6 +5480,7 @@ function cardPedido(p, fila, idxFila) {
 }
 function renderKB() {
   const kb = $("#kb"); if (!kb) return;
+  const bf = $("#ped-filas"); if (bf) bf.hidden = !ehAdm();
   const q = semAcentoTxt(($("#ped-busca").value || "").trim());
   const scroll = kb.scrollLeft;
   kb.innerHTML = "";
@@ -5405,8 +5490,9 @@ function renderKB() {
     if (!veFila(f.id)) return;   /* só as filas da hierarquia (produção nunca vê o atendimento) */
     const col = document.createElement("section");
     col.className = "kb-col"; col.dataset.fila = f.id; col.style.setProperty("--cor", f.cor);
-    const itens = pedidos.filter(p => p.fila === f.id && (!q || textoPed(p).includes(q))).sort((a, b) => a.ordem - b.ordem);
-    const naFila = pedidos.filter(p => p.fila === f.id).length;
+    const daFila = p => p.fila === f.id || (i === 0 && !FILAS.some(x => x.id === p.fila));   /* fila apagada: aparece no atendimento */
+    const itens = pedidos.filter(p => daFila(p) && (!q || textoPed(p).includes(q))).sort((a, b) => a.ordem - b.ordem);
+    const naFila = pedidos.filter(daFila).length;
     col.innerHTML = '<div class="kb-cab"><span class="kb-dot"></span><h3>' + escapa(f.nome) + '</h3><span class="kb-n">' + (q ? itens.length + "/" : "") + naFila + '</span></div><div class="kb-lista" data-fila="' + f.id + '"></div>';
     const lista = col.querySelector(".kb-lista");
     itens.forEach(p => lista.appendChild(cardPedido(p, f, i)));
@@ -5525,9 +5611,10 @@ function abrirModal(m) { m.hidden = false; document.body.classList.add("modal-ab
 function fecharModal(m) { m.hidden = true; if (!document.querySelector(".modal:not([hidden])")) document.body.classList.remove("modal-aberto"); }
 function setPrio(v) { pedPrio = v === "urgente" ? "urgente" : "normal"; document.querySelectorAll("#pm-prio button").forEach(b => b.classList.toggle("on", b.dataset.v === pedPrio)); }
 document.querySelectorAll("#pm-prio button").forEach(b => b.addEventListener("click", () => setPrio(b.dataset.v)));
-$("#pm-fila").innerHTML = FILAS.map(f => '<option value="' + f.id + '">' + f.nome + '</option>').join("");
+$("#pm-fila").innerHTML = FILAS.map(f => '<option value="' + f.id + '">' + escapa(f.nome) + '</option>').join("");
 
 function abrirPedidoModal(p, filaInicial) {
+  pmPerguntouCamisa = false;
   if (!podeGravarPed()) return;
   pedEditId = p ? p.id : null;
   $("#pm-titulo").textContent = p ? "Pedido #" + p.numero : "Novo pedido";
@@ -5555,9 +5642,22 @@ $("#pm-cliente").addEventListener("change", () => {
 $("#pm-telefone").addEventListener("blur", e => e.target.value = fmtTel(e.target.value));
 $("#pm-form").addEventListener("submit", async ev => {
   ev.preventDefault();
-  const irOS = pmAbrirOSDepois; pmAbrirOSDepois = null;
+  let irOS = pmAbrirOSDepois; pmAbrirOSDepois = null;
   const cliente = $("#pm-cliente").value.trim();
   if (!cliente) { say("Informe o nome do cliente.", "err"); $("#pm-cliente").focus(); return; }
+  /* camisa lançada em Materiais (e não pela Venda de camisa): pergunta se cria a O.S. */
+  const suspeitos = pmItens.filter(pareceCamisa);
+  if (suspeitos.length && !pmPerguntouCamisa && !camisaRecusada(pedEditId) && podeAba("os")) {
+    pmPerguntouCamisa = true;
+    const prev = camisasDeMateriais(pmItens);
+    const sim = await confirmar("Esse pedido parece ser de camisa. Deseja criar a O.S da camisa?", {
+      titulo: "Pedido de camisa?", sim: "Sim, criar O.S", nao: "Não", perigo: false,
+      detalhe: "Encontrei em Materiais: " + suspeitos.map(i => String(i.material || i.descricao).trim().toUpperCase()).join(", ") + ". " +
+        "Sim: junto como venda de camisa (" + prev.map(g => resumoGrupo(g)).join("; ") + "), mantendo os valores, e crio a O.S de camisa sem preço. Não: salva do jeito que está."
+    });
+    if (sim) { const uid = converterItensCamisa(pmItens); renderItensPed(); if (uid && !irOS) irOS = uid; }
+    else recusarCamisa(pedEditId);
+  }
   const c = (typeof clientes !== "undefined" ? clientes : []).find(x => (x.nome || "").toLowerCase() === cliente.toLowerCase());
   const itens = itensParaSalvar();
   const total = itens.reduce((a, i) => a + parseReal(i.preco), 0);
@@ -5637,6 +5737,88 @@ async function abrirEntregues() {
   abrirModal($("#ent-modal"));
 }
 $("#ped-entregues-btn").addEventListener("click", abrirEntregues);
+
+/* ---------- filas personalizadas (só ADM) ---------- */
+const CORES_FILA = ["#8b5cf6", "#3b82f6", "#06b6d4", "#14b8a6", "#22c55e", "#84cc16", "#eab308", "#f59e0b", "#f97316", "#ef4444", "#ec4899", "#64748b"];
+let flEd = null, flCorNova = CORES_FILA[3];
+const flLista = () => montarFilas(flEd);
+function flOpcoesDepois(lista, atual, semId) {
+  return lista.filter(f => f.id !== "entregue" && f.id !== semId).map(f => '<option value="' + f.id + '"' + (f.id === atual ? " selected" : "") + '>' + escapa(f.nome) + '</option>').join("");
+}
+function renderFilasEd() {
+  const lista = flLista(), box = $("#fl-lista"); box.innerHTML = "";
+  lista.forEach(f => {
+    const n = pedidos.filter(p => p.fila === f.id).length;
+    const d = document.createElement("div"); d.className = "fl-item" + (f.padrao ? "" : " nova");
+    if (f.padrao) d.innerHTML = '<span class="fl-dot" style="background:' + f.cor + '"></span><b>' + escapa(f.nome) + '</b>' + (n ? '<span class="fl-n">' + n + ' pedido' + (n > 1 ? "s" : "") + '</span>' : "") + '<span class="fl-pad">padrão</span>';
+    else {
+      const e = flEd.extras.find(x => x.id === f.id);
+      d.innerHTML = '<span class="fl-dot" style="background:' + escapa(e.cor) + '"></span><input type="text" maxlength="40" aria-label="Nome da fila"><label class="fl-n">depois de</label><select aria-label="Entra depois de">' + flOpcoesDepois(lista, e.depois, e.id) + '</select>' +
+        '<div class="fl-mini">' + CORES_FILA.map(c => '<button type="button" style="background:' + c + '"' + (c === e.cor ? ' class="on"' : "") + ' data-c="' + c + '" aria-label="Cor"></button>').join("") + '</div>' +
+        (n ? '<span class="fl-n">' + n + ' pedido' + (n > 1 ? "s" : "") + '</span>' : "") + '<button type="button" class="fl-rm" aria-label="Apagar fila">×</button>';
+      const inp = d.querySelector("input"); inp.value = e.nome;
+      inp.addEventListener("input", () => { e.nome = inp.value; flSujo(); });
+      d.querySelector("select").addEventListener("change", ev => { e.depois = ev.target.value; flSujo(); renderFilasEd(); });
+      d.querySelectorAll(".fl-mini button").forEach(b => b.addEventListener("click", () => { e.cor = b.dataset.c; flSujo(); renderFilasEd(); }));
+      d.querySelector(".fl-rm").addEventListener("click", async () => {
+        if (n && !(await confirmar("Apagar a fila " + e.nome + "?", { titulo: "Apagar fila", detalhe: "Os " + n + " pedido(s) dessa fila voltam para a fila anterior quando você salvar." }))) return;
+        flEd.extras = flEd.extras.filter(x => x.id !== e.id);
+        flEd.extras.forEach(x => { if (x.depois === e.id) x.depois = e.depois; });
+        flSujo(); renderFilasEd();
+      });
+    }
+    box.appendChild(d);
+  });
+  const dep = $("#fl-depois"), v = dep.value;
+  dep.innerHTML = flOpcoesDepois(lista, v || "costura");
+  $("#fl-cores").innerHTML = CORES_FILA.map(c => '<button type="button" style="background:' + c + '"' + (c === flCorNova ? ' class="on"' : "") + ' data-c="' + c + '" aria-label="Cor ' + c + '"></button>').join("");
+  $("#fl-cores").querySelectorAll("button").forEach(b => b.addEventListener("click", () => { flCorNova = b.dataset.c; renderFilasEd(); }));
+}
+function flSujo() { $("#fl-estado").textContent = "● Alterações não salvas"; }
+function abrirFilas() {
+  if (!ehAdm()) return;
+  flEd = JSON.parse(JSON.stringify(filasCfg));
+  $("#fl-nome").value = ""; $("#fl-estado").textContent = ""; $("#fl-depois").value = "";
+  renderFilasEd();
+  abrirModal($("#filas-modal"));
+}
+$("#ped-filas").addEventListener("click", abrirFilas);
+["fl-fechar", "fl-cancelar"].forEach(id => $("#" + id).addEventListener("click", () => fecharModal($("#filas-modal"))));
+$("#fl-add").addEventListener("click", () => {
+  const nome = $("#fl-nome").value.replace(/\s+/g, " ").trim();
+  if (!nome) { say("Dê um nome para a fila.", "err"); $("#fl-nome").focus(); return; }
+  if (flLista().some(f => semAcentoTxt(f.nome) === semAcentoTxt(nome))) { say("Já existe uma fila com esse nome.", "err"); return; }
+  if (flEd.extras.length >= 20) { say("Dá para criar até 20 filas novas.", "err"); return; }
+  flEd.extras.push({ id: "f_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), nome, cor: flCorNova, depois: $("#fl-depois").value || "costura" });
+  $("#fl-nome").value = ""; flSujo(); renderFilasEd();
+  say("Fila " + nome + " adicionada. Clique em Salvar filas para valer.", "ok");
+});
+$("#fl-nome").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); $("#fl-add").click(); } });
+$("#fl-salvar").addEventListener("click", async () => {
+  document.activeElement && document.activeElement.blur && document.activeElement.blur();
+  const cfg = { extras: flEd.extras.map(e => ({ id: e.id, nome: String(e.nome || "").replace(/\s+/g, " ").trim(), cor: e.cor, depois: e.depois })) };
+  if (cfg.extras.some(e => !e.nome)) { say("Tem fila sem nome.", "err"); return; }
+  const btn = $("#fl-salvar"); btn.disabled = true;
+  try {
+    /* pedidos em filas apagadas voltam para a fila anterior (na ordem antiga) */
+    const antigas = FILAS.slice(), novasIds = montarFilas(cfg).map(f => f.id);
+    const sumiram = antigas.filter(f => !novasIds.includes(f.id)).map(f => f.id);
+    if (modoHist === "nuvem") await apiCfg("PUT", "", { chave: "filas", valor: cfg });
+    else if (modoHist === "local") localStorage.setItem("amz_filas", JSON.stringify(cfg));
+    else { say("Entre no painel para salvar.", "err"); return; }
+    aplicarFilas(cfg);
+    for (const p of pedidos.filter(x => sumiram.includes(x.fila))) {
+      let k = antigas.findIndex(f => f.id === p.fila) - 1;
+      while (k > 0 && sumiram.includes(antigas[k].id)) k--;
+      const destino = antigas[Math.max(k, 0)].id;
+      await atualizarPedido(p.id, { fila: destino, ordem: ordemFinal(destino, p.id) });
+    }
+    renderKB();
+    fecharModal($("#filas-modal"));
+    say("Filas salvas.", "ok");
+  } catch (e) { say("Não consegui salvar as filas: " + (e.msg || "sem conexão") + ".", "err"); }
+  finally { btn.disabled = false; }
+});
 $("#ent-fechar").addEventListener("click", () => fecharModal($("#ent-modal")));
 document.querySelectorAll(".modal:not(.modal-conf):not(.pdf-modal)").forEach(m => m.addEventListener("mousedown", e => { if (e.target === m) fecharModal(m); }));
 document.addEventListener("keydown", e => {
@@ -6639,6 +6821,7 @@ document.querySelectorAll("#det-tam button").forEach(b => b.addEventListener("cl
 
 function abrirDetalhe(p, origem) {
   detPed = p; detIdx = kcArteIdx.get(p.id) || 0; detMinis = minisDe(p); detArtes = null; detCarregando = null;
+  $("#det-os").hidden = !podeAba("os");
   /* artes em tamanho real: locais já estão no pedido; no banco, busca agora */
   const locais = artesCompletasLocais(p);
   if (locais.length) detArtes = locais;
@@ -6756,6 +6939,8 @@ const taxaArteCamisa = c => c && c.arte === "criar" ? (Number(c.taxaArte) || 0) 
 
 /* preço unitário da venda: o editado à mão (lápis) ou o da tabela */
 function unitCm(tm, total) { return cm.precoManual && cm.precoManual[tm] != null ? cm.precoManual[tm] : precoUnitCamisa(cm.tipo, tm, total, cm.tecido, cm.gola); }
+/* tamanhos da tabela + os que vieram de fora dela (ex.: camisa lançada em Materiais) */
+const tamsCm = t => t.tamanhos.concat(Object.keys(cm.qtd || {}).filter(k => !t.tamanhos.includes(k) && (parseInt(cm.qtd[k], 10) || 0) > 0));
 const rotuloTam = tm => (cm && cm.rotTam && cm.rotTam[tm]) || tm;
 function precoUnitCamisa(tipo, tam, total, tecido, gola) {
   const t = CAMISA[tipo]; if (!t) return 0;
@@ -6801,11 +6986,12 @@ function renderCamisa() {
   $("#cm-taxa-box").hidden = cm.arte !== "criar";
   if (document.activeElement !== $("#cm-taxa")) $("#cm-taxa").value = cm.taxaArte ? reais(cm.taxaArte) : "";
   $("#cm-corgola").value = cm.corgola || "";
-  const total = t.tamanhos.reduce((a, tm) => a + (parseInt(cm.qtd[tm], 10) || 0), 0);
+  const listaTam = tamsCm(t);
+  const total = listaTam.reduce((a, tm) => a + (parseInt(cm.qtd[tm], 10) || 0), 0);
   const corpo = $("#cm-grade"); corpo.innerHTML = "";
   let soma = 0;
   cm.rotTam = cm.rotTam || {}; cm.precoManual = cm.precoManual || {};
-  t.tamanhos.forEach(tm => {
+  listaTam.forEach(tm => {
     const q = parseInt(cm.qtd[tm], 10) || 0;
     const manual = cm.precoManual[tm] != null;
     const un = unitCm(tm, Math.max(total, 1));
@@ -6888,7 +7074,7 @@ function adicionarCamisa(semOS) {
   const t = CAMISA[cm.tipo];
   if (!cm.total) { say("Informe a quantidade de pelo menos um tamanho.", "err"); return null; }
   if (t.minimo && cm.total < t.minimo) { say((t.rotulo || "Esse tipo") + " tem pedido mínimo de " + t.minimo + " unidades.", "err"); return null; }
-  const tams = t.tamanhos.filter(tm => parseInt(cm.qtd[tm], 10) > 0);
+  const tams = tamsCm(t).filter(tm => parseInt(cm.qtd[tm], 10) > 0);
   const rotTam = {}, precoManual = {};
   tams.forEach(tm => { if (cm.rotTam[tm]) rotTam[tm] = cm.rotTam[tm]; if (cm.precoManual[tm] != null) precoManual[tm] = cm.precoManual[tm]; });
   const camisa = { tabela: cm.tabela, tipo: cm.tipo, nome: t.nome, tecido: cm.tecido, gola: cm.gola || "", corgola: cm.corgola || "", arte: cm.arte, taxaArte: taxaArteCamisa(cm),
@@ -7016,24 +7202,217 @@ const CAMPOS_DADOS_PED = ["cliente", "clienteId", "contato", "telefone", "materi
 async function enviarOSDoDetalhe(p, uid, btn) {
   if (btn) btn.disabled = true;
   try {
-    const dados = {}; CAMPOS_DADOS_PED.forEach(k => { if (p[k] != null) dados[k] = p[k]; });
-    dados.itens = itensDoPedido(p).map(i => Object.assign({}, i));
+    const dados = dadosDoPedido(p);
     const it = dados.itens.find(i => i.uid === uid); if (!it) return;
-    let c; try { c = typeof it.camisa === "string" ? JSON.parse(it.camisa) : it.camisa; } catch (e) { return; }
+    const c = lerCamisa(it.camisa); if (!c) return;
     delete c.semOS; it.camisa = JSON.stringify(c);
-    dados.itens.forEach(i => { if (i.camisa && typeof i.camisa !== "string") i.camisa = JSON.stringify(i.camisa); });
-    let artes = detArtes;
-    if (!artes && p.temArte && modoHist === "nuvem") { try { artes = (await apiPed("GET", "?id=" + encodeURIComponent(p.id) + "&arte=1")).artes; } catch (e) {} }
-    artes = artes || artesCompletasLocais(p) || [];
-    await atualizarPedido(p.id, { dados });
-    const ped = pedidos.find(x => x.id === p.id) || p;
-    await sincronizarOSCamisa(ped, dados, artes, true);
-    const c2 = JSON.parse(dados.itens.find(i => i.uid === uid).camisa);
-    detArtes = artes;
-    await abrirOSDoPedido(c2, ped, uid);
+    await gravarCamisaEOS(p, dados, uid, false);
   } catch (e) { say("Não consegui enviar para a O.S.: " + (e.msg || e.message || "sem conexão") + ".", "err"); }
   finally { if (btn) btn.disabled = false; }
 }
+/* ===== camisa lançada em Materiais: reconhece e transforma em venda de camisa ===== */
+let pmPerguntouCamisa = false;
+const semAcento = t => String(t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
+const PAL_CAMISA = /\b(CAMISAS?|CAMISETAS?|CAMISETES?|BLUSAS?|BABY ?LOOKS?|REGATAS?|UNIFORMES?|FARDAS?|FARDAMENTOS?|ABADAS?|JERSEYS?|POLOS?|MANGA (CURTA|LONGA)|RAGLAN|MACHAO|CROPPEDS?|DRY ?FIT)\b/;
+const NAO_CAMISA = /\b(ADESIVOS?|LONAS?|BANNERS?|PLACAS?|ACM|PVC|FAIXAS?|CARTA[OE]S?|PANFLETOS?|FLYERS?|ETIQUETAS?|TAGS?|CANECAS?|BONES?|ESTAMPAS?|SILK|TRANSFER|DTF|SUBLIMACAO|IMPRESSAO|ARTE|LOGO|CRIACAO|BORDADO|CHAVEIROS?|SACOLAS?)\b/;
+function distEd(a, b) {
+  const m = a.length, n = b.length; if (Math.abs(m - n) > 2) return 9;
+  let ant = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) {
+    const at = [i];
+    for (let j = 1; j <= n; j++) at[j] = Math.min(ant[j] + 1, at[j - 1] + 1, ant[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    ant = at;
+  }
+  return ant[n];
+}
+const palavras = t => semAcento(t).replace(/[^A-Z0-9 ]+/g, " ").split(/\s+/).filter(Boolean);
+/* aceita erro de digitação: "CAMSA", "CAMIZA", "CAMISETAA" */
+const pareceCamisaTexto = t => { const u = semAcento(t); return PAL_CAMISA.test(u) || palavras(t).some(w => w.length >= 5 && ["CAMISA", "CAMISAS", "CAMISETA", "CAMISETAS"].some(k => distEd(w, k) <= 1)); };
+function pareceCamisa(it) {
+  if (!it || it.camisa) return false;
+  const m = String(it.material || ""), d = String(it.descricao || "");
+  if (!(m.trim() || d.trim())) return false;
+  if (NAO_CAMISA.test(semAcento(m))) return false;
+  return pareceCamisaTexto(m) || (!m.trim() && pareceCamisaTexto(d));
+}
+function camisaRecusada(id) { try { return !!id && (JSON.parse(localStorage.getItem("amz_sem_os_camisa") || "[]")).includes(id); } catch (e) { return false; } }
+function recusarCamisa(id) { if (!id) return; try { const l = JSON.parse(localStorage.getItem("amz_sem_os_camisa") || "[]"); if (!l.includes(id)) l.push(id); localStorage.setItem("amz_sem_os_camisa", JSON.stringify(l.slice(-300))); } catch (e) {} }
+function tamanhosConhecidos() {
+  const set = new Set(["PP", "P", "M", "G", "GG", "XG", "XGG", "XXG", "EG", "EGG", "EXG", "G1", "G2", "G3", "G4", "G5", "BL", "2", "4", "6", "8", "10", "12", "14", "16"].concat(TAM_PADRAO, ORDEM_TAM));
+  Object.values(CAMISA).forEach(t => (t.tamanhos || []).forEach(x => set.add(String(x).toUpperCase())));
+  return set;
+}
+/* lê tamanho(s) e quantidade de um material: "CAMISA G" + 24 · medidas "M 10 · G 5" · "10 M, 5 G" · "tamanho GG" */
+function tamanhosDoItem(it) {
+  const conh = tamanhosConhecidos();
+  const qtd = parseInt(soDig(it.quantidade), 10) || 0;
+  const med = semAcento(it.medidas);
+  const pares = {}; let soma = 0, re;
+  const r1 = /\b([A-Z]{1,3}\d?|\d{1,2})\s*[:=X-]?\s*(\d{1,4})\b/g;           /* M 10 */
+  while ((re = r1.exec(med))) if (conh.has(re[1]) && !/^\d+$/.test(re[1])) { pares[re[1]] = (pares[re[1]] || 0) + +re[2]; soma += +re[2]; }
+  if (!soma) { const r2 = /\b(\d{1,4})\s*(?:UN\.?\s*)?([A-Z]{1,3}\d?)\b/g;     /* 10 M */
+    while ((re = r2.exec(med))) if (conh.has(re[2])) { pares[re[2]] = (pares[re[2]] || 0) + +re[1]; soma += +re[1]; } }
+  if (soma && (!qtd || soma === qtd)) return pares;
+  /* um tamanho só: o último que aparece no nome do material (ou "tamanho X" na descrição) */
+  const ws = palavras(it.material).concat(palavras(it.medidas));
+  let tam = ws.slice().reverse().find(w => conh.has(w) && !/^\d+$/.test(w));
+  if (!tam) { const m = /\bTAM(?:ANHO)?\.?\s*([A-Z]{1,3}\d?)\b/.exec(semAcento(it.descricao)); if (m && conh.has(m[1])) tam = m[1]; }
+  return { [tam || "S/ TAM"]: qtd || soma || 1 };
+}
+function tecidoDoItem(it) {
+  const txt = semAcento([it.material, it.descricao, it.medidas].join(" ")), ws = palavras(txt), junto = txt.replace(/[^A-Z0-9]/g, "");
+  for (const [nome] of TECIDOS_CAMISA) { const n = semAcento(nome).replace(/[^A-Z0-9]/g, ""); if (n.length >= 3 && junto.includes(n)) return nome; }
+  for (const [nome] of TECIDOS_CAMISA) { const n = semAcento(nome).replace(/[^A-Z0-9]/g, ""); if (n.length >= 5 && ws.some(w => distEd(w, n) <= Math.max(1, Math.floor(n.length / 5)))) return nome; }
+  return "";
+}
+function golaDoItem(it) {
+  const txt = " " + semAcento([it.material, it.descricao].join(" ")).replace(/GOLA EM V/g, "GOLA V").replace(/\bGOLA\s+/g, "GOLA ") + " ";
+  for (const [nome] of GOLAS_CAMISA) { const n = semAcento(nome); if (txt.includes(" " + n + " ") || txt.includes(" GOLA " + n.replace(/^GOLA /, "") + " ")) return nome; }
+  return "";
+}
+function tipoDoItem(it) {
+  const txt = semAcento([it.material, it.descricao].join(" "));
+  const achou = CAMISA_TIPOS.find(([id, rot]) => { const nm = semAcento((CAMISA[id] || {}).nome || rot).replace(/^CAMISA\s+/, ""); return nm && txt.includes(nm); })
+    || CAMISA_TIPOS.find(([id, rot]) => { const k = semAcento(rot).replace(/^MANGA\s+/, "").split(/\s+/)[0]; return k.length >= 4 && k !== "CURTA" && new RegExp("\\b" + k + "\\b").test(txt); });
+  return (achou || CAMISA_TIPOS.find(([id, rot]) => /CURTA/i.test(rot)) || CAMISA_TIPOS[0])[0];
+}
+/* agrupa os materiais de camisa (mesmo tipo, tecido e gola) */
+function camisasDeMateriais(itens) {
+  const grupos = new Map();
+  itens.forEach(it => {
+    if (!pareceCamisa(it)) return;
+    const tipo = tipoDoItem(it), tecido = tecidoDoItem(it), gola = golaDoItem(it), k = tipo + "|" + tecido + "|" + gola;
+    if (!grupos.has(k)) grupos.set(k, { tipo, tecido, gola, itens: [], qtd: {}, valorTam: {}, total: 0 });
+    const g = grupos.get(k); g.itens.push(it);
+    const tams = tamanhosDoItem(it), soma = Object.values(tams).reduce((a, b) => a + b, 0), preco = parseReal(it.preco);
+    Object.entries(tams).forEach(([tm, q]) => { g.qtd[tm] = (g.qtd[tm] || 0) + q; g.valorTam[tm] = (g.valorTam[tm] || 0) + (soma ? preco * q / soma : 0); });
+    g.total += preco;
+  });
+  return [...grupos.values()];
+}
+const resumoGrupo = g => { const n = Object.values(g.qtd).reduce((a, b) => a + b, 0); return n + " peças " + Object.entries(g.qtd).map(([t, q]) => q + " " + t).join("/") + (g.tecido ? " " + g.tecido : "") + (g.total ? ", " + fmtReal(g.total) : ""); };
+/* troca os materiais por camisas da venda (uma por grupo) e devolve o uid da primeira */
+function converterItensCamisa(itens) {
+  const grupos = camisasDeMateriais(itens); if (!grupos.length) return null;
+  usarTabelaMal("amazonia");
+  let primeiro = null;
+  grupos.forEach(g => {
+    const t = CAMISA[g.tipo] || {};
+    const tams = Object.keys(g.qtd).sort((a, b) => (ORDEM_TAM.indexOf(a) + 1 || 99) - (ORDEM_TAM.indexOf(b) + 1 || 99));
+    const unit = {}, precoManual = {};
+    tams.forEach(tm => { const u = g.qtd[tm] ? Math.round(g.valorTam[tm] / g.qtd[tm] * 100) / 100 : 0; unit[tm] = u; if (g.total) precoManual[tm] = u; });
+    const camisa = { tabela: "amazonia", tipo: g.tipo, nome: t.nome || "CAMISA", tecido: g.tecido, gola: g.gola, corgola: "", arte: "tem", taxaArte: 0,
+      qtd: tams.reduce((o, tm) => (o[tm] = g.qtd[tm], o), {}), unit, rotTam: {}, precoManual, deMateriais: true };
+    const base = g.itens[0];
+    if (!base.uid) base.uid = "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const total = tams.reduce((a, tm) => a + g.qtd[tm], 0);
+    Object.assign(base, {
+      camisa, prod: null, produtoId: "", precoUnit: "", unit: "", precoManual: true,
+      material: camisa.nome,
+      descricao: [g.tecido || g.itens.map(i => i.descricao).filter(Boolean)[0] || "", g.gola ? "gola " + g.gola : "", "arte: " + nomeArteCamisa("tem").toLowerCase()].filter(Boolean).join(" · "),
+      medidas: tams.map(tm => tm + " " + g.qtd[tm]).join(" · "),
+      quantidade: String(total),
+      preco: reais(g.total)
+    });
+    g.itens.slice(1).forEach(x => { const i = itens.indexOf(x); if (i >= 0) itens.splice(i, 1); });
+    if (!primeiro) primeiro = base.uid;
+  });
+  return primeiro;
+}
+const lerCamisa = c => { if (!c) return null; if (typeof c === "object") return c; try { return JSON.parse(c); } catch (e) { return null; } };
+function dadosDoPedido(p) {
+  const dados = {}; CAMPOS_DADOS_PED.forEach(k => { if (p[k] != null) dados[k] = p[k]; });
+  dados.itens = itensDoPedido(p).map(i => Object.assign({}, i));
+  dados.itens.forEach(i => { if (!i.uid) i.uid = "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); });
+  return dados;
+}
+async function artesDoDetalhe(p) {
+  let artes = detArtes;
+  if (!artes && p.temArte && modoHist === "nuvem") { try { artes = (await apiPed("GET", "?id=" + encodeURIComponent(p.id) + "&arte=1")).artes; } catch (e) {} }
+  return artes || artesCompletasLocais(p) || [];
+}
+/* grava o pedido com a camisa liberada para a O.S., cria a O.S. e mostra */
+async function gravarCamisaEOS(p, dados, uid, noCard) {
+  dados.itens = dados.itens.map(i => ({ uid: i.uid, camisa: i.camisa ? (typeof i.camisa === "string" ? i.camisa : JSON.stringify(i.camisa)) : "",
+    material: String(i.material || "").trim().toUpperCase(), produtoId: i.produtoId || "", precoUnit: i.precoUnit || "", descricao: i.descricao || "", medidas: i.medidas || "",
+    quantidade: String(i.quantidade || ""), preco: String(i.preco || "").trim() ? parseReal(i.preco).toFixed(2) : "" }));
+  dados.material = dados.itens.map(i => i.material).filter(Boolean).join(" + ").slice(0, 200);
+  dados.descricao = dados.itens.map(i => i.descricao).filter(Boolean).join(" | ");
+  dados.medidas = dados.itens.length === 1 ? dados.itens[0].medidas : ""; dados.quantidade = dados.itens.length === 1 ? dados.itens[0].quantidade : "";
+  const artes = await artesDoDetalhe(p);
+  await atualizarPedido(p.id, { dados });
+  const ped = pedidos.find(x => x.id === p.id) || p;
+  await sincronizarOSCamisa(ped, dados, artes, true);
+  const c2 = lerCamisa(dados.itens.find(i => i.uid === uid).camisa);
+  detArtes = artes;
+  if (!c2 || !c2.osId) { say("O pedido foi salvo, mas a O.S. de camisa não foi criada. Tente de novo.", "err"); return; }
+  if (noCard) { if (detPed && detPed.id === ped.id) abrirDetalhe(ped); await verOSNoCard(c2, ped, uid); }
+  else await abrirOSDoPedido(c2, ped, uid);
+}
+/* mostra a O.S. de camisa por cima do card do pedido (sem sair da tela) */
+async function verOSNoCard(c, pedido, uid) {
+  const h = historico.find(x => (x.id || x.quando) === c.osId);
+  if (!h) { say("Não achei a O.S. de camisa deste pedido no histórico.", "err"); return; }
+  say("Montando a O.S. de camisa…");
+  const temArte = await abrirOS(c.osId);
+  if (!temArte) {
+    const artes = (await artesDoDetalhe(pedido)).filter(a => a && a.img);
+    const a = artes.find(x => x.item === uid) || artes[0];
+    if (a) { try { osArteTok++; await porArteNoForm(a.img, "arte-pedido-" + pedido.numero + ".jpg"); osArteMudou = true; } catch (e) {} }
+  }
+  const numero = h.numero && h.numero !== "…" ? h.numero : "";
+  const bytes = await buildOS(numero);
+  say("");
+  const cli = String(h.cliente || pedido.cliente || "cliente").replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
+  verPdf(bytes, "O.S. de camisa" + (numero ? " nº " + numero : "") + " · pedido nº " + pedido.numero, "O.S CAMISA " + (numero ? numero.replace("/", "-") + " " : "") + "- " + cli + ".pdf");
+}
+async function criarOSDeMateriais(p, btn, noCard) {
+  if (btn) btn.disabled = true;
+  try {
+    const dados = dadosDoPedido(p);
+    const uid = converterItensCamisa(dados.itens);
+    if (!uid) { say("Não reconheci camisas nos materiais deste pedido.", "err"); return; }
+    await gravarCamisaEOS(p, dados, uid, noCard);
+  } catch (e) { console.error(e); say("Não consegui criar a O.S. de camisa: " + (e.msg || e.message || "sem conexão") + ".", "err"); }
+  finally { if (btn) btn.disabled = false; }
+}
+$("#det-os").addEventListener("click", async () => {
+  const p = detPed; if (!p) return;
+  const btn = $("#det-os");
+  if (detCarregando) await detCarregando;
+  const its = itensDoPedido(p);
+  const cams = its.map(i => ({ i, c: lerCamisa(i.camisa) })).filter(x => x.c);
+  const comOS = cams.filter(x => x.c.osId);
+  if (comOS.length) {
+    btn.disabled = true;
+    try { await verOSNoCard(comOS[0].c, p, comOS[0].i.uid); if (comOS.length > 1) say("Este pedido tem " + comOS.length + " O.S. de camisa. As outras ficam em Materiais → “Abrir O.S.”."); }
+    catch (e) { console.error(e); say("Não foi possível montar a O.S. de camisa.", "err"); }
+    finally { btn.disabled = false; }
+    return;
+  }
+  const pend = cams.filter(x => !x.c.osId), susp = its.filter(pareceCamisa);
+  if (!pedCompleto() || (!pend.length && !susp.length)) { say("O.S da Camisa não gerada!", "err"); return; }
+  if (pend.length) {
+    const ok = await confirmar("O.S da Camisa não gerada!", { titulo: "O.S da Camisa", detalhe: "A camisa deste pedido (" + cm_resumo(pend[0].c) + ") ficou sem O.S. Deseja gerar agora?", sim: "Gerar O.S", nao: "Agora não", perigo: false });
+    if (!ok) return;
+    btn.disabled = true;
+    try {
+      const dados = dadosDoPedido(p);
+      const it = dados.itens.find(i => i.uid === pend[0].i.uid) || dados.itens.find(i => lerCamisa(i.camisa));
+      const c = lerCamisa(it.camisa); delete c.semOS; it.camisa = JSON.stringify(c);
+      await gravarCamisaEOS(p, dados, it.uid, true);
+    } catch (e) { console.error(e); say("Não consegui criar a O.S. de camisa: " + (e.msg || e.message || "sem conexão") + ".", "err"); }
+    finally { btn.disabled = false; }
+    return;
+  }
+  const prev = camisasDeMateriais(its);
+  const ok = await confirmar("O.S da Camisa não gerada!", {
+    titulo: "O.S da Camisa", sim: "Criar O.S", nao: "Agora não", perigo: false,
+    detalhe: "Este pedido tem camisa lançada em Materiais (" + susp.map(i => String(i.material || i.descricao).trim().toUpperCase()).join(", ") + "), e não pela Venda de camisa. " +
+      "Deseja criar a O.S da camisa a partir desses materiais? Vai ficar: " + prev.map(g => resumoGrupo(g)).join("; ") + ". O valor do pedido não muda."
+  });
+  if (ok) await criarOSDeMateriais(p, btn, true);
+});
 /* abre a O.S. ligada ao pedido, já com a arte do material anexada */
 async function abrirOSDoPedido(c, pedido, uid) {
   const h = historico.find(x => (x.id || x.quando) === c.osId);
