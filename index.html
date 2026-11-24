@@ -513,6 +513,29 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 /* ---------- PEDIDOS: kanban ---------- */
 .modo-kb .content{max-width:none}
 .kb-barra{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+/* topo de Pedidos em tela de tablet: botões secundários só com o ícone */
+@media (max-width:1400px){#ped-revisar>span:not(.n),#ped-filas>span,#ped-entregues-btn>span{display:none}#ped-revisar,#ped-filas,#ped-entregues-btn{padding-left:12px;padding-right:12px}}
+/* pedidos da Gráfica Soares: card vinho */
+:root{--vinho:#6b1428;--vinho-2:#821a32;--vinho-linha:#9b3550}
+.kc.soares{background:var(--vinho);border-color:var(--vinho-linha);--text:#fff;--muted:#ecc6d0;--card:var(--vinho);--card-2:var(--vinho-2);--line:var(--vinho-linha);color:#fff}
+.kc.soares .kc-cli,.kc.soares .kc-num,.kc.soares b{color:#fff}
+.kc-emp{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.06em;padding:2px 7px;border-radius:6px;background:rgba(255,255,255,.16);color:#fff;margin-right:4px}
+.kb-emp{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.kb-emp button{border:0;background:none;color:var(--text);font:inherit;font-size:13px;font-weight:700;padding:0 14px;min-height:42px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.kb-emp button+button{border-left:1px solid var(--line)}
+.kb-emp button.on{background:var(--accent);color:#fff}
+.kb-emp button[data-emp="soares"].on{background:var(--vinho)}
+.dot-vinho{width:11px;height:11px;border-radius:50%;background:var(--vinho);box-shadow:0 0 0 1.5px rgba(255,255,255,.5)}
+.pm-empresa{display:flex;gap:8px;margin:0 auto 0 16px;flex-wrap:wrap}
+.pm-empresa button{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 14px 6px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--card-2);color:var(--text);font:inherit;font-size:13px;font-weight:800;letter-spacing:.03em;cursor:pointer}
+.pm-empresa .cx{width:22px;height:22px;border-radius:6px;border:2px solid var(--muted);display:grid;place-items:center;flex:none}
+.pm-empresa .cx svg{width:14px;height:14px;opacity:0}
+.pm-empresa button[aria-checked="true"]{border-color:var(--accent)}
+.pm-empresa button[aria-checked="true"] .cx{background:var(--accent);border-color:var(--accent);color:#fff}
+.pm-empresa button[aria-checked="true"] .cx svg{opacity:1}
+.pm-empresa button[data-emp="soares"][aria-checked="true"]{border-color:var(--vinho-linha);background:var(--vinho);color:#fff}
+.pm-empresa button[data-emp="soares"][aria-checked="true"] .cx{background:#fff;border-color:#fff;color:var(--vinho)}
+@media (max-width:700px){.pm-empresa{order:3;width:100%;margin:8px 0 0}}
 .kb-busca{position:relative;flex:0 1 360px;min-width:220px}
 .kb-busca svg{position:absolute;left:12px;top:50%;width:17px;height:17px;transform:translateY(-50%);color:var(--muted);pointer-events:none}
 .kb-busca input{padding-left:38px;min-height:42px;font-size:14.5px}
@@ -1157,9 +1180,9 @@ body.modal-aberto{overflow:hidden}
       <button class="icobtn" type="button" id="menu" aria-label="Abrir ou fechar o menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <h1 id="titulo">O.S Camisa</h1>
       <div class="top-acoes" id="top-ped" hidden>
-        <button class="btn" type="button" id="ped-revisar" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.4 1.8 3-.2.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.2L12 21l-2.4-1.8-3 .2-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .2z"/><path d="m9 12 2 2 4-4"/></svg><span>Artes para revisar</span><span class="n" id="ped-revisar-n">0</span></button>
-        <button class="btn" type="button" id="ped-filas" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><path d="M19.5 8v8M15.5 12h8"/></svg><span>Filas</span></button>
-        <button class="btn" type="button" id="ped-entregues-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/><path d="m9 13 2 2 4-4"/></svg><span>Arquivados</span></button>
+        <button class="btn" type="button" id="ped-revisar" hidden title="Artes para revisar" aria-label="Artes para revisar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.4 1.8 3-.2.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.2L12 21l-2.4-1.8-3 .2-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .2z"/><path d="m9 12 2 2 4-4"/></svg><span>Artes para revisar</span><span class="n" id="ped-revisar-n">0</span></button>
+        <button class="btn" type="button" id="ped-filas" hidden title="Filas" aria-label="Filas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><path d="M19.5 8v8M15.5 12h8"/></svg><span>Filas</span></button>
+        <button class="btn" type="button" id="ped-entregues-btn" title="Arquivados" aria-label="Arquivados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/><path d="m9 13 2 2 4-4"/></svg><span>Arquivados</span></button>
         <button class="btn primary" type="button" id="ped-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Novo pedido</span></button>
       </div>
       <div class="top-acoes" id="top-rel" hidden>
@@ -1263,6 +1286,9 @@ body.modal-aberto{overflow:hidden}
       <div id="view-ped" hidden>
         <div class="kb-barra">
           <div class="kb-busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><input type="search" id="ped-busca" placeholder="Buscar pedido, cliente ou material" autocomplete="off"></div>
+          <div class="kb-emp" id="ped-emp" role="group" aria-label="Filtrar por gráfica">
+            <button type="button" data-emp="">Todas</button><button type="button" data-emp="amazonia">Amazônia Gráfica</button><button type="button" data-emp="soares"><i class="dot-vinho"></i>Gráfica Soares</button>
+          </div>
           <p class="kb-resumo" id="ped-resumo"></p>
         </div>
         <p class="kb-alerta" id="ped-alerta" hidden>⚠ O arquivo <b>api/pedidos.js</b> no GitHub está desatualizado, por isso as prévias das artes não aparecem nos cards. Envie o <b>api/pedidos.js</b> do último zip para dentro da pasta <b>api</b> do repositório e dê Commit.</p>
@@ -2059,7 +2085,10 @@ body.modal-aberto{overflow:hidden}
 
   <div class="modal" id="ped-modal" hidden role="dialog" aria-modal="true" aria-labelledby="pm-titulo">
     <form class="modal-box" id="pm-form" autocomplete="off" novalidate>
-      <div class="modal-cab"><h2 id="pm-titulo">Novo pedido</h2><button class="btn-x" type="button" id="pm-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-cab"><h2 id="pm-titulo">Novo pedido</h2><div class="pm-empresa" id="pm-empresa" role="radiogroup" aria-label="De qual gráfica é o pedido">
+        <button type="button" role="radio" data-emp="amazonia" aria-checked="true"><span class="cx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>AMAZÔNIA GRÁFICA</button>
+        <button type="button" role="radio" data-emp="soares" aria-checked="false"><span class="cx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>GRÁFICA SOARES</button>
+      </div><button class="btn-x" type="button" id="pm-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
       <div class="modal-corpo">
         <p class="c-sec">Cliente</p>
         <div class="grid-c">
@@ -5546,9 +5575,23 @@ document.addEventListener("pointerdown", e => {
   if (e.target.closest && e.target.closest(".kc-des")) return;
   document.querySelectorAll(".kc-des-menu:not([hidden])").forEach(m => { m.hidden = true; const c = m.closest(".kc"); if (c) c.classList.remove("menu-aberto"); const b = c && c.querySelector(".kc-des-bt"); if (b) b.setAttribute("aria-expanded", "false"); });
 });
+/* de qual gráfica é o pedido (sem marcação = Amazônia) e o filtro do quadro */
+const empresaDe = p => (p && p.empresa === "soares") ? "soares" : "amazonia";
+let filtroEmpresa = (() => { try { const v = localStorage.getItem("amz_filtro_emp") || ""; return ["", "amazonia", "soares"].includes(v) ? v : ""; } catch (e) { return ""; } })();
+const daEmpresa = p => !filtroEmpresa || empresaDe(p) === filtroEmpresa;
+document.querySelectorAll("#ped-emp [data-emp]").forEach(b => b.addEventListener("click", () => {
+  filtroEmpresa = b.dataset.emp; try { localStorage.setItem("amz_filtro_emp", filtroEmpresa); } catch (e) {}
+  renderKB();
+}));
+let pmEmpresa = "amazonia";
+function marcaEmpresa(v) {
+  pmEmpresa = v === "soares" ? "soares" : "amazonia";
+  document.querySelectorAll("#pm-empresa [data-emp]").forEach(b => b.setAttribute("aria-checked", b.dataset.emp === pmEmpresa ? "true" : "false"));
+}
+document.querySelectorAll("#pm-empresa [data-emp]").forEach(b => b.addEventListener("click", () => marcaEmpresa(b.dataset.emp)));
 function cardPedido(p, fila, idxFila) {
   const el = document.createElement("article");
-  el.className = "kc" + (p.prioridade === "urgente" ? " urg" : "") + (pedChegou === p.id ? " chegou" : "");
+  el.className = "kc" + (p.prioridade === "urgente" ? " urg" : "") + (pedChegou === p.id ? " chegou" : "") + (p.empresa === "soares" ? " soares" : "");
   el.dataset.id = p.id; el.tabIndex = 0;
   el.style.setProperty("--cor", fila.cor);
   el.setAttribute("aria-label", "Pedido " + p.numero + ", " + (p.cliente || ""));
@@ -5569,6 +5612,7 @@ function cardPedido(p, fila, idxFila) {
       (!minis.length && (p.temArte || p.arte || (p.artes && p.artes.length)) ? '<span class="kc-info" title="Tem arte anexada">' + ICO_ARTE + '</span>' : "") +
       (valor && !semValores() ? '<span class="kc-valor">' + fmtReal(valor) + '</span>' : "") + '</div>' +
     (p.aprov && p.aprov.exige ? '<div class="kc-tags">' + chipAprov(p) + '</div>' : "") +
+    (p.empresa === "soares" ? '<div class="kc-tags"><span class="kc-emp">GRÁFICA SOARES</span></div>' : "") +
     ((p.contato || p.telefone) ? '<p class="kc-contato">' + ICO_PES + '<span>' + escapa([p.contato, p.telefone].filter(Boolean).join(" · ")) + '</span></p>' : "") +
     (fila.id === "designer"
       ? '<div class="kc-des"><button type="button" class="kc-des-bt' + (p.designer ? " on" : "") + '" aria-haspopup="true" aria-expanded="false">' + ICO_PINCEL +
@@ -5647,6 +5691,7 @@ function cardPedido(p, fila, idxFila) {
 }
 function renderKB() {
   const kb = $("#kb"); if (!kb) return;
+  document.querySelectorAll("#ped-emp [data-emp]").forEach(b => b.classList.toggle("on", b.dataset.emp === filtroEmpresa));
   let fx = document.getElementById("tablet-faixa");
   if (!fx) { fx = document.createElement("div"); fx.id = "tablet-faixa"; fx.className = "tablet-faixa"; fx.innerHTML = 'TABLET (Produção): aqui só dá para ver os pedidos. Para dar OK, toque em <b>&nbsp;Trocar usuário&nbsp;</b> e entre com o seu usuário.'; kb.parentNode.insertBefore(fx, kb); }
   const bf = $("#ped-filas"); if (bf) bf.hidden = !ehAdm();
@@ -5660,8 +5705,8 @@ function renderKB() {
     const col = document.createElement("section");
     col.className = "kb-col"; col.dataset.fila = f.id; col.style.setProperty("--cor", f.cor);
     const daFila = p => p.fila === f.id || (i === 0 && !FILAS.some(x => x.id === p.fila));   /* fila apagada: aparece no atendimento */
-    const itens = pedidos.filter(p => daFila(p) && (!q || textoPed(p).includes(q))).sort((a, b) => a.ordem - b.ordem);
-    const naFila = pedidos.filter(daFila).length;
+    const itens = pedidos.filter(p => daFila(p) && daEmpresa(p) && (!q || textoPed(p).includes(q))).sort((a, b) => a.ordem - b.ordem);
+    const naFila = pedidos.filter(p => daFila(p) && daEmpresa(p)).length;
     col.innerHTML = '<div class="kb-cab"><span class="kb-dot"></span><h3>' + escapa(f.nome) + '</h3><span class="kb-n">' + (q ? itens.length + "/" : "") + naFila + '</span></div><div class="kb-lista" data-fila="' + f.id + '"></div>';
     const lista = col.querySelector(".kb-lista");
     itens.forEach(p => lista.appendChild(cardPedido(p, f, i)));
@@ -5787,6 +5832,7 @@ function abrirPedidoModal(p, filaInicial) {
   if (!podeGravarPed()) return;
   pedEditId = p ? p.id : null;
   $("#pm-titulo").textContent = p ? "Pedido #" + p.numero : "Novo pedido";
+  marcaEmpresa(p ? empresaDe(p) : (filtroEmpresa || "amazonia"));
   $("#pm-salvar").textContent = p ? "Salvar alterações" : "Criar pedido";
   $("#pm-excluir").hidden = !p;
   const v = (k, def) => (p && p[k] != null ? p[k] : def);
@@ -5841,7 +5887,8 @@ $("#pm-form").addEventListener("submit", async ev => {
     produtoId: "", precoUnit: "",
     preco: total ? total.toFixed(2) : "",
     prazo: $("#pm-prazo").value, prioridade: pedPrio,
-    atendente: $("#pm-atendente").value.trim(), obs: $("#pm-obs").value.trim()
+    atendente: $("#pm-atendente").value.trim(), obs: $("#pm-obs").value.trim(),
+    empresa: pmEmpresa
   };
   Object.assign(dados, pagamentoDoForm());
 
@@ -6511,6 +6558,7 @@ function escolherProdutoPed(p, idx) {
 $("#pm-add-item").addEventListener("click", () => { pmItens.push(itemPedVazio()); renderItensPed(pmItens.length - 1); });
 /* itens prontos para salvar ou imprimir */
 function itensParaSalvar() {
+  corrigirQtdCamisas(pmItens);
   return pmItens.filter(i => String(i.material).trim() || String(i.descricao).trim() || parseReal(i.preco)).map(i => ({
     uid: i.uid,
     camisa: i.camisa ? JSON.stringify(i.camisa) : "",
@@ -7165,7 +7213,7 @@ function renderDetalhe() {
   });
   $("#det-obs-sec").hidden = !p.obs;
   $("#det-obs").textContent = p.obs || "";
-  const info = [["Etapa", f.nome]].concat(semValores() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Designer", p.designer || "—"]])
+  const info = [["Gráfica", empresaDe(p) === "soares" ? "GRÁFICA SOARES" : "AMAZÔNIA GRÁFICA"], ["Etapa", f.nome]].concat(semValores() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Designer", p.designer || "—"]])
     .concat(p.aprov && p.aprov.exige ? [["Arte", textoAprov(p.aprov)]] : []).concat([ ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
   const c = (typeof clientes !== "undefined" ? clientes : []).find(x => (p.clienteId && x.id === p.clienteId) || (x.nome || "").toLowerCase() === (p.cliente || "").toLowerCase());
   if (c) {
@@ -7420,7 +7468,7 @@ $("#cm-taxa-zero").addEventListener("click", ev => { ev.preventDefault(); if (!c
 function lerGolaCamisa() { if (!cm) return; cm.corgola = $("#cm-corgola").value.trim().toUpperCase(); }
 function abrirCamisa(uid) {
   const it = uid ? pmItens.find(i => i.uid === uid) : null;
-  const tabIni = it && it.camisa ? (it.camisa.tabela || "amazonia") : (cmUltimaTabela || "amazonia");
+  const tabIni = it && it.camisa ? (it.camisa.tabela || "amazonia") : (pmEmpresa || cmUltimaTabela || "amazonia");
   usarTabelaMal(tabIni);
   cm = it && it.camisa ? JSON.parse(JSON.stringify(it.camisa)) : { tabela: tabIni, tipo: CAMISA_TIPOS[0][0], tecido: TECIDOS_CAMISA.length ? TECIDOS_CAMISA[0][0] : "", gola: GOLAS_CAMISA.length ? GOLAS_CAMISA[0][0] : "REDONDA", corgola: "", arte: "tem", qtd: {} };
   cm.tabela = tabIni;
@@ -7612,7 +7660,7 @@ async function regerarOSApagada(p, uid, btn, noCard) {
 }
 /* botão do detalhe: cria a O.S. de uma camisa que ficou "sem O.S." e abre preenchida */
 const CAMPOS_DADOS_PED = ["cliente", "clienteId", "contato", "telefone", "material", "produtoId", "precoUnit", "descricao", "medidas", "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes",
-  "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo", "designer"];
+  "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo", "designer", "empresa"];
 async function enviarOSDoDetalhe(p, uid, btn) {
   if (btn) btn.disabled = true;
   try {
@@ -7704,6 +7752,42 @@ function camisasDeMateriais(itens) {
   });
   return [...grupos.values()];
 }
+/* tamanhos escritos à mão nas medidas: "2 - PP / 1 - P / 1 - M / 2 - G", "PP 2 · P 1", "M: 10, G: 5", "10x M" */
+function paresDeMedidas(txt) {
+  const conh = tamanhosConhecidos(), med = semAcento(txt), pares = {}; let soma = 0, re;
+  const SEP = "\\s*(?:[:=X×\\-]|UN\\.?|UNID\\.?|UNIDADES?)?\\s*(?:DE\\s+)?";
+  const r2 = new RegExp("(?:^|[^A-Z0-9])(\\d{1,4})" + SEP + "([A-Z]{1,3}\\d?)(?![A-Z0-9])", "g");   /* 2 - PP */
+  while ((re = r2.exec(med))) if (conh.has(re[2]) && !/^\d+$/.test(re[2])) { pares[re[2]] = (pares[re[2]] || 0) + +re[1]; soma += +re[1]; }
+  if (!soma) {
+    const r1 = new RegExp("(?:^|[^A-Z0-9])([A-Z]{1,3}\\d?)" + SEP + "(\\d{1,4})(?![0-9])", "g");      /* PP 2 */
+    while ((re = r1.exec(med))) if (conh.has(re[1])) { pares[re[1]] = (pares[re[1]] || 0) + +re[2]; soma += +re[2]; }
+  }
+  return soma ? pares : null;
+}
+/* camisa cujo campo de medidas foi editado à mão: os tamanhos de lá passam a valer (pedido, impressão e O.S.) */
+function corrigirQtdCamisas(itens) {
+  let mudou = false;
+  (itens || []).forEach(it => {
+    const ehTexto = typeof it.camisa === "string", c = lerCamisa(it.camisa);
+    if (!c || !String(it.medidas || "").trim()) return;
+    const qtd = c.qtd || {};
+    const norm = t => semAcento(t).replace(/[^A-Z0-9]+/g, " ").trim();
+    const canon = Object.entries(qtd).filter(([, q]) => +q > 0).map(([k, q]) => k + " " + q).join(" · ");
+    if (norm(it.medidas) === norm(canon)) return;                 /* não foi mexido */
+    const pares = paresDeMedidas(it.medidas); if (!pares) return;
+    const iguais = Object.keys(pares).length === Object.keys(qtd).filter(k => +qtd[k] > 0).length && Object.entries(pares).every(([k, q]) => +qtd[k] === q);
+    if (iguais) return;
+    const total = Object.values(pares).reduce((a, b) => a + b, 0), preco = parseReal(it.preco);
+    const unit = {};
+    Object.keys(pares).forEach(k => { unit[k] = c.unit && c.unit[k] != null ? c.unit[k] : (total && preco ? Math.round(preco / total * 100) / 100 : 0); });
+    c.qtd = pares; c.unit = unit;
+    if (c.precoManual) Object.keys(c.precoManual).forEach(k => { if (!(k in pares)) delete c.precoManual[k]; });
+    it.camisa = ehTexto ? JSON.stringify(c) : c;
+    it.quantidade = String(total);
+    mudou = true;
+  });
+  return mudou;
+}
 const resumoGrupo = g => { const n = Object.values(g.qtd).reduce((a, b) => a + b, 0); return n + " peças " + Object.entries(g.qtd).map(([t, q]) => q + " " + t).join("/") + (g.tecido ? " " + g.tecido : "") + (g.total ? ", " + fmtReal(g.total) : ""); };
 /* troca os materiais por camisas da venda (uma por grupo) e devolve o uid da primeira */
 function converterItensCamisa(itens) {
@@ -7738,6 +7822,7 @@ function dadosDoPedido(p) {
   const dados = {}; CAMPOS_DADOS_PED.forEach(k => { if (p[k] != null) dados[k] = p[k]; });
   dados.itens = itensDoPedido(p).map(i => Object.assign({}, i));
   dados.itens.forEach(i => { if (!i.uid) i.uid = "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); });
+  corrigirQtdCamisas(dados.itens);
   return dados;
 }
 async function artesDoDetalhe(p) {
@@ -7796,6 +7881,20 @@ $("#det-os").addEventListener("click", async () => {
   if (detCarregando) await detCarregando;
   const its = itensDoPedido(p);
   const cams = its.map(i => ({ i, c: lerCamisa(i.camisa) })).filter(x => x.c);
+  /* tamanhos mexidos à mão nas medidas: atualiza o pedido e a O.S. antes de mostrar */
+  if (pedCompleto() && cams.some(x => x.c.osId)) {
+    const dFix = { itens: itensDoPedido(p).map(i => Object.assign({}, i)) };
+    if (corrigirQtdCamisas(dFix.itens)) {
+      const alvo = cams.find(x => x.c.osId);
+      if (await osAindaExiste(alvo.c.osId)) {
+        btn.disabled = true;
+        try { const dados = dadosDoPedido(p); await gravarCamisaEOS(p, dados, alvo.i.uid, true); say("Tamanhos da O.S. atualizados com o que está no pedido.", "ok"); }
+        catch (e) { console.error(e); say("Não consegui atualizar a O.S.: " + (e.msg || e.message || "sem conexão") + ".", "err"); }
+        finally { btn.disabled = false; }
+        return;
+      }
+    }
+  }
   let comOS = cams.filter(x => x.c.osId);
   if (comOS.length) {
     btn.disabled = true;
