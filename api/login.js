@@ -47,6 +47,7 @@ export default async function handler(req, res) {
       if (b.soProducao === true && ok.papel !== "producao") return res.status(403).json({ erro: "Por aqui só entram usuários da hierarquia PRODUÇÃO." });
       const perm = await permissoes(ok.papel);
       if (!perm) return res.status(403).json({ erro: "A hierarquia deste usuário foi apagada. Fale com o ADM." });
+      if (ok.aprovaArte && !perm.aprovaArte) perm.aprovaArte = true;   /* liberado só para este usuário */
       const { token, exp } = criarToken(ok.usuario, ok.papel, ok.versao);
       await auditar(sql, ok, "entrou", { detalhe: "Entrou no painel" });
       return res.status(200).json({ token, exp, usuario: ok.usuario, papel: ok.papel, perm });

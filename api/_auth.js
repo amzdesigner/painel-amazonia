@@ -89,6 +89,8 @@ export function prepararUsuarios() {
                 ON CONFLICT (id) DO NOTHING`;
       await sql`ALTER TABLE hierarquias ADD COLUMN IF NOT EXISTS filas JSONB`;
       await sql`ALTER TABLE hierarquias ADD COLUMN IF NOT EXISTS aprova_arte BOOLEAN NOT NULL DEFAULT FALSE`;
+      /* aprova artes também por usuário (ex.: GRÁFICA SOARES), além da hierarquia */
+      await sql`ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS aprova_arte BOOLEAN NOT NULL DEFAULT FALSE`;
       const [c] = await sql`SELECT count(*)::int AS n FROM usuarios`;
       if (!c || !Number(c.n)) {
         for (const [u, d] of Object.entries(INICIAIS)) {
@@ -175,7 +177,7 @@ export async function conferirLogin(usuario, senha) {
     await sql`UPDATE usuarios SET algo = ${n.algo}::text, sal = ${n.sal}::text, hash = ${n.hash}::text WHERE usuario = ${nome}::text`;
   }
   await sql`UPDATE usuarios SET ultimo_login = now() WHERE usuario = ${nome}::text`;
-  return { usuario: u.usuario, papel: u.papel, versao: Number(u.versao) || 1 };
+  return { usuario: u.usuario, papel: u.papel, versao: Number(u.versao) || 1, aprovaArte: !!u.aprova_arte };
 }
 
 /* papel de um nome (para registrar senha errada na auditoria) */
@@ -199,7 +201,7 @@ async function usuarioAtual(nome) {
   const c = cache.get(nome);
   if (c && c.ate > Date.now()) return c.u;
   await prepararUsuarios();
-  const [u] = await sql`SELECT usuario, papel, ativo, versao FROM usuarios WHERE usuario = ${nome}::text`;
+  const [u] = await sql`SELECT usuario, papel, ativo, versao, aprova_arte FROM usuarios WHERE usuario = ${nome}::text`;
   cache.set(nome, { u: u || null, ate: Date.now() + 15000 });
   return u || null;
 }
@@ -222,7 +224,7 @@ export async function lerSessao(req) {
   if (!u || !u.ativo || u.papel !== d.p || (Number(u.versao) || 1) !== (d.v || 1)) return null;
   const perm = await permissoes(u.papel);
   if (!perm) return null;
-  return { usuario: d.u, papel: d.p, adm: d.p === "adm", nomePapel: perm.nome, abas: perm.abas, pedidos: perm.pedidos, valores: perm.valores, filas: perm.filas || null, aprovaArte: !!perm.aprovaArte };
+  return { usuario: d.u, papel: d.p, adm: d.p === "adm", nomePapel: perm.nome, abas: perm.abas, pedidos: perm.pedidos, valores: perm.valores, filas: perm.filas || null, aprovaArte: !!perm.aprovaArte || !!u.aprova_arte };
 }
 
 /* para as rotas: responde 500/401/403 e devolve null se não puder seguir.

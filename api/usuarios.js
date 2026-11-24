@@ -16,7 +16,7 @@ import { auditar } from "./_auditoria.js";
 
 const nomePapel = async p => p === "adm" ? "ADM" : ((await permissoes(p)) || {}).nome || p;
 const formata = r => ({
-  usuario: r.usuario, papel: r.papel, ativo: r.ativo,
+  usuario: r.usuario, papel: r.papel, ativo: r.ativo, aprovaArte: !!r.aprova_arte,
   criadoEm: r.criado_em ? new Date(r.criado_em).toISOString() : "",
   ultimoLogin: r.ultimo_login ? new Date(r.ultimo_login).toISOString() : ""
 });
@@ -72,16 +72,25 @@ export default async function handler(req, res) {
         if (!b.ativo && atual.papel === "adm" && await admsAtivos() <= 1) return res.status(400).json({ erro: "Precisa ficar pelo menos um ADM ativo." });
         ativo = !!b.ativo; mud.push(ativo ? "reativou" : "desativou");
       }
+      let aprova = !!atual.aprova_arte;
+      if (b.aprovaArte != null && !!b.aprovaArte !== aprova) { aprova = !!b.aprovaArte; mud.push(aprova ? "liberou aprovar artes" : "tirou aprovar artes"); }
       if (b.senha != null) {
         if (!senhaValida(b.senha)) return res.status(400).json({ erro: "A senha precisa ter pelo menos 4 caracteres." });
         h = gerarHash(b.senha); mud.push("trocou a senha");
       }
       if (!mud.length) return res.status(200).json({ item: formata(atual) });
+      /* só mudou o "aprova artes": não derruba a sessão dele */
+      if (mud.length === 1 && b.aprovaArte != null && aprova !== !!atual.aprova_arte) {
+        const [l1] = await sql`UPDATE usuarios SET aprova_arte = ${aprova}::boolean, atualizado_em = now() WHERE usuario = ${alvo}::text RETURNING *`;
+        esquecerCache(alvo);
+        await auditar(sql, sessao, "usuarios", { detalhe: "Usuário " + alvo + ": " + mud.join(", ") });
+        return res.status(200).json({ item: formata(l1) });
+      }
       /* versao + 1: as sessões abertas desse usuário caem (ele entra de novo com a senha/nível novos) */
       const [l] = h
-        ? await sql`UPDATE usuarios SET papel = ${papel}::text, ativo = ${ativo}::boolean, algo = ${h.algo}::text, sal = ${h.sal}::text, hash = ${h.hash}::text,
+        ? await sql`UPDATE usuarios SET papel = ${papel}::text, ativo = ${ativo}::boolean, algo = ${h.algo}::text, sal = ${h.sal}::text, hash = ${h.hash}::text, aprova_arte = ${aprova}::boolean,
                     versao = versao + ${euMesmo ? 0 : 1}::int, atualizado_em = now() WHERE usuario = ${alvo}::text RETURNING *`
-        : await sql`UPDATE usuarios SET papel = ${papel}::text, ativo = ${ativo}::boolean, versao = versao + 1, atualizado_em = now()
+        : await sql`UPDATE usuarios SET papel = ${papel}::text, ativo = ${ativo}::boolean, aprova_arte = ${aprova}::boolean, versao = versao + 1, atualizado_em = now()
                     WHERE usuario = ${alvo}::text RETURNING *`;
       esquecerCache(alvo);
       await auditar(sql, sessao, "usuarios", { detalhe: "Usuário " + alvo + ": " + mud.join(", ") });
