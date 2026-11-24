@@ -9,6 +9,7 @@
  *     abas    → quais abas do menu a pessoa vê (visao, ped, rel, prod, mal, os, cli, orc, recibo, calc, aud)
  *     pedidos → "producao" (só move entre as filas a partir do designer) ou "completo" (vê o atendimento, cria e edita)
  *     valores → se vê os valores de venda nos pedidos
+ *     filas   → quais filas do quadro de pedidos ele vê (vazio = todas; ex.: costureira só "costura")
  *   A primeira hierarquia ("producao" = PRODUÇÃO) vem pronta: só PEDIDOS, modo produção, sem valores.
  *
  * Os usuários ficam no banco (tabela "usuarios"). Na primeira vez, o banco recebe os usuários iniciais abaixo.
@@ -29,7 +30,8 @@ const INICIAIS = {
   SIMRI:    { papel: "producao", hash: "e7b6ccb81fbf9973531ec94b7ee283aea3509afa9bdaf893a9bcdff5fe27d51f" }
 };
 export const ABAS = ["visao", "ped", "rel", "prod", "mal", "os", "cli", "orc", "recibo", "calc", "aud"];
-const PERM_ADM = { nome: "ADM", abas: ABAS.slice(), pedidos: "completo", valores: true };
+export const FILAS_PED = ["atendimento", "designer", "impressao", "acabamento", "costura", "pronto", "entregue"];
+const PERM_ADM = { nome: "ADM", abas: ABAS.slice(), pedidos: "completo", valores: true, filas: FILAS_PED.slice() };
 export const SESSAO_HORAS = 16;
 
 function acharUrlBanco() {
@@ -81,6 +83,7 @@ export function prepararUsuarios() {
       )`;
       await sql`INSERT INTO hierarquias (id, nome, abas, pedidos, valores) VALUES ('producao', 'PRODUÇÃO', '["ped"]'::jsonb, 'producao', false)
                 ON CONFLICT (id) DO NOTHING`;
+      await sql`ALTER TABLE hierarquias ADD COLUMN IF NOT EXISTS filas JSONB`;
       const [c] = await sql`SELECT count(*)::int AS n FROM usuarios`;
       if (!c || !Number(c.n)) {
         for (const [u, d] of Object.entries(INICIAIS)) {
@@ -114,12 +117,19 @@ function confere(linha, senha) {
 /* ---------- hierarquias ---------- */
 export function limpaHierarquia(b) {
   const abas = Array.isArray(b.abas) ? [...new Set(b.abas.filter(a => ABAS.includes(a)))] : [];
-  return { abas, pedidos: b.pedidos === "completo" ? "completo" : "producao", valores: !!b.valores };
+  const pedidos = b.pedidos === "completo" ? "completo" : "producao";
+  /* filas que ele vê no quadro; "producao" nunca vê o atendimento; todas marcadas = sem limite (null) */
+  let filas = Array.isArray(b.filas) ? [...new Set(b.filas.filter(f => FILAS_PED.includes(f)))] : null;
+  if (filas && pedidos === "producao") filas = filas.filter(f => f !== "atendimento");
+  const todas = FILAS_PED.filter(f => pedidos === "completo" || f !== "atendimento");
+  if (filas && (!filas.length || todas.every(f => filas.includes(f)))) filas = null;
+  return { abas, pedidos, valores: !!b.valores, filas };
 }
 export async function listarHierarquias() {
   await prepararUsuarios();
   const l = await sql`SELECT h.*, (SELECT count(*)::int FROM usuarios u WHERE u.papel = h.id) AS usuarios FROM hierarquias h ORDER BY h.nome`;
-  return l.map(h => ({ id: h.id, nome: h.nome, abas: Array.isArray(h.abas) ? h.abas : [], pedidos: h.pedidos, valores: h.valores, usuarios: Number(h.usuarios) || 0 }));
+  return l.map(h => ({ id: h.id, nome: h.nome, abas: Array.isArray(h.abas) ? h.abas : [], pedidos: h.pedidos, valores: h.valores,
+    filas: Array.isArray(h.filas) && h.filas.length ? h.filas : null, usuarios: Number(h.usuarios) || 0 }));
 }
 const cacheH = new Map();
 export async function permissoes(papel) {
@@ -128,7 +138,8 @@ export async function permissoes(papel) {
   if (c && c.ate > Date.now()) return c.p;
   await prepararUsuarios();
   const [h] = await sql`SELECT * FROM hierarquias WHERE id = ${papel}::text`;
-  const p = h ? { nome: h.nome, abas: Array.isArray(h.abas) ? h.abas : [], pedidos: h.pedidos, valores: h.valores } : null;
+  const p = h ? { nome: h.nome, abas: Array.isArray(h.abas) ? h.abas : [], pedidos: h.pedidos, valores: h.valores,
+    filas: Array.isArray(h.filas) && h.filas.length ? h.filas : null } : null;
   cacheH.set(papel, { p, ate: Date.now() + 15000 });
   return p;
 }
@@ -201,7 +212,7 @@ export async function lerSessao(req) {
   if (!u || !u.ativo || u.papel !== d.p || (Number(u.versao) || 1) !== (d.v || 1)) return null;
   const perm = await permissoes(u.papel);
   if (!perm) return null;
-  return { usuario: d.u, papel: d.p, adm: d.p === "adm", nomePapel: perm.nome, abas: perm.abas, pedidos: perm.pedidos, valores: perm.valores };
+  return { usuario: d.u, papel: d.p, adm: d.p === "adm", nomePapel: perm.nome, abas: perm.abas, pedidos: perm.pedidos, valores: perm.valores, filas: perm.filas || null };
 }
 
 /* para as rotas: responde 500/401/403 e devolve null se não puder seguir.

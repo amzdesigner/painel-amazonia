@@ -14,6 +14,7 @@
  * Usuários da produção (não ADM): só veem os pedidos que já saíram do atendimento, sem nenhum valor,
  * e só podem mudar a fila / ordem / arquivar (e as miniaturas). Não criam, não editam e não excluem.
  * Toda mudança (de qualquer usuário) vai para a auditoria (api/auditoria.js).
+ * PATCH { designer: "CLAYTON" } escolhe quem faz a arte (qualquer usuário com acesso aos pedidos; "" tira).
  */
 import { neon } from "@neondatabase/serverless";
 import { exigirSessao, pode } from "./_auth.js";
@@ -174,6 +175,8 @@ export default async function handler(req, res) {
   /* "adm" aqui = acesso completo aos pedidos (vê o atendimento, cria, edita, exclui) */
   const adm = sessao.adm || (sessao.pedidos === "completo" && sessao.abas.includes("ped"));
   const veValores = sessao.adm || sessao.valores;
+  /* filas do quadro que essa pessoa vê (hierarquia); produção nunca vê o atendimento */
+  const veFila = f => (sessao.adm || !sessao.filas || sessao.filas.includes(f)) && (adm || f !== "atendimento");
 
   try {
     await prepararBanco();
@@ -199,7 +202,7 @@ export default async function handler(req, res) {
         const id = parseInt(req.query.id, 10);
         if (!id) return res.status(400).json({ erro: "Informe o id." });
         const [r] = await sql`SELECT arte, fila FROM pedidos WHERE id = ${id}::bigint`;
-        if (!r || (!adm && r.fila === "atendimento")) return res.status(404).json({ erro: "Pedido não encontrado." });
+        if (!r || !veFila(r.fila)) return res.status(404).json({ erro: "Pedido não encontrado." });
         return res.status(200).json({ artes: artesDoBanco(r.arte) });
       }
       /* a lista não traz as imagens, só se o pedido tem arte */
@@ -209,7 +212,7 @@ export default async function handler(req, res) {
         : await sql`SELECT id, numero, fila, ordem, arquivado, dados, criado_em, atualizado_em, miniatura, (arte IS NOT NULL) AS tem_arte
                     FROM pedidos WHERE NOT arquivado ORDER BY fila, ordem LIMIT 2000`;
       /* produção não vê a coluna de atendimento (vendas) */
-      return res.status(200).json({ itens: linhas.filter(r => adm || r.fila !== "atendimento").map(saida) });
+      return res.status(200).json({ itens: linhas.filter(r => veFila(r.fila)).map(saida) });
     }
 
     if (req.method === "POST") {
@@ -247,21 +250,29 @@ export default async function handler(req, res) {
       const fila = b.fila == null ? null : (FILAS.includes(b.fila) ? b.fila : undefined);
       if (fila === undefined) return res.status(400).json({ erro: "Fila inválida." });
       const [atual] = await sql`SELECT fila, arquivado, ordem, dados FROM pedidos WHERE id = ${id}::bigint`;
-      if (!atual) return res.status(404).json({ erro: "Pedido não encontrado." });
+      if (!atual || !veFila(atual.fila)) return res.status(404).json({ erro: "Pedido não encontrado." });
       if (!adm) {
         /* produção: só move entre as filas de produção, muda a ordem, arquiva e atualiza miniaturas */
         if (b.dados != null || b.artes !== undefined || b.arte !== undefined) return res.status(403).json({ erro: "Seu usuário não pode editar o pedido." });
+        /* (designer pode: ver abaixo) */
         if (fila === "atendimento") return res.status(403).json({ erro: "Seu usuário não pode mandar pedidos para o atendimento." });
         if (atual.fila === "atendimento") return res.status(404).json({ erro: "Pedido não encontrado." });
       }
       const ordem = b.ordem == null || !Number.isFinite(Number(b.ordem)) ? null : Number(b.ordem);
       const arquivado = b.arquivado == null ? null : !!b.arquivado;
       let dados = null;
+      const antesDados = atual.dados || {};
       if (b.dados && typeof b.dados === "object") {
         const d = limpa(b.dados);
         if (!d.cliente) return res.status(400).json({ erro: "Informe o cliente." });
+        if (antesDados.designer && d.designer == null) d.designer = antesDados.designer;   /* editar o pedido não apaga o designer */
         dados = JSON.stringify(d);
       }
+      /* designer da arte */
+      const mexeDesigner = b.designer !== undefined;
+      const designer = mexeDesigner ? String(b.designer || "").trim().toUpperCase().slice(0, 40) : "";
+      if (mexeDesigner && !dados) dados = JSON.stringify(Object.assign({}, antesDados, { designer }));
+      else if (mexeDesigner) dados = JSON.stringify(Object.assign(JSON.parse(dados), { designer }));
       const arte = lerArtes(b);
       if (arte === false) return res.status(400).json({ erro: "Artes inválidas ou pesadas demais (máx. 12 imagens)." });
       const mexeArte = arte !== undefined;
@@ -288,6 +299,8 @@ export default async function handler(req, res) {
       if (arquivado === true && !atual.arquivado) await auditar(sql, sessao, "arquivou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Saiu do quadro (" + nomeFila(linha.fila) + ")" });
       if (arquivado === false && atual.arquivado) await auditar(sql, sessao, "desarquivou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Voltou para " + nomeFila(linha.fila) });
       if (dados) { const m = oQueMudou(dAntes, dDepois); if (m.length) await auditar(sql, sessao, "editou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Mudou: " + m.join(", ") }); }
+      if (mexeDesigner && designer !== (antesDados.designer || ""))
+        await auditar(sql, sessao, "designer", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: designer ? "Designer da arte: " + designer + (antesDados.designer ? " (era " + antesDados.designer + ")" : "") : "Tirou o designer (" + antesDados.designer + ")" });
       if (mexeArte) await auditar(sql, sessao, "artes", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Trocou as artes do pedido" });
       if (ordem != null && !(fila && fila !== atual.fila) && arquivado == null && Number(atual.ordem) !== ordem)
         await auditar(sql, sessao, "reordenou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Mudou a posição em " + nomeFila(linha.fila) });

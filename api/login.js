@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       if (req.query && req.query.nomes === "1") return res.status(200).json({ nomes: await nomesAtivos() });
       const s = await lerSessao(req);
       if (!s) return res.status(401).json({ erro: "Sessão expirada. Entre de novo." });
-      return res.status(200).json({ usuario: s.usuario, papel: s.papel, perm: { nome: s.nomePapel, abas: s.abas, pedidos: s.pedidos, valores: s.valores } });
+      return res.status(200).json({ usuario: s.usuario, papel: s.papel, perm: { nome: s.nomePapel, abas: s.abas, pedidos: s.pedidos, valores: s.valores, filas: s.filas } });
     }
     if (req.method === "POST") {
       let b = req.body || {};

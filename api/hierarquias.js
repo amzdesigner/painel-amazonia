@@ -5,6 +5,7 @@
  *   abas    → abas do menu (visao, ped, rel, prod, mal, os, cli, orc, recibo, calc, aud)
  *   pedidos → "producao" (só move entre as filas a partir do designer) ou "completo" (vê o atendimento, cria e edita)
  *   valores → se vê os valores de venda nos pedidos
+ *   filas   → quais filas do quadro de pedidos ele vê (null = todas)
  * A hierarquia ADM é fixa (vê tudo) e não aparece aqui. Usuários e Hierarquia são só do ADM.
  *
  * GET    /api/hierarquias                         → { itens: [...] }
@@ -19,7 +20,9 @@ const NOMES_ABA = { visao: "Visão geral", ped: "Pedidos", rel: "Relatórios", p
   cli: "Clientes", orc: "Orçamento", recibo: "Recibo", calc: "Calculadora", aud: "Auditoria" };
 const limpaNomeH = v => String(v || "").trim().toUpperCase().replace(/\s+/g, " ").slice(0, 30);
 const idDe = nome => nome.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 30);
-const resumo = h => h.abas.map(a => NOMES_ABA[a] || a).join(", ") + (h.abas.includes("ped") ? " · pedidos " + (h.pedidos === "completo" ? "completo" : "produção") + (h.valores ? " com valores" : " sem valores") : "");
+const NOMES_FILA = { atendimento: "Atendimento", designer: "Designer", impressao: "Impressão", acabamento: "Acabamento", costura: "Costura", pronto: "Pronto", entregue: "Entregue" };
+const resumo = h => h.abas.map(a => NOMES_ABA[a] || a).join(", ") + (h.abas.includes("ped") ? " · pedidos " + (h.pedidos === "completo" ? "completo" : "produção") + (h.valores ? " com valores" : " sem valores") +
+  (h.filas ? " · só as filas: " + h.filas.map(f => NOMES_FILA[f] || f).join(", ") : " · todas as filas") : "");
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
@@ -35,7 +38,7 @@ export default async function handler(req, res) {
       if (!nome || !id || id === "adm") return res.status(400).json({ erro: "Dê um nome para a hierarquia (ex.: ATENDENTE)." });
       const h = limpaHierarquia(b);
       if (!h.abas.length) return res.status(400).json({ erro: "Marque pelo menos uma aba." });
-      const l = await sql`INSERT INTO hierarquias (id, nome, abas, pedidos, valores) VALUES (${id}::text, ${nome}::text, ${JSON.stringify(h.abas)}::jsonb, ${h.pedidos}::text, ${h.valores}::boolean)
+      const l = await sql`INSERT INTO hierarquias (id, nome, abas, pedidos, valores, filas) VALUES (${id}::text, ${nome}::text, ${JSON.stringify(h.abas)}::jsonb, ${h.pedidos}::text, ${h.valores}::boolean, ${h.filas ? JSON.stringify(h.filas) : null}::jsonb)
                           ON CONFLICT (id) DO NOTHING RETURNING id`;
       if (!l.length) return res.status(409).json({ erro: "Já existe uma hierarquia com esse nome." });
       esquecerHierarquias();
@@ -51,9 +54,11 @@ export default async function handler(req, res) {
       const b = corpo();
       const nome = b.nome != null ? limpaNomeH(b.nome) : atual.nome;
       if (!nome) return res.status(400).json({ erro: "Dê um nome para a hierarquia." });
-      const h = limpaHierarquia({ abas: b.abas != null ? b.abas : atual.abas, pedidos: b.pedidos != null ? b.pedidos : atual.pedidos, valores: b.valores != null ? b.valores : atual.valores });
+      const h = limpaHierarquia({ abas: b.abas != null ? b.abas : atual.abas, pedidos: b.pedidos != null ? b.pedidos : atual.pedidos, valores: b.valores != null ? b.valores : atual.valores,
+        filas: b.filas !== undefined ? b.filas : atual.filas });
       if (!h.abas.length) return res.status(400).json({ erro: "Marque pelo menos uma aba." });
-      await sql`UPDATE hierarquias SET nome = ${nome}::text, abas = ${JSON.stringify(h.abas)}::jsonb, pedidos = ${h.pedidos}::text, valores = ${h.valores}::boolean, atualizado_em = now()
+      await sql`UPDATE hierarquias SET nome = ${nome}::text, abas = ${JSON.stringify(h.abas)}::jsonb, pedidos = ${h.pedidos}::text, valores = ${h.valores}::boolean,
+                filas = ${h.filas ? JSON.stringify(h.filas) : null}::jsonb, atualizado_em = now()
                 WHERE id = ${id}::text`;
       esquecerHierarquias();
       await auditar(sql, sessao, "usuarios", { detalhe: "Mudou a hierarquia " + nome + ": " + resumo(h) });
