@@ -370,9 +370,21 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .troca-pop[hidden]{display:none}
 .troca-tit{margin:0;font-weight:800;font-size:15px}
 .troca-tit small{display:block;font-weight:600;color:var(--muted);font-size:12px;margin-top:2px}
-.troca-pop input{min-height:46px;font-size:16px}
-.troca-bts{display:flex;gap:8px;justify-content:flex-end}
-.troca-bts .btn{flex:1}
+.troca-nomes{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:300px;overflow:auto}
+.troca-nomes button{min-height:56px;border-radius:12px;border:1px solid var(--line);background:var(--card-2);color:var(--text);font:inherit;font-size:16px;font-weight:800;letter-spacing:.03em;cursor:pointer;touch-action:manipulation}
+.troca-nomes button:active{background:var(--accent);color:#fff}
+.troca-nomes p{grid-column:1/-1;margin:0;color:var(--muted);font-size:13px}
+.troca-quem{display:flex;align-items:center;gap:10px;font-size:18px}
+.troca-voltar{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card-2);color:var(--text);font-size:24px;line-height:1;cursor:pointer}
+.pin-pontos{display:flex;justify-content:center;gap:12px;min-height:30px;align-items:center;margin:4px 0}
+.pin-pontos i{width:16px;height:16px;border-radius:50%;background:var(--text)}
+.pin-pontos span{color:var(--muted);font-size:13px}
+.teclado{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.teclado button{min-height:60px;border-radius:14px;border:1px solid var(--line);background:var(--card-2);color:var(--text);font:inherit;font-size:24px;font-weight:800;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.teclado button:active{background:var(--line)}
+.teclado .t-apaga{font-size:22px}
+.teclado .t-ok{background:#22c55e;border-color:#22c55e;color:#fff;font-size:16px}
+.teclado .t-ok:disabled{opacity:.5}
 .troca-tablet{display:flex;align-items:center;justify-content:center;gap:8px;border-color:#22c55e}
 .troca-tablet svg{width:18px;height:18px}
 .somente-ver .kc-ok,.somente-ver .kc-prox,.somente-ver .kc-seta,.somente-ver .kc-des,.somente-ver #det-editar,.somente-ver #det-apv,.somente-ver #det-os,.somente-ver .det-os button,.somente-ver .pi-enviar-os{display:none!important}
@@ -1179,11 +1191,19 @@ body.modal-aberto{overflow:hidden}
         <span class="troca-wrap">
           <button class="btn troca-btn" type="button" id="troca-btn" hidden aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 21H3v-5"/><path d="M3 21l7-7"/></svg><span>Trocar usuário</span></button>
           <form class="troca-pop" id="troca-pop" hidden autocomplete="off" novalidate role="dialog" aria-label="Trocar usuário">
-            <p class="troca-tit">Trocar usuário <small>só usuários da PRODUÇÃO</small></p>
-            <label class="f"><span>Usuário</span><input type="text" id="troca-usuario" autocapitalize="characters" spellcheck="false" placeholder="Seu usuário" autocomplete="off"></label>
-            <label class="f"><span>Senha</span><input type="password" id="troca-senha" placeholder="Sua senha" autocomplete="off"></label>
+            <p class="troca-tit" id="troca-tit">Trocar usuário <small>Toque no seu nome</small></p>
+            <div class="troca-nomes" id="troca-nomes"></div>
+            <div class="troca-pin" id="troca-pin" hidden>
+              <div class="troca-quem"><button type="button" class="troca-voltar" id="troca-voltar" aria-label="Escolher outro usuário">‹</button><b id="troca-quem"></b></div>
+              <div class="pin-pontos" id="pin-pontos" aria-live="polite"></div>
+              <div class="teclado" id="teclado" role="group" aria-label="Teclado numérico">
+                <button type="button" data-n="1">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button>
+                <button type="button" data-n="4">4</button><button type="button" data-n="5">5</button><button type="button" data-n="6">6</button>
+                <button type="button" data-n="7">7</button><button type="button" data-n="8">8</button><button type="button" data-n="9">9</button>
+                <button type="button" data-n="apaga" class="t-apaga" aria-label="Apagar">⌫</button><button type="button" data-n="0">0</button><button type="submit" class="t-ok" id="troca-entrar">Entrar</button>
+              </div>
+            </div>
             <p class="login-erro" id="troca-erro" role="alert"></p>
-            <div class="troca-bts"><button class="btn" type="button" id="troca-cancelar">Cancelar</button><button class="btn primary" type="submit" id="troca-entrar">Entrar</button></div>
             <button class="btn troca-tablet" type="button" id="troca-tablet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><span>Voltar para TABLET (só ver)</span></button>
           </form>
         </span>
@@ -3993,7 +4013,7 @@ async function removerRegistro(id) {
   const nome = h ? (h.tipo === "orcamento" ? "o orçamento " : h.tipo === "recibo" ? "o recibo " : "a O.S. ") + h.numero : "este registro";
   if (modoHist === "nuvem") {
     if (!(await confirmar("Tem certeza que é para remover " + nome + "?", { titulo: "Remover do histórico", detalhe: "Some do histórico de todos os computadores." }))) return;
-    try { await api("DELETE", "?id=" + encodeURIComponent(id)); historico = historico.filter(x => x.id !== id); renderVisao(); }
+    try { await api("DELETE", "?id=" + encodeURIComponent(id)); historico = historico.filter(x => x.id !== id); renderVisao(); desligarOSApagadas([id]); }
     catch (e) { say("Não consegui remover: " + (e.msg || "sem conexão") + ".", "err"); }
   } else {
     if (!(await confirmar("Tem certeza que é para remover " + nome + "?", { titulo: "Remover do histórico" }))) return;
@@ -4013,7 +4033,7 @@ $("#h-limpar").addEventListener("click", async () => {
   if (!historico.filter(h => h.tipo === "os" && !h.pendente).length) { say("Não há O.S. no histórico."); return; }
   if (modoHist === "nuvem") {
     if (!(await confirmar("Tem certeza que é para apagar TODAS as O.S. do histórico?", { titulo: "Apagar O.S.", detalhe: "Some para todos os computadores e não dá para desfazer." }))) return;
-    try { await api("DELETE", "?tudo=1&tipo=os"); historico = historico.filter(h => h.tipo !== "os" || h.pendente); renderVisao(); say("O.S. apagadas do histórico.", "ok"); }
+    try { await api("DELETE", "?tudo=1&tipo=os"); historico = historico.filter(h => h.tipo !== "os" || h.pendente); renderVisao(); say("O.S. apagadas do histórico.", "ok"); desligarOSApagadas(null); }
     catch (e) { say("Não consegui limpar: " + (e.msg || "sem conexão") + ".", "err"); }
     return;
   }
@@ -7546,6 +7566,50 @@ async function sincronizarOSCamisa(pedido, dados, artes, artesMudaram) {
   delete dados._pedidoId;
   if (mudou) await atualizarPedido(pedido.id, { dados });
 }
+/* ---------- O.S. de camisa apagada no histórico ----------
+   a camisa do pedido fica "sem O.S." (botão para gerar de novo) em vez de apontar para uma O.S. que não existe mais */
+const osExisteNoHist = id => !!id && historico.some(h => (h.id || h.quando) === id);
+async function desligarOSApagadas(ids) {        /* ids = null: todas as O.S. foram apagadas */
+  if (modoHist !== "nuvem" && modoHist !== "local") return;
+  if (!pedCompleto()) return;
+  try { if (!pedidos.length && window.carregarPedidos) await carregarPedidos(true); } catch (e) {}
+  for (const p of pedidos.slice()) {
+    const its = itensDoPedido(p);
+    if (!its.some(i => { const c = lerCamisa(i.camisa); return c && c.osId && (ids ? ids.includes(c.osId) : true); })) continue;
+    try {
+      const dados = dadosDoPedido(p);
+      dados.itens.forEach(i => {
+        const c = lerCamisa(i.camisa);
+        if (c && c.osId && (ids ? ids.includes(c.osId) : !osExisteNoHist(c.osId))) { delete c.osId; delete c.osNumero; c.semOS = true; i.camisa = JSON.stringify(c); }
+      });
+      dados.itens = dados.itens.map(i => Object.assign({}, i, { camisa: i.camisa ? (typeof i.camisa === "string" ? i.camisa : JSON.stringify(i.camisa)) : "", preco: String(i.preco || "").trim() ? parseReal(i.preco).toFixed(2) : "" }));
+      await atualizarPedido(p.id, { dados });
+    } catch (e) { console.error(e); }
+  }
+}
+/* confere se a O.S. ainda existe (recarrega o histórico uma vez antes de dizer que não) */
+let histConferidoEm = 0;
+async function osAindaExiste(id) {
+  /* confere no servidor (pode ter sido apagada em outro computador); no máximo uma vez a cada 5 s */
+  if (modoHist === "nuvem" && Date.now() - histConferidoEm > 5000) {
+    try { const r = await api("GET"); const pend = historico.filter(h => h.pendente); historico = pend.concat(r.items || r.itens || []); histConferidoEm = Date.now(); }
+    catch (e) { return osExisteNoHist(id) || true; }
+  }
+  return osExisteNoHist(id);
+}
+async function regerarOSApagada(p, uid, btn, noCard) {
+  if (!pedCompleto()) { say("A O.S. da Camisa deste pedido foi apagada. Peça para quem atende gerar de novo.", "err"); return; }
+  const ok = await confirmar("A O.S. da Camisa deste pedido foi apagada. Gerar uma nova?", { titulo: "O.S da Camisa", detalhe: "Cria uma O.S. de camisa nova com os tamanhos, tecido, gola e a arte do pedido.", sim: "Gerar O.S", nao: "Agora não", perigo: false });
+  if (!ok) return;
+  if (btn) btn.disabled = true;
+  try {
+    const dados = dadosDoPedido(p);
+    const it = dados.itens.find(i => i.uid === uid) || dados.itens.find(i => lerCamisa(i.camisa));
+    const c = lerCamisa(it.camisa); delete c.osId; delete c.osNumero; delete c.semOS; it.camisa = JSON.stringify(c);
+    await gravarCamisaEOS(p, dados, it.uid, noCard);
+  } catch (e) { console.error(e); say("Não consegui gerar a O.S. de camisa: " + (e.msg || e.message || "sem conexão") + ".", "err"); }
+  finally { if (btn) btn.disabled = false; }
+}
 /* botão do detalhe: cria a O.S. de uma camisa que ficou "sem O.S." e abre preenchida */
 const CAMPOS_DADOS_PED = ["cliente", "clienteId", "contato", "telefone", "material", "produtoId", "precoUnit", "descricao", "medidas", "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes",
   "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo", "designer"];
@@ -7732,8 +7796,14 @@ $("#det-os").addEventListener("click", async () => {
   if (detCarregando) await detCarregando;
   const its = itensDoPedido(p);
   const cams = its.map(i => ({ i, c: lerCamisa(i.camisa) })).filter(x => x.c);
-  const comOS = cams.filter(x => x.c.osId);
+  let comOS = cams.filter(x => x.c.osId);
   if (comOS.length) {
+    btn.disabled = true;
+    const vivas = [];
+    for (const x of comOS) if (await osAindaExiste(x.c.osId)) vivas.push(x);
+    btn.disabled = false;
+    if (!vivas.length) { await regerarOSApagada(p, comOS[0].i.uid, btn, true); return; }
+    comOS = vivas;
     btn.disabled = true;
     try { await verOSNoCard(comOS[0].c, p, comOS[0].i.uid); if (comOS.length > 1) say("Este pedido tem " + comOS.length + " O.S. de camisa. As outras ficam em Materiais → “Abrir O.S.”."); }
     catch (e) { console.error(e); say("Não foi possível montar a O.S. de camisa.", "err"); }
@@ -7766,7 +7836,10 @@ $("#det-os").addEventListener("click", async () => {
 /* abre a O.S. ligada ao pedido, já com a arte do material anexada */
 async function abrirOSDoPedido(c, pedido, uid) {
   const h = historico.find(x => (x.id || x.quando) === c.osId);
-  if (!h) { say("Não achei essa O.S. no histórico. Abra e salve o pedido de novo para recriar.", "err"); return; }
+  if (!h) {
+    if (await osAindaExiste(c.osId)) return abrirOSDoPedido(c, pedido, uid);
+    return regerarOSApagada(pedido, uid, null, false);
+  }
   fecharModal($("#det-modal"));
   irPara("os");
   const jaTem = await abrirOS(c.osId);
@@ -9345,32 +9418,71 @@ window.renderVisao=renderVisao;
     try { await entrarTablet(); } catch (e) { erro.textContent = e.message || "Sem conexão com o servidor."; }
     finally { b.disabled = false; }
   });
-  const pop = document.getElementById("troca-pop"), tBtn = document.getElementById("troca-btn");
-  const tU = document.getElementById("troca-usuario"), tS = document.getElementById("troca-senha"), tErro = document.getElementById("troca-erro");
+  const pop = document.getElementById("troca-pop"), tBtn = document.getElementById("troca-btn"), tErro = document.getElementById("troca-erro");
+  const tNomes = document.getElementById("troca-nomes"), tPin = document.getElementById("troca-pin"), tPontos = document.getElementById("pin-pontos");
+  let tUsuario = "", tSenha = "", tEnviando = false;
+  function mostraPontos() {
+    tPontos.innerHTML = tSenha ? "<i></i>".repeat(tSenha.length) : "<span>Digite a senha</span>";
+    document.getElementById("troca-entrar").disabled = !tSenha || tEnviando;
+  }
+  function escolher(nome) {
+    tUsuario = nome; tSenha = ""; tErro.textContent = "";
+    tNomes.hidden = !!nome; tPin.hidden = !nome;
+    document.getElementById("troca-quem").textContent = nome || "";
+    document.getElementById("troca-tit").hidden = !!nome;
+    mostraPontos();
+  }
+  async function carregarNomesProducao() {
+    tNomes.innerHTML = "<p>Carregando…</p>";
+    try {
+      const r = await fetch("/api/login?producao=1", { headers: cabecalhoAuth(), cache: "no-store" });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.erro || "");
+      const nomes = (j.nomes || []).filter(n => n !== (sessao && sessao.usuario));
+      tNomes.innerHTML = nomes.length ? "" : "<p>Nenhum outro usuário na hierarquia PRODUÇÃO.</p>";
+      nomes.forEach(n => {
+        const b = document.createElement("button"); b.type = "button"; b.textContent = n;
+        b.addEventListener("click", () => escolher(n));
+        tNomes.appendChild(b);
+      });
+    } catch (e) { tNomes.innerHTML = "<p>Não consegui carregar os usuários. Confira a internet.</p>"; }
+  }
   function abrirTroca(abrir) {
     pop.hidden = !abrir; tBtn.setAttribute("aria-expanded", abrir ? "true" : "false");
-    if (abrir) { tU.value = ""; tS.value = ""; tErro.textContent = ""; setTimeout(() => tU.focus(), 30); }
+    if (abrir) { escolher(""); carregarNomesProducao(); }
   }
   tBtn.addEventListener("click", ev => { ev.stopPropagation(); abrirTroca(pop.hidden); });
-  document.getElementById("troca-cancelar").addEventListener("click", () => abrirTroca(false));
+  document.getElementById("troca-voltar").addEventListener("click", () => escolher(""));
   pop.addEventListener("click", ev => ev.stopPropagation());
   document.addEventListener("click", () => { if (!pop.hidden) abrirTroca(false); });
-  document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !pop.hidden) abrirTroca(false); });
-  [tU, tS].forEach(i => i.addEventListener("input", () => { tErro.textContent = ""; }));
+  const tecla = n => {
+    if (tEnviando) return;
+    if (n === "apaga") tSenha = tSenha.slice(0, -1);
+    else if (tSenha.length < 12) tSenha += n;
+    tErro.textContent = ""; mostraPontos();
+  };
+  document.getElementById("teclado").querySelectorAll("[data-n]").forEach(b => b.addEventListener("click", () => tecla(b.dataset.n)));
+  document.addEventListener("keydown", ev => {
+    if (pop.hidden) return;
+    if (ev.key === "Escape") { abrirTroca(false); return; }
+    if (tPin.hidden) return;
+    if (/^[0-9]$/.test(ev.key)) { ev.preventDefault(); tecla(ev.key); }
+    else if (ev.key === "Backspace") { ev.preventDefault(); tecla("apaga"); }
+    else if (ev.key === "Enter") { ev.preventDefault(); pop.requestSubmit(); }
+  });
   pop.addEventListener("submit", async ev => {
     ev.preventDefault();
-    const usuario = tU.value.trim().toUpperCase(), senha = tS.value;
-    if (!usuario) { tErro.textContent = "Digite o usuário."; tU.focus(); return; }
-    if (!senha) { tErro.textContent = "Digite a senha."; tS.focus(); return; }
-    const b = document.getElementById("troca-entrar"); b.disabled = true; b.textContent = "Entrando…";
+    if (!tUsuario || !tSenha || tEnviando) return;
+    tEnviando = true; mostraPontos();
+    const b = document.getElementById("troca-entrar"); b.textContent = "…";
     try {
-      const r = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ usuario, senha, soProducao: true }), cache: "no-store" });
+      const r = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ usuario: tUsuario, senha: tSenha, soProducao: true }), cache: "no-store" });
       const j = await r.json().catch(() => ({}));
-      if (!r.ok) { tErro.textContent = j.erro || "Não foi possível entrar."; tS.select(); return; }
+      if (!r.ok) { tErro.textContent = j.erro || "Não foi possível entrar."; tSenha = ""; return; }
       abrirTroca(false);
       entrouCom({ token: j.token, usuario: j.usuario, papel: j.papel, exp: j.exp, perm: j.perm || null });
-    } catch (e) { tErro.textContent = "Sem conexão com o servidor."; }
-    finally { b.disabled = false; b.textContent = "Entrar"; }
+    } catch (e) { tErro.textContent = "Sem conexão com o servidor."; tSenha = ""; }
+    finally { tEnviando = false; b.textContent = "Entrar"; mostraPontos(); }
   });
   document.getElementById("troca-tablet").addEventListener("click", async () => {
     try { abrirTroca(false); await entrarTablet("Voltou para o TABLET (só ver)."); } catch (e) { say(e.message || "Sem conexão.", "err"); }
