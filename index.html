@@ -807,6 +807,11 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .apv-lado .colar-zona{min-height:54px}
 .apv-envia .btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;font-size:14px}
 .apv-envia svg{width:18px;height:18px;flex:none}
+.apv-atualizar{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;font-size:14px;border-color:#f59e0b;color:var(--text)}
+.apv-atualizar svg{width:18px;height:18px;flex:none;color:#f59e0b}
+.apv-up{border:1px dashed #f59e0b;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.apv-up[hidden]{display:none}
+.apv-up p{margin:0;font-size:12.5px;color:var(--muted)}
 .apv-acoes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
 .apv-card{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--card)}
 .apv-card h4{margin:0;font-size:15px}
@@ -6157,7 +6162,10 @@ function renderAprov() {
   const lado = (k, titulo, ajuda) =>
     '<div class="apv-lado" data-k="' + k + '"><h4><b>' + titulo + '</b></h4>' +
     (apvImgs[k] ? '<div class="apv-img"><img alt="' + escapa(titulo) + '"></div>' : '<div class="apv-img vazio">' + escapa(ajuda) + '</div>') +
-    (k === "recriada" && apvImgs[k] ? '<div class="apv-bts apv-envia"><button class="btn primary" type="button" data-baixar><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg> Baixar arte</button><button class="btn" type="button" data-copiar><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg> Copiar imagem</button></div>' : "") +
+    (k === "recriada" && apvImgs[k] ? '<div class="apv-bts apv-envia"><button class="btn primary" type="button" data-baixar><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg> Baixar arte</button><button class="btn" type="button" data-copiar><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg> Copiar imagem</button></div>' +
+      (somenteVer() ? "" : '<button class="btn apv-atualizar" type="button" data-atualizar><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/></svg> Atualizar arte</button>' +
+        '<div class="apv-up" hidden><p>Cole a arte nova (Ctrl+V) ou escolha o arquivo. ' + (aprovada ? 'A aprovação atual deixa de valer e a arte volta para revisão.' : (st === "revisao" ? 'A arte nova substitui a que está em revisão.' : '')) + '</p><div class="colar-zona" contenteditable="true" spellcheck="false" role="textbox" aria-label="Colar a arte nova" data-texto="Clique aqui e aperte Ctrl+V"></div>' +
+        '<div class="apv-bts"><button class="btn" type="button" data-up-colar>Colar imagem</button><button class="btn" type="button" data-up-arq>Escolher arquivo</button><button class="btn" type="button" data-up-x>Cancelar</button><input type="file" accept="image/*" hidden data-up-inp></div></div>') : "") +
     (podeTrocar ? '<div class="colar-zona" contenteditable="true" spellcheck="false" role="textbox" aria-label="Colar ' + escapa(titulo) + '" data-texto="Clique aqui e aperte Ctrl+V"></div>' +
       '<div class="apv-bts"><button class="btn" type="button" data-colar>Colar imagem</button><button class="btn" type="button" data-arq>Anexar arquivo</button>' +
       (apvPed.temArte ? '<button class="btn" type="button" data-ped>Usar arte do pedido</button>' : "") +
@@ -6168,6 +6176,25 @@ function renderAprov() {
     if (im) { im.src = apvImgs[k]; im.parentElement.addEventListener("click", () => zoomImg(apvImgs[k])); }
     const bb = el.querySelector("[data-baixar]"); if (bb) bb.addEventListener("click", () => baixarArteAprov(apvImgs[k]));
     const bc = el.querySelector("[data-copiar]"); if (bc) bc.addEventListener("click", () => copiarImagem(apvImgs[k], bc));
+    const bu = el.querySelector("[data-atualizar]");
+    if (bu) {
+      const painel = el.querySelector(".apv-up"), zona = painel.querySelector(".colar-zona"), inpU = painel.querySelector("[data-up-inp]");
+      const trocar = async f => {
+        try {
+          const url = await reduzirArte(f);
+          if (aprovada && !(await confirmar("Trocar a arte já aprovada?", { titulo: "Atualizar arte", detalhe: "A aprovação atual deixa de valer e a arte nova volta para revisão.", sim: "Trocar arte", nao: "Cancelar", perigo: false }))) return;
+          if (podeTrocar) { const ok = await acaoAprov("imagens", { recriada: url }, "Arte recriada atualizada."); return ok; }
+          const r = await acaoAprov("atualizar", { recriada: url }, "Arte atualizada. Ela voltou para revisão.");
+          if (r) apvImgs.recriada = url, renderAprov();
+        } catch (e) { say("Não consegui ler essa imagem.", "err"); }
+      };
+      bu.addEventListener("click", () => { painel.hidden = !painel.hidden; if (!painel.hidden) zona.focus(); });
+      ligarZonaColar(zona, trocar);
+      ligarBotaoColar(painel.querySelector("[data-up-colar]"), zona, trocar);
+      painel.querySelector("[data-up-arq]").addEventListener("click", () => inpU.click());
+      inpU.addEventListener("change", () => { const f = inpU.files && inpU.files[0]; inpU.value = ""; if (f) trocar(f); });
+      painel.querySelector("[data-up-x]").addEventListener("click", () => { painel.hidden = true; });
+    }
     if (!podeTrocar) return;
     const usar = async f => { try { const url = await reduzirArte(f); await acaoAprov("imagens", { [k]: url }, k === "original" ? "Arte do cliente guardada." : "Arte recriada guardada."); } catch (e) { say("Não consegui ler essa imagem.", "err"); } };
     ligarZonaColar(el.querySelector(".colar-zona"), usar);
@@ -6235,7 +6262,7 @@ function renderAprov() {
   ligarHist(corpo, a);
 }
 function ligarHist(corpo, a) {
-  const NOMES = { imagens: "anexou arte", enviar: "mandou para revisão", aprovar: "aprovou (revisão)", corrigir: "pediu correção", cliente: "registrou a aprovação do cliente", reabrir: "abriu nova versão", exigir: "exigiu aprovação", dispensar: "dispensou a aprovação" };
+  const NOMES = { imagens: "anexou arte", atualizar: "atualizou a arte recriada", enviar: "mandou para revisão", aprovar: "aprovou (revisão)", corrigir: "pediu correção", cliente: "registrou a aprovação do cliente", reabrir: "abriu nova versão", exigir: "exigiu aprovação", dispensar: "dispensou a aprovação" };
   const h = (a.historico || []).slice().reverse();
   if (!h.length) return;
   corpo.insertAdjacentHTML("beforeend", '<p class="c-sec" style="margin-top:16px">Histórico</p><ul class="apv-hist">' +
