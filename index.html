@@ -340,10 +340,11 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 #sair{min-height:40px;padding:8px 14px}
 @media (max-width:760px){.usuario-nome small{display:none}}
 /* produção (não ADM): só PEDIDOS, sem valores e sem a coluna de atendimento */
-.papel-producao .side,.papel-producao #menu,.papel-producao #ped-novo,.papel-producao #ped-entregues-btn,
-.papel-producao .kc-valor,.papel-producao .kc-pago,.papel-producao .kc-parcial,.papel-producao .kc-50,
-.papel-producao .det-mat-val,.papel-producao .det-total,.papel-producao .det-os,.papel-producao #det-editar,
-.papel-producao .seg-vias,.papel-producao .kb-add{display:none!important}
+.so-uma-aba .side,.so-uma-aba #menu,
+.papel-producao #ped-novo,.papel-producao #ped-entregues-btn,.papel-producao .det-os,.papel-producao #det-editar,.papel-producao .kb-add,
+.sem-aba-os .det-os,
+.sem-valores .kc-valor,.sem-valores .kc-pago,.sem-valores .kc-parcial,.sem-valores .kc-50,
+.sem-valores .det-mat-val,.sem-valores .det-total,.sem-valores .seg-vias{display:none!important}
 .papel-producao .kb-col{flex-basis:300px}
 .papel-producao .kc-pe{flex-direction:column;align-items:stretch;gap:6px;padding-top:11px}
 .papel-producao .kc-ok{justify-content:center;gap:12px;min-height:60px;border-radius:14px;border:2px solid #22c55e;background:rgba(34,197,94,.12);font-size:20px;letter-spacing:.06em;color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background .15s,transform .1s}
@@ -421,6 +422,34 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .usr-papel input{margin-top:3px;accent-color:var(--accent);width:18px;height:18px}
 .usr-papel b{display:block;font-size:15px}
 .usr-papel small{display:block;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.35}
+/* ---------- HIERARQUIA ---------- */
+.hier-box{max-width:680px}
+.hier-lista{display:flex;flex-direction:column;gap:10px;margin:12px 0 16px}
+.hier-item{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card-2);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hier-item .tx{flex:1 1 260px;min-width:0}
+.hier-item b{font-size:15.5px;letter-spacing:.03em}
+.hier-item .ab{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.hier-item .ab span{font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 7px;background:var(--card);border:1px solid var(--line);color:var(--text)}
+.hier-item .ab span.v{border-color:transparent;background:rgba(34,197,94,.14);color:#22c55e}
+.hier-item .ab span.nv{border-color:transparent;background:rgba(239,68,68,.12);color:#f87171}
+.hier-item small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.hier-item .bts{display:flex;gap:8px}
+.hier-item .bts .btn{min-height:38px;padding:7px 12px;font-size:13px}
+.hier-item.fixo{border-color:color-mix(in srgb,var(--brand) 45%,transparent)}
+.hier-abas{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.hier-aba{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line-2);border-radius:11px;padding:10px 12px;cursor:pointer;background:var(--card-2);font-weight:600;font-size:14px}
+.hier-aba:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.hier-aba input,.hier-check input{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.hier-aba svg{width:18px;height:18px;flex:none;color:var(--muted)}
+.hier-ped{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:14px;margin-top:4px}
+.hier-ped .f{gap:8px}
+.hier-check{display:flex;gap:10px;align-items:flex-start;cursor:pointer;border:1.5px solid var(--line-2);border-radius:12px;padding:12px;background:var(--card-2)}
+.hier-check:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.hier-check b{display:block;font-size:14.5px}.hier-check small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+#hier-form{display:flex;flex-direction:column;gap:16px}
+#hier-nome{text-transform:uppercase;letter-spacing:.04em}
+.usr-sel{width:100%;min-height:40px;padding:6px 10px;font-size:14px}
+.usr-papeis{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
 /* ---------- PEDIDOS: kanban ---------- */
 .modo-kb .content{max-width:none}
 .kb-barra{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -1069,8 +1098,9 @@ body.modal-aberto{overflow:hidden}
       <!-- ================= USUÁRIOS (só ADM) ================= -->
       <div id="view-usr" hidden>
         <div class="usr-topo">
-          <p class="hint">Crie quem pode entrar no painel e escolha o nível. <b>ADM</b> vê e faz tudo. <b>Produção</b> só vê os pedidos a partir da Fila do designer, sem valores.
-          Trocar a senha, o nível ou desativar alguém tira essa pessoa do painel na hora (ela entra de novo com os dados novos).</p>
+          <p class="hint">Crie quem pode entrar no painel e escolha a <b>hierarquia</b> de cada um (o que ele vê no menu). <b>ADM</b> vê e faz tudo.
+          Em <b>HIERARQUIA</b> você monta os tipos (ex.: ATENDENTE vê só Pedidos e O.S Camisa). Trocar a senha, a hierarquia ou desativar alguém tira essa pessoa do painel na hora.</p>
+          <button class="btn" type="button" id="usr-hier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.5" width="6" height="5" rx="1"/><rect x="2.5" y="16.5" width="6" height="5" rx="1"/><rect x="15.5" y="16.5" width="6" height="5" rx="1"/><path d="M12 7.5v4M5.5 16.5v-2.5h13v2.5"/></svg>HIERARQUIA</button>
           <button class="btn primary" type="button" id="usr-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Novo usuário</button>
         </div>
         <div class="usr-grade" id="usr-lista"></div>
@@ -1690,16 +1720,38 @@ body.modal-aberto{overflow:hidden}
         <label class="f" id="usr-nome-box"><span>Nome de usuário</span><input type="text" id="usr-nome" maxlength="20" autocapitalize="characters" spellcheck="false" placeholder="Ex.: MARCOS"></label>
         <label class="f"><span id="usr-senha-rot">Senha</span>
           <span class="usr-senha"><input type="text" id="usr-senha" maxlength="64" autocomplete="new-password" spellcheck="false" placeholder="Pelo menos 4 caracteres"><button class="btn" type="button" id="usr-gerar">Gerar</button></span></label>
-        <div class="f" id="usr-papel-box"><span>Nível de acesso</span>
-          <div class="usr-papeis">
-            <label class="usr-papel"><input type="radio" name="usr-papel" value="producao" checked><span><b>Produção</b><small>Só pedidos (sem atendimento e sem valores)</small></span></label>
-            <label class="usr-papel"><input type="radio" name="usr-papel" value="adm"><span><b>ADM</b><small>Tudo, inclusive valores e usuários</small></span></label>
-          </div>
+        <div class="f" id="usr-papel-box"><span>Hierarquia</span>
+          <div class="usr-papeis" id="usr-papeis"></div>
         </div>
         <p class="login-erro" id="usr-erro" role="alert"></p>
       </div>
       <div class="modal-pe"><span class="espaco"></span><button class="btn" type="button" id="usr-cancelar">Cancelar</button><button class="btn primary" type="submit" id="usr-salvar">Criar usuário</button></div>
     </form>
+  </div>
+  <div class="modal" id="hier-modal" hidden role="dialog" aria-modal="true" aria-labelledby="hier-titulo">
+    <div class="modal-box hier-box">
+      <div class="modal-cab"><h2 id="hier-titulo">Hierarquia</h2><button class="btn-x" type="button" id="hier-x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo">
+        <div id="hier-lista-box">
+          <p class="hint" style="margin-top:0">Cada hierarquia diz quais abas do menu da esquerda a pessoa vê. Depois é só escolher a hierarquia de cada usuário.</p>
+          <div class="hier-lista" id="hier-lista"></div>
+          <button class="btn primary" type="button" id="hier-nova">+ Nova hierarquia</button>
+        </div>
+        <form id="hier-form" hidden novalidate autocomplete="off">
+          <label class="f"><span>Nome da hierarquia</span><input type="text" id="hier-nome" maxlength="30" placeholder="Ex.: ATENDENTE" autocapitalize="characters"></label>
+          <div class="f"><span>O que ele vê no menu</span><div class="hier-abas" id="hier-abas"></div></div>
+          <div class="hier-ped" id="hier-ped">
+            <div class="f"><span>Nos pedidos ele pode</span>
+              <label class="usr-papel"><input type="radio" name="hier-pedidos" value="producao" checked><span><b>Só a produção</b><small>Vê a partir da Fila do designer e só move os pedidos de fila (botão OK). Não cria nem edita.</small></span></label>
+              <label class="usr-papel"><input type="radio" name="hier-pedidos" value="completo"><span><b>Completo</b><small>Vê o Atendimento, cria, edita e exclui pedidos.</small></span></label>
+            </div>
+            <label class="hier-check"><input type="checkbox" id="hier-valores"><span><b>Ver valores de venda nos pedidos</b><small>Preços, total, pagamento e a via do atendente.</small></span></label>
+          </div>
+          <p class="login-erro" id="hier-erro" role="alert"></p>
+          <div class="acts"><button class="btn" type="button" id="hier-voltar">Voltar</button><button class="btn primary" type="submit" id="hier-salvar">Salvar hierarquia</button></div>
+        </form>
+      </div>
+    </div>
   </div>
   <div class="modal" id="os-escolha" hidden role="dialog" aria-modal="true" aria-labelledby="os-escolha-titulo">
     <div class="modal-box os-escolha-box">
@@ -3371,7 +3423,21 @@ let USUARIOS_LOGIN = ["ADM", "GIL", "GENILSON", "ANGELO", "SIMRI"];   /* troca p
 let sessao = null;                         /* { token, usuario, papel: "adm" | "producao", exp, previa? } */
 try { const s = JSON.parse(localStorage.getItem("amz_sessao") || "null"); if (s && s.usuario && s.exp > Date.now()) sessao = s; } catch (e) {}
 try { localStorage.removeItem("amz_senha"); } catch (e) {}
-const ehProducao = () => !!sessao && sessao.papel !== "adm";
+/* ---- o que cada usuário pode ver (hierarquia) ---- */
+const TODAS_ABAS = ["visao", "ped", "rel", "prod", "mal", "os", "cli", "orc", "recibo", "calc", "aud"];
+const ehAdm = () => !!sessao && sessao.papel === "adm";
+function permAtual() {
+  if (!sessao) return { nome: "", abas: [], pedidos: "producao", valores: false };
+  if (ehAdm()) return { nome: "ADMINISTRADOR", abas: TODAS_ABAS.concat("usr"), pedidos: "completo", valores: true };
+  return sessao.perm || { nome: "PRODUÇÃO", abas: ["ped"], pedidos: "producao", valores: false };
+}
+const podeAba = v => permAtual().abas.includes(v);
+const podeAlguma = l => l.some(podeAba);
+const pedRestrito = () => !!sessao && !ehAdm() && permAtual().pedidos !== "completo";   /* só move entre filas (sem atendimento) */
+const pedCompleto = () => podeAba("ped") && !pedRestrito();
+const semValores = () => !!sessao && !ehAdm() && !permAtual().valores;
+const ehProducao = pedRestrito;
+function primeiraAba() { const l = permAtual().abas; return ["ped", "os", "orc", "recibo", "cli", "prod", "mal", "rel", "calc", "visao", "aud"].find(a => l.includes(a)) || "ped"; }
 function cabecalhoAuth() { return { "x-painel-token": (sessao && sessao.token) || "" }; }
 let senhaPainel = "";
 let fila = [];                            /* registros esperando para subir ao banco */
@@ -3506,14 +3572,28 @@ function filaParaLocal() {
   });
   fila = []; salvarFila(); salvarHist();
 }
+/* carrega só o que a hierarquia do usuário deixa ver */
+function carregarExtras() {
+  if (window.carregarClientes && (podeAlguma(["cli", "orc", "recibo", "os"]) || pedCompleto())) carregarClientes();
+  if (window.carregarProdutos && (podeAlguma(["prod", "orc"]) || pedCompleto())) carregarProdutos();
+  if (window.carregarMalharia && (podeAlguma(["mal", "orc"]) || pedCompleto())) carregarMalharia();
+  if (window.carregarTamanhosOS && podeAlguma(["os", "ped"])) carregarTamanhosOS();
+}
 async function carregarNuvem() {
   if (!sessao) return;
-  if (ehProducao()) {                       /* produção: só o quadro de pedidos */
-    modoHist = sessao.previa ? "local" : "nuvem";
+  if (sessao.previa) {
+    modoHist = "local";
+    if (ehAdm()) { filaParaLocal(); historico = histLocal; renderVisao(); }
     if (!document.getElementById("view-ped").hidden && window.carregarPedidos) carregarPedidos();
     return;
   }
-  if (sessao.previa) { modoHist = "local"; filaParaLocal(); historico = histLocal; renderVisao(); return; }
+  const usaHist = podeAlguma(["visao", "rel", "os", "orc", "recibo"]);
+  if (!usaHist) {                       /* ex.: produção: só o quadro de pedidos */
+    modoHist = "nuvem"; fecharSenha();
+    if (!document.getElementById("view-ped").hidden && window.carregarPedidos) carregarPedidos();
+    carregarExtras();
+    return;
+  }
   try {
     const r = await api("GET");
     modoHist = "nuvem";
@@ -3522,11 +3602,8 @@ async function carregarNuvem() {
     fecharSenha();
     renderVisao();
     enviarFila();
-    if (window.carregarClientes) carregarClientes();
     if (!document.getElementById("view-ped").hidden) carregarPedidos();
-    if (window.carregarProdutos) carregarProdutos();
-    if (window.carregarMalharia) carregarMalharia();
-    if (window.carregarTamanhosOS) carregarTamanhosOS();
+    carregarExtras();
   } catch (e) {
     if (e.semApi || !e.status) { modoHist = "local"; filaParaLocal(); historico = histLocal; }
     else if (e.status === 401) { modoHist = "senha"; pedirSenha(senhaPainel ? "Senha incorreta." : ""); }
@@ -5155,13 +5232,13 @@ function cardPedido(p, fila, idxFila) {
   const valor = parseReal(p.preco);
   const ultimo = idxFila === FILAS.length - 1;
   el.innerHTML = mini +
-    '<div class="kc-topo"><span class="kc-num">#' + escapa(p.numero) + '</span>' + (p.prioridade === "urgente" ? '<span class="kc-urg">URGENTE</span>' : "") + (ehProducao() ? "" : badgePag(p)) + prazo + '</div>' +
+    '<div class="kc-topo"><span class="kc-num">#' + escapa(p.numero) + '</span>' + (p.prioridade === "urgente" ? '<span class="kc-urg">URGENTE</span>' : "") + (semValores() ? "" : badgePag(p)) + prazo + '</div>' +
     '<p class="kc-cli">' + escapa(p.cliente || "Sem cliente") + '</p>' +
     (p.descricao ? '<p class="kc-desc">' + escapa(p.descricao) + '</p>' : "") +
     '<div class="kc-tags">' + chipsMateriais(p) +
       (p.obs ? '<span class="kc-info" title="' + escapa(p.obs) + '">' + ICO_OBS + '</span>' : "") +
       (!minis.length && (p.temArte || p.arte || (p.artes && p.artes.length)) ? '<span class="kc-info" title="Tem arte anexada">' + ICO_ARTE + '</span>' : "") +
-      (valor && !ehProducao() ? '<span class="kc-valor">' + fmtReal(valor) + '</span>' : "") + '</div>' +
+      (valor && !semValores() ? '<span class="kc-valor">' + fmtReal(valor) + '</span>' : "") + '</div>' +
     ((p.contato || p.telefone) ? '<p class="kc-contato">' + ICO_PES + '<span>' + escapa([p.contato, p.telefone].filter(Boolean).join(" · ")) + '</span></p>' : "") +
     '<div class="kc-pe"><label class="kc-ok"><input type="checkbox" aria-label="' + (ultimo ? "Arquivar pedido " + escapa(p.numero) : "OK: mandar pedido " + escapa(p.numero) + " para " + escapa(FILAS[idxFila + 1].nome)) + '">' + (ultimo ? "ARQUIVAR" : "OK") + '</label>' +
     '<span class="kc-prox">' + (ultimo ? "tira do quadro" : "→ " + escapa(FILAS[idxFila + 1].nome)) + '</span></div>';
@@ -6418,7 +6495,7 @@ function renderDetalhe() {
   });
   $("#det-obs-sec").hidden = !p.obs;
   $("#det-obs").textContent = p.obs || "";
-  const info = [["Etapa", f.nome]].concat(ehProducao() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
+  const info = [["Etapa", f.nome]].concat(semValores() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
   const c = (typeof clientes !== "undefined" ? clientes : []).find(x => (p.clienteId && x.id === p.clienteId) || (x.nome || "").toLowerCase() === (p.cliente || "").toLowerCase());
   if (c) {
     if (c.razao && c.razao !== c.nome) info.push(["Razão social", c.razao]);
@@ -7744,7 +7821,7 @@ window.renderVisao=renderVisao;
     } finally { carregando = false; }
   }
   window.audAoMudar = on => {
-    ativa = on && !ehProducao();
+    ativa = on && podeAba("aud");
     clearInterval(timer); timer = null;
     if (!ativa) return;
     ultimoId = 0; carregar(true);
@@ -7758,6 +7835,21 @@ window.renderVisao=renderVisao;
 (function () {
   const $u = id => document.getElementById(id);
   let lista = [], eu = "", editando = null;   /* editando: null = novo · { usuario, modo: "senha" } */
+  let hierarquias = [];
+  const NOME_ABA = { visao: "Visão geral", ped: "Pedidos", rel: "Relatórios", prod: "Produtos", mal: "Malharia", os: "O.S Camisa",
+    cli: "Clientes", orc: "Orçamento", recibo: "Recibo", calc: "Calculadora Atual Card", aud: "Auditoria" };
+  const nomeHier = id => id === "adm" ? "ADM" : ((hierarquias.find(h => h.id === id) || {}).nome || id);
+  async function apiHier(metodo, query, corpo) {
+    const r = await fetch("/api/hierarquias" + (query || ""), {
+      method: metodo, cache: "no-store",
+      headers: Object.assign(cabecalhoAuth(), corpo ? { "Content-Type": "application/json" } : {}),
+      body: corpo ? JSON.stringify(corpo) : undefined
+    });
+    if (!(r.headers.get("content-type") || "").includes("application/json")) { const e = new Error("sem api"); e.semApi = true; throw e; }
+    const j = await r.json();
+    if (!r.ok) { if (r.status === 401 && window.sessaoExpirou) window.sessaoExpirou(); const e = new Error(j.erro || "erro"); e.status = r.status; e.msg = j.erro; throw e; }
+    return j;
+  }
   async function apiUsr(metodo, query, corpo) {
     const r = await fetch("/api/usuarios" + (query || ""), {
       method: metodo, cache: "no-store",
@@ -7775,20 +7867,24 @@ window.renderVisao=renderVisao;
       const adm = u.papel === "adm", souEu = u.usuario === eu;
       return '<div class="usr-card' + (adm ? " adm" : "") + (u.ativo ? "" : " off") + '" data-u="' + escapa(u.usuario) + '">' +
         '<div class="usr-cab"><span class="usr-av" aria-hidden="true">' + escapa(u.usuario.slice(0, 1)) + '</span><div><div class="usr-nome">' + escapa(u.usuario) + '</div>' +
-        '<div class="usr-tags"><span class="usr-tag' + (adm ? " adm" : "") + '">' + (adm ? "ADM" : "Produção") + '</span>' + (souEu ? '<span class="usr-tag eu">Você</span>' : "") + (u.ativo ? "" : '<span class="usr-tag off">Desativado</span>') + '</div></div></div>' +
+        '<div class="usr-tags"><span class="usr-tag' + (adm ? " adm" : "") + '">' + escapa(nomeHier(u.papel)) + '</span>' + (souEu ? '<span class="usr-tag eu">Você</span>' : "") + (u.ativo ? "" : '<span class="usr-tag off">Desativado</span>') + '</div></div></div>' +
         '<div class="usr-info">' + escapa(quando(u.ultimoLogin)) + '</div>' +
         '<div class="usr-acoes"><button class="btn" type="button" data-a="senha">Trocar senha</button>' +
-        (souEu ? "" : '<button class="btn" type="button" data-a="papel">' + (adm ? "Tornar Produção" : "Tornar ADM") + '</button>' +
+        (souEu ? "" : '<select class="sel usr-sel" data-a="papel" aria-label="Hierarquia de ' + escapa(u.usuario) + '">' +
+          [["adm", "ADM"]].concat(hierarquias.map(h => [h.id, h.nome])).map(([id, n]) => '<option value="' + escapa(id) + '"' + (id === u.papel ? " selected" : "") + '>' + escapa(n) + '</option>').join("") + '</select>' +
           '<button class="btn" type="button" data-a="ativo">' + (u.ativo ? "Desativar" : "Reativar") + '</button>' +
           '<button class="btn danger" type="button" data-a="apagar">Apagar</button>') + '</div></div>';
     }).join("");
-    $u("usr-lista").querySelectorAll(".usr-card").forEach(c => c.querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", () => acao(c.dataset.u, b.dataset.a))));
+    $u("usr-lista").querySelectorAll(".usr-card").forEach(c => c.querySelectorAll("[data-a]").forEach(b => {
+      if (b.tagName === "SELECT") b.addEventListener("change", () => acao(c.dataset.u, "papel", b.value, b));
+      else b.addEventListener("click", () => acao(c.dataset.u, b.dataset.a));
+    }));
   }
   async function carregar() {
     $u("usr-msg").textContent = "Carregando…";
     try {
       const j = await apiUsr("GET");
-      lista = j.itens || []; eu = j.eu || (sessao && sessao.usuario) || "";
+      lista = j.itens || []; eu = j.eu || (sessao && sessao.usuario) || ""; hierarquias = j.hierarquias || [];
       USUARIOS_LOGIN = lista.filter(u => u.ativo).map(u => u.usuario);
       $u("usr-msg").textContent = lista.length + (lista.length === 1 ? " usuário." : " usuários.");
       render();
@@ -7799,7 +7895,7 @@ window.renderVisao=renderVisao;
         : "Não consegui carregar os usuários: " + (e.msg || "sem conexão") + ".";
     }
   }
-  window.usrAoAbrir = () => { if (!ehProducao()) carregar(); };
+  window.usrAoAbrir = () => { if (ehAdm()) carregar(); };
 
   function gerarSenha() {
     const a = "23456789"; let s = "";
@@ -7815,7 +7911,10 @@ window.renderVisao=renderVisao;
     $u("usr-senha-rot").textContent = modo === "novo" ? "Senha" : "Nova senha";
     $u("usr-salvar").textContent = modo === "novo" ? "Criar usuário" : "Salvar senha";
     $u("usr-nome").value = ""; $u("usr-senha").value = ""; $u("usr-erro").textContent = "";
-    document.querySelector('input[name="usr-papel"][value="producao"]').checked = true;
+    const padrao = hierarquias.some(h => h.id === "producao") ? "producao" : ((hierarquias[0] || {}).id || "adm");
+    $u("usr-papeis").innerHTML = hierarquias.concat([{ id: "adm", nome: "ADM", abas: [] }]).map(h =>
+      '<label class="usr-papel"><input type="radio" name="usr-papel" value="' + escapa(h.id) + '"' + (h.id === padrao ? " checked" : "") + '><span><b>' + escapa(h.nome) + '</b><small>' +
+      escapa(h.id === "adm" ? "Tudo, inclusive valores e usuários" : h.abas.map(x => NOME_ABA[x] || x).join(", ")) + '</small></span></label>').join("");
     abrirModal($u("usr-modal"));
     setTimeout(() => (modo === "novo" ? $u("usr-nome") : $u("usr-senha")).focus(), 60);
   }
@@ -7855,16 +7954,81 @@ window.renderVisao=renderVisao;
     finally { btn.disabled = false; }
   });
 
-  async function acao(nome, a) {
+  /* ---------- HIERARQUIA ---------- */
+  const ICONE_ABA = a => { const b = document.querySelector('.nav button[data-view="' + a + '"] svg'); return b ? b.outerHTML : ""; };
+  let hierEdit = null;   /* null = nova · id */
+  function mostraListaHier() {
+    $u("hier-form").hidden = true; $u("hier-lista-box").hidden = false; $u("hier-titulo").textContent = "Hierarquia";
+    $u("hier-lista").innerHTML =
+      '<div class="hier-item fixo"><div class="tx"><b>ADM</b><small>Vê e faz tudo, inclusive Usuários e Hierarquia. Não dá para mudar.</small></div></div>' +
+      hierarquias.map(h => '<div class="hier-item" data-id="' + escapa(h.id) + '"><div class="tx"><b>' + escapa(h.nome) + '</b>' +
+        '<div class="ab">' + h.abas.map(a => '<span>' + escapa(NOME_ABA[a] || a) + '</span>').join("") +
+        (h.abas.includes("ped") ? '<span class="' + (h.valores ? "v" : "nv") + '">' + (h.pedidos === "completo" ? "Pedidos completo" : "Pedidos: só produção") + (h.valores ? " · com valores" : " · sem valores") + '</span>' : "") + '</div>' +
+        '<small>' + h.usuarios + (h.usuarios === 1 ? " usuário" : " usuários") + '</small></div>' +
+        '<div class="bts"><button class="btn" type="button" data-h="editar">Editar</button><button class="btn danger" type="button" data-h="apagar">Apagar</button></div></div>').join("");
+    $u("hier-lista").querySelectorAll(".hier-item[data-id]").forEach(el => {
+      const h = hierarquias.find(x => x.id === el.dataset.id);
+      el.querySelector('[data-h="editar"]').addEventListener("click", () => editarHier(h));
+      el.querySelector('[data-h="apagar"]').addEventListener("click", () => apagarHier(h));
+    });
+  }
+  function editarHier(h) {
+    hierEdit = h ? h.id : null;
+    $u("hier-titulo").textContent = h ? "Editar " + h.nome : "Nova hierarquia";
+    $u("hier-lista-box").hidden = true; $u("hier-form").hidden = false; $u("hier-erro").textContent = "";
+    $u("hier-nome").value = h ? h.nome : "";
+    $u("hier-abas").innerHTML = TODAS_ABAS.map(a => '<label class="hier-aba"><input type="checkbox" value="' + a + '"' + (h && h.abas.includes(a) ? " checked" : "") + '>' + ICONE_ABA(a) + '<span>' + escapa(NOME_ABA[a]) + '</span></label>').join("");
+    document.querySelector('input[name="hier-pedidos"][value="' + (h && h.pedidos === "completo" ? "completo" : "producao") + '"]').checked = true;
+    $u("hier-valores").checked = !!(h && h.valores);
+    const mostraPed = () => { $u("hier-ped").hidden = !$u("hier-abas").querySelector('input[value="ped"]').checked; };
+    $u("hier-abas").querySelectorAll("input").forEach(i => i.addEventListener("change", () => { mostraPed(); $u("hier-erro").textContent = ""; }));
+    mostraPed();
+    setTimeout(() => $u("hier-nome").focus(), 60);
+  }
+  async function apagarHier(h) {
+    if (h.usuarios) { say("Ainda tem " + h.usuarios + (h.usuarios === 1 ? " usuário" : " usuários") + " em " + h.nome + ". Mude a hierarquia deles antes de apagar.", "err"); return; }
+    if (!(await confirmar("Apagar a hierarquia " + h.nome + "?", { titulo: "Apagar hierarquia", sim: "Apagar", nao: "Voltar", perigo: true }))) return;
+    try { await apiHier("DELETE", "?id=" + encodeURIComponent(h.id)); say("Hierarquia " + h.nome + " apagada.", "ok"); await carregar(); mostraListaHier(); }
+    catch (e) { say(e.msg || "Não consegui apagar agora.", "err"); }
+  }
+  $u("usr-hier").addEventListener("click", () => { mostraListaHier(); abrirModal($u("hier-modal")); });
+  const fecharHier = () => fecharModal($u("hier-modal"));
+  $u("hier-x").addEventListener("click", fecharHier);
+  $u("hier-modal").addEventListener("mousedown", e => { if (e.target.id === "hier-modal") fecharHier(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$u("hier-modal").hidden && $u("conf-modal") && $u("conf-modal").hidden) fecharHier(); });
+  $u("hier-nova").addEventListener("click", () => editarHier(null));
+  $u("hier-voltar").addEventListener("click", mostraListaHier);
+  $u("hier-form").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const nome = $u("hier-nome").value.trim().toUpperCase();
+    const abas = [...$u("hier-abas").querySelectorAll("input:checked")].map(i => i.value);
+    const erro = $u("hier-erro");
+    if (!nome) { erro.textContent = "Dê um nome para a hierarquia (ex.: ATENDENTE)."; $u("hier-nome").focus(); return; }
+    if (nome === "ADM") { erro.textContent = "ADM já existe e vê tudo. Use outro nome."; return; }
+    if (!abas.length) { erro.textContent = "Marque pelo menos uma aba."; return; }
+    const corpo = { nome, abas, pedidos: document.querySelector('input[name="hier-pedidos"]:checked').value, valores: $u("hier-valores").checked };
+    const btn = $u("hier-salvar"); btn.disabled = true;
+    try {
+      if (hierEdit) await apiHier("PATCH", "?id=" + encodeURIComponent(hierEdit), corpo);
+      else await apiHier("POST", "", corpo);
+      say("Hierarquia " + nome + " salva." + (hierEdit ? " Quem estiver logado nela vê a mudança ao abrir o painel de novo." : ""), "ok");
+      await carregar(); mostraListaHier();
+    } catch (e) { erro.textContent = e.msg || "Não consegui salvar agora."; }
+    finally { btn.disabled = false; }
+  });
+
+  async function acao(nome, a, valor, sel) {
     const u = lista.find(x => x.usuario === nome); if (!u) return;
     if (a === "senha") return abrirForm("senha", u);
     try {
       if (a === "papel") {
-        const novo = u.papel === "adm" ? "producao" : "adm";
-        if (!(await confirmar(novo === "adm" ? "Dar acesso total (ADM) para " + nome + "?" : "Tirar o acesso de ADM de " + nome + "?",
-          { titulo: "Mudar nível", detalhe: novo === "adm" ? "Ele vai ver valores, relatórios, clientes e poder mexer nos usuários." : "Ele vai ver só os pedidos, sem valores.", sim: novo === "adm" ? "Tornar ADM" : "Tornar Produção", nao: "Voltar" }))) return;
+        const novo = valor;
+        if (!novo || novo === u.papel) return;
+        const h = hierarquias.find(x => x.id === novo);
+        const det = novo === "adm" ? "Ele vai ver e fazer tudo: valores, relatórios, clientes, usuários." : "Vai ver: " + (h ? h.abas.map(x => NOME_ABA[x] || x).join(", ") : "") + ".";
+        if (!(await confirmar("Colocar " + nome + " na hierarquia " + nomeHier(novo) + "?", { titulo: "Mudar hierarquia", detalhe: det + " Se estiver logado, ele vai precisar entrar de novo.", sim: "Mudar", nao: "Voltar" }))) { if (sel) sel.value = u.papel; return; }
         await apiUsr("PATCH", "?usuario=" + encodeURIComponent(nome), { papel: novo });
-        say(nome + " agora é " + (novo === "adm" ? "ADM" : "Produção") + ".", "ok");
+        say(nome + " agora é " + nomeHier(novo) + ".", "ok");
       } else if (a === "ativo") {
         if (u.ativo && !(await confirmar("Desativar " + nome + "?", { titulo: "Desativar usuário", detalhe: "Ele sai do painel na hora e não consegue mais entrar até ser reativado.", sim: "Desativar", nao: "Voltar", perigo: true }))) return;
         await apiUsr("PATCH", "?usuario=" + encodeURIComponent(nome), { ativo: !u.ativo });
@@ -7931,13 +8095,19 @@ window.renderVisao=renderVisao;
   };
 
   function aplicarPapel() {
-    const prod = ehProducao();
-    document.documentElement.classList.toggle("papel-producao", prod);
+    const raiz = document.documentElement, perm = permAtual();
+    raiz.classList.toggle("papel-producao", pedRestrito());
+    raiz.classList.toggle("sem-valores", semValores());
+    raiz.classList.toggle("sem-aba-os", !!sessao && !podeAba("os"));
+    raiz.classList.toggle("so-uma-aba", !!sessao && perm.abas.length === 1);
+    /* menu da esquerda: só as abas da hierarquia (USUÁRIOS só para o ADM) */
+    document.querySelectorAll(".nav button[data-view]").forEach(b => { b.hidden = !!sessao && !podeAba(b.dataset.view); });
     document.getElementById("usuario-box").hidden = !sessao;
     document.getElementById("usuario-nome").textContent = sessao ? sessao.usuario : "";
-    document.getElementById("usuario-papel").textContent = sessao ? (prod ? "PRODUÇÃO" : "ADMINISTRADOR") : "";
-    if (prod) { if (typeof setVias === "function") setVias("impressor"); }
+    document.getElementById("usuario-papel").textContent = sessao ? (perm.nome || "").toUpperCase() : "";
+    if (semValores() && typeof setVias === "function") setVias("impressor");
   }
+  window.aplicarPapel = aplicarPapel;
 
   function entrouCom(dados) {
     sessao = dados;
@@ -7946,8 +8116,8 @@ window.renderVisao=renderVisao;
     if (shellEl) shellEl.inert = false;
     aplicarPapel();
     modoHist = "verificando";
-    if (ehProducao()) irPara("ped");
-    else { const v = lido("amz_view"); irPara(TITULOS[v] && (v !== "visao" || MOSTRAR_VISAO) ? v : "ped"); }
+    const v = lido("amz_view");
+    irPara(TITULOS[v] && podeAba(v) && (v !== "visao" || MOSTRAR_VISAO) ? v : primeiraAba());
     carregarNuvem();
     say("Olá, " + sessao.usuario + "!", "ok");
   }
@@ -7962,13 +8132,13 @@ window.renderVisao=renderVisao;
       const r = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ usuario, senha }), cache: "no-store" });
       const tipo = r.headers.get("content-type") || "";
       if (!tipo.includes("application/json")) {
-        if (previa && USUARIOS_LOGIN.includes(usuario)) { entrouCom({ token: "", usuario, papel: usuario === "ADM" ? "adm" : "producao", exp: Date.now() + 16 * 3600e3, previa: true }); return; }
+        if (previa && USUARIOS_LOGIN.includes(usuario)) { entrouCom({ token: "", usuario, papel: usuario === "ADM" ? "adm" : "producao", exp: Date.now() + 16 * 3600e3, previa: true, perm: usuario === "ADM" ? null : { nome: "PRODUÇÃO", abas: ["ped"], pedidos: "producao", valores: false } }); return; }
         erro.textContent = previa ? "Usuário não encontrado." : "O servidor do painel não respondeu. Confira se o arquivo api/login.js foi enviado para o GitHub.";
         return;
       }
       const j = await r.json();
       if (!r.ok) { erro.textContent = j.erro || "Não foi possível entrar."; inpS.select(); return; }
-      entrouCom({ token: j.token, usuario: j.usuario, papel: j.papel, exp: j.exp });
+      entrouCom({ token: j.token, usuario: j.usuario, papel: j.papel, exp: j.exp, perm: j.perm || null });
     } catch (e) {
       erro.textContent = "Sem conexão com o servidor. Confira a internet e tente de novo.";
     } finally { btn.disabled = false; btn.textContent = "Entrar"; }
@@ -7983,14 +8153,22 @@ window.renderVisao=renderVisao;
 
   /* produção só pode ficar em PEDIDOS */
   const irParaSemPapel = irPara;
-  irPara = function (v) { irParaSemPapel(ehProducao() ? "ped" : v); };
+  irPara = function (v) { irParaSemPapel(!sessao || podeAba(v) ? v : primeiraAba()); };
 
   /* ao abrir: com sessão válida entra direto (e confere com o servidor); sem sessão, pede login */
   if (sessao) {
     aplicarPapel();
     carregarNuvem();
     if (!sessao.previa) fetch("/api/login", { headers: cabecalhoAuth(), cache: "no-store" })
-      .then(r => { if (r.status === 401) window.sessaoExpirou(); else if (r.ok) return r.json().then(j => { if (j.papel && j.papel !== sessao.papel) { sessao.papel = j.papel; try { localStorage.setItem("amz_sessao", JSON.stringify(sessao)); } catch (e) {} location.reload(); } }); })
+      .then(r => { if (r.status === 401) window.sessaoExpirou(); else if (r.ok) return r.json().then(j => {
+        const antes = JSON.stringify([sessao.papel, sessao.perm || null]);
+        if (j.papel) sessao.papel = j.papel;
+        sessao.perm = j.papel === "adm" ? null : (j.perm || sessao.perm || null);
+        if (JSON.stringify([sessao.papel, sessao.perm || null]) !== antes) {
+          try { localStorage.setItem("amz_sessao", JSON.stringify(sessao)); } catch (e) {}
+          location.reload();
+        }
+      }); })
       .catch(() => {});
   } else mostrarLogin("");
   /* sessão vence com o painel aberto */
