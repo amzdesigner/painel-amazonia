@@ -805,6 +805,8 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .apv-bts{display:flex;gap:8px;flex-wrap:wrap}
 .apv-bts .btn{min-height:40px;padding:8px 12px;font-size:13px}
 .apv-lado .colar-zona{min-height:54px}
+.apv-envia .btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;font-size:14px}
+.apv-envia svg{width:18px;height:18px;flex:none}
 .apv-acoes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
 .apv-card{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--card)}
 .apv-card h4{margin:0;font-size:15px}
@@ -6087,6 +6089,37 @@ async function acaoAprov(acao, extra, ok) {
     return true;
   } catch (e) { say(e.msg || "Não consegui salvar agora.", "err"); return false; }
 }
+/* arte recriada: baixar e copiar (para a atendente mandar para o cliente) */
+function nomeArquivoArte(ext) {
+  const p = apvPed || {}, cli = String(p.cliente || "cliente").replace(/[^A-Za-zÀ-ÿ0-9 ]/g, "").trim().slice(0, 40);
+  return "ARTE " + String(p.numero || "").replace("/", "-") + " - " + cli + "." + ext;
+}
+function baixarArteAprov(src) {
+  if (!src) return;
+  const tipo = (/^data:image\/(\w+)/.exec(src) || [, "jpeg"])[1], ext = tipo === "jpeg" ? "jpg" : tipo;
+  fetch(src).then(r => r.blob()).then(b => {
+    const url = URL.createObjectURL(b), a = document.createElement("a");
+    a.href = url; a.download = nomeArquivoArte(ext); document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    say("Arte baixada: " + a.download, "ok");
+  }).catch(() => say("Não consegui baixar a arte.", "err"));
+}
+async function pngDeImagem(src) {
+  const img = new Image(); img.src = src; await img.decode();
+  const c = document.createElement("canvas"); c.width = img.naturalWidth; c.height = img.naturalHeight;
+  c.getContext("2d").drawImage(img, 0, 0);
+  return await new Promise(r => c.toBlob(r, "image/png"));
+}
+async function copiarImagem(src, btn) {
+  if (!src) return;
+  if (!navigator.clipboard || !window.ClipboardItem) { say("Este navegador não deixa copiar imagem. Use “Baixar arte” e envie o arquivo.", "err"); return; }
+  try {
+    /* o Safari quer a promessa direto no ClipboardItem; os outros aceitam também */
+    await navigator.clipboard.write([new ClipboardItem({ "image/png": pngDeImagem(src) })]);
+    say("Imagem copiada. Cole na conversa do cliente (Ctrl+V ou segurar e colar).", "ok");
+    if (btn) { const t = btn.innerHTML; btn.lastChild.textContent = " Copiada ✓"; setTimeout(() => { btn.innerHTML = t; }, 1800); }
+  } catch (e) { say("Não consegui copiar a imagem aqui. Use “Baixar arte” e envie o arquivo.", "err"); }
+}
 function zoomImg(src) {
   const d = document.createElement("div"); d.className = "apv-zoom"; d.innerHTML = '<img alt="">'; d.querySelector("img").src = src;
   d.addEventListener("click", () => d.remove()); document.body.appendChild(d);
@@ -6124,6 +6157,7 @@ function renderAprov() {
   const lado = (k, titulo, ajuda) =>
     '<div class="apv-lado" data-k="' + k + '"><h4><b>' + titulo + '</b></h4>' +
     (apvImgs[k] ? '<div class="apv-img"><img alt="' + escapa(titulo) + '"></div>' : '<div class="apv-img vazio">' + escapa(ajuda) + '</div>') +
+    (k === "recriada" && apvImgs[k] ? '<div class="apv-bts apv-envia"><button class="btn primary" type="button" data-baixar><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg> Baixar arte</button><button class="btn" type="button" data-copiar><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg> Copiar imagem</button></div>' : "") +
     (podeTrocar ? '<div class="colar-zona" contenteditable="true" spellcheck="false" role="textbox" aria-label="Colar ' + escapa(titulo) + '" data-texto="Clique aqui e aperte Ctrl+V"></div>' +
       '<div class="apv-bts"><button class="btn" type="button" data-colar>Colar imagem</button><button class="btn" type="button" data-arq>Anexar arquivo</button>' +
       (apvPed.temArte ? '<button class="btn" type="button" data-ped>Usar arte do pedido</button>' : "") +
@@ -6132,6 +6166,8 @@ function renderAprov() {
   corpo.querySelectorAll(".apv-lado").forEach(el => {
     const k = el.dataset.k, im = el.querySelector(".apv-img img");
     if (im) { im.src = apvImgs[k]; im.parentElement.addEventListener("click", () => zoomImg(apvImgs[k])); }
+    const bb = el.querySelector("[data-baixar]"); if (bb) bb.addEventListener("click", () => baixarArteAprov(apvImgs[k]));
+    const bc = el.querySelector("[data-copiar]"); if (bc) bc.addEventListener("click", () => copiarImagem(apvImgs[k], bc));
     if (!podeTrocar) return;
     const usar = async f => { try { const url = await reduzirArte(f); await acaoAprov("imagens", { [k]: url }, k === "original" ? "Arte do cliente guardada." : "Arte recriada guardada."); } catch (e) { say("Não consegui ler essa imagem.", "err"); } };
     ligarZonaColar(el.querySelector(".colar-zona"), usar);
