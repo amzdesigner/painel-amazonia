@@ -142,7 +142,7 @@ function semValores(p) {
   if (Array.isArray(p.itens)) p.itens = p.itens.map(it => {
     const i = Object.assign({}, it); delete i.preco; delete i.precoUnit;
     if (i.camisa) {
-      try { const c = typeof i.camisa === "string" ? JSON.parse(i.camisa) : i.camisa; delete c.unit; delete c.valor; i.camisa = JSON.stringify(c); }
+      try { const c = typeof i.camisa === "string" ? JSON.parse(i.camisa) : i.camisa; delete c.unit; delete c.valor; delete c.taxaArte; i.camisa = JSON.stringify(c); }
       catch (e) { i.camisa = ""; }
     }
     return i;
