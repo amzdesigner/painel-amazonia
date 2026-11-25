@@ -5859,6 +5859,11 @@ function ligarAcabamento(el, p) {
     const antes = Array.isArray(p.acabamento) ? p.acabamento : [];
     if (lista.length === antes.length && lista.every(x => antes.includes(x))) return;
     await atualizarPedido(p.id, { acabamento: lista });
+    const salvo = (pedidos.find(x => x.id === p.id) || {}).acabamento;
+    if (modoHist === "nuvem" && lista.length && !(Array.isArray(salvo) && lista.every(x => salvo.includes(x)))) {
+      say("O servidor não guardou o acabamento: a pasta api publicada na Vercel ainda é a antiga (falta o api/pedidos.js novo).", "err");
+      return;
+    }
     say(lista.length ? "Acabamento do pedido #" + p.numero + " com " + lista.join(", ") + ". Avisamos no celular." : "Ninguém marcado no acabamento do pedido #" + p.numero + ".", "ok");
   };
   menu.querySelector(".acab-ok").addEventListener("click", () => salvar([...menu.querySelectorAll("input:checked")].map(i => i.value)));
