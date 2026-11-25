@@ -571,6 +571,16 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kb-cab h3{margin:0;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;flex:1}
 .kb-n{font-size:12px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-variant-numeric:tabular-nums}
 .kb-lista{flex:1;display:flex;flex-direction:column;gap:10px;padding:4px 10px 12px;min-height:80px;transition:background .15s}
+/* cada fila rola sozinha, com a barrinha do lado */
+.kb.altura-fixa,html[data-zoom] .kb.altura-fixa{min-height:0}
+.kb.altura-fixa .kb-col{max-height:100%}
+.kb.altura-fixa .kb-lista{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding-right:28px;min-height:0}
+.kb.altura-fixa .kb-lista::-webkit-scrollbar{display:none}
+.kb-rolo{position:absolute;right:3px;width:22px;border-radius:999px;touch-action:none;cursor:pointer;z-index:3}
+.kb-rolo[hidden]{display:none}
+.kb-rolo::before{content:"";position:absolute;left:8px;right:8px;top:0;bottom:0;border-radius:999px;background:color-mix(in srgb,var(--text) 14%,transparent)}
+.kb-rolo i{position:absolute;left:3px;right:3px;min-height:44px;border-radius:999px;background:var(--cor);box-shadow:0 1px 6px rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.85)}
+.kb-rolo.ativo i{filter:brightness(1.15)}
 .kb-col.alvo{border-color:var(--cor)}
 .kb-col.alvo .kb-lista{background:color-mix(in srgb,var(--cor) 10%,transparent)}
 .kb-vazio{border:1.5px dashed var(--line);border-radius:12px;padding:18px 12px;text-align:center;color:var(--muted);font-size:12.5px}
@@ -777,6 +787,21 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .cm-tbl td.un.manual{color:var(--accent);font-weight:800}
 .cm-tag{display:inline-block;margin-left:6px;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
 .cm-volta{border:0;background:none;color:var(--muted);font:inherit;font-size:11.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:2px 4px}
+/* aviso de atualização do painel */
+.atualizacao{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:300;display:flex;align-items:center;gap:12px;width:min(640px,calc(100vw - 24px));padding:12px 14px;border-radius:16px;background:#0f3d24;border:1px solid #22c55e;color:#fff;box-shadow:0 18px 50px rgba(0,0,0,.5);animation:atuEntra .35s ease}
+.atualizacao[hidden]{display:none}
+.atu-ico{width:40px;height:40px;border-radius:12px;background:#22c55e;display:grid;place-items:center;flex:none}
+.atu-ico svg{width:22px;height:22px;color:#fff;animation:atuGira 2.4s linear infinite}
+.atu-tx{flex:1;min-width:0}
+.atu-tx b{display:block;font-size:15px}
+.atu-tx small{display:block;color:#c8f1d6;font-size:12.5px;margin-top:2px}
+.atualizacao .btn{min-height:42px;white-space:nowrap}
+.atualizacao .btn:not(.primary){background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+.atualizacao .btn.primary{background:#22c55e;border-color:#22c55e;color:#06210f}
+@keyframes atuEntra{from{opacity:0;transform:translate(-50%,-12px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes atuGira{to{transform:rotate(360deg)}}
+@media (max-width:600px){.atualizacao{flex-wrap:wrap}.atualizacao .btn{flex:1}}
+@media (prefers-reduced-motion:reduce){.atualizacao,.atu-ico svg{animation:none}}
 /* aprovação da arte */
 .kc-apv{display:inline-flex;align-items:center;gap:5px;border:1px solid transparent;border-radius:7px;padding:2px 8px;font:inherit;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
 .kc-apv svg{width:13px;height:13px}
@@ -831,6 +856,13 @@ body.kb-arrastando .kb{scroll-snap-type:none}
 .det-apv-btn{display:inline-flex;align-items:center;gap:8px}
 .det-apv-btn svg{width:18px;height:18px}
 @media (max-width:760px){.apv-cols,.apv-acoes{grid-template-columns:1fr}}
+#ped-rasc .n{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px;background:#f59e0b;color:#1b1203;font-size:12px;font-weight:800;padding:0 6px;margin-left:2px}
+#ped-rasc svg{width:18px;height:18px;flex:none}
+@media (max-width:1400px){#ped-rasc>span:not(.n){display:none}#ped-rasc{padding-left:12px;padding-right:12px}}
+.conf-extra{background:#f59e0b;border-color:#f59e0b;color:#1b1203;font-weight:800}
+.conf-extra[hidden]{display:none}
+.rasc-acoes{display:flex;gap:8px;flex:none}
+.rasc-acoes .btn{min-height:40px}
 .fl-lista{display:flex;flex-direction:column;gap:8px;margin:12px 0 6px}
 .fl-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card-2);flex-wrap:wrap}
 .fl-item .fl-dot{width:14px;height:14px;border-radius:50%;flex:none}
@@ -1207,6 +1239,7 @@ body.modal-aberto{overflow:hidden}
       <button class="icobtn" type="button" id="menu" aria-label="Abrir ou fechar o menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <h1 id="titulo">O.S Camisa</h1>
       <div class="top-acoes" id="top-ped" hidden>
+        <button class="btn" type="button" id="ped-rasc" hidden title="Meus rascunhos" aria-label="Meus rascunhos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>Rascunhos</span><span class="n" id="ped-rasc-n">0</span></button>
         <button class="btn" type="button" id="ped-revisar" hidden title="Artes para revisar" aria-label="Artes para revisar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.4 1.8 3-.2.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.2L12 21l-2.4-1.8-3 .2-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .2z"/><path d="m9 12 2 2 4-4"/></svg><span>Artes para revisar</span><span class="n" id="ped-revisar-n">0</span></button>
         <button class="btn" type="button" id="ped-filas" hidden title="Filas" aria-label="Filas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><path d="M19.5 8v8M15.5 12h8"/></svg><span>Filas</span></button>
         <button class="btn" type="button" id="ped-entregues-btn" title="Arquivados" aria-label="Arquivados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/><path d="m9 13 2 2 4-4"/></svg><span>Arquivados</span></button>
@@ -2071,6 +2104,7 @@ body.modal-aberto{overflow:hidden}
       <p class="conf-det" id="conf-det"></p>
       <div class="conf-bts">
         <button class="btn" type="button" id="conf-nao">Não</button>
+        <button class="btn conf-extra" type="button" id="conf-extra" hidden></button>
         <button class="btn danger-cheio" type="button" id="conf-sim">Sim</button>
       </div>
     </div>
@@ -2200,10 +2234,23 @@ body.modal-aberto{overflow:hidden}
     </form>
   </div>
 
+  <div class="atualizacao" id="atualizacao" hidden role="alertdialog" aria-live="assertive" aria-labelledby="atu-tit">
+    <span class="atu-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/></svg></span>
+    <div class="atu-tx"><b id="atu-tit">Atualização disponível no painel</b><small id="atu-sub">Recarregue a página para usar a versão nova.</small></div>
+    <button class="btn" type="button" id="atu-depois">Depois</button>
+    <button class="btn primary" type="button" id="atu-recarregar">Recarregar agora</button>
+  </div>
+
   <div class="modal" id="apv-modal" hidden role="dialog" aria-modal="true" aria-labelledby="apv-titulo">
     <div class="modal-box apv-box">
       <div class="modal-cab"><h2 id="apv-titulo">Aprovação da arte</h2><button class="btn-x" type="button" id="apv-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
       <div class="modal-corpo" id="apv-corpo"></div>
+    </div>
+  </div>
+  <div class="modal" id="rasc-modal" hidden role="dialog" aria-modal="true" aria-labelledby="rasc-titulo">
+    <div class="modal-box">
+      <div class="modal-cab"><h2 id="rasc-titulo">Meus rascunhos</h2><button class="btn-x" type="button" id="rasc-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="modal-corpo"><div class="rev-lista" id="rasc-lista"></div><p class="hint">Só você vê os seus rascunhos. Ao criar o pedido, o rascunho some sozinho.</p></div>
     </div>
   </div>
   <div class="modal" id="rev-modal" hidden role="dialog" aria-modal="true" aria-labelledby="rev-titulo">
@@ -2406,6 +2453,7 @@ function confirmar(texto, o = {}) {
     document.getElementById("conf-det").textContent = o.detalhe || "";
     const sim = document.getElementById("conf-sim"), nao = document.getElementById("conf-nao");
     sim.textContent = o.sim || "Sim"; nao.textContent = o.nao || "Não";
+    const ex = document.getElementById("conf-extra"); ex.hidden = !o.extra; ex.textContent = o.extra || "";
     const perigo = o.perigo !== false;
     sim.className = "btn " + (perigo ? "danger-cheio" : "aviso-cheio");
     document.getElementById("conf-ico").className = "conf-ico" + (perigo ? "" : " aviso");
@@ -2427,6 +2475,7 @@ function responderConf(v) {
 }
 document.getElementById("conf-sim").addEventListener("click", () => responderConf(true));
 document.getElementById("conf-nao").addEventListener("click", () => responderConf(false));
+document.getElementById("conf-extra").addEventListener("click", () => responderConf("extra"));
 document.getElementById("conf-modal").addEventListener("mousedown", e => { if (e.target.id === "conf-modal") responderConf(false); });
 document.addEventListener("keydown", e => {
   if (document.getElementById("conf-modal").hidden) return;
@@ -2536,6 +2585,60 @@ document.getElementById("tema").addEventListener("click", () => aplicarTema(!doc
 function guardar(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 function lido(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 aplicarTema(lido("amz_tema") === "claro");
+/* ================= aviso de atualização (novo commit publicado na Vercel) ================= */
+(function () {
+  if (window.claude && window.claude.use) return;          /* prévia: não tem servidor */
+  const box = document.getElementById("atualizacao");
+  let minha = null, etag = null, adiadoAte = 0, avisando = false;
+  async function versaoAtual() {
+    try {
+      const r = await fetch("/api/versao", { cache: "no-store" });
+      if (r.ok && (r.headers.get("content-type") || "").includes("json")) { const j = await r.json(); if (j.versao) return "v:" + j.versao; }
+    } catch (e) {}
+    /* sem a API: compara a "etiqueta" da própria página */
+    try {
+      const r = await fetch(location.pathname || "/", { method: "HEAD", cache: "no-store" });
+      const t = r.headers.get("etag") || r.headers.get("last-modified");
+      if (t) return "e:" + t;
+    } catch (e) {}
+    return null;
+  }
+  async function conferir() {
+    if (document.hidden || avisando && Date.now() < adiadoAte) return;
+    const v = await versaoAtual();
+    if (!v) return;
+    if (!minha) { minha = v; return; }
+    if (v !== minha && Date.now() >= adiadoAte) mostrar();
+  }
+  function mostrar() {
+    avisando = true;
+    const ocupado = !!document.querySelector(".modal:not([hidden])");
+    document.getElementById("atu-sub").textContent = ocupado
+      ? "Termine e salve o que está fazendo, depois toque em Recarregar."
+      : "Recarregue a página para usar a versão nova.";
+    box.hidden = false;
+  }
+  document.getElementById("atu-recarregar").addEventListener("click", () => {
+    const ocupado = document.querySelector("#ped-modal:not([hidden]), #apv-modal:not([hidden])");
+    if (ocupado) {
+      box.hidden = true;
+      confirmar("Recarregar o painel agora?", { titulo: "Atualização", detalhe: "Tem um pedido aberto: o que não foi salvo será perdido.", sim: "Recarregar", nao: "Voltar", perigo: true })
+        .then(ok => { if (ok) location.reload(); else box.hidden = false; });
+      return;
+    }
+    location.reload();
+  });
+  document.getElementById("atu-depois").addEventListener("click", () => {
+    box.hidden = true; adiadoAte = Date.now() + 10 * 60 * 1000;   /* lembra de novo em 10 minutos */
+    say("Ok! Aviso de novo em 10 minutos.");
+  });
+  conferir();
+  setInterval(conferir, 60 * 1000);                               /* confere a cada minuto */
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) conferir(); });
+  window.addEventListener("online", conferir);
+  window.verificarAtualizacao = conferir;
+})();
+
 /* ================= tela cheia (tablet) ================= */
 (function () {
   const raiz = document.documentElement, btn = document.getElementById("tela-cheia");
@@ -2580,6 +2683,7 @@ function aplicarZoom(z) {
   document.getElementById("zoom-menos").disabled = z <= ZOOM_MIN;
   document.getElementById("zoom-mais").disabled = z >= ZOOM_MAX;
   guardar("amz_zoom", String(z));
+  if (typeof ajustarAlturaKB === "function") requestAnimationFrame(() => { try { ajustarAlturaKB(); } catch (e) {} });
   return z;
 }
 let zoomAtual = aplicarZoom(lido("amz_zoom") || 100);
@@ -5484,6 +5588,7 @@ async function carregarPedidos(silencioso) {
   if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden) renderKB();
   completarMiniaturas();
   if (typeof contarRevisao === "function") contarRevisao();
+  if (typeof carregarRascunhos === "function") carregarRascunhos();
 }
 /* pedidos com arte mas sem miniatura (feitos antes, ou salvos com o servidor antigo): gera e guarda */
 let completandoMinis = false;
@@ -5641,7 +5746,11 @@ document.addEventListener("pointerdown", e => {
   const kb = document.getElementById("kb"), nav = document.getElementById("kb-nav"), r = document.getElementById("kb-nav-r");
   let mexendo = false, solta = null;
   const max = () => Math.max(0, kb.scrollWidth - kb.clientWidth);
+  let pedVisivel = false;
   function atualizar() {
+    const pv = !document.getElementById("view-ped").hidden;
+    if (pv && !pedVisivel && typeof ajustarAlturaKB === "function") requestAnimationFrame(ajustarAlturaKB);
+    pedVisivel = pv;
     const vis = !document.getElementById("view-ped").hidden && max() > 8 && !document.querySelector(".modal:not([hidden])");
     nav.hidden = !vis;
     if (vis && !mexendo) r.value = String(Math.round(kb.scrollLeft / max() * 1000));
@@ -5772,8 +5881,17 @@ function cardPedido(p, fila, idxFila) {
   el.addEventListener("keydown", ev => { if ((ev.key === "Enter" || ev.key === " ") && ev.target === el) { ev.preventDefault(); abrirDetalhe(p, el); } });
   return el;
 }
+/* ordem dos cards: pelo número do pedido, do mais antigo (menor) para o mais novo — quem chegou primeiro fica em cima */
+function chaveNumero(p) {
+  const m = /^(\d+)\s*\/\s*(\d{4})$/.exec(String(p.numero || "").trim());
+  if (m) return Number(m[2]) * 1e6 + Number(m[1]);
+  const t = Date.parse(p.criadoEm || p.criado_em || "") || 0;
+  return t ? t / 1e3 : Number(p.id) || 0;
+}
+const porNumero = (a, b) => (chaveNumero(a) - chaveNumero(b)) || (Number(a.id) - Number(b.id));
 function renderKB() {
   const kb = $("#kb"); if (!kb) return;
+  const rolagens = {}; kb.querySelectorAll(".kb-lista").forEach(l => { rolagens[l.dataset.fila] = l.scrollTop; });
   document.querySelectorAll("#ped-emp [data-emp]").forEach(b => b.classList.toggle("on", b.dataset.emp === filtroEmpresa));
   let fx = document.getElementById("tablet-faixa");
   if (!fx) { fx = document.createElement("div"); fx.id = "tablet-faixa"; fx.className = "tablet-faixa"; fx.innerHTML = 'TABLET (Produção): aqui só dá para ver os pedidos. Para dar OK, toque em <b>&nbsp;Trocar usuário&nbsp;</b> e entre com o seu usuário.'; kb.parentNode.insertBefore(fx, kb); }
@@ -5788,7 +5906,7 @@ function renderKB() {
     const col = document.createElement("section");
     col.className = "kb-col"; col.dataset.fila = f.id; col.style.setProperty("--cor", f.cor);
     const daFila = p => p.fila === f.id || (i === 0 && !FILAS.some(x => x.id === p.fila));   /* fila apagada: aparece no atendimento */
-    const itens = pedidos.filter(p => daFila(p) && daEmpresa(p) && (!q || textoPed(p).includes(q))).sort((a, b) => a.ordem - b.ordem);
+    const itens = pedidos.filter(p => daFila(p) && daEmpresa(p) && (!q || textoPed(p).includes(q))).sort(porNumero);
     const naFila = pedidos.filter(p => daFila(p) && daEmpresa(p)).length;
     col.innerHTML = '<div class="kb-cab"><span class="kb-dot"></span><h3>' + escapa(f.nome) + '</h3><span class="kb-n">' + (q ? itens.length + "/" : "") + naFila + '</span></div><div class="kb-lista" data-fila="' + f.id + '"></div>';
     const lista = col.querySelector(".kb-lista");
@@ -5810,8 +5928,63 @@ function renderKB() {
     ? "<b>" + total + "</b> " + (total === 1 ? "pedido" : "pedidos") + " no quadro" + (urg ? " · <b>" + urg + "</b> urgente" + (urg > 1 ? "s" : "") : "") + (atr ? " · <b style=\"color:#e04848\">" + atr + "</b> atrasado" + (atr > 1 ? "s" : "") : "")
     : "Quadro vazio.";
   kb.scrollLeft = scroll;
+  kb.querySelectorAll(".kb-lista").forEach(l => { if (rolagens[l.dataset.fila]) l.scrollTop = rolagens[l.dataset.fila]; });
   pedChegou = null;
+  ajustarAlturaKB();
 }
+/* o quadro ocupa só a altura da tela: cada fila rola por dentro, com a barrinha para arrastar para cima e para baixo */
+function ajustarAlturaKB() {
+  const kb = $("#kb"); if (!kb || $("#view-ped").hidden) return;
+  const z = parseFloat(document.documentElement.style.zoom) || 1;
+  const topo = kb.getBoundingClientRect().top;
+  const livre = window.innerHeight - topo - 76;          /* 76 = espaço da barrinha de navegação de baixo */
+  if (livre < 260) { kb.classList.remove("altura-fixa"); kb.style.height = ""; }
+  else { kb.classList.add("altura-fixa"); kb.style.height = Math.floor(livre / z) + "px"; }
+  kb.querySelectorAll(".kb-col").forEach(montarRolo);
+}
+function montarRolo(col) {
+  const lista = col.querySelector(".kb-lista"); if (!lista) return;
+  let rolo = col.querySelector(".kb-rolo");
+  if (!rolo) {
+    rolo = document.createElement("div"); rolo.className = "kb-rolo"; rolo.setAttribute("aria-hidden", "true"); rolo.innerHTML = "<i></i>";
+    col.appendChild(rolo);
+    const pega = rolo.querySelector("i");
+    let arrastando = null;
+    const irPara = (yCliente, desloc) => {
+      const r = rolo.getBoundingClientRect(), alt = pega.getBoundingClientRect().height;
+      const frac = Math.min(1, Math.max(0, (yCliente - r.top - desloc) / Math.max(1, r.height - alt)));
+      lista.scrollTop = frac * (lista.scrollHeight - lista.clientHeight);
+    };
+    rolo.addEventListener("pointerdown", e => {
+      e.preventDefault(); e.stopPropagation();
+      const pr = pega.getBoundingClientRect();
+      const desloc = (e.target === pega) ? e.clientY - pr.top : pr.height / 2;
+      arrastando = desloc; rolo.classList.add("ativo");
+      try { rolo.setPointerCapture(e.pointerId); } catch (x) {}
+      irPara(e.clientY, desloc);
+    });
+    rolo.addEventListener("pointermove", e => { if (arrastando != null) { e.preventDefault(); irPara(e.clientY, arrastando); } });
+    const solta = () => { arrastando = null; rolo.classList.remove("ativo"); };
+    rolo.addEventListener("pointerup", solta); rolo.addEventListener("pointercancel", solta);
+    lista.addEventListener("scroll", () => posRolo(col), { passive: true });
+  }
+  posRolo(col);
+}
+function posRolo(col) {
+  const lista = col.querySelector(".kb-lista"), rolo = col.querySelector(".kb-rolo"); if (!lista || !rolo) return;
+  const sobra = lista.scrollHeight - lista.clientHeight;
+  const kb = $("#kb");
+  if (!kb.classList.contains("altura-fixa") || sobra <= 4) { if (!rolo.hidden) rolo.hidden = true; return; }
+  if (rolo.hidden) rolo.hidden = false;
+  const z = parseFloat(document.documentElement.style.zoom) || 1;
+  const top = lista.offsetTop + 6, alt = lista.clientHeight - 12;
+  rolo.style.top = top + "px"; rolo.style.height = alt + "px";
+  const pega = rolo.querySelector("i");
+  const hp = Math.max(44, alt * lista.clientHeight / lista.scrollHeight);
+  pega.style.height = hp + "px";
+  pega.style.top = ((alt - hp) * (lista.scrollTop / sobra)) + "px";
+}
+window.addEventListener("resize", () => requestAnimationFrame(ajustarAlturaKB));
 $("#ped-busca").addEventListener("input", renderKB);
 
 /* ---------- arrastar e soltar (mouse e toque) ---------- */
@@ -5911,7 +6084,7 @@ document.querySelectorAll("#pm-prio button").forEach(b => b.addEventListener("cl
 $("#pm-fila").innerHTML = FILAS.map(f => '<option value="' + f.id + '">' + escapa(f.nome) + '</option>').join("");
 
 function abrirPedidoModal(p, filaInicial) {
-  pmPerguntouCamisa = false;
+  pmPerguntouCamisa = false; pmRascId = null;
   if (!podeGravarPed()) return;
   pedEditId = p ? p.id : null;
   $("#pm-titulo").textContent = p ? "Pedido #" + p.numero : "Novo pedido";
@@ -6003,6 +6176,7 @@ $("#pm-form").addEventListener("submit", async ev => {
       if (pmArtes.length) dados.qtdArtes = String(pmArtes.length);
       const novo = await criarPedido(pmArtes.length ? Object.assign({}, dados, { artes: artesParaSalvar(), miniaturas: await miniaturasArtes() }) : dados, fila);
       fecharModal($("#ped-modal"));
+      if (novo && pmRascId) { const rid = pmRascId; pmRascId = null; apagarRascunho(rid, true); }
       if (novo && dados.itens.some(i => i.camisa)) {
         await sincronizarOSCamisa(novo, dados, artesParaSalvar(), true); say("Pedido criado em " + filaInfo(fila).nome + " e O.S. de camisa (sem preço) gerada.", "ok");
         if (irOS) await abrirOSDepoisDeSalvar(irOS, novo, dados);
@@ -6017,7 +6191,7 @@ $("#pm-excluir").addEventListener("click", async () => {
   if (!(await confirmar("Tem certeza que é para excluir o pedido?", { titulo: "Excluir pedido", detalhe: "Pedido #" + p.numero + " · " + p.cliente + ". Não dá para desfazer." }))) return;
   if (await excluirPedido(p.id)) { fecharModal($("#ped-modal")); say("Pedido excluído.", "ok"); }
 });
-["pm-fechar", "pm-cancelar"].forEach(id => $("#" + id).addEventListener("click", () => fecharModal($("#ped-modal"))));
+["pm-fechar", "pm-cancelar"].forEach(id => $("#" + id).addEventListener("click", () => tentarFecharPedido()));
 $("#ped-novo").addEventListener("click", () => abrirPedidoModal(null, "atendimento"));
 
 /* ---------- entregues ---------- */
@@ -6044,6 +6218,118 @@ async function abrirEntregues() {
   abrirModal($("#ent-modal"));
 }
 $("#ped-entregues-btn").addEventListener("click", abrirEntregues);
+
+/* ---------- rascunhos de pedido (só de quem salvou) ---------- */
+let pmRascId = null, rascLista = [], rascCarregadoEm = 0;
+function formPedTemConteudo() {
+  if (["cliente", "contato", "telefone", "prazo", "obs"].some(k => ($("#pm-" + k).value || "").trim())) return true;
+  if (pmItens.some(i => String(i.material || "").trim() || String(i.descricao || "").trim() || parseReal(i.preco) || i.camisa)) return true;
+  return pmArtes.length > 0;
+}
+function rascunhoDoForm() {
+  const itens = itensParaSalvar();
+  const total = itens.reduce((a, i) => a + parseReal(i.preco), 0);
+  const dados = {
+    cliente: $("#pm-cliente").value.trim(), contato: $("#pm-contato").value.trim(), telefone: fmtTel($("#pm-telefone").value),
+    itens, material: itens.map(i => i.material).filter(Boolean).join(" + ").slice(0, 200),
+    descricao: itens.map(i => i.descricao).filter(Boolean).join(" | "),
+    medidas: itens.length === 1 ? itens[0].medidas : "", quantidade: itens.length === 1 ? itens[0].quantidade : "",
+    preco: total ? total.toFixed(2) : "", prazo: $("#pm-prazo").value, prioridade: pedPrio,
+    atendente: $("#pm-atendente").value.trim(), obs: $("#pm-obs").value.trim(), empresa: pmEmpresa
+  };
+  try { Object.assign(dados, pagamentoDoForm()); } catch (e) {}
+  return { dados, fila: $("#pm-fila").value, artes: artesParaSalvar() };
+}
+function chaveRascLocal() { return "amz_rascunhos_" + ((sessao && sessao.usuario) || "local"); }
+function lerRascLocal() { try { const l = JSON.parse(localStorage.getItem(chaveRascLocal()) || "[]"); return Array.isArray(l) ? l : []; } catch (e) { return []; } }
+async function apiRasc(metodo, query, corpo) {
+  const r = await fetch("/api/rascunhos" + (query || ""), { method: metodo, headers: Object.assign(cabecalhoAuth(), corpo ? { "Content-Type": "application/json" } : {}), body: corpo ? JSON.stringify(corpo) : undefined, cache: "no-store" });
+  const tipo = r.headers.get("content-type") || "";
+  if (!tipo.includes("application/json")) { const e = new Error("sem api"); e.semApi = true; throw e; }
+  const j = await r.json();
+  if (!r.ok) { const e = new Error(j.erro || "erro"); e.msg = j.erro; e.status = r.status; throw e; }
+  return j;
+}
+async function salvarRascunho() {
+  const r = rascunhoDoForm();
+  if (modoHist === "nuvem") {
+    let corpo = { id: pmRascId, dados: r.dados, fila: r.fila, artes: r.artes };
+    if (JSON.stringify(corpo).length > 4000000) { corpo.artes = []; say("As artes são pesadas demais para o rascunho: ele foi salvo sem as artes.", "err"); }
+    const j = await apiRasc("POST", "", corpo);
+    pmRascId = j.id;
+  } else {
+    const l = lerRascLocal(), agora = new Date().toISOString();
+    const id = pmRascId || ("r" + Date.now().toString(36));
+    const it = { id, dados: r.dados, fila: r.fila, artes: r.artes, criadoEm: agora, atualizadoEm: agora };
+    const i = l.findIndex(x => x.id === id);
+    if (i >= 0) { it.criadoEm = l[i].criadoEm; l[i] = it; } else l.unshift(it);
+    try { localStorage.setItem(chaveRascLocal(), JSON.stringify(l.slice(0, 30))); }
+    catch (e) { it.artes = []; localStorage.setItem(chaveRascLocal(), JSON.stringify(l.slice(0, 30))); }
+    pmRascId = id;
+  }
+  await carregarRascunhos(true);
+}
+async function tentarFecharPedido() {
+  const m = $("#ped-modal"); if (m.hidden) return;
+  if (pedEditId || !formPedTemConteudo()) { fecharModal(m); return; }
+  const r = await confirmar("Deseja fechar essa criação de pedido?", {
+    titulo: "Fechar pedido", sim: "Sim", nao: "Não", extra: "Salvar rascunho", perigo: true,
+    detalhe: pmRascId ? "Sim: fecha sem guardar o que mudou agora (o rascunho anterior continua). Salvar rascunho: guarda tudo e fecha." : "Sim: fecha e descarta o que foi preenchido. Salvar rascunho: guarda para continuar depois (só você vê)."
+  });
+  if (r === "extra") {
+    try { await salvarRascunho(); fecharModal(m); say("Rascunho salvo. Ele fica em “Rascunhos”, só para você.", "ok"); }
+    catch (e) { say("Não consegui salvar o rascunho: " + (e.msg || "sem conexão") + ".", "err"); }
+  } else if (r === true) fecharModal(m);
+}
+async function carregarRascunhos(forcar) {
+  const b = $("#ped-rasc"); if (!b) return;
+  if (!sessao || somenteVer() || !pedCompleto()) { b.hidden = true; return; }
+  if (!forcar && Date.now() - rascCarregadoEm < 60000) return;
+  rascCarregadoEm = Date.now();
+  if (modoHist === "nuvem") { try { rascLista = (await apiRasc("GET")).itens || []; } catch (e) { return; } }
+  else rascLista = lerRascLocal().map(x => ({ id: x.id, cliente: x.dados.cliente, material: (x.dados.itens || []).map(i => i.material).filter(Boolean).join(" + "), preco: x.dados.preco, empresa: x.dados.empresa, temArte: !!(x.artes && x.artes.length), atualizadoEm: x.atualizadoEm }));
+  $("#ped-rasc-n").textContent = rascLista.length;
+  b.hidden = !rascLista.length;
+  if (!$("#rasc-modal").hidden) renderRascunhos();
+}
+function renderRascunhos() {
+  $("#rasc-lista").innerHTML = rascLista.length ? rascLista.map(r =>
+    '<div class="rev-item"><div class="tx"><b>' + escapa(r.cliente || "(sem cliente)") + (r.empresa === "soares" ? ' · <span style="color:#e58aa0">GRÁFICA SOARES</span>' : "") + '</b>' +
+    '<small>' + escapa(r.material || "sem materiais") + (r.preco && !semValores() ? " · " + fmtReal(parseReal(r.preco)) : "") + (r.temArte ? " · com arte" : "") + ' · salvo ' + escapa(dataHora(r.atualizadoEm)) + '</small></div>' +
+    '<div class="rasc-acoes"><button class="btn" type="button" data-apaga="' + escapa(r.id) + '">Apagar</button><button class="btn primary" type="button" data-abre="' + escapa(r.id) + '">Continuar</button></div></div>').join("")
+    : '<p class="hint" style="margin:0">Nenhum rascunho.</p>';
+  $("#rasc-lista").querySelectorAll("[data-abre]").forEach(b => b.addEventListener("click", () => abrirRascunho(b.dataset.abre)));
+  $("#rasc-lista").querySelectorAll("[data-apaga]").forEach(b => b.addEventListener("click", async () => {
+    if (!(await confirmar("Apagar este rascunho?", { titulo: "Apagar rascunho", detalhe: "Não dá para desfazer." }))) return;
+    apagarRascunho(b.dataset.apaga);
+  }));
+}
+async function abrirRascunho(id) {
+  let r;
+  try {
+    if (modoHist === "nuvem") r = (await apiRasc("GET", "?id=" + encodeURIComponent(id))).item;
+    else r = lerRascLocal().find(x => x.id === id);
+  } catch (e) { say("Não consegui abrir o rascunho: " + (e.msg || "sem conexão") + ".", "err"); return; }
+  if (!r) { say("Rascunho não encontrado.", "err"); carregarRascunhos(true); return; }
+  fecharModal($("#rasc-modal"));
+  const falso = Object.assign({}, r.dados, { id: null, numero: "", fila: r.fila || "atendimento", artes: r.artes || [] });
+  abrirPedidoModal(falso, r.fila);
+  pmRascId = id; pedEditId = null;
+  $("#pm-titulo").textContent = "Novo pedido (rascunho)";
+  $("#pm-salvar").textContent = "Criar pedido";
+  $("#pm-excluir").hidden = true;
+  $("#pm-fila").value = r.fila || "atendimento";
+}
+async function apagarRascunho(id, quieto) {
+  try {
+    if (modoHist === "nuvem") await apiRasc("DELETE", "?id=" + encodeURIComponent(id));
+    else { try { localStorage.setItem(chaveRascLocal(), JSON.stringify(lerRascLocal().filter(x => x.id !== id))); } catch (e) {} }
+    if (!quieto) say("Rascunho apagado.", "ok");
+  } catch (e) { if (!quieto) say("Não consegui apagar: " + (e.msg || "sem conexão") + ".", "err"); }
+  await carregarRascunhos(true);
+}
+$("#ped-rasc").addEventListener("click", async () => { await carregarRascunhos(true); renderRascunhos(); abrirModal($("#rasc-modal")); });
+$("#rasc-fechar").addEventListener("click", () => fecharModal($("#rasc-modal")));
 
 /* ---------- aprovação da arte criada / recriada ---------- */
 const podeAprovarArte = () => ehAdm() || !!permAtual().aprovaArte;
@@ -6374,11 +6660,11 @@ $("#fl-salvar").addEventListener("click", async () => {
   finally { btn.disabled = false; }
 });
 $("#ent-fechar").addEventListener("click", () => fecharModal($("#ent-modal")));
-document.querySelectorAll(".modal:not(.modal-conf):not(.pdf-modal)").forEach(m => m.addEventListener("mousedown", e => { if (e.target === m) fecharModal(m); }));
+document.querySelectorAll(".modal:not(.modal-conf):not(.pdf-modal)").forEach(m => m.addEventListener("mousedown", e => { if (e.target === m) { if (m.id === "ped-modal") tentarFecharPedido(); else fecharModal(m); } }));
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
   const m = [...document.querySelectorAll(".modal:not(.modal-conf):not(.pdf-modal)")].find(x => !x.hidden);
-  if (m) fecharModal(m);
+  if (m) { if (m.id === "ped-modal" && $("#pm-camisa").hidden) tentarFecharPedido(); else if (m.id !== "ped-modal") fecharModal(m); }
 });
 
 
