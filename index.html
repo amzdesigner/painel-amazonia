@@ -392,6 +392,22 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .teclado .t-apaga{font-size:22px}
 .teclado .t-ok{background:#22c55e;border-color:#22c55e;color:#fff;font-size:16px}
 .teclado .t-ok:disabled{opacity:.5}
+.notif-btn{position:relative;width:44px;height:42px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.notif-btn svg{width:20px;height:20px}
+.notif-btn .notif-on{position:absolute;top:7px;right:8px;width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 2px var(--card);display:none}
+.notif-btn.ligado .notif-on{display:block}
+.notif-pop{width:320px}
+.notif-filas{margin:0;font-size:13px;color:var(--muted)}
+.notif-filas b{color:var(--text)}
+.notif-bts{display:flex;flex-direction:column;gap:8px}
+.notif-bts .btn{min-height:44px}
+.notif-bts .btn[hidden]{display:none}
+.usr-notif{display:flex;flex-wrap:wrap;gap:6px;align-items:center;width:100%;padding-top:8px;border-top:1px dashed var(--line);margin-top:4px}
+.usr-notif>span{font-size:12px;font-weight:700;color:var(--muted);width:100%}
+.usr-notif button{border:1px solid var(--line);background:var(--card-2);color:var(--text);font:inherit;font-size:12px;font-weight:700;border-radius:999px;padding:5px 10px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.usr-notif button i{width:8px;height:8px;border-radius:50%}
+.usr-notif button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.usr-notif small{font-size:11.5px;color:var(--muted)}
 .troca-tablet{display:flex;align-items:center;justify-content:center;gap:8px;border-color:#22c55e}
 .troca-tablet svg{width:18px;height:18px}
 .somente-ver .kc-ok,.somente-ver .kc-prox,.somente-ver .kc-seta,.somente-ver .kc-des,.somente-ver #det-editar,.somente-ver #det-apv,.somente-ver #det-os,.somente-ver .det-os button,.somente-ver .pi-enviar-os{display:none!important}
@@ -634,6 +650,14 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kc-des-menu button.on::after{content:" ✓"}
 .kc-des-menu button.tira{font-weight:600;font-size:13px;color:#e04848}
 .kc-des-tag svg{color:var(--muted)}
+.kc-acab-menu label{display:flex;align-items:center;gap:10px;min-height:46px;padding:8px 12px;border-radius:9px;font:700 15px Inter,system-ui,sans-serif;cursor:pointer}
+.kc-acab-menu label:hover{background:var(--card-2)}
+.kc-acab-menu input{width:20px;height:20px;accent-color:var(--cor)}
+.kc-acab-menu .acab-ok{background:var(--accent);color:#fff;text-align:center;margin-top:4px}
+.kc-acab-menu .acab-ok:hover{background:var(--accent)}
+.kc-acab-menu p{margin:4px 8px;font-size:12px;color:var(--muted)}
+.kc-gil{display:flex;align-items:center;gap:7px;margin:8px 0 0;padding:7px 10px;border-radius:10px;background:color-mix(in srgb,var(--cor) 14%,transparent);font-size:12.5px;font-weight:700}
+.kc-gil svg{width:16px;height:16px;color:var(--cor);flex:none}
 .kc-des-tag b{color:var(--text);letter-spacing:.03em}
 .kc-topo{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:11.5px;color:var(--muted);font-weight:700}
 .kc-num{font-variant-numeric:tabular-nums}
@@ -1297,6 +1321,18 @@ body.modal-aberto{overflow:hidden}
             <p class="login-erro" id="troca-erro" role="alert"></p>
             <button class="btn troca-tablet" type="button" id="troca-tablet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><span>Voltar para TABLET (só ver)</span></button>
           </form>
+        </span>
+        <span class="troca-wrap">
+          <button class="btn notif-btn" type="button" id="notif-btn" hidden title="Notificações no celular" aria-label="Notificações no celular" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><i class="notif-on" aria-hidden="true"></i></button>
+          <div class="troca-pop notif-pop" id="notif-pop" hidden role="dialog" aria-label="Notificações">
+            <p class="troca-tit">Notificações neste aparelho <small id="notif-sub"></small></p>
+            <p class="notif-filas" id="notif-filas"></p>
+            <div class="notif-bts">
+              <button class="btn primary" type="button" id="notif-ativar">Ativar notificações</button>
+              <button class="btn" type="button" id="notif-teste">Enviar teste</button>
+              <button class="btn" type="button" id="notif-desativar">Desativar neste aparelho</button>
+            </div>
+          </div>
         </span>
         <button class="btn" type="button" id="sair">Sair</button>
       </div>
@@ -2682,8 +2718,10 @@ aplicarTema(lido("amz_tema") === "claro");
   marca();
 })();
 /* app na tela inicial: registra o service worker (não guarda cache; só permite instalar) */
-if ("serviceWorker" in navigator && location.protocol === "https:" && !(window.claude && window.claude.use)) {
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost") && !(window.claude && window.claude.use)) {
   window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+  /* tocou na notificação com o painel já aberto: abre o pedido */
+  navigator.serviceWorker.addEventListener("message", e => { const u = e.data && e.data.abrir; if (u && window.abrirPedidoDaUrl) abrirPedidoDaUrl(u); });
 }
 /* ================= zoom da página (fica guardado neste aparelho) ================= */
 const ZOOM_MIN = 50, ZOOM_MAX = 150, ZOOM_PASSO = 10;
@@ -5615,10 +5653,12 @@ async function carregarPedidos(silencioso) {
   } else if (modoHist === "local") {
     pedidos = pedLocal.filter(p => !p.arquivado);
   }
-  if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden) renderKB();
+  if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden && !document.querySelector(".kc.menu-aberto")) renderKB();
   completarMiniaturas();
   if (typeof contarRevisao === "function") contarRevisao();
   if (typeof carregarRascunhos === "function") carregarRascunhos();
+  if (!EQUIPE.length && typeof carregarEquipe === "function") carregarEquipe().then(() => { if (EQUIPE.length && pedidos.some(x => x.fila === "acabamento")) renderKB(); });
+  if (typeof atualizarSino === "function" && !window._sinoOk) { window._sinoOk = true; atualizarSino(); }
 }
 /* pedidos com arte mas sem miniatura (feitos antes, ou salvos com o servidor antigo): gera e guarda */
 let completandoMinis = false;
@@ -5643,7 +5683,7 @@ async function completarMiniaturas() {
           p.miniaturas = minis;
           const l = pedLocal.find(x => x.id === p.id); if (l) { l.miniaturas = minis; salvarPedLocal(); }
         }
-        if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden) renderKB();
+        if (!pedDrag && $("#ped-modal").hidden && $("#det-modal").hidden && !document.querySelector(".kc.menu-aberto")) renderKB();
       } catch (e) { /* tenta de novo na próxima vez que o quadro abrir */ minisTentadas.delete(p.id); break; }
     }
   } finally { completandoMinis = false; }
@@ -5766,6 +5806,64 @@ function chipsMateriais(p) {
 function textoPed(p) { return semAcentoTxt([p.numero, p.cliente, p.contato, p.material, p.descricao, p.atendente].join(" ")); }
 /* designers que podem ser escolhidos na Fila do designer */
 const DESIGNERS = ["CLAYTON", "ANDREW"];
+/* ---------- acabamento: quem faz (adesivo recortado / corte especial é sempre do GIL) ---------- */
+const ACAB_FIXO = "GIL";
+const ICO_ACAB = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 11l2 2 4-4"/></svg>', ICO_TESOURA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></svg>';
+const ehRecortado = i => /RECORT|CORTE\s+ESPECIAL/.test(semAcento((i && i.material) + " " + (i && i.descricao)));
+let EQUIPE = [], equipeEm = 0;
+async function carregarEquipe() {
+  if (Date.now() - equipeEm < 5 * 60000 && EQUIPE.length) return;
+  if (modoHist !== "nuvem" || !sessao || somenteVer()) return;
+  try { const r = await fetch("/api/login?equipe=1", { headers: cabecalhoAuth(), cache: "no-store" }); const j = await r.json(); if (r.ok) { EQUIPE = j.nomes || []; equipeEm = Date.now(); } } catch (e) {}
+}
+function htmlAcabamento(p) {
+  const its = itensDoPedido(p), rec = its.filter(ehRecortado), outros = its.filter(i => !ehRecortado(i));
+  const acab = Array.isArray(p.acabamento) ? p.acabamento : [];
+  let h = "";
+  if (rec.length) h += '<p class="kc-gil">' + ICO_TESOURA + '<span>' + escapa(ACAB_FIXO) + ' · adesivo recortado' + (outros.length ? "" : " (fixo)") + '</span></p>';
+  if (!outros.length) return h;
+  const nomes = [...new Set(EQUIPE.concat(acab))];
+  return h + '<div class="kc-des kc-acab"><button type="button" class="kc-des-bt' + (acab.length ? " on" : "") + '" aria-haspopup="true" aria-expanded="false">' + ICO_ACAB +
+    '<span>' + (acab.length ? "Acabamento: <b>" + escapa(acab.join(", ")) + "</b>" : "Acabamento: <i>ninguém marcado</i>") + '</span><i aria-hidden="true">▾</i></button>' +
+    '<div class="kc-des-menu kc-acab-menu" role="menu" hidden>' +
+      (nomes.length ? nomes.map(n => '<label><input type="checkbox" value="' + escapa(n) + '"' + (acab.includes(n) ? " checked" : "") + '>' + escapa(n) + '</label>').join("") : '<p>Carregando a equipe…</p>') +
+      '<p>Quem for marcado recebe aviso no celular.</p>' +
+      '<button type="button" class="acab-ok">Salvar</button>' +
+      (acab.length ? '<button type="button" class="tira" data-ninguem="1">Não marcar ninguém</button>' : "") +
+    '</div></div>';
+}
+function ligarAcabamento(el, p) {
+  const box = el.querySelector(".kc-acab"); if (!box) return;
+  const bt = box.querySelector(".kc-des-bt"), menu = box.querySelector(".kc-acab-menu");
+  const fechar = () => { menu.hidden = true; bt.setAttribute("aria-expanded", "false"); el.classList.remove("menu-aberto"); };
+  bt.addEventListener("pointerdown", ev => ev.stopPropagation());
+  menu.addEventListener("pointerdown", ev => ev.stopPropagation());
+  menu.addEventListener("click", ev => ev.stopPropagation());
+  bt.addEventListener("click", async ev => {
+    ev.stopPropagation();
+    if (!podeGravarPed()) return;
+    const abrir = menu.hidden;
+    document.querySelectorAll(".kc-des-menu:not([hidden])").forEach(m => { m.hidden = true; m.closest(".kc").classList.remove("menu-aberto"); });
+    menu.hidden = !abrir; bt.setAttribute("aria-expanded", String(abrir)); el.classList.toggle("menu-aberto", abrir);
+    if (abrir && !menu.querySelector("label")) {
+      if (!EQUIPE.length) await carregarEquipe();
+      const acab = Array.isArray(p.acabamento) ? p.acabamento : [];
+      const nomes = [...new Set(EQUIPE.concat(acab))];
+      const alvo = menu.querySelector("p");
+      if (nomes.length && alvo && !menu.querySelector("label")) alvo.outerHTML = nomes.map(n => '<label><input type="checkbox" value="' + escapa(n) + '"' + (acab.includes(n) ? " checked" : "") + '>' + escapa(n) + '</label>').join("");
+      else if (!nomes.length && alvo) alvo.textContent = "Não consegui carregar a equipe.";
+    }
+  });
+  const salvar = async lista => {
+    fechar();
+    const antes = Array.isArray(p.acabamento) ? p.acabamento : [];
+    if (lista.length === antes.length && lista.every(x => antes.includes(x))) return;
+    await atualizarPedido(p.id, { acabamento: lista });
+    say(lista.length ? "Acabamento do pedido #" + p.numero + " com " + lista.join(", ") + ". Avisamos no celular." : "Ninguém marcado no acabamento do pedido #" + p.numero + ".", "ok");
+  };
+  menu.querySelector(".acab-ok").addEventListener("click", () => salvar([...menu.querySelectorAll("input:checked")].map(i => i.value)));
+  const ng = menu.querySelector("[data-ninguem]"); if (ng) ng.addEventListener("click", () => salvar([]));
+}
 const ICO_PINCEL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.4 2.6a2 2 0 0 1 2.9 2.9L11 15.8 8.2 13z"/><path d="M8.2 13C5.5 13 4 15 4 17c0 1.5-.8 2.5-2 3 4.5 1 9-.5 9-4.2"/></svg>';
 document.addEventListener("pointerdown", e => {
   if (e.target.closest && e.target.closest(".kc-des")) return;
@@ -5851,6 +5949,7 @@ function cardPedido(p, fila, idxFila) {
         '<div class="kc-des-menu" role="menu" hidden>' + DESIGNERS.map(d => '<button type="button" role="menuitemradio" aria-checked="' + (p.designer === d) + '" data-d="' + d + '"' + (p.designer === d ? ' class="on"' : "") + '>' + escapa(d.charAt(0) + d.slice(1).toLowerCase()) + '</button>').join("") +
           (p.designer ? '<button type="button" role="menuitem" data-d="" class="tira">Tirar designer</button>' : "") + '</div></div>'
       : (p.designer ? '<p class="kc-contato kc-des-tag">' + ICO_PINCEL + '<span>Designer: <b>' + escapa(p.designer) + '</b></span></p>' : "")) +
+    (fila.id === "acabamento" ? htmlAcabamento(p) : "") +
     '<div class="kc-pe"><label class="kc-ok"><input type="checkbox" aria-label="' + (ultimo ? "Arquivar pedido " + escapa(p.numero) : "OK: mandar pedido " + escapa(p.numero) + " para " + escapa(FILAS[idxFila + 1].nome)) + '">' + (ultimo ? "ARQUIVAR" : "OK") + '</label>' +
     '<span class="kc-prox">' + (ultimo ? "tira do quadro" : "→ " + escapa(FILAS[idxFila + 1].nome)) + '</span></div>';
   if (minis.length) {
@@ -5873,9 +5972,10 @@ function cardPedido(p, fila, idxFila) {
     mostra();
   }
   /* escolher o designer da arte */
-  const desBt = el.querySelector(".kc-des-bt");
+  ligarAcabamento(el, p);
+  const desBt = el.querySelector(".kc-des:not(.kc-acab) .kc-des-bt");
   if (desBt) {
-    const menu = el.querySelector(".kc-des-menu");
+    const menu = el.querySelector(".kc-des:not(.kc-acab) .kc-des-menu");
     const fechar = () => { menu.hidden = true; desBt.setAttribute("aria-expanded", "false"); el.classList.remove("menu-aberto"); };
     desBt.addEventListener("pointerdown", ev => ev.stopPropagation());
     desBt.addEventListener("click", ev => {
@@ -6274,6 +6374,73 @@ async function abrirEntregues() {
   abrirModal($("#ent-modal"));
 }
 $("#ped-entregues-btn").addEventListener("click", abrirEntregues);
+
+/* ---------- notificações no celular (push) ---------- */
+const pushSuportado = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window && (location.protocol === "https:" || location.hostname === "localhost") && !(window.claude && window.claude.use);
+let notifInfo = null;
+function b64ParaU8(b) { const p = "=".repeat((4 - b.length % 4) % 4), s = atob((b + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from([...s].map(c => c.charCodeAt(0))); }
+async function apiPush(metodo, query, corpo) {
+  const r = await fetch("/api/push" + (query || ""), { method: metodo, headers: Object.assign(cabecalhoAuth(), corpo ? { "Content-Type": "application/json" } : {}), body: corpo ? JSON.stringify(corpo) : undefined, cache: "no-store" });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.erro || "erro"); e.msg = j.erro; throw e; }
+  return j;
+}
+async function minhaInscricao() { try { const reg = await navigator.serviceWorker.ready; return await reg.pushManager.getSubscription(); } catch (e) { return null; } }
+async function atualizarSino() {
+  const b = $("#notif-btn");
+  if (!sessao || somenteVer() || !pushSuportado() || modoHist !== "nuvem") { b.hidden = true; return; }
+  b.hidden = false;
+  try { notifInfo = await apiPush("GET"); } catch (e) { notifInfo = null; }
+  const sub = await minhaInscricao();
+  const ligado = !!sub && Notification.permission === "granted";
+  b.classList.toggle("ligado", ligado);
+  const filas = (notifInfo && notifInfo.filas) || [];
+  $("#notif-filas").innerHTML = filas.length ? "Você recebe aviso quando um pedido chega em: <b>" + filas.map(id => escapa(filaInfo(id).id === id ? filaInfo(id).nome : id)).join("</b>, <b>") + "</b>." : "O ADM ainda não marcou nenhuma fila para avisar você (Usuários → Notificar no celular).";
+  $("#notif-sub").textContent = !notifInfo || !notifInfo.ligado ? "Ainda não configurado na Vercel" : Notification.permission === "denied" ? "Bloqueadas no navegador" : ligado ? "Ativadas ✓" : "Desligadas";
+  $("#notif-ativar").hidden = ligado; $("#notif-teste").hidden = !ligado; $("#notif-desativar").hidden = !ligado;
+}
+async function ativarNotificacoes() {
+  if (!notifInfo || !notifInfo.ligado || !notifInfo.chave) { say("As notificações ainda não foram configuradas na Vercel (chaves VAPID).", "err"); return; }
+  if (Notification.permission === "denied") { say("As notificações estão bloqueadas para este site. No Chrome: cadeado ao lado do endereço → Permissões → Notificações → Permitir.", "err"); return; }
+  const perm = await Notification.requestPermission();
+  if (perm !== "granted") { say("Sem permissão, o celular não mostra os avisos.", "err"); return; }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ParaU8(notifInfo.chave) });
+    const ua = navigator.userAgent, ap = (/Android[^;)]*;\s*([^;)]+)/.exec(ua) || [, ""])[1] || (/(iPhone|iPad|Windows|Macintosh|Linux)/.exec(ua) || [, "aparelho"])[1];
+    await apiPush("POST", "", { sub: sub.toJSON(), aparelho: ap });
+    say("Notificações ativadas neste aparelho.", "ok");
+  } catch (e) { console.error(e); say("Não consegui ativar: " + (e.msg || e.message || "erro") + ".", "err"); }
+  atualizarSino();
+}
+$("#notif-btn").addEventListener("click", ev => { ev.stopPropagation(); const p = $("#notif-pop"); p.hidden = !p.hidden; if (!p.hidden) atualizarSino(); });
+$("#notif-pop").addEventListener("click", ev => ev.stopPropagation());
+document.addEventListener("click", () => { const p = $("#notif-pop"); if (p && !p.hidden) p.hidden = true; });
+$("#notif-ativar").addEventListener("click", ativarNotificacoes);
+$("#notif-teste").addEventListener("click", async () => {
+  try { const r = await apiPush("POST", "?teste=1"); say(r.enviados ? "Teste enviado. Deve aparecer nas notificações em alguns segundos." : "Nenhum aparelho recebeu. Desative e ative de novo.", r.enviados ? "ok" : "err"); }
+  catch (e) { say("Não consegui enviar: " + (e.msg || "sem conexão") + ".", "err"); }
+});
+$("#notif-desativar").addEventListener("click", async () => {
+  const sub = await minhaInscricao();
+  if (sub) { try { await apiPush("DELETE", "", { endpoint: sub.endpoint }); } catch (e) {} try { await sub.unsubscribe(); } catch (e) {} }
+  say("Notificações desligadas neste aparelho.", "ok"); atualizarSino();
+});
+/* abrir o pedido que veio na notificação (/?pedido=ID) */
+function abrirPedidoDaUrl(u) {
+  let id = null; try { id = new URL(u, location.href).searchParams.get("pedido"); } catch (e) {}
+  if (!id) return;
+  const tenta = async (n) => {
+    const p = pedidos.find(x => String(x.id) === String(id));
+    if (p) { irPara("ped"); abrirDetalhe(p); return; }
+    if (n === 0 && window.carregarPedidos) { try { await carregarPedidos(true); } catch (e) {} }
+    if (n < 6) setTimeout(() => tenta(n + 1), 700);
+  };
+  tenta(0);
+}
+window.abrirPedidoDaUrl = abrirPedidoDaUrl;
+if (/[?&]pedido=/.test(location.search)) { const u = location.href; setTimeout(() => { abrirPedidoDaUrl(u); try { history.replaceState(null, "", location.pathname); } catch (e) {} }, 1500); }
 
 /* ---------- rascunhos de pedido (só de quem salvou) ---------- */
 let pmRascId = null, rascLista = [], rascCarregadoEm = 0;
@@ -7701,7 +7868,8 @@ function renderDetalhe() {
   $("#det-obs-sec").hidden = !p.obs;
   $("#det-obs").textContent = p.obs || "";
   const info = [["Gráfica", empresaDe(p) === "soares" ? "GRÁFICA SOARES" : "AMAZÔNIA GRÁFICA"], ["Etapa", f.nome]].concat(semValores() ? [] : [["Pagamento", textoPagamento(p, total)]]).concat([ ["Atendente", p.atendente || "—"], ["Designer", p.designer || "—"]])
-    .concat(p.aprov && p.aprov.exige ? [["Arte", textoAprov(p.aprov)]] : []).concat([ ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
+    .concat(p.aprov && p.aprov.exige ? [["Arte", textoAprov(p.aprov)]] : [])
+    .concat((Array.isArray(p.acabamento) && p.acabamento.length) || itensDoPedido(p).some(ehRecortado) ? [["Acabamento", [itensDoPedido(p).some(ehRecortado) ? ACAB_FIXO + " (adesivo recortado)" : ""].concat(p.acabamento || []).filter(Boolean).join(", ")]] : []).concat([ ["Criado em", p.criado ? dataHora(p.criado) : "—"], ["Atualizado em", p.atualizado ? dataHora(p.atualizado) : "—"]]);
   const c = (typeof clientes !== "undefined" ? clientes : []).find(x => (p.clienteId && x.id === p.clienteId) || (x.nome || "").toLowerCase() === (p.cliente || "").toLowerCase());
   if (c) {
     if (c.razao && c.razao !== c.nome) info.push(["Razão social", c.razao]);
@@ -8147,7 +8315,7 @@ async function regerarOSApagada(p, uid, btn, noCard) {
 }
 /* botão do detalhe: cria a O.S. de uma camisa que ficou "sem O.S." e abre preenchida */
 const CAMPOS_DADOS_PED = ["cliente", "clienteId", "contato", "telefone", "material", "produtoId", "precoUnit", "descricao", "medidas", "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes",
-  "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo", "designer", "empresa"];
+  "metodoPag", "condPag", "entrada", "pagoEm", "restantePago", "restantePagoEm", "restanteMetodo", "designer", "empresa", "acabamento"];
 async function enviarOSDoDetalhe(p, uid, btn) {
   if (btn) btn.disabled = true;
   try {
@@ -9553,7 +9721,7 @@ window.renderVisao=renderVisao;
 /* ================= AUDITORIA (só ADM) ================= */
 (function () {
   const ACOES = { usuarios: "Usuários", designer: "Designer da arte", moveu: "Moveu de fila", arquivou: "Arquivou", desarquivou: "Voltou do arquivo", criou: "Criou pedido", editou: "Editou pedido",
-    artes: "Trocou artes", arte: "Aprovação de arte", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
+    artes: "Trocou artes", arte: "Aprovação de arte", acabamento: "Acabamento", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
   let itens = [], ultimoId = 0, timer = null, ativa = false, novos = new Set(), carregando = false;
   const $a = id => document.getElementById(id);
   $a("aud-acao").innerHTML = '<option value="">Tudo</option>' + Object.entries(ACOES).map(([k, v]) => '<option value="' + k + '">' + v + '</option>').join("");
@@ -9709,8 +9877,22 @@ window.renderVisao=renderVisao;
           [["adm", "ADM"]].concat(hierarquias.map(h => [h.id, h.nome])).map(([id, n]) => '<option value="' + escapa(id) + '"' + (id === u.papel ? " selected" : "") + '>' + escapa(n) + '</option>').join("") + '</select>' +
           (adm ? "" : '<label class="usr-apv"><input type="checkbox" data-a="aprova"' + (u.aprovaArte ? " checked" : "") + (((hierarquias.find(h => h.id === u.papel) || {}).aprovaArte) ? " checked disabled title=\"Já liberado pela hierarquia\"" : "") + '><span>Pode aprovar artes</span></label>') +
           '<button class="btn" type="button" data-a="ativo">' + (u.ativo ? "Desativar" : "Reativar") + '</button>' +
-          '<button class="btn danger" type="button" data-a="apagar">Apagar</button>') + '</div></div>';
+          '<button class="btn danger" type="button" data-a="apagar">Apagar</button>') +
+        '<div class="usr-notif"><span>🔔 Notificar no celular quando um pedido chegar em:</span>' +
+          FILAS.map(f => '<button type="button" data-nf="' + escapa(f.id) + '" class="' + ((u.notifFilas || []).includes(f.id) ? "on" : "") + '"><i style="background:' + escapa(f.cor) + '"></i>' + escapa(f.nome) + '</button>').join("") +
+          '<small>' + (u.aparelhos ? "📱 " + u.aparelhos + (u.aparelhos === 1 ? " aparelho ativado" : " aparelhos ativados") : "nenhum aparelho ativado ainda") + '</small></div>' +
+        '</div></div>';
     }).join("");
+    $u("usr-lista").querySelectorAll(".usr-card").forEach(c => c.querySelectorAll("[data-nf]").forEach(b => b.addEventListener("click", async () => {
+      const u = lista.find(x => x.usuario === c.dataset.u); if (!u) return;
+      const atual = new Set(u.notifFilas || []); atual.has(b.dataset.nf) ? atual.delete(b.dataset.nf) : atual.add(b.dataset.nf);
+      try {
+        const r = await apiUsr("PATCH", "?usuario=" + encodeURIComponent(u.usuario), { notifFilas: [...atual] });
+        u.notifFilas = (r.item && r.item.notifFilas) || [...atual];
+        b.classList.toggle("on", u.notifFilas.includes(b.dataset.nf));
+        say(u.usuario + (u.notifFilas.length ? " recebe aviso de: " + u.notifFilas.map(id => filaInfo(id).nome).join(", ") + "." : " não recebe mais avisos."), "ok");
+      } catch (e) { say("Não consegui salvar: " + (e.msg || "sem conexão") + ".", "err"); }
+    })));
     $u("usr-lista").querySelectorAll(".usr-card").forEach(c => c.querySelectorAll("[data-a]").forEach(b => {
       if (b.tagName === "SELECT") b.addEventListener("change", () => acao(c.dataset.u, "papel", b.value, b));
       else if (b.type === "checkbox") b.addEventListener("change", () => acao(c.dataset.u, "aprova", b.checked, b));
@@ -9946,6 +10128,7 @@ window.renderVisao=renderVisao;
     const tb = document.getElementById("troca-btn");
     if (tb) tb.hidden = !(sessao && !sessao.previa && (sessao.papel === "tablet" || sessao.papel === "producao"));
     const vt = document.getElementById("troca-tablet"); if (vt) vt.hidden = !!(sessao && sessao.papel === "tablet");
+    if (typeof atualizarSino === "function") setTimeout(() => { try { atualizarSino(); } catch (e) {} }, 300);
     /* menu da esquerda: só as abas da hierarquia (USUÁRIOS só para o ADM) */
     document.querySelectorAll(".nav button[data-view]").forEach(b => { b.hidden = !!sessao && !podeAba(b.dataset.view); });
     document.getElementById("usuario-box").hidden = !sessao;
