@@ -191,7 +191,7 @@ function oQueMudou(antes, depois) {
   return Object.keys(ROTULOS).filter(k => JSON.stringify(a[k] ?? "") !== JSON.stringify(d[k] ?? "")).map(k => ROTULOS[k]);
 }
 let nomesExtras = {};
-const nomeFila = f => NOMES_FILA[f] || nomesExtras[f] || f;
+const nomeFila = f => nomesExtras[f] || NOMES_FILA[f] || f;
 function formata(r) {
   return Object.assign({}, r.dados || {}, {
     id: String(r.id), numero: r.numero || String(r.id), fila: r.fila, ordem: Number(r.ordem), arquivado: r.arquivado,
@@ -218,7 +218,7 @@ export default async function handler(req, res) {
   /* filas atuais (padrão + as criadas pelo ADM) */
   const listaFilas = await filasAtuais(sql);
   const FILAS = listaFilas.map(f => f.id);
-  nomesExtras = {}; listaFilas.forEach(f => { if (!f.padrao) nomesExtras[f.id] = f.nome; });
+  nomesExtras = {}; listaFilas.forEach(f => { nomesExtras[f.id] = f.nome; });
 
   try {
     await prepararBanco();

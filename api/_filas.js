@@ -1,8 +1,11 @@
 /*
  * Painel Amazônia Gráfica · filas do quadro de pedidos
  *
- * As filas padrão ficam fixas aqui. O ADM cria filas novas na tela de Pedidos (botão "Filas"):
- * elas ficam na configuração "filas" ({ extras: [{ id, nome, cor, depois }] }) e entram depois da fila escolhida.
+ * O ADM edita as filas na tela de Pedidos (botão "Filas"): nome, cor, ordem, criar e apagar.
+ * Configuração "filas":
+ *   novo formato   { lista: [{ id, nome, cor }] }  → a ordem completa do quadro
+ *   formato antigo { extras: [{ id, nome, cor, depois }] } → filas novas depois de uma padrão
+ * "atendimento" fica sempre em primeiro (é onde o pedido nasce) e "entregue" sempre em último (arquiva).
  */
 export const FILAS_PADRAO = [
   { id: "atendimento", nome: "Atendimento", cor: "#8b5cf6" },
@@ -16,8 +19,29 @@ export const FILAS_PADRAO = [
 export const MAX_EXTRAS = 20;
 const idOk = id => typeof id === "string" && /^f_[a-z0-9]{2,24}$/.test(id);
 
+const PADRAO_IDS = FILAS_PADRAO.map(f => f.id);
+const corOk = c => /^#[0-9a-fA-F]{6}$/.test(c || "");
+/* novo formato: lista completa, na ordem */
+function limpaLista(l) {
+  const vistos = new Set(), out = [];
+  for (const e of l.slice(0, 40)) {
+    if (!e || typeof e.id !== "string" || vistos.has(e.id)) continue;
+    if (!PADRAO_IDS.includes(e.id) && !idOk(e.id)) continue;
+    const pad = FILAS_PADRAO.find(f => f.id === e.id);
+    const nome = String(e.nome || (pad ? pad.nome : "")).replace(/\s+/g, " ").trim().slice(0, 40);
+    if (!nome) continue;
+    out.push({ id: e.id, nome, cor: corOk(e.cor) ? e.cor : (pad ? pad.cor : "#94a3b8") });
+    vistos.add(e.id);
+  }
+  /* atendimento sempre primeiro, entregue sempre último */
+  const primeiro = out.find(f => f.id === "atendimento") || Object.assign({}, FILAS_PADRAO[0]);
+  const ultimo = out.find(f => f.id === "entregue") || Object.assign({}, FILAS_PADRAO[FILAS_PADRAO.length - 1]);
+  const meio = out.filter(f => f.id !== "atendimento" && f.id !== "entregue");
+  return [primeiro].concat(meio, [ultimo]).map(f => ({ id: f.id, nome: f.nome, cor: f.cor }));
+}
 /* confere e arruma o que o ADM mandou salvar; devolve null se não der */
 export function limpaFilasCfg(v) {
+  if (v && typeof v === "object" && Array.isArray(v.lista)) return { lista: limpaLista(v.lista) };
   if (!v || typeof v !== "object" || !Array.isArray(v.extras)) return null;
   const extras = [], ids = new Set(FILAS_PADRAO.map(f => f.id));
   for (const e of v.extras.slice(0, MAX_EXTRAS)) {
@@ -33,6 +57,7 @@ export function limpaFilasCfg(v) {
 }
 /* lista completa, na ordem do quadro */
 export function montarFilas(cfg) {
+  if (cfg && Array.isArray(cfg.lista)) return limpaLista(cfg.lista).map(f => Object.assign({ padrao: PADRAO_IDS.includes(f.id) }, f));
   const lista = FILAS_PADRAO.map(f => Object.assign({ padrao: true }, f));
   const extras = (cfg && Array.isArray(cfg.extras) ? cfg.extras : []).slice();
   let mudou = true;

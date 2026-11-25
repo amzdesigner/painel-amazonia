@@ -24,7 +24,7 @@ const idDe = nome => nome.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 const NOMES_FILA = { atendimento: "Atendimento", designer: "Designer", impressao: "Impressão", acabamento: "Acabamento", costura: "Costura", pronto: "Pronto", entregue: "Entregue" };
 let NOMES_EXTRAS = {};
 const resumo = h => h.abas.map(a => NOMES_ABA[a] || a).join(", ") + (h.abas.includes("ped") ? " · pedidos " + (h.pedidos === "completo" ? "completo" : "produção") + (h.valores ? " com valores" : " sem valores") +
-  (h.filas ? " · só as filas: " + h.filas.map(f => NOMES_FILA[f] || NOMES_EXTRAS[f] || f).join(", ") : " · todas as filas") : "") + (h.aprovaArte ? " · aprova artes" : "");
+  (h.filas ? " · só as filas: " + h.filas.map(f => NOMES_EXTRAS[f] || NOMES_FILA[f] || f).join(", ") : " · todas as filas") : "") + (h.aprovaArte ? " · aprova artes" : "");
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     await prepararUsuarios();
     const listaFilas = await filasAtuais(sql);
     const idsFilas = listaFilas.map(f => f.id);
-    NOMES_EXTRAS = {}; listaFilas.forEach(f => { if (!f.padrao) NOMES_EXTRAS[f.id] = f.nome; });
+    NOMES_EXTRAS = {}; listaFilas.forEach(f => { NOMES_EXTRAS[f.id] = f.nome; });
     if (req.method === "GET") return res.status(200).json({ itens: await listarHierarquias(), abas: ABAS });
 
     if (req.method === "POST") {
