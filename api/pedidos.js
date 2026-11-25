@@ -15,6 +15,8 @@
  * e só podem mudar a fila / ordem / arquivar (e as miniaturas). Não criam, não editam e não excluem.
  * Toda mudança (de qualquer usuário) vai para a auditoria (api/auditoria.js).
  * PATCH { designer: "CLAYTON" } escolhe quem faz a arte (qualquer usuário com acesso aos pedidos; "" tira).
+ * PATCH { acabamento: ["ANGELO", ...] } quem faz o acabamento ([] = ninguém); quem entra na lista recebe aviso no celular.
+ *       Adesivo recortado / corte especial é sempre do GIL (avisado sozinho quando o pedido chega no acabamento).
  *
  * APROVAÇÃO DA ARTE (arte criada ou recriada pela gráfica): o pedido não sai da Fila do designer
  * para a produção enquanto a arte não for aprovada. Uma aprovação basta:
@@ -30,6 +32,7 @@ import { neon } from "@neondatabase/serverless";
 import { exigirSessao, pode } from "./_auth.js";
 import { auditar, NOMES_FILA } from "./_auditoria.js";
 import { filasAtuais } from "./_filas.js";
+import { avisarFila, enviarPara } from "./_push.js";
 
 function acharUrlBanco() {
   const env = process.env;
@@ -164,6 +167,12 @@ function aprovAoSalvar(antes, d) {
   }
   return auto ? { exige: true, auto: true, manual: false, status: "pendente", historico: [] } : undefined;
 }
+/* acabamento: adesivo recortado / corte especial é sempre do GIL */
+const ACAB_FIXO = "GIL";
+const semAc = t => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+const ehRecortado = i => /RECORT|CORTE\s+ESPECIAL/.test(semAc((i && i.material) + " " + (i && i.descricao)));
+const itensDe = d => Array.isArray(d && d.itens) ? d.itens : (d && d.material ? [{ material: d.material, descricao: d.descricao }] : []);
+const materiaisDe = d => itensDe(d).map(i => i && i.material).filter(Boolean).join(" + ") || (d && d.material) || "";
 const bloqueiaFila = (aprov, fila) => !!(aprov && aprov.exige && aprov.status !== "aprovada" && fila !== "atendimento" && fila !== "designer");
 const MSG_BLOQ = "A arte deste pedido foi criada/recriada e ainda não foi aprovada. Aprove a arte antes de mandar para a produção.";
 function imgsAprov(txt) { if (!txt) return {}; if (typeof txt === "object") return Object.assign({}, txt); try { return JSON.parse(txt) || {}; } catch (e) { return {}; } }
@@ -298,6 +307,7 @@ export default async function handler(req, res) {
         FROM c
         RETURNING *`;
       await auditar(sql, sessao, "criou", { pedidoId: linha.id, pedidoNumero: linha.numero, cliente: d.cliente, detalhe: "Em " + nomeFila(fila) + (d.material ? " · " + d.material : "") });
+      await avisarFila(sql, linha, linha.fila, nomeFila(linha.fila), sessao.usuario);
       return res.status(201).json({ item: formata(linha) });
     }
 
@@ -431,6 +441,7 @@ export default async function handler(req, res) {
         const d = limpa(b.dados);
         if (!d.cliente) return res.status(400).json({ erro: "Informe o cliente." });
         if (antesDados.designer && d.designer == null) d.designer = antesDados.designer;   /* editar o pedido não apaga o designer */
+        if (Array.isArray(antesDados.acabamento) && d.acabamento == null) d.acabamento = antesDados.acabamento;
         const ap = aprovAoSalvar(antesDados.aprov, d); if (ap) d.aprov = ap;               /* a aprovação só muda pelas ações próprias */
         dados = JSON.stringify(d);
       }
@@ -439,6 +450,10 @@ export default async function handler(req, res) {
       const designer = mexeDesigner ? String(b.designer || "").trim().toUpperCase().slice(0, 40) : "";
       if (mexeDesigner && !dados) dados = JSON.stringify(Object.assign({}, antesDados, { designer }));
       else if (mexeDesigner) dados = JSON.stringify(Object.assign(JSON.parse(dados), { designer }));
+      /* quem faz o acabamento */
+      const mexeAcab = Array.isArray(b.acabamento);
+      const acab = mexeAcab ? [...new Set(b.acabamento.map(x => String(x || "").trim().toUpperCase().slice(0, 40)).filter(Boolean))].slice(0, 10) : null;
+      if (mexeAcab) dados = JSON.stringify(Object.assign(dados ? JSON.parse(dados) : Object.assign({}, antesDados), { acabamento: acab }));
       /* arte criada/recriada sem aprovação: não vai para a produção */
       const aprovFinal = dados ? JSON.parse(dados).aprov : antesDados.aprov;
       if (fila && fila !== atual.fila && bloqueiaFila(aprovFinal, fila)) return res.status(409).json({ erro: MSG_BLOQ, bloqueio: "arte" });
@@ -465,11 +480,33 @@ export default async function handler(req, res) {
       const dAntes = atual.dados || {}, dDepois = linha.dados || {};
       const cli = dDepois.cliente || dAntes.cliente || "";
       if (fila && fila !== atual.fila) await auditar(sql, sessao, "moveu", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: nomeFila(atual.fila) + " → " + nomeFila(fila) });
+      /* notificação no celular de quem acompanha a fila nova */
+      if (fila && fila !== atual.fila && !linha.arquivado) await avisarFila(sql, linha, fila, nomeFila(fila), sessao.usuario);
       if (arquivado === true && !atual.arquivado) await auditar(sql, sessao, "arquivou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Saiu do quadro (" + nomeFila(linha.fila) + ")" });
       if (arquivado === false && atual.arquivado) await auditar(sql, sessao, "desarquivou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Voltou para " + nomeFila(linha.fila) });
       if (dados) { const m = oQueMudou(dAntes, dDepois); if (m.length) await auditar(sql, sessao, "editou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Mudou: " + m.join(", ") }); }
       if (mexeDesigner && designer !== (antesDados.designer || ""))
         await auditar(sql, sessao, "designer", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: designer ? "Designer da arte: " + designer + (antesDados.designer ? " (era " + antesDados.designer + ")" : "") : "Tirou o designer (" + antesDados.designer + ")" });
+      if (mexeAcab) {
+        const antes = Array.isArray(antesDados.acabamento) ? antesDados.acabamento : [];
+        const novos = acab.filter(x => !antes.includes(x));
+        if (novos.length || antes.some(x => !acab.includes(x)))
+          await auditar(sql, sessao, "acabamento", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: acab.length ? "Acabamento com: " + acab.join(", ") : "Tirou as pessoas do acabamento" });
+        /* avisa no celular quem acabou de ser marcado */
+        const avisar = novos.filter(x => x !== sessao.usuario);
+        if (avisar.length) await enviarPara(sql, avisar, {
+          titulo: "Material pra você fazer · Pedido #" + linha.numero,
+          corpo: [cli, materiaisDe(dDepois)].filter(Boolean).join(" · ").slice(0, 160) + (dDepois.prioridade === "urgente" ? " · URGENTE" : ""),
+          url: "/?pedido=" + id, tag: "acab-" + id
+        });
+      }
+      /* chegou no acabamento com adesivo recortado: avisa o GIL */
+      if (fila === "acabamento" && atual.fila !== "acabamento" && !linha.arquivado && sessao.usuario !== ACAB_FIXO && itensDe(dDepois).some(ehRecortado))
+        await enviarPara(sql, [ACAB_FIXO], {
+          titulo: "Adesivo recortado pra fazer · Pedido #" + linha.numero,
+          corpo: [cli, itensDe(dDepois).filter(ehRecortado).map(i => i.material).join(" + ")].filter(Boolean).join(" · ").slice(0, 160),
+          url: "/?pedido=" + id, tag: "acab-" + id
+        });
       if (mexeArte) await auditar(sql, sessao, "artes", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Trocou as artes do pedido" });
       if (ordem != null && !(fila && fila !== atual.fila) && arquivado == null && Number(atual.ordem) !== ordem)
         await auditar(sql, sessao, "reordenou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Mudou a posição em " + nomeFila(linha.fila) });
