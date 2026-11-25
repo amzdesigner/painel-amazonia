@@ -535,6 +535,7 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kb-emp button+button{border-left:1px solid var(--line)}
 .kb-emp button.on{background:var(--accent);color:#fff}
 .kb-emp button[data-emp="soares"].on{background:var(--vinho)}
+.kb-modo svg{width:17px;height:17px;flex:none}
 .dot-vinho{width:11px;height:11px;border-radius:50%;background:var(--vinho);box-shadow:0 0 0 1.5px rgba(255,255,255,.5)}
 .pm-empresa{display:flex;gap:8px;margin:0 auto 0 16px;flex-wrap:wrap}
 .pm-empresa button{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 14px 6px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--card-2);color:var(--text);font:inherit;font-size:13px;font-weight:800;letter-spacing:.03em;cursor:pointer}
@@ -1349,6 +1350,9 @@ body.modal-aberto{overflow:hidden}
           <div class="kb-busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><input type="search" id="ped-busca" placeholder="Buscar pedido, cliente ou material" autocomplete="off"></div>
           <div class="kb-emp" id="ped-emp" role="group" aria-label="Filtrar por gráfica">
             <button type="button" data-emp="">Todas</button><button type="button" data-emp="amazonia">Amazônia Gráfica</button><button type="button" data-emp="soares"><i class="dot-vinho"></i>Gráfica Soares</button>
+          </div>
+          <div class="kb-emp kb-modo" id="ped-modo" role="group" aria-label="Como ver as filas">
+            <button type="button" data-modo="todos" title="Visualizar todos os cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="3" width="7" height="8" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Todos os cards</span></button><button type="button" data-modo="barras" title="Visualizar com as barrinhas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="13" height="16" rx="2"/><path d="M20 5v14"/><path d="M20 8v3" stroke-width="3.4"/></svg><span>Com barrinhas</span></button>
           </div>
           <p class="kb-resumo" id="ped-resumo"></p>
         </div>
@@ -5933,8 +5937,22 @@ function renderKB() {
   ajustarAlturaKB();
 }
 /* o quadro ocupa só a altura da tela: cada fila rola por dentro, com a barrinha para arrastar para cima e para baixo */
+/* visualização das filas: "todos" (cards um embaixo do outro, a página rola) ou "barras" (cada fila rola com a barrinha) */
+let modoFilas = (() => { try { return localStorage.getItem("amz_modo_filas") === "barras" ? "barras" : "todos"; } catch (e) { return "todos"; } })();
+document.querySelectorAll("#ped-modo [data-modo]").forEach(b => b.addEventListener("click", () => {
+  modoFilas = b.dataset.modo === "barras" ? "barras" : "todos";
+  try { localStorage.setItem("amz_modo_filas", modoFilas); } catch (e) {}
+  marcaModoFilas(); ajustarAlturaKB();
+}));
+function marcaModoFilas() { document.querySelectorAll("#ped-modo [data-modo]").forEach(b => b.classList.toggle("on", b.dataset.modo === modoFilas)); }
 function ajustarAlturaKB() {
   const kb = $("#kb"); if (!kb || $("#view-ped").hidden) return;
+  marcaModoFilas();
+  if (modoFilas !== "barras") {
+    kb.classList.remove("altura-fixa"); kb.style.height = "";
+    kb.querySelectorAll(".kb-rolo").forEach(r => { if (!r.hidden) r.hidden = true; });
+    return;
+  }
   const z = parseFloat(document.documentElement.style.zoom) || 1;
   const topo = kb.getBoundingClientRect().top;
   const livre = window.innerHeight - topo - 76;          /* 76 = espaço da barrinha de navegação de baixo */
