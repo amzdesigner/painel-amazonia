@@ -557,6 +557,8 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kb-sit button[data-sit="atrasados"].on{background:#c53030}
 .kb-sit button[data-sit="urgentes"].on{background:#d97706}
 .kb-sit button.on .n{background:rgba(0,0,0,.25);border-color:transparent;color:#fff}
+.kb-filtros{display:contents}
+.kb-filtro-bt,.kb-cel{display:none}
 .kb-modo svg{width:17px;height:17px;flex:none}
 .dot-vinho{width:11px;height:11px;border-radius:50%;background:var(--vinho);box-shadow:0 0 0 1.5px rgba(255,255,255,.5)}
 .pm-empresa{display:flex;gap:8px;margin:0 auto 0 16px;flex-wrap:wrap}
@@ -1226,6 +1228,108 @@ body.modal-aberto{overflow:hidden}
   .print-pages .receipt:last-child{page-break-after:auto}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* =====================================================================
+   TELEFONE (até 640px): layout próprio. Tablet e computador não mudam.
+   ===================================================================== */
+@media (max-width:640px){
+  html,body{max-width:100%;overflow-x:hidden}
+  /* digitar sem o celular dar zoom sozinho */
+  input,select,textarea{font-size:16px!important}
+  /* topo em duas linhas: menu + título + usuário / botões da tela */
+  .top{flex-wrap:wrap;gap:8px 8px;padding:8px 10px;padding-top:calc(8px + env(safe-area-inset-top,0px))}
+  .top h1{font-size:19px;flex:1 1 0;order:1}
+  #menu{order:0;width:40px;height:40px}
+  .usuario-box{order:2;gap:6px}
+  .toggle{order:3}
+  .zoom-box,.fs-btn{display:none!important}
+  .usuario-nome{padding:6px 10px;font-size:12.5px;max-width:110px;overflow:hidden}
+  .usuario-nome #usuario-nome{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .usuario-nome small{display:none}
+  #sair{min-height:38px;padding:6px 10px;font-size:13px}
+  .troca-btn>span{display:none}
+  .troca-btn,.notif-btn{min-height:38px;height:38px;padding:0 10px}
+  .troca-pop{position:fixed;left:10px;right:10px;top:calc(64px + env(safe-area-inset-top,0px));width:auto}
+  .top-acoes{order:10;width:100%;margin:0;overflow-x:auto;flex-wrap:nowrap;gap:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px 0}
+  .top-acoes::-webkit-scrollbar{display:none}
+  .top-acoes .btn{flex:0 0 auto;min-height:40px}
+  .top-acoes .btn.primary{margin-left:auto}
+  .top-acoes .btn.primary span{display:inline}
+  .usuario-nome{display:none}
+  #sair{padding:6px 9px}
+  /* conteúdo */
+  .main,.conteudo,.view{min-width:0}
+  .card{border-radius:14px}
+  .kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:14px}
+  .kpi b{font-size:28px}
+  /* Pedidos: busca em cima, filtros numa linha que desliza */
+  .kb-barra{gap:10px}
+  .kb-busca{flex:1 1 0;min-width:0}
+  /* filtros: um botão só; quando aberto mostra tudo */
+  .kb-filtro-bt{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit;font-weight:700;font-size:14.5px;cursor:pointer;flex:none}
+  .kb-filtro-bt svg{width:18px;height:18px}
+  .kb-filtro-bt .n{min-width:20px;height:20px;border-radius:999px;background:var(--accent,#0a84ff);color:#fff;font-size:12px;display:inline-grid;place-items:center;padding:0 5px}
+  .kb-filtro-bt .n[hidden]{display:none}
+  .kb-filtro-bt[aria-expanded=true]{border-color:var(--accent,#0a84ff);color:var(--accent,#0a84ff)}
+  .kb-filtros{display:none}
+  .kb-barra.filtros-on .kb-filtros{display:flex;flex-direction:column;gap:8px;width:100%;padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--card-2)}
+  .kb-filtros .kb-emp{display:flex;width:100%}
+  .kb-filtros .kb-emp button{flex:1 1 0;min-height:44px;padding:0 8px;white-space:nowrap;justify-content:center}
+  #ped-modo{display:none!important}
+  .kb-resumo{width:100%;margin:0}
+  /* filas: uma por tela, setas embaixo e área para arrastar */
+  html{scrollbar-width:none}
+  html::-webkit-scrollbar{display:none}
+  .kb{scroll-snap-type:x mandatory;scrollbar-width:none;gap:12px;padding:10px 0 6px;overscroll-behavior-x:contain}
+  .kb::-webkit-scrollbar{display:none}
+  .kb-col{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always}
+  .kb.altura-fixa .kb-lista{padding-right:10px}
+  .kb-rolo{display:none!important}
+  .kb-nav{display:none!important}
+  .kb-cel{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:stretch;gap:8px;padding:6px;border-radius:22px;background:rgba(36,36,42,.9);border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 30px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  .kb-cel[hidden]{display:none}
+  .shell.open .kb-cel{display:none!important}
+  .kb-cel-seta{flex:none;width:56px;min-height:56px;border-radius:16px;border:0;background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .kb-cel-seta svg{width:26px;height:26px}
+  .kb-cel-seta:active{background:rgba(255,255,255,.24)}
+  .kb-cel-seta:disabled{opacity:.3;cursor:default}
+  .kb-cel-pad{flex:1;min-width:0;border-radius:16px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.18);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;touch-action:none;cursor:ns-resize;user-select:none;-webkit-user-select:none;padding:4px 6px}
+  .kb-cel-pad.ativo{background:rgba(255,255,255,.14);border-style:solid}
+  .kb-cel-pad b{font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:7px}
+  .kb-cel-pad b i{width:9px;height:9px;border-radius:50%;flex:none}
+  .kb-cel-pad span{font-size:11.5px;color:rgba(255,255,255,.65);white-space:nowrap}
+  .kb-cel-pontos{display:flex;gap:4px}
+  .kb-cel-pontos i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25)}
+  .kb-cel-pontos i.on{background:#fff;width:16px;border-radius:3px}
+  .cm-tbl th{font-size:10.5px;letter-spacing:.03em}
+  .toast{bottom:76px}
+  .fl-mini{flex-wrap:wrap}
+  .fl-item input[type=text]{min-width:0;flex:1 1 140px}
+  /* janelas (pedido, detalhe, camisa…) ocupando a tela */
+  .modal-cab{flex-wrap:wrap;gap:8px;padding:12px 14px;padding-top:max(12px,env(safe-area-inset-top,0px))}
+  .modal-cab h2{flex:1 1 0;font-size:18px;min-width:0}
+  .modal-cab .btn-x{order:2}
+  .pm-empresa{order:3;width:100%;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .pm-empresa button{justify-content:center;padding:6px 8px;font-size:12px}
+  .modal-corpo{padding:14px}
+  .modal-pe{flex-wrap:wrap;gap:8px;padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom,0px))}
+  .modal-pe .espaco{display:none}
+  .modal-pe>.btn{flex:1 1 calc(50% - 4px)}
+  .pm-pdf{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+  .pm-pdf .btn{width:100%;justify-content:center}
+  .pm-pdf-tam{display:none}
+  /* venda de camisa: tabela de tamanhos cabendo na tela */
+  .cm-tbl{font-size:13px}
+  .cm-tbl th,.cm-tbl td{padding:6px 4px}
+  .cm-tbl th:nth-child(4),.cm-tbl td:nth-child(4){display:none}
+  .cm-tbl td input{width:56px;min-height:38px;padding:4px 6px}
+  .cm-lapis{width:28px;height:28px;margin-left:3px}
+  /* tabelas largas: deslizam dentro do quadro, não a página */
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  /* barras fixas de baixo */
+  .barra-fixa,.bar{padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}
+}
 </style>
 
 <div id="login" hidden>
@@ -1391,6 +1495,8 @@ body.modal-aberto{overflow:hidden}
       <div id="view-ped" hidden>
         <div class="kb-barra">
           <div class="kb-busca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><input type="search" id="ped-busca" placeholder="Buscar pedido, cliente ou material" autocomplete="off"></div>
+          <button type="button" class="kb-filtro-bt" id="kb-filtro-bt" aria-expanded="false" aria-controls="kb-filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros<span class="n" id="kb-filtro-n" hidden>0</span></button>
+          <div class="kb-filtros" id="kb-filtros">
           <div class="kb-emp" id="ped-emp" role="group" aria-label="Filtrar por gráfica">
             <button type="button" data-emp="">Todas</button><button type="button" data-emp="amazonia">Amazônia Gráfica</button><button type="button" data-emp="soares"><i class="dot-vinho"></i>Gráfica Soares</button>
           </div>
@@ -1400,11 +1506,17 @@ body.modal-aberto{overflow:hidden}
           <div class="kb-emp kb-modo" id="ped-modo" role="group" aria-label="Como ver as filas">
             <button type="button" data-modo="todos" title="Visualizar todos os cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="8" rx="1.5"/><rect x="14" y="3" width="7" height="8" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Todos os cards</span></button><button type="button" data-modo="barras" title="Visualizar com as barrinhas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="13" height="16" rx="2"/><path d="M20 5v14"/><path d="M20 8v3" stroke-width="3.4"/></svg><span>Com barrinhas</span></button>
           </div>
+          </div>
           <p class="kb-resumo" id="ped-resumo"></p>
         </div>
         <p class="kb-alerta" id="ped-alerta" hidden>⚠ O arquivo <b>api/pedidos.js</b> no GitHub está desatualizado, por isso as prévias das artes não aparecem nos cards. Envie o <b>api/pedidos.js</b> do último zip para dentro da pasta <b>api</b> do repositório e dê Commit.</p>
         <div class="kb" id="kb" aria-label="Quadro de pedidos"></div>
         <div class="kb-nav" id="kb-nav" hidden><input type="range" id="kb-nav-r" min="0" max="1000" step="1" value="0" aria-label="Andar pelas filas (esquerda e direita)"></div>
+        <div class="kb-cel" id="kb-cel" hidden>
+          <button type="button" class="kb-cel-seta" id="kb-ant" aria-label="Fila anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button>
+          <div class="kb-cel-pad" id="kb-pad" role="slider" aria-label="Arraste para cima e para baixo para passar os pedidos da fila" tabindex="0"><b id="kb-cel-nome"></b><div class="kb-cel-pontos" id="kb-cel-pontos"></div><span>↕ arraste aqui para passar os pedidos</span></div>
+          <button type="button" class="kb-cel-seta" id="kb-prox" aria-label="Próxima fila"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button>
+        </div>
       </div>
 
       <!-- ================= RELATÓRIOS ================= -->
@@ -2738,7 +2850,7 @@ function aplicarZoom(z) {
   if (typeof ajustarAlturaKB === "function") requestAnimationFrame(() => { try { ajustarAlturaKB(); } catch (e) {} });
   return z;
 }
-let zoomAtual = aplicarZoom(lido("amz_zoom") || 100);
+let zoomAtual = matchMedia("(max-width:640px)").matches ? (document.documentElement.style.zoom = "", 100) : aplicarZoom(lido("amz_zoom") || 100);
 document.getElementById("zoom-menos").addEventListener("click", () => { zoomAtual = aplicarZoom(zoomAtual - ZOOM_PASSO); });
 document.getElementById("zoom-mais").addEventListener("click", () => { zoomAtual = aplicarZoom(zoomAtual + ZOOM_PASSO); });
 document.getElementById("zoom-val").addEventListener("click", () => { zoomAtual = aplicarZoom(100); });
@@ -5900,6 +6012,85 @@ document.addEventListener("pointerdown", e => {
   new MutationObserver(() => requestAnimationFrame(atualizar)).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["hidden"] });
   setTimeout(atualizar, 500);
 })();
+/* celular: botão "Filtros" que abre todos os filtros */
+function marcarFiltroBt() {
+  const n = (filtroEmpresa ? 1 : 0) + (filtroSit ? 1 : 0), el = document.getElementById("kb-filtro-n");
+  if (el) { el.textContent = n; el.hidden = !n; }
+}
+document.getElementById("kb-filtro-bt").addEventListener("click", () => {
+  const barra = document.querySelector("#view-ped .kb-barra"), on = !barra.classList.contains("filtros-on");
+  barra.classList.toggle("filtros-on", on);
+  document.getElementById("kb-filtro-bt").setAttribute("aria-expanded", String(on));
+  requestAnimationFrame(ajustarAlturaKB);
+});
+/* celular: setas para trocar de fila e área para arrastar os pedidos para cima e para baixo */
+(function () {
+  const kb = document.getElementById("kb"), bar = document.getElementById("kb-cel"), pad = document.getElementById("kb-pad");
+  const ant = document.getElementById("kb-ant"), prox = document.getElementById("kb-prox");
+  const cel = () => matchMedia("(max-width:640px)").matches;
+  const cols = () => [...kb.querySelectorAll(".kb-col")];
+  let alvo = null;
+  function indice() {
+    const cs = cols(); if (!cs.length) return 0;
+    const meio = kb.getBoundingClientRect().left + kb.clientWidth / 2;
+    let melhor = 0, dist = Infinity;
+    cs.forEach((c, i) => { const r = c.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - meio); if (d < dist) { dist = d; melhor = i; } });
+    return melhor;
+  }
+  function irCol(i) {
+    const cs = cols(); if (!cs[i]) return;
+    alvo = i;
+    const left = cs[i].getBoundingClientRect().left - kb.getBoundingClientRect().left + kb.scrollLeft;
+    kb.scrollTo({ left, behavior: "smooth" });
+    pintar(i);
+    clearTimeout(irCol.t); irCol.t = setTimeout(() => { alvo = null; pintar(); }, 600);
+  }
+  function pintar(i) {
+    const cs = cols(); if (i == null) i = alvo != null ? alvo : indice();
+    const c = cs[i]; if (!c) return;
+    const f = FILAS.find(x => x.id === c.dataset.fila) || {};
+    const n = c.querySelectorAll(".kb-lista .kc").length;
+    const nome = document.getElementById("kb-cel-nome");
+    nome.innerHTML = '<i style="background:' + (f.cor || "#888") + '"></i>';
+    nome.appendChild(document.createTextNode((f.nome || "") + " · " + n + (n === 1 ? " pedido" : " pedidos")));
+    document.getElementById("kb-cel-pontos").innerHTML = cs.map((_, k) => '<i' + (k === i ? ' class="on"' : "") + '></i>').join("");
+    ant.disabled = i <= 0; prox.disabled = i >= cs.length - 1;
+  }
+  function atualizar() {
+    const vis = cel() && !document.getElementById("view-ped").hidden && !document.querySelector(".modal:not([hidden])") && cols().length > 0;
+    if (bar.hidden === vis) bar.hidden = !vis;
+    if (vis) pintar();
+  }
+  window.atualizarNavCel = atualizar;
+  ant.addEventListener("click", () => irCol(Math.max(0, (alvo != null ? alvo : indice()) - 1)));
+  prox.addEventListener("click", () => irCol(Math.min(cols().length - 1, (alvo != null ? alvo : indice()) + 1)));
+  kb.addEventListener("scroll", () => { if (cel() && alvo == null) requestAnimationFrame(() => pintar()); }, { passive: true });
+  /* arrastar no espaço do meio: dedo para baixo = os pedidos passam para cima */
+  let y0 = null, lista = null;
+  pad.addEventListener("pointerdown", e => {
+    const c = cols()[indice()]; lista = c && c.querySelector(".kb-lista"); if (!lista) return;
+    e.preventDefault(); y0 = e.clientY; pad.classList.add("ativo");
+    try { pad.setPointerCapture(e.pointerId); } catch (x) {}
+  });
+  pad.addEventListener("pointermove", e => {
+    if (y0 == null || !lista) return;
+    e.preventDefault();
+    lista.scrollTop += (e.clientY - y0) * 2.2; y0 = e.clientY;
+  });
+  const solta = () => { y0 = null; pad.classList.remove("ativo"); };
+  pad.addEventListener("pointerup", solta); pad.addEventListener("pointercancel", solta);
+  pad.addEventListener("wheel", e => { const c = cols()[indice()], l = c && c.querySelector(".kb-lista"); if (l) { e.preventDefault(); l.scrollTop += e.deltaY; } }, { passive: false });
+  pad.addEventListener("keydown", e => {
+    const c = cols()[indice()], l = c && c.querySelector(".kb-lista"); if (!l) return;
+    if (e.key === "ArrowDown") { l.scrollTop += 120; e.preventDefault(); }
+    else if (e.key === "ArrowUp") { l.scrollTop -= 120; e.preventDefault(); }
+    else if (e.key === "ArrowRight") prox.click(); else if (e.key === "ArrowLeft") ant.click();
+  });
+  window.addEventListener("resize", atualizar);
+  new MutationObserver(() => requestAnimationFrame(atualizar)).observe(kb, { childList: true, subtree: true });
+  new MutationObserver(() => requestAnimationFrame(atualizar)).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["hidden"] });
+  setTimeout(atualizar, 500);
+})();
 /* de qual gráfica é o pedido (sem marcação = Amazônia) e o filtro do quadro */
 const empresaDe = p => (p && p.empresa === "soares") ? "soares" : "amazonia";
 let filtroEmpresa = (() => { try { const v = localStorage.getItem("amz_filtro_emp") || ""; return ["", "amazonia", "soares"].includes(v) ? v : ""; } catch (e) { return ""; } })();
@@ -6091,6 +6282,15 @@ function marcaModoFilas() { document.querySelectorAll("#ped-modo [data-modo]").f
 function ajustarAlturaKB() {
   const kb = $("#kb"); if (!kb || $("#view-ped").hidden) return;
   marcaModoFilas();
+  if (typeof marcarFiltroBt === "function") marcarFiltroBt();
+  if (matchMedia("(max-width:640px)").matches) {        /* celular: a fila ocupa a tela e rola por dentro */
+    const livre = window.innerHeight - (kb.getBoundingClientRect().top + window.scrollY) - 92;
+    kb.classList.add("altura-fixa"); kb.style.height = Math.max(320, Math.floor(livre)) + "px";
+    const sobra = document.documentElement.scrollHeight - window.innerHeight;   /* tira o que ainda faz a página rolar */
+    if (sobra > 0) kb.style.height = Math.max(320, Math.floor(livre - sobra)) + "px";
+    if (window.atualizarNavCel) window.atualizarNavCel();
+    return;
+  }
   if (modoFilas !== "barras") {
     kb.classList.remove("altura-fixa"); kb.style.height = "";
     kb.querySelectorAll(".kb-rolo").forEach(r => { if (!r.hidden) r.hidden = true; });
@@ -10090,7 +10290,38 @@ window.renderVisao=renderVisao;
   const shellEl = document.querySelector(".shell");
   const inpU = document.getElementById("login-usuario"), inpS = document.getElementById("login-senha");
   const erro = document.getElementById("login-erro"), btn = document.getElementById("login-entrar");
-  const previa = !!(window.claude && window.claude.use);   /* prévia aqui no Claude: não há servidor para conferir a senha */
+  /* prévia aqui no Claude: não há servidor para conferir a senha nem banco — vira protótipo navegável */
+  const previa = !!window.claude || /[?&]prototipo=1/.test(location.search) || /(^|\.)(claude\.ai|claude\.site|claudeusercontent\.com|anthropic\.com)$/.test(location.hostname) || !/^https?:$/.test(location.protocol);
+  const SESSAO_PREVIA = { token: "", usuario: "ADM", papel: "adm", previa: true, perm: null };
+  if (previa) {
+    const bt = document.createElement("button");
+    bt.type = "button"; bt.className = "btn primary"; bt.id = "login-prototipo";
+    bt.style.cssText = "width:100%;min-height:52px;font-size:16px;margin:0 0 14px";
+    bt.textContent = "Ver protótipo (entrar sem senha)";
+    bt.addEventListener("click", () => { semearPrevia(); entrouCom(Object.assign({}, SESSAO_PREVIA, { exp: Date.now() + 16 * 3600e3 })); });
+    const tb = document.getElementById("login-tablet"); tb.parentNode.insertBefore(bt, tb);
+  }
+  function semearPrevia() {
+    try { if (localStorage.getItem("amz_previa_ok")) return; } catch (e) {}
+    if (pedLocal.length) return;
+    const hoje = new Date(), d = n => { const x = new Date(hoje); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10); };
+    const ex = [
+      ["atendimento", "Padaria Pão Quente", "Banner 1x2m", "ADESIVO", "1", "100x200cm", 2, "normal", "amazonia", "180,00"],
+      ["atendimento", "Escola Raio de Sol", "Camisas do evento", "CAMISA", "40", "", 5, "urgente", "soares", "1.200,00"],
+      ["designer", "Açaí do Norte", "Cardápio A3", "LONA", "2", "30x42cm", 1, "normal", "amazonia", "90,00"],
+      ["designer", "Clínica Vida", "Placa de fachada", "ACM", "1", "300x80cm", -1, "urgente", "amazonia", "950,00"],
+      ["impressao", "Mercadinho Bom Preço", "Panfletos", "PAPEL COUCHÊ", "1000", "A5", 3, "normal", "soares", "250,00"],
+      ["acabamento", "Oficina Turbo", "Adesivo recortado", "ADESIVO RECORTADO", "20", "15x10cm", 2, "normal", "amazonia", "160,00"],
+      ["costura", "Time Leões FC", "Uniformes", "CAMISA", "18", "", 4, "normal", "amazonia", "720,00"],
+      ["pronto", "Igreja Esperança", "Faixa de evento", "LONA", "1", "400x90cm", 0, "normal", "soares", "210,00"]
+    ];
+    const agora = Date.now();
+    ex.forEach((e, i) => pedLocal.push({ id: "l_demo" + i, numero: String(i + 1).padStart(2, "0") + "/" + hoje.getFullYear(), fila: e[0], ordem: i, cliente: e[1], descricao: e[2],
+      itens: [{ material: e[3], quantidade: e[4], medidas: e[5], preco: e[9] }], preco: e[9], prazo: d(e[6]), prioridade: e[7], empresa: e[8], atendente: "ADM",
+      arquivado: false, criado: agora - (8 - i) * 3600e3, atualizado: agora }));
+    salvarPedLocal();
+    try { localStorage.setItem("amz_previa_ok", "1"); } catch (e) {}
+  }
   const logoSide = document.querySelector(".logo img");
   if (logoSide) document.getElementById("login-logo").src = logoSide.src;
   document.getElementById("login-aviso").textContent = previa
@@ -10166,7 +10397,8 @@ window.renderVisao=renderVisao;
       const r = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ usuario, senha }), cache: "no-store" });
       const tipo = r.headers.get("content-type") || "";
       if (!tipo.includes("application/json")) {
-        if (previa && USUARIOS_LOGIN.includes(usuario)) { entrouCom({ token: "", usuario, papel: usuario === "ADM" ? "adm" : "producao", exp: Date.now() + 16 * 3600e3, previa: true, perm: usuario === "ADM" ? null : { nome: "PRODUÇÃO", abas: ["ped"], pedidos: "producao", valores: false } }); return; }
+        if (previa) { semearPrevia(); entrouCom(Object.assign({}, SESSAO_PREVIA, { usuario: USUARIOS_LOGIN.includes(usuario) ? usuario : "ADM", exp: Date.now() + 16 * 3600e3 })); return; }
+        if (false) { entrouCom({ token: "", usuario, papel: usuario === "ADM" ? "adm" : "producao", exp: Date.now() + 16 * 3600e3, previa: true, perm: usuario === "ADM" ? null : { nome: "PRODUÇÃO", abas: ["ped"], pedidos: "producao", valores: false } }); return; }
         erro.textContent = previa ? "Usuário não encontrado." : "O servidor do painel não respondeu. Confira se o arquivo api/login.js foi enviado para o GitHub.";
         return;
       }
@@ -10174,12 +10406,14 @@ window.renderVisao=renderVisao;
       if (!r.ok) { erro.textContent = j.erro || "Não foi possível entrar."; inpS.select(); return; }
       entrouCom({ token: j.token, usuario: j.usuario, papel: j.papel, exp: j.exp, perm: j.perm || null });
     } catch (e) {
+      if (previa) { semearPrevia(); entrouCom(Object.assign({}, SESSAO_PREVIA, { exp: Date.now() + 16 * 3600e3 })); return; }
       erro.textContent = "Sem conexão com o servidor. Confira a internet e tente de novo.";
     } finally { btn.disabled = false; btn.textContent = "Entrar"; }
   });
 
   /* ---------- TABLET (Produção) e troca de usuário na mesma página ---------- */
   async function entrarTablet(aviso) {
+    if (previa) { semearPrevia(); entrouCom({ token: "", usuario: "TABLET", papel: "tablet", exp: Date.now() + 16 * 3600e3, previa: true, perm: { nome: "TABLET (Produção)", abas: ["ped"], pedidos: "producao", valores: false, filas: null, somenteVer: true, verAtendimento: true } }); return true; }
     const r = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tablet: true }), cache: "no-store" });
     const tipo = r.headers.get("content-type") || "";
     if (!tipo.includes("application/json")) {
