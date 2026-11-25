@@ -17,6 +17,7 @@ import { auditar } from "./_auditoria.js";
 const nomePapel = async p => p === "adm" ? "ADM" : ((await permissoes(p)) || {}).nome || p;
 const formata = r => ({
   usuario: r.usuario, papel: r.papel, ativo: r.ativo, aprovaArte: !!r.aprova_arte,
+  notifFilas: Array.isArray(r.notif_filas) ? r.notif_filas : [], aparelhos: Number(r.aparelhos) || 0,
   criadoEm: r.criado_em ? new Date(r.criado_em).toISOString() : "",
   ultimoLogin: r.ultimo_login ? new Date(r.ultimo_login).toISOString() : ""
 });
@@ -31,7 +32,8 @@ export default async function handler(req, res) {
     const admsAtivos = async () => { const [c] = await sql`SELECT count(*)::int AS n FROM usuarios WHERE papel = 'adm' AND ativo`; return Number(c.n) || 0; };
 
     if (req.method === "GET") {
-      const l = await sql`SELECT * FROM usuarios ORDER BY (papel = 'adm') DESC, usuario`;
+      const l = await sql`SELECT u.*, (SELECT count(*) FROM push_subs p WHERE p.usuario = u.usuario)::int AS aparelhos
+                          FROM usuarios u ORDER BY (u.papel = 'adm') DESC, u.usuario`;
       return res.status(200).json({ itens: l.map(formata), eu: sessao.usuario, hierarquias: await listarHierarquias() });
     }
 
@@ -74,6 +76,13 @@ export default async function handler(req, res) {
       }
       let aprova = !!atual.aprova_arte;
       if (b.aprovaArte != null && !!b.aprovaArte !== aprova) { aprova = !!b.aprovaArte; mud.push(aprova ? "liberou aprovar artes" : "tirou aprovar artes"); }
+      /* filas que mandam notificação para o celular dele */
+      if (Array.isArray(b.notifFilas)) {
+        const nf = [...new Set(b.notifFilas.map(x => String(x).slice(0, 40)).filter(x => /^[a-z0-9_]{2,40}$/.test(x)))].slice(0, 40);
+        const [r0] = await sql`UPDATE usuarios SET notif_filas = ${nf.length ? JSON.stringify(nf) : null}::jsonb, atualizado_em = now() WHERE usuario = ${alvo}::text RETURNING *`;
+        await auditar(sql, sessao, "usuarios", { detalhe: "Usuário " + alvo + ": notificações " + (nf.length ? "das filas " + nf.join(", ") : "desligadas") });
+        if (b.papel == null && b.ativo == null && b.senha == null && b.aprovaArte == null) return res.status(200).json({ item: formata(r0) });
+      }
       if (b.senha != null) {
         if (!senhaValida(b.senha)) return res.status(400).json({ erro: "A senha precisa ter pelo menos 4 caracteres." });
         h = gerarHash(b.senha); mud.push("trocou a senha");

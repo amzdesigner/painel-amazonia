@@ -3,6 +3,7 @@
  *
  * POST /api/login  { usuario, senha }  → { token, usuario, papel, exp }
  * GET  /api/login  (com o cabeçalho x-painel-token) → { usuario, papel } se a sessão ainda vale
+ * GET  /api/login?equipe=1 → { nomes } usuários ativos que não são ADM (quem faz o acabamento)
  * GET  /api/login?producao=1 (TABLET/produção/ADM logado) → { nomes } usuários da hierarquia PRODUÇÃO
  * Entradas e senhas erradas vão para a auditoria.
  */
@@ -17,6 +18,13 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
       const s = await lerSessao(req);
       if (!s) return res.status(401).json({ erro: "Sessão expirada. Entre de novo." });
+      /* equipe (todos os usuários ativos que não são ADM): para marcar quem faz o acabamento */
+      if (req.query && req.query.equipe === "1") {
+        if (s.somenteVer) return res.status(403).json({ erro: "Sem acesso." });
+        await prepararUsuarios();
+        const l = await sql`SELECT usuario FROM usuarios WHERE ativo AND papel <> 'adm' ORDER BY usuario`;
+        return res.status(200).json({ nomes: l.map(r => r.usuario) });
+      }
       /* lista dos usuários da PRODUÇÃO (para o "Trocar usuário" do tablet) */
       if (req.query && req.query.producao === "1") {
         if (!(s.adm || s.papel === "tablet" || s.papel === "producao")) return res.status(403).json({ erro: "Sem acesso." });

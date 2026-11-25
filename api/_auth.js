@@ -91,6 +91,15 @@ export function prepararUsuarios() {
       await sql`ALTER TABLE hierarquias ADD COLUMN IF NOT EXISTS aprova_arte BOOLEAN NOT NULL DEFAULT FALSE`;
       /* aprova artes também por usuário (ex.: GRÁFICA SOARES), além da hierarquia */
       await sql`ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS aprova_arte BOOLEAN NOT NULL DEFAULT FALSE`;
+      /* notificações no celular: filas que avisam este usuário e os aparelhos dele */
+      await sql`ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS notif_filas JSONB`;
+      await sql`CREATE TABLE IF NOT EXISTS push_subs (
+        endpoint  TEXT PRIMARY KEY,
+        usuario   TEXT NOT NULL,
+        chaves    JSONB NOT NULL,
+        aparelho  TEXT,
+        criado_em TIMESTAMPTZ NOT NULL DEFAULT now()
+      )`;
       const [c] = await sql`SELECT count(*)::int AS n FROM usuarios`;
       if (!c || !Number(c.n)) {
         for (const [u, d] of Object.entries(INICIAIS)) {
