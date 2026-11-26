@@ -590,6 +590,54 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .msg-pe{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-top:16px;flex-wrap:wrap}
 .msg-pe .hint{margin:0;flex:1}
 @media (max-width:640px){.msg-emp{width:100%;display:flex}.msg-emp button{flex:1 1 0}.msg-card{padding:14px}.msg-pe{position:sticky;bottom:0;background:var(--bg);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));margin:12px 0 0}.msg-pe .btn{flex:1 1 100%;min-height:48px}}
+.pm-drive{margin-top:6px}
+.pm-drive-sub{font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:6px}
+.pm-drive-zona{border:1.5px dashed var(--line-2);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;transition:border-color .15s,background .15s}
+.pm-drive-zona.sobre{border-color:#1fa463;background:rgba(31,164,99,.08)}
+.pm-drive-acoes{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pm-drive-bt{display:inline-flex;align-items:center;gap:8px;border-color:#1fa463!important;color:#1fa463!important;font-weight:700}
+.pm-drive-bt svg,.det-orig-bt svg,.drv-env svg{width:18px;height:18px;flex:none}
+.pm-drive-dica{font-size:12.5px;color:var(--muted);flex:1 1 220px;line-height:1.4}
+.pm-drive-lista{display:flex;flex-direction:column;gap:6px}
+.pm-drive-lista:empty{display:none}
+.pm-drive-it{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:var(--card-2);font-size:13.5px;min-width:0}
+.pm-drive-it .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.pm-drive-it .tm{color:var(--muted);font-size:12px;white-space:nowrap}
+.pm-drive-it .st{font-size:11.5px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pm-drive-it .st.ok{background:rgba(31,164,99,.16);color:#1fa463}
+.pm-drive-it .st.fila{background:rgba(245,165,36,.16);color:#f5a524}
+.pm-drive-it button{border:0;background:none;color:var(--muted);font-size:18px;cursor:pointer;width:32px;height:32px;border-radius:8px}
+.pm-drive-it button:hover{background:var(--line);color:var(--text)}
+.det-thumbs-linha{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.det-thumbs-linha .det-thumbs{flex:0 1 auto;min-width:0}
+.det-orig{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;margin-top:10px;padding-bottom:4px}
+.det-orig-bt{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:12px;font:700 13.5px Inter,system-ui,sans-serif;cursor:pointer;text-decoration:none;border:1px solid #1fa463;background:#1fa463;color:#fff!important}
+.det-orig-bt:hover{filter:brightness(1.08)}
+.det-orig-bt.sec{background:transparent;color:#1fa463!important}
+.det-orig-bt small{font-weight:600;opacity:.85}
+#drv-envio{position:fixed;right:16px;bottom:16px;z-index:80;width:min(360px,calc(100vw - 32px));background:var(--card);border:1px solid var(--line-2);border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.4);padding:12px;display:flex;flex-direction:column;gap:8px}
+#drv-envio[hidden]{display:none}
+#drv-envio h4{margin:0;display:flex;align-items:center;gap:8px;font-size:13.5px}
+#drv-envio h4 svg{width:18px;height:18px;color:#1fa463}
+#drv-envio h4 span{flex:1}
+#drv-envio h4 button{border:0;background:none;color:var(--muted);font-size:18px;cursor:pointer;width:30px;height:30px;border-radius:8px}
+.drv-env{display:flex;flex-direction:column;gap:5px;padding:8px 10px;border-radius:10px;background:var(--card-2);font-size:12.5px}
+.drv-env .l1{display:flex;gap:8px;align-items:center;min-width:0}
+.drv-env .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.drv-env .pc{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.drv-env .barra{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.drv-env .barra i{display:block;height:100%;width:0;background:#1fa463;transition:width .2s}
+.drv-env.erro .barra i{background:#e04848}
+.drv-env.erro .pc{color:#e04848}
+.drv-env .rt{border:0;background:none;color:var(--accent);font:700 12px inherit;cursor:pointer;padding:0}
+.usr-drive{margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:16px}
+.usr-drive .ic{width:44px;height:44px;border-radius:12px;background:rgba(31,164,99,.15);color:#1fa463;display:grid;place-items:center;flex:none}
+.usr-drive .ic svg{width:24px;height:24px}
+.usr-drive .tx{flex:1 1 260px;min-width:0}
+.usr-drive h3{margin:0 0 3px;font-size:15.5px}
+.usr-drive p{margin:0;font-size:13px;color:var(--muted);line-height:1.45;overflow-wrap:anywhere}
+.usr-drive .bts{display:flex;gap:8px;flex-wrap:wrap}
+@media (max-width:640px){#drv-envio{right:12px;left:12px;width:auto;bottom:calc(86px + env(safe-area-inset-bottom,0px))}.det-orig{margin-left:0;width:100%}.det-orig-bt{flex:1 1 auto;justify-content:center}}
 #descanso{position:fixed;left:50%;top:calc(76px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:9px;max-width:calc(100vw - 24px);padding:10px 16px;border-radius:999px;border:1px solid var(--line-2);background:var(--card);color:var(--text);font:600 13.5px Inter,system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer}
 #descanso[hidden]{display:none}
 #descanso svg{width:16px;height:16px;flex:none;color:#f5a524}
@@ -1608,6 +1656,11 @@ body.modal-aberto{overflow:hidden}
           <button class="btn" type="button" id="usr-hier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.5" width="6" height="5" rx="1"/><rect x="2.5" y="16.5" width="6" height="5" rx="1"/><rect x="15.5" y="16.5" width="6" height="5" rx="1"/><path d="M12 7.5v4M5.5 16.5v-2.5h13v2.5"/></svg>HIERARQUIA</button>
           <button class="btn primary" type="button" id="usr-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Novo usuário</button>
         </div>
+        <section class="card usr-drive" id="usr-drive" hidden>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M8.2 3.5h7.6l6 10.4-3.8 6.6H6l-3.8-6.6z"/><path d="M8.2 3.5 14 13.9h7.8M15.8 3.5 6 20.5M2.2 13.9H14"/></svg></span>
+          <div class="tx"><h3>Google Drive · artes originais</h3><p id="usr-drive-txt">Verificando…</p></div>
+          <div class="bts" id="usr-drive-bts"></div>
+        </section>
         <div class="usr-grade" id="usr-lista"></div>
         <p class="hint" id="usr-msg"></p>
       </div>
@@ -2464,6 +2517,17 @@ body.modal-aberto{overflow:hidden}
         <div class="colar-zona" id="pm-colar" contenteditable="true" spellcheck="false" role="textbox" aria-label="Colar imagem da arte do pedido" data-texto="Clique aqui e aperte Ctrl+V para colar uma arte"></div>
         <div class="drop-bts"><button class="btn blue" type="button" id="pm-colar-bt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/></svg>Colar imagem</button><button class="btn pm-add-item" type="button" id="pm-arte-add">+ Adicionar do computador</button></div>
         <input type="file" id="pm-arte-file" accept="image/*" class="arquivo-oculto">
+        <div class="pm-drive" id="pm-drive-box" hidden>
+          <p class="c-sec">Arquivos originais <span class="pm-drive-sub">Google Drive</span></p>
+          <div class="pm-drive-zona" id="pm-drive-zona">
+            <div class="pm-drive-lista" id="pm-drive-lista"></div>
+            <div class="pm-drive-acoes">
+              <button class="btn pm-drive-bt" type="button" id="pm-drive-add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M8.2 3.5h7.6l6 10.4-3.8 6.6H6l-3.8-6.6z"/><path d="M8.2 3.5 14 13.9h7.8M15.8 3.5 6 20.5M2.2 13.9H14"/></svg>Colocar arquivo de arte</button>
+              <span class="pm-drive-dica" id="pm-drive-dica">Vai direto para a pasta do pedido no Google Drive, sem perder qualidade. PDF, CDR, AI, PSD, PNG, JPG… (pode arrastar aqui)</span>
+            </div>
+          </div>
+          <input type="file" id="pm-drive-file" multiple class="arquivo-oculto">
+        </div>
       </div>
       <div class="modal-pe">
         <button class="btn danger" type="button" id="pm-excluir" hidden>Excluir</button>
@@ -4305,6 +4369,7 @@ function carregarExtras() {
   if (window.carregarTamanhosOS && podeAlguma(["os", "ped"])) carregarTamanhosOS();
   if (window.carregarFilas && podeAlguma(["ped", "visao", "rel"])) carregarFilas();
   if (window.carregarMensagens && podeAba("ped")) carregarMensagens();
+  if (window.carregarDriveInfo && podeAba("ped")) carregarDriveInfo().then(() => { if (typeof avisoDriveDepoisDoLogin === "function") avisoDriveDepoisDoLogin(); });
 }
 async function carregarNuvem() {
   if (!sessao) return;
@@ -6606,6 +6671,7 @@ function abrirPedidoModal(p, filaInicial) {
   pmPerguntouCamisa = false; pmRascId = null;
   if (!podeGravarPed()) return;
   pedEditId = p ? p.id : null;
+  pmDriveFila = []; renderPmDrive();
   $("#pm-titulo").textContent = p ? "Pedido #" + p.numero : "Novo pedido";
   marcaEmpresa(p ? empresaDe(p) : (filtroEmpresa || "amazonia"));
   $("#pm-salvar").textContent = p ? "Salvar alterações" : "Criar pedido";
@@ -6686,15 +6752,19 @@ $("#pm-form").addEventListener("submit", async ev => {
       if (p && p.fila !== fila) { campos.fila = fila; campos.ordem = ordemFinal(fila, p.id); pedChegou = p.id; }
       fecharModal($("#ped-modal"));
       const idEd = pedEditId;
+      const origs = pmDriveFila.slice(); pmDriveFila = [];
       await atualizarPedido(idEd, campos);
       const ped = pedidos.find(x => x.id === idEd);
+      if (ped && origs.length) enviarOriginais(ped, origs);
       if (ped && dados.itens.some(i => i.camisa)) await sincronizarOSCamisa(ped, dados, pmArteMudou ? artesParaSalvar() : (detArtesSalvas(ped) || artesParaSalvar()), pmArteMudou);
       say("Pedido atualizado.", "ok");
       if (irOS && ped) await abrirOSDepoisDeSalvar(irOS, ped, dados);
     } else {
       if (pmArtes.length) dados.qtdArtes = String(pmArtes.length);
+      const origs = pmDriveFila.slice(); pmDriveFila = [];
       const novo = await criarPedido(pmArtes.length ? Object.assign({}, dados, { artes: artesParaSalvar(), miniaturas: await miniaturasArtes() }) : dados, fila);
       fecharModal($("#ped-modal"));
+      if (novo && origs.length) enviarOriginais(novo, origs);
       if (novo && pmRascId) { const rid = pmRascId; pmRascId = null; apagarRascunho(rid, true); }
       if (novo && dados.itens.some(i => i.camisa)) {
         await sincronizarOSCamisa(novo, dados, artesParaSalvar(), true); say("Pedido criado em " + filaInfo(fila).nome + " e O.S. de camisa (sem preço) gerada.", "ok");
@@ -8175,7 +8245,8 @@ function renderViewerDet() {
   const lista = detArtes || detMinis;
   $("#det-artes-tit").textContent = lista.length > 1 ? "Artes (" + lista.length + ")" : "Arte";
   if (!lista.length) {
-    box.innerHTML = '<div class="det-sem">' + (detCarregando ? "Carregando as artes…" : "Nenhuma arte anexada neste pedido.") + '</div>';
+    box.innerHTML = '<div class="det-sem">' + (detCarregando ? "Carregando as artes…" : "Nenhuma arte anexada neste pedido.") + '</div>' + htmlOriginais(detPed);
+    ligarOriginais(box, detPed);
     return;
   }
   detIdx = ((detIdx % lista.length) + lista.length) % lista.length;
@@ -8184,11 +8255,184 @@ function renderViewerDet() {
   box.innerHTML = '<div class="det-view"><img alt="Arte ' + (detIdx + 1) + '">' +
     (lista.length > 1 ? '<button type="button" class="kc-seta esq" aria-label="Arte anterior">‹</button><button type="button" class="kc-seta dir" aria-label="Próxima arte">›</button>' : "") + '</div>' +
     '<p class="det-cap">Arte ' + (detIdx + 1) + (lista.length > 1 ? " de " + lista.length : "") + (rot ? ' <span>· ' + escapa(rot) + '</span>' : "") + (detCarregando ? ' <span>· carregando em alta…</span>' : "") + '</p>' +
-    (lista.length > 1 ? '<div class="det-thumbs">' + lista.map((x, k) => '<button type="button" class="' + (k === detIdx ? "on" : "") + '" data-k="' + k + '" aria-label="Ver arte ' + (k + 1) + '"><img alt=""></button>').join("") + '</div>' : "");
+    '<div class="det-thumbs-linha">' +
+    (lista.length > 1 ? '<div class="det-thumbs">' + lista.map((x, k) => '<button type="button" class="' + (k === detIdx ? "on" : "") + '" data-k="' + k + '" aria-label="Ver arte ' + (k + 1) + '"><img alt=""></button>').join("") + '</div>' : "") +
+    htmlOriginais(detPed) + '</div>';
+  ligarOriginais(box, detPed);
   box.querySelector(".det-view img").src = a.img;
   box.querySelectorAll(".det-thumbs button").forEach(b => { const x = (detMinis[+b.dataset.k] || lista[+b.dataset.k]); b.querySelector("img").src = x.img; b.addEventListener("click", () => { detIdx = +b.dataset.k; renderViewerDet(); }); });
   box.querySelectorAll(".det-view .kc-seta").forEach(b => b.addEventListener("click", () => { detIdx += b.classList.contains("dir") ? 1 : -1; renderViewerDet(); }));
 }
+/* ================= ARTES ORIGINAIS NO GOOGLE DRIVE =================
+ * O arquivo vai direto do navegador para o Google Drive (pasta "PEDIDO #N"), sem passar pelo banco.
+ */
+const ICO_DRIVE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M8.2 3.5h7.6l6 10.4-3.8 6.6H6l-3.8-6.6z"/><path d="M8.2 3.5 14 13.9h7.8M15.8 3.5 6 20.5M2.2 13.9H14"/></svg>';
+let driveInfo = null, pmDriveFila = [];
+const tamanhoBonito = n => n >= 1e9 ? (n / 1e9).toFixed(1).replace(".", ",") + " GB" : n >= 1e6 ? (n / 1e6).toFixed(1).replace(".", ",") + " MB" : Math.max(1, Math.round(n / 1e3)) + " KB";
+async function apiDrive(metodo, query, corpo) {
+  const r = await fetch("/api/drive" + (query || ""), { method: metodo, headers: Object.assign(cabecalhoAuth(), corpo ? { "Content-Type": "application/json" } : {}), body: corpo ? JSON.stringify(corpo) : undefined, cache: "no-store" });
+  const j = await r.json().catch(() => null);
+  if (!r.ok || !j) { const e = new Error((j && j.erro) || "erro"); e.msg = (j && j.erro) || (r.status === 404 ? "falta publicar o api/drive.js na pasta api do GitHub" : "sem conexão"); e.status = r.status; throw e; }
+  return j;
+}
+async function carregarDriveInfo() {
+  if (modoHist !== "nuvem") { driveInfo = null; return null; }
+  try { driveInfo = await apiDrive("GET"); } catch (e) { driveInfo = { erro: e.msg, configurado: false, conectado: false }; }
+  return driveInfo;
+}
+window.carregarDriveInfo = carregarDriveInfo;
+const driveOk = () => !!(driveInfo && driveInfo.conectado);
+function arquivosDrive(p) { return (p && p.drive && Array.isArray(p.drive.arquivos)) ? p.drive.arquivos : []; }
+
+/* ---- envio (com barra de progresso no canto da tela) ---- */
+const envios = [];
+function painelEnvio() {
+  let el = document.getElementById("drv-envio");
+  if (!el) {
+    el = document.createElement("div"); el.id = "drv-envio"; el.hidden = true; el.setAttribute("role", "status");
+    document.body.appendChild(el);
+  }
+  const ativos = envios.filter(e => e.estado === "enviando" || e.estado === "fila").length;
+  if (!envios.length) { el.hidden = true; return; }
+  el.hidden = false;
+  el.innerHTML = '<h4>' + ICO_DRIVE + '<span>' + (ativos ? "Enviando para o Google Drive… não feche o painel" : "Envio para o Google Drive") + '</span>' + (ativos ? "" : '<button type="button" data-fechar aria-label="Fechar">×</button>') + '</h4>' +
+    envios.map((e, k) => '<div class="drv-env' + (e.estado === "erro" ? " erro" : "") + '"><div class="l1"><span class="nm">#' + escapa(e.numero) + ' · ' + escapa(e.file.name) + '</span><span class="pc">' +
+      (e.estado === "erro" ? "Falhou" : e.estado === "ok" ? "✓ Enviado" : e.estado === "fila" ? "Na fila" : Math.round(e.pct) + "%") + '</span></div>' +
+      '<div class="barra"><i style="width:' + (e.estado === "ok" ? 100 : e.pct) + '%"></i></div>' +
+      (e.estado === "erro" ? '<div class="l1"><span class="tm" style="flex:1;color:var(--muted)">' + escapa(e.erro || "") + '</span><button type="button" class="rt" data-k="' + k + '">Tentar de novo</button></div>' : "") + '</div>').join("");
+  const f = el.querySelector("[data-fechar]"); if (f) f.addEventListener("click", () => { for (let i = envios.length - 1; i >= 0; i--) if (envios[i].estado === "ok" || envios[i].estado === "erro") envios.splice(i, 1); painelEnvio(); });
+  el.querySelectorAll(".rt").forEach(b => b.addEventListener("click", () => { const e = envios[+b.dataset.k]; if (e) { e.estado = "fila"; e.pct = 0; e.erro = ""; rodarEnvios(); } }));
+}
+function enviarOriginais(ped, arquivos) {
+  if (!ped || !arquivos || !arquivos.length) return;
+  arquivos.forEach(file => envios.push({ pedidoId: ped.id, numero: ped.numero, file, estado: "fila", pct: 0 }));
+  painelEnvio(); rodarEnvios();
+}
+let drvRodando = false;
+async function rodarEnvios() {
+  if (drvRodando) return;
+  drvRodando = true;
+  try {
+    let e;
+    while ((e = envios.find(x => x.estado === "fila"))) {
+      e.estado = "enviando"; e.pct = 0; painelEnvio();
+      try {
+        const ses = await apiDrive("POST", "?enviar=1", { pedidoId: e.pedidoId, nome: e.file.name, tipo: e.file.type || "application/octet-stream", tamanho: e.file.size });
+        const arq = await new Promise((ok, falha) => {
+          const x = new XMLHttpRequest();
+          x.open("PUT", ses.url);
+          x.upload.onprogress = ev => { if (ev.lengthComputable) { e.pct = ev.loaded / ev.total * 100; const bar = document.querySelector("#drv-envio .drv-env:nth-of-type(" + (envios.indexOf(e) + 1) + ") .barra i"); if (bar) { bar.style.width = e.pct + "%"; bar.parentNode.previousSibling.querySelector(".pc").textContent = Math.round(e.pct) + "%"; } } };
+          x.onload = () => { if (x.status >= 200 && x.status < 300) { try { ok(JSON.parse(x.responseText)); } catch (er) { ok({}); } } else falha(new Error("O Google recusou o arquivo (" + x.status + ").")); };
+          x.onerror = () => falha(new Error("A conexão caiu durante o envio."));
+          x.send(e.file);
+        });
+        const r = await apiDrive("POST", "?concluido=1", { pedidoId: e.pedidoId, arquivo: { id: arq.id, nome: arq.name || e.file.name, tamanho: Number(arq.size) || e.file.size } });
+        const p = pedidos.find(x => String(x.id) === String(e.pedidoId)); if (p) p.drive = r.drive;
+        if (detPed && String(detPed.id) === String(e.pedidoId)) { detPed.drive = r.drive; renderViewerDet(); }
+        e.estado = "ok";
+      } catch (er) { e.estado = "erro"; e.erro = er.msg || er.message || "Não consegui enviar."; }
+      painelEnvio();
+    }
+    if (envios.length && envios.every(x => x.estado === "ok")) {
+      say("Arquivos originais salvos no Google Drive.", "ok");
+      setTimeout(() => { if (envios.every(x => x.estado === "ok")) { envios.length = 0; painelEnvio(); } }, 6000);
+    }
+  } finally { drvRodando = false; }
+}
+window.addEventListener("beforeunload", ev => { if (envios.some(x => x.estado === "enviando" || x.estado === "fila")) { ev.preventDefault(); ev.returnValue = ""; } });
+function escolherOriginais(aoEscolher) {
+  const inp = document.createElement("input"); inp.type = "file"; inp.multiple = true;
+  inp.addEventListener("change", () => { const fs = [...inp.files]; if (fs.length) aoEscolher(fs); });
+  inp.click();
+}
+
+/* ---- no formulário do pedido ---- */
+function renderPmDrive() {
+  const box = $("#pm-drive-box");
+  box.hidden = modoHist !== "nuvem";
+  if (box.hidden) return;
+  const p = pedEditId ? pedidos.find(x => x.id === pedEditId) : null;
+  const ja = arquivosDrive(p);
+  const lista = $("#pm-drive-lista");
+  lista.innerHTML =
+    (ja.length ? '<div class="pm-drive-it"><span class="nm">' + ja.length + (ja.length === 1 ? " arquivo já está" : " arquivos já estão") + ' na pasta do pedido</span><span class="st ok">No Drive</span>' +
+      (p.drive.link ? '<a class="det-orig-bt sec" style="min-height:32px;padding:0 10px" href="' + escapa(p.drive.link) + '" target="_blank" rel="noopener">Abrir pasta</a>' : "") + '</div>' : "") +
+    pmDriveFila.map((f, k) => '<div class="pm-drive-it"><span class="nm">' + escapa(f.name) + '</span><span class="tm">' + tamanhoBonito(f.size) + '</span><span class="st fila">Envia ao salvar</span><button type="button" data-k="' + k + '" aria-label="Tirar ' + escapa(f.name) + '">×</button></div>').join("");
+  lista.querySelectorAll("button[data-k]").forEach(b => b.addEventListener("click", () => { pmDriveFila.splice(+b.dataset.k, 1); renderPmDrive(); }));
+  const dica = $("#pm-drive-dica"), bt = $("#pm-drive-add");
+  if (driveInfo && !driveOk()) {
+    dica.textContent = driveInfo.erro ? "Google Drive indisponível: " + driveInfo.erro + "." : "O Google Drive ainda não foi conectado. O ADM conecta em Usuários → Google Drive.";
+    bt.disabled = true;
+  } else {
+    dica.textContent = "Vai direto para a pasta " + (p ? "PEDIDO #" + String(p.numero).replace("/", "-") : "do pedido") + " no Google Drive, sem perder qualidade. PDF, CDR, AI, PSD, PNG, JPG… (pode arrastar aqui)";
+    bt.disabled = false;
+  }
+}
+function addPmDrive(fs) { fs.forEach(f => { if (!pmDriveFila.some(x => x.name === f.name && x.size === f.size)) pmDriveFila.push(f); }); renderPmDrive(); }
+$("#pm-drive-add").addEventListener("click", () => escolherOriginais(addPmDrive));
+{
+  const z = $("#pm-drive-zona");
+  ["dragenter", "dragover"].forEach(ev => z.addEventListener(ev, e => { if (e.dataTransfer && [...e.dataTransfer.types].includes("Files") && !$("#pm-drive-add").disabled) { e.preventDefault(); z.classList.add("sobre"); } }));
+  ["dragleave", "drop"].forEach(ev => z.addEventListener(ev, () => z.classList.remove("sobre")));
+  z.addEventListener("drop", e => { if ($("#pm-drive-add").disabled) return; e.preventDefault(); e.stopPropagation(); addPmDrive([...e.dataTransfer.files]); });
+}
+
+/* ---- no resumo do pedido (ao lado das miniaturas) ---- */
+function htmlOriginais(p) {
+  if (!p || modoHist !== "nuvem") return "";
+  const n = arquivosDrive(p).length, link = p.drive && p.drive.link;
+  const podeEnviar = podeGravarPed() && driveOk();
+  if (!link && !podeEnviar) return "";
+  return '<div class="det-orig">' +
+    (link ? '<a class="det-orig-bt" href="' + escapa(link) + '" target="_blank" rel="noopener" title="Abre a pasta do pedido no Google Drive">' + ICO_DRIVE + 'Baixar artes originais' + (n ? ' <small>(' + n + ')</small>' : "") + '</a>' : "") +
+    (podeEnviar ? '<button type="button" class="det-orig-bt sec" data-orig-add>' + (link ? "+ Colocar arquivo" : ICO_DRIVE + "Colocar arquivo de arte") + '</button>' : "") + '</div>';
+}
+function ligarOriginais(box, p) {
+  const b = box.querySelector("[data-orig-add]");
+  if (b) b.addEventListener("click", () => escolherOriginais(fs => enviarOriginais(p, fs)));
+}
+
+/* ---- ADM: conectar a conta Google (em Usuários) ---- */
+let usrDriveSeq = 0;
+async function renderUsrDrive(tent) {
+  const box = $("#usr-drive"), seq = ++usrDriveSeq;
+  if (ehAdm() && modoHist !== "nuvem" && (tent || 0) < 8) { setTimeout(() => { if (seq === usrDriveSeq) renderUsrDrive((tent || 0) + 1); }, 700); }
+  box.hidden = !ehAdm() || modoHist !== "nuvem";
+  if (box.hidden) return;
+  const txt = $("#usr-drive-txt"), bts = $("#usr-drive-bts");
+  txt.textContent = "Verificando…"; bts.innerHTML = "";
+  const i = await carregarDriveInfo();
+  if (seq !== usrDriveSeq) return;
+  if (!i || i.erro) { txt.textContent = "Não consegui falar com o servidor do Drive: " + ((i && i.erro) || "sem conexão") + "."; return; }
+  if (!i.configurado) { txt.innerHTML = "Falta configurar na Vercel: <b>GOOGLE_CLIENT_ID</b> e <b>GOOGLE_CLIENT_SECRET</b> (veja o LEIA-ME). Endereço de retorno para cadastrar no Google: <b>" + escapa(i.retorno || location.origin + "/api/drive") + "</b>"; return; }
+  if (!i.conectado) {
+    txt.textContent = "Ainda não conectado. Conecte a conta Google da gráfica: as artes originais dos pedidos vão para pastas no Drive dela.";
+    bts.innerHTML = '<a class="btn primary" href="/api/drive?conectar=1&t=' + encodeURIComponent((sessao && sessao.token) || "") + '">Conectar Google Drive</a>';
+    return;
+  }
+  txt.innerHTML = "Conectado em <b>" + escapa(i.conta || "conta Google") + "</b>. Cada pedido ganha a pasta <b>PEDIDO #número</b>, aberta para quem tem o link.";
+  bts.innerHTML = (i.pasta ? '<a class="btn" href="' + escapa(i.pasta) + '" target="_blank" rel="noopener">Abrir pasta principal</a>' : "") + '<button type="button" class="btn danger" id="usr-drive-sair">Desconectar</button>';
+  $("#usr-drive-sair").addEventListener("click", async () => {
+    if (!(await confirmar("Desconectar o Google Drive do painel?", { titulo: "Google Drive", detalhe: "Os arquivos e as pastas continuam no Drive. Só não dá para enviar novos até conectar de novo.", sim: "Desconectar", perigo: true }))) return;
+    try { await apiDrive("DELETE"); say("Google Drive desconectado.", "ok"); } catch (e) { say("Não consegui desconectar: " + e.msg + ".", "err"); }
+    renderUsrDrive();
+  });
+}
+/* volta do Google depois de conectar */
+{
+  const q = new URLSearchParams(location.search), d = q.get("drive");
+  if (d != null) {
+    history.replaceState(null, "", location.pathname);
+    window._avisoDrive = d;
+  }
+}
+function avisoDriveDepoisDoLogin() {
+  const d = window._avisoDrive; if (d == null) return;
+  window._avisoDrive = null;
+  if (d === "ok") { say("Google Drive conectado! As artes originais já podem ser enviadas.", "ok"); irPara("usr"); }
+  else say(d.replace(/^erro:/, "Google Drive: "), "err");
+}
+
 /* WhatsApp: abre a conversa com o cliente com a mensagem de pedido pronto */
 const ICO_ZAP = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.54-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>';
 function telWhats(p) {
@@ -10249,7 +10493,7 @@ window.renderVisao=renderVisao;
 /* ================= AUDITORIA (só ADM) ================= */
 (function () {
   const ACOES = { usuarios: "Usuários", designer: "Designer da arte", moveu: "Moveu de fila", arquivou: "Arquivou", desarquivou: "Voltou do arquivo", criou: "Criou pedido", editou: "Editou pedido",
-    artes: "Trocou artes", arte: "Aprovação de arte", acabamento: "Acabamento", avisou: "Avisou cliente", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
+    artes: "Trocou artes", arte: "Aprovação de arte", acabamento: "Acabamento", avisou: "Avisou cliente", drive: "Google Drive", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
   let itens = [], ultimoId = 0, timer = null, ativa = false, novos = new Set(), carregando = false;
   const $a = id => document.getElementById(id);
   $a("aud-acao").innerHTML = '<option value="">Tudo</option>' + Object.entries(ACOES).map(([k, v]) => '<option value="' + k + '">' + v + '</option>').join("");
@@ -10444,7 +10688,7 @@ window.renderVisao=renderVisao;
         : "Não consegui carregar os usuários: " + (e.msg || "sem conexão") + ".";
     }
   }
-  window.usrAoAbrir = () => { if (ehAdm()) carregar(); };
+  window.usrAoAbrir = () => { if (ehAdm()) { carregar(); renderUsrDrive(); } };
 
   function gerarSenha() {
     const a = "23456789"; let s = "";
