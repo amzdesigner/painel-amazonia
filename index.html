@@ -8272,7 +8272,7 @@ const tamanhoBonito = n => n >= 1e9 ? (n / 1e9).toFixed(1).replace(".", ",") + "
 async function apiDrive(metodo, query, corpo) {
   const r = await fetch("/api/drive" + (query || ""), { method: metodo, headers: Object.assign(cabecalhoAuth(), corpo ? { "Content-Type": "application/json" } : {}), body: corpo ? JSON.stringify(corpo) : undefined, cache: "no-store" });
   const j = await r.json().catch(() => null);
-  if (!r.ok || !j) { const e = new Error((j && j.erro) || "erro"); e.msg = (j && j.erro) || (r.status === 404 ? "falta publicar o api/drive.js na pasta api do GitHub" : "sem conexão"); e.status = r.status; throw e; }
+  if (!r.ok || !j) { const e = new Error((j && j.erro) || "erro"); e.msg = (j && j.erro) || (r.status === 404 ? "falta publicar o vercel.json novo e os arquivos api/config.js e api/_drive.js no GitHub" : "sem conexão"); e.status = r.status; throw e; }
   return j;
 }
 async function carregarDriveInfo() {

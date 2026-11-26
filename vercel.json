@@ -33,5 +33,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/drive",
+      "destination": "/api/config?__drive=1"
+    },
+    {
+      "source": "/api/versao",
+      "destination": "/api/config?__versao=1"
+    }
   ]
 }
