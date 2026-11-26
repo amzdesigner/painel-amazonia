@@ -444,6 +444,7 @@ export default async function handler(req, res) {
         if (antesDados.designer && d.designer == null) d.designer = antesDados.designer;   /* editar o pedido não apaga o designer */
         if (Array.isArray(antesDados.acabamento) && d.acabamento == null) d.acabamento = antesDados.acabamento;
         if (antesDados.avisoPronto && d.avisoPronto == null) d.avisoPronto = antesDados.avisoPronto;   /* editar não apaga o "cliente avisado" */
+        if (antesDados.drive && d.drive == null) d.drive = antesDados.drive;   /* pasta do Google Drive fica no pedido */
         const ap = aprovAoSalvar(antesDados.aprov, d); if (ap) d.aprov = ap;               /* a aprovação só muda pelas ações próprias */
         dados = JSON.stringify(d);
       }
