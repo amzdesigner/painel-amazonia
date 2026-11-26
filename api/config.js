@@ -10,6 +10,8 @@
  * Toda chamada precisa estar logada (cabeçalho "x-painel-token", ver api/login.js).
  * Só o usuário ADM tem acesso.
  */
+import { driveHandler } from "./_drive.js";
+import { versaoHandler } from "./_versao.js";
 import { neon } from "@neondatabase/serverless";
 import { exigirSessao, pode } from "./_auth.js";
 import { limpaFilasCfg, esquecerFilas } from "./_filas.js";
@@ -53,6 +55,9 @@ function prepararBanco() {
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
+  /* /api/drive e /api/versao chegam aqui pelo vercel.json (o plano grátis da Vercel aceita no máximo 12 funções) */
+  if (req.query && req.query.__drive) { delete req.query.__drive; return driveHandler(req, res); }
+  if (req.query && req.query.__versao) return versaoHandler(req, res);
   if (!sql) return res.status(500).json({ erro: "Banco não configurado (falta DATABASE_URL)" });
   const sessao = await exigirSessao(req, res, null);
   if (!sessao) return;
