@@ -3,7 +3,8 @@
  *
  * GET  /api/config?chave=malharia   → { valor } (null se ainda não foi salva)
  * chaves aceitas: malharia (tabela de preços) tamanhos_os (tamanhos que vão na O.S.), atualcard (valores da calculadora Atual Card)
- *                 e filas (filas personalizadas do quadro de pedidos, só o ADM grava)
+ *                 filas (filas personalizadas do quadro de pedidos, só o ADM grava)
+ *                 e mensagens (textos do WhatsApp: contato e pedido pronto, por gráfica; só o ADM grava)
  * PUT  /api/config                  → { chave, valor } grava a configuração
  *
  * Toda chamada precisa estar logada (cabeçalho "x-painel-token", ver api/login.js).
@@ -13,9 +14,9 @@ import { neon } from "@neondatabase/serverless";
 import { exigirSessao, pode } from "./_auth.js";
 import { limpaFilasCfg, esquecerFilas } from "./_filas.js";
 /* que abas leem / gravam cada configuração */
-const LER = { malharia: ["mal", "orc", "_pedCompleto"], tamanhos_os: ["os", "ped"], atualcard: ["calc"], filas: ["ped", "visao", "rel"] };
+const LER = { malharia: ["mal", "orc", "_pedCompleto"], tamanhos_os: ["os", "ped"], atualcard: ["calc"], filas: ["ped", "visao", "rel"], mensagens: ["ped"] };
 /* "_adm": só o ADM grava (as filas do quadro) */
-const GRAVAR = { malharia: ["mal"], tamanhos_os: ["os"], atualcard: ["calc"], filas: ["_adm"] };
+const GRAVAR = { malharia: ["mal"], tamanhos_os: ["os"], atualcard: ["calc"], filas: ["_adm"], mensagens: ["_adm"] };
 
 function acharUrlBanco() {
   const env = process.env;
@@ -27,7 +28,16 @@ function acharUrlBanco() {
 }
 const URL_BANCO = acharUrlBanco();
 const sql = URL_BANCO ? neon(URL_BANCO) : null;
-const CHAVES = ["malharia", "tamanhos_os", "atualcard", "filas"];
+const CHAVES = ["malharia", "tamanhos_os", "atualcard", "filas", "mensagens"];
+/* mensagens do WhatsApp: { contato: { amazonia, soares }, pronto: { amazonia, soares } } */
+function limpaMensagens(v) {
+  const o = {};
+  ["contato", "pronto"].forEach(t => {
+    o[t] = {};
+    ["amazonia", "soares"].forEach(e => { const x = v && v[t] && v[t][e]; if (typeof x === "string" && x.trim()) o[t][e] = x.slice(0, 2000); });
+  });
+  return o;
+}
 
 let preparado = null;
 function prepararBanco() {
@@ -62,6 +72,7 @@ export default async function handler(req, res) {
       if (!CHAVES.includes(b.chave)) return res.status(400).json({ erro: "Chave inválida." });
       if (!pode(sessao, GRAVAR[b.chave])) return negado();
       if (!b.valor || typeof b.valor !== "object") return res.status(400).json({ erro: "Valor inválido." });
+      if (b.chave === "mensagens") b.valor = limpaMensagens(b.valor);
       if (b.chave === "filas") { b.valor = limpaFilasCfg(b.valor); if (!b.valor) return res.status(400).json({ erro: "Filas inválidas." }); esquecerFilas(); }
       const txt = JSON.stringify(b.valor);
       if (txt.length > 200000) return res.status(413).json({ erro: "Configuração grande demais." });

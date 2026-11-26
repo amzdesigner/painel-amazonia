@@ -15,6 +15,7 @@
  * e só podem mudar a fila / ordem / arquivar (e as miniaturas). Não criam, não editam e não excluem.
  * Toda mudança (de qualquer usuário) vai para a auditoria (api/auditoria.js).
  * PATCH { designer: "CLAYTON" } escolhe quem faz a arte (qualquer usuário com acesso aos pedidos; "" tira).
+ * PATCH { avisouPronto: true } marca que o cliente foi avisado no WhatsApp que o pedido está pronto.
  * PATCH { acabamento: ["ANGELO", ...] } quem faz o acabamento ([] = ninguém); quem entra na lista recebe aviso no celular.
  *       Adesivo recortado / corte especial é sempre do GIL (avisado sozinho quando o pedido chega no acabamento).
  *
@@ -442,6 +443,7 @@ export default async function handler(req, res) {
         if (!d.cliente) return res.status(400).json({ erro: "Informe o cliente." });
         if (antesDados.designer && d.designer == null) d.designer = antesDados.designer;   /* editar o pedido não apaga o designer */
         if (Array.isArray(antesDados.acabamento) && d.acabamento == null) d.acabamento = antesDados.acabamento;
+        if (antesDados.avisoPronto && d.avisoPronto == null) d.avisoPronto = antesDados.avisoPronto;   /* editar não apaga o "cliente avisado" */
         const ap = aprovAoSalvar(antesDados.aprov, d); if (ap) d.aprov = ap;               /* a aprovação só muda pelas ações próprias */
         dados = JSON.stringify(d);
       }
@@ -454,6 +456,9 @@ export default async function handler(req, res) {
       const mexeAcab = Array.isArray(b.acabamento);
       const acab = mexeAcab ? [...new Set(b.acabamento.map(x => String(x || "").trim().toUpperCase().slice(0, 40)).filter(Boolean))].slice(0, 10) : null;
       if (mexeAcab) dados = JSON.stringify(Object.assign(dados ? JSON.parse(dados) : Object.assign({}, antesDados), { acabamento: acab }));
+      /* cliente avisado no WhatsApp que o pedido está pronto */
+      const avisou = b.avisouPronto === true;
+      if (avisou) dados = JSON.stringify(Object.assign(dados ? JSON.parse(dados) : Object.assign({}, antesDados), { avisoPronto: { em: new Date().toISOString(), por: sessao.usuario } }));
       /* arte criada/recriada sem aprovação: não vai para a produção */
       const aprovFinal = dados ? JSON.parse(dados).aprov : antesDados.aprov;
       if (fila && fila !== atual.fila && bloqueiaFila(aprovFinal, fila)) return res.status(409).json({ erro: MSG_BLOQ, bloqueio: "arte" });
@@ -487,6 +492,7 @@ export default async function handler(req, res) {
       if (dados) { const m = oQueMudou(dAntes, dDepois); if (m.length) await auditar(sql, sessao, "editou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Mudou: " + m.join(", ") }); }
       if (mexeDesigner && designer !== (antesDados.designer || ""))
         await auditar(sql, sessao, "designer", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: designer ? "Designer da arte: " + designer + (antesDados.designer ? " (era " + antesDados.designer + ")" : "") : "Tirou o designer (" + antesDados.designer + ")" });
+      if (avisou) await auditar(sql, sessao, "avisou", { pedidoId: id, pedidoNumero: linha.numero, cliente: cli, detalhe: "Avisou o cliente no WhatsApp que o pedido está pronto" });
       if (mexeAcab) {
         const antes = Array.isArray(antesDados.acabamento) ? antesDados.acabamento : [];
         const novos = acab.filter(x => !antes.includes(x));
