@@ -428,6 +428,8 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .papel-producao .kc-ok input{width:32px;height:32px;border-radius:9px;border-width:2.5px}
 .papel-producao .kc-ok input::after{width:16px;height:8px;border-width:0 0 3.5px 3.5px}
 .papel-producao .kc-prox{margin:0;text-align:center;font-size:13px}
+.papel-producao .kc-mover{margin:0}
+.papel-producao .kc-mover-bt{width:100%;justify-content:center;min-height:44px;font-size:13.5px}
 .papel-producao .kc-cli{font-size:16.5px}
 .papel-producao .top h1{font-size:27px}
 /* ---------- AUDITORIA ---------- */
@@ -558,6 +560,40 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kb-sit button[data-sit="urgentes"].on{background:#d97706}
 .kb-sit button.on .n{background:rgba(0,0,0,.25);border-color:transparent;color:#fff}
 .kb-filtros{display:contents}
+#det-contato:has(.det-zap){display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px}
+.det-zap{display:inline-flex;align-items:center;gap:7px;padding:6px 13px 6px 10px;border-radius:999px;background:#25d366;color:#fff!important;font-weight:700;font-size:13px;text-decoration:none;line-height:1.2;box-shadow:0 2px 8px rgba(37,211,102,.3);transition:filter .15s}
+.det-zap:hover{filter:brightness(1.08)}
+.det-zap:active{filter:brightness(.92)}
+.det-zap svg{width:17px;height:17px;flex:none}
+.msg-topo{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
+.msg-topo .hint{flex:1 1 420px;margin:0;font-size:13.5px;line-height:1.55}
+.msg-topo code{background:var(--card-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.msg-emp button{min-height:42px;padding:0 16px;font-weight:700}
+.msg-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;align-items:start}
+.msg-card{padding:18px;display:flex;flex-direction:column;gap:12px}
+.msg-card header{display:flex;gap:12px;align-items:center}
+.msg-card h3{margin:0;font-size:16px}
+.msg-card header .hint{margin:2px 0 0}
+.msg-ico{width:40px;height:40px;border-radius:12px;background:#25d366;color:#fff;display:grid;place-items:center;flex:none}
+.msg-ico.pronto{background:#128c4a}
+.msg-ico svg{width:22px;height:22px}
+.msg-card textarea{min-height:120px;font-size:15px;line-height:1.5}
+.msg-vars{display:flex;flex-wrap:wrap;gap:6px}
+.msg-vars button{font:inherit;font-size:12.5px;font-weight:700;border:1px dashed var(--line-2);background:var(--card-2);color:var(--text);border-radius:999px;padding:5px 11px;cursor:pointer;min-height:32px}
+.msg-vars button:hover{border-color:#25d366;color:#25d366}
+.msg-rot{margin:4px 0 0;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.msg-zap{border-radius:12px;padding:16px 14px;background:#0b141a;background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:14px 14px}
+.msg-bolha{position:relative;margin-left:auto;max-width:92%;width:fit-content;background:#005c4b;color:#e9edef;border-radius:10px 2px 10px 10px;padding:8px 10px 18px;font-size:14px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:0 1px 1px rgba(0,0,0,.3)}
+.msg-bolha::after{content:attr(data-hora) " ✓✓";position:absolute;right:8px;bottom:3px;font-size:10.5px;color:#8fd3c7}
+.msg-bolha:empty::before{content:"(mensagem vazia)";color:#8fd3c7}
+.msg-padrao{align-self:flex-start}
+.msg-pe{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-top:16px;flex-wrap:wrap}
+.msg-pe .hint{margin:0;flex:1}
+@media (max-width:640px){.msg-emp{width:100%;display:flex}.msg-emp button{flex:1 1 0}.msg-card{padding:14px}.msg-pe{position:sticky;bottom:0;background:var(--bg);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));margin:12px 0 0}.msg-pe .btn{flex:1 1 100%;min-height:48px}}
+.det-zap-pronto{background:#128c4a;box-shadow:0 2px 8px rgba(18,140,74,.35)}
+.det-avisado{flex-basis:100%;font-size:12.5px;font-weight:700;color:#25d366}
+.kc-avisado{margin:7px 0 0;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:#fff;background:#1fa855;border-radius:999px;padding:3px 10px 3px 7px;letter-spacing:.01em}
+.kc-avisado svg{width:13px;height:13px;flex:none}
 .kb-filtro-bt,.kb-cel{display:none}
 .kb-modo svg{width:17px;height:17px;flex:none}
 .dot-vinho{width:11px;height:11px;border-radius:50%;background:var(--vinho);box-shadow:0 0 0 1.5px rgba(255,255,255,.5)}
@@ -684,6 +720,16 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kc-ok input:checked::after{transform:rotate(-45deg) translate(1px,-1px) scale(1)}
 .kc-ok input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .kc-prox{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc-mover{margin:0 0 0 auto;min-width:0;flex:0 1 auto}
+.kc-mover-bt{display:inline-flex;align-items:center;gap:5px;max-width:100%;min-height:32px;padding:4px 10px;border-radius:999px;border:1px solid var(--line-2);background:var(--card-2);color:var(--text);font:600 11.5px Inter,system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.kc-mover-bt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kc-mover-bt i{font-style:normal;font-size:10px;color:var(--muted)}
+.kc-mover-bt:hover,.kc-mover-bt[aria-expanded=true]{border-color:var(--accent);color:var(--accent)}
+.kc-mover-menu{left:auto;right:0;width:max(230px,100%);max-height:320px;overflow-y:auto}
+.kc-mover-menu.pra-cima{top:auto;bottom:calc(100% + 6px)}
+.kc-mover-menu button{display:flex;align-items:center;gap:10px;font-size:14px;min-height:44px}
+.kc-mover-menu button i{width:10px;height:10px;border-radius:50%;flex:none}
+.kc-mover-tit{margin:4px 8px 4px;font-size:11.5px;font-weight:700;color:var(--muted)}
 body.kb-arrastando,body.kb-arrastando *{cursor:grabbing!important;user-select:none!important}
 body.kb-arrastando .kb{scroll-snap-type:none}
 @media (max-width:760px){.kb-col{flex-basis:84vw}}
@@ -1362,6 +1408,7 @@ body.modal-aberto{overflow:hidden}
       <button type="button" data-view="orc" id="nav-orc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>ORÇAMENTO</span></button>
       <button type="button" data-view="recibo" id="nav-recibo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v18l2.5-1.6L10 21l2-1.6L14 21l2.5-1.6L19 21V3H5Z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>RECIBO</span></button>
       <button type="button" data-view="calc" id="nav-calc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7v3h-7z"/><path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 16.5h.01M12 16.5h.01M15.5 16.5h.01"/></svg><span>CALCULADORA ATUALCARD</span></button>
+      <button type="button" data-view="msg" id="nav-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"/><path d="M8.5 10h7M8.5 13.5h4.5"/></svg><span>MENSAGENS</span></button>
       <button type="button" data-view="aud" id="nav-aud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="M12 8v4l2.5 2"/></svg><span>AUDITORIA</span></button>
       <button type="button" data-view="usr" id="nav-usr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M19 8v6M16 11h6"/></svg><span>USUÁRIOS</span></button>
       <button type="button" data-view="time" id="nav-time" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 10h18M3 15h18M9 5v14M15 5v14"/></svg><span>LISTA DO TIME</span></button>
@@ -1559,6 +1606,38 @@ body.modal-aberto{overflow:hidden}
         </div>
         <div class="usr-grade" id="usr-lista"></div>
         <p class="hint" id="usr-msg"></p>
+      </div>
+
+      <!-- ================= MENSAGENS DO WHATSAPP (só ADM) ================= -->
+      <div id="view-msg" hidden>
+        <div class="msg-topo">
+          <p class="hint">Escreva aqui as mensagens que os botões do WhatsApp mandam para o cliente. Cada gráfica tem as suas. Toque numa <b>etiqueta</b> para colocar o dado do pedido no texto (ele troca sozinho pelo nome do cliente, número do pedido…). Para deixar em <b>negrito</b> no WhatsApp, coloque entre asteriscos: <code>*assim*</code>.</p>
+          <div class="kb-emp msg-emp" id="msg-emp" role="group" aria-label="Mensagens de qual gráfica">
+            <button type="button" data-emp="amazonia" class="on">Amazônia Gráfica</button><button type="button" data-emp="soares"><i class="dot-vinho"></i>Gráfica Soares</button>
+          </div>
+        </div>
+        <div class="msg-grade">
+          <section class="card msg-card" data-tipo="contato">
+            <header><span class="msg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"/><path d="M8.5 10h7M8.5 13.5h4.5"/></svg></span><div><h3>Botão WHATSAPP</h3><p class="hint">Em todas as filas: abre a conversa com o cliente.</p></div></header>
+            <textarea id="msg-txt-contato" rows="5" spellcheck="true"></textarea>
+            <div class="msg-vars" data-alvo="msg-txt-contato"></div>
+            <p class="msg-rot">Como o cliente vai ver</p>
+            <div class="msg-zap"><div class="msg-bolha" id="msg-prev-contato"></div></div>
+            <button type="button" class="btn msg-padrao" data-tipo="contato">Voltar ao texto padrão</button>
+          </section>
+          <section class="card msg-card" data-tipo="pronto">
+            <header><span class="msg-ico pronto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"/><path d="M8.5 10h7M8.5 13.5h4.5"/></svg></span><div><h3>Avisar que está pronto</h3><p class="hint">Só na fila Pedido pronto: avisa que pode retirar.</p></div></header>
+            <textarea id="msg-txt-pronto" rows="7" spellcheck="true"></textarea>
+            <div class="msg-vars" data-alvo="msg-txt-pronto"></div>
+            <p class="msg-rot">Como o cliente vai ver</p>
+            <div class="msg-zap"><div class="msg-bolha" id="msg-prev-pronto"></div></div>
+            <button type="button" class="btn msg-padrao" data-tipo="pronto">Voltar ao texto padrão</button>
+          </section>
+        </div>
+        <div class="msg-pe">
+          <p class="hint" id="msg-status"></p>
+          <button type="button" class="btn primary" id="msg-salvar">Salvar mensagens</button>
+        </div>
       </div>
 
       <!-- ================= AUDITORIA (só ADM) ================= -->
@@ -2662,7 +2741,7 @@ const shell = document.getElementById("shell");
    O histórico segue sendo gravado nos bastidores. */
 const MOSTRAR_VISAO = true;
 document.getElementById("nav-visao").hidden = !MOSTRAR_VISAO;
-const TITULOS = { mal: "Malharia", visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo", calc: "Calculadora Atual Card", aud: "Auditoria", usr: "Usuários" };
+const TITULOS = { mal: "Malharia", visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo", calc: "Calculadora Atual Card", aud: "Auditoria", usr: "Usuários", msg: "Mensagens" };
 function irPara(v) {
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.view === v));
   document.getElementById("view-visao").hidden = v !== "visao";
@@ -2678,6 +2757,7 @@ function irPara(v) {
   document.getElementById("view-calc").hidden = v !== "calc";
   document.getElementById("view-aud").hidden = v !== "aud";
   document.getElementById("view-usr").hidden = v !== "usr";
+  document.getElementById("view-msg").hidden = v !== "msg";
   document.getElementById("top-mal").hidden = v !== "mal";
   document.getElementById("bar-mal").hidden = v !== "mal";
   document.getElementById("top-rel").hidden = v !== "rel";
@@ -2685,7 +2765,7 @@ function irPara(v) {
   document.getElementById("top-prod").hidden = v !== "prod";
   document.getElementById("top-ped").hidden = v !== "ped";
   document.body.classList.toggle("modo-kb", v === "ped");
-  document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod" || v === "calc" || v === "aud" || v === "usr";
+  document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod" || v === "calc" || v === "aud" || v === "usr" || v === "msg";
   document.getElementById("bar-os").hidden = v === "recibo" || v === "visao" || v === "orc" || v === "rel" || v === "mal";
   document.getElementById("bar-orc").hidden = v !== "orc";
   document.getElementById("bar-recibo").hidden = v !== "recibo";
@@ -2709,6 +2789,7 @@ function irPara(v) {
   if (v === "calc" && window.calcAoAbrir) window.calcAoAbrir();
   if (window.audAoMudar) window.audAoMudar(v === "aud");
   if (v === "usr" && window.usrAoAbrir) window.usrAoAbrir();
+  if (v === "msg" && window.msgAoAbrir) window.msgAoAbrir();
   guardar("amz_view", v);
 }
 document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => irPara(b.dataset.view)));
@@ -4060,7 +4141,7 @@ const TODAS_ABAS = ["visao", "ped", "rel", "prod", "mal", "os", "cli", "orc", "r
 const ehAdm = () => !!sessao && sessao.papel === "adm";
 function permAtual() {
   if (!sessao) return { nome: "", abas: [], pedidos: "producao", valores: false };
-  if (ehAdm()) return { nome: "ADMINISTRADOR", abas: TODAS_ABAS.concat("usr"), pedidos: "completo", valores: true, filas: null };
+  if (ehAdm()) return { nome: "ADMINISTRADOR", abas: TODAS_ABAS.concat("usr", "msg"), pedidos: "completo", valores: true, filas: null };
   return sessao.perm || { nome: "PRODUÇÃO", abas: ["ped"], pedidos: "producao", valores: false, filas: null };
 }
 const podeAba = v => permAtual().abas.includes(v);
@@ -4219,6 +4300,7 @@ function carregarExtras() {
   if (window.carregarMalharia && (podeAlguma(["mal", "orc"]) || pedCompleto())) carregarMalharia();
   if (window.carregarTamanhosOS && podeAlguma(["os", "ped"])) carregarTamanhosOS();
   if (window.carregarFilas && podeAlguma(["ped", "visao", "rel"])) carregarFilas();
+  if (window.carregarMensagens && podeAba("ped")) carregarMensagens();
 }
 async function carregarNuvem() {
   if (!sessao) return;
@@ -6139,6 +6221,7 @@ function cardPedido(p, fila, idxFila) {
     (p.aprov && p.aprov.exige ? '<div class="kc-tags">' + chipAprov(p) + '</div>' : "") +
     (p.empresa === "soares" ? '<div class="kc-tags"><span class="kc-emp">GRÁFICA SOARES</span></div>' : "") +
     ((p.contato || p.telefone) ? '<p class="kc-contato">' + ICO_PES + '<span>' + escapa([p.contato, p.telefone].filter(Boolean).join(" · ")) + '</span></p>' : "") +
+    (p.avisoPronto && (p.fila === "pronto" || p.fila === "entregue") ? '<p class="kc-avisado">' + ICO_ZAP + '<span>Cliente já avisado que está pronto</span></p>' : "") +
     (fila.id === "designer"
       ? '<div class="kc-des"><button type="button" class="kc-des-bt' + (p.designer ? " on" : "") + '" aria-haspopup="true" aria-expanded="false">' + ICO_PINCEL +
           '<span>' + (p.designer ? "Designer: <b>" + escapa(p.designer) + "</b>" : "Designer") + '</span><i aria-hidden="true">▾</i></button>' +
@@ -6147,7 +6230,9 @@ function cardPedido(p, fila, idxFila) {
       : (p.designer ? '<p class="kc-contato kc-des-tag">' + ICO_PINCEL + '<span>Designer: <b>' + escapa(p.designer) + '</b></span></p>' : "")) +
     (fila.id === "acabamento" ? htmlAcabamento(p) : "") +
     '<div class="kc-pe"><label class="kc-ok"><input type="checkbox" aria-label="' + (ultimo ? "Arquivar pedido " + escapa(p.numero) : "OK: mandar pedido " + escapa(p.numero) + " para " + escapa(FILAS[idxFila + 1].nome)) + '">' + (ultimo ? "ARQUIVAR" : "OK") + '</label>' +
-    '<span class="kc-prox">' + (ultimo ? "tira do quadro" : "→ " + escapa(FILAS[idxFila + 1].nome)) + '</span></div>';
+    '<div class="kc-des kc-mover"><button type="button" class="kc-prox kc-mover-bt" aria-haspopup="true" aria-expanded="false" title="Escolher para qual fila enviar">' +
+      '<span>' + (ultimo ? "Enviar para…" : "→ " + escapa(FILAS[idxFila + 1].nome)) + '</span><i aria-hidden="true">▾</i></button>' +
+      '<div class="kc-des-menu kc-mover-menu" role="menu" hidden></div></div></div>';
   if (minis.length) {
     const img = el.querySelector(".kc-thumb img");
     const mostra = () => {
@@ -6190,6 +6275,35 @@ function cardPedido(p, fila, idxFila) {
       await atualizarPedido(p.id, { designer: novo });
       say(novo ? "Pedido #" + p.numero + " com o designer " + novo + "." : "Designer tirado do pedido #" + p.numero + ".", "ok");
     }));
+  }
+  /* escolher a fila de destino (só as filas que o usuário pode ver) */
+  const movBt = el.querySelector(".kc-mover-bt"), movMenu = el.querySelector(".kc-mover-menu");
+  if (movBt) {
+    const fechar = () => { movMenu.hidden = true; movBt.setAttribute("aria-expanded", "false"); el.classList.remove("menu-aberto"); };
+    movBt.addEventListener("pointerdown", ev => ev.stopPropagation());
+    movMenu.addEventListener("pointerdown", ev => ev.stopPropagation());
+    movBt.addEventListener("click", ev => {
+      ev.stopPropagation();
+      if (!movMenu.hidden) { fechar(); return; }
+      if (!podeGravarPed()) return;
+      const opcoes = FILAS.filter(f => f.id !== p.fila && veFila(f.id) && !(pedRestrito() && f.id === "atendimento"));
+      movMenu.innerHTML = '<p class="kc-mover-tit">Enviar pedido #' + escapa(p.numero) + ' para</p>' +
+        (opcoes.length ? opcoes.map(f => '<button type="button" role="menuitem" data-f="' + escapa(f.id) + '"><i style="background:' + escapa(f.cor) + '"></i>' + escapa(f.nome) + '</button>').join("")
+          : '<p class="kc-mover-tit">Nenhuma outra fila liberada para você.</p>');
+      movMenu.querySelectorAll("button[data-f]").forEach(b => b.addEventListener("click", e2 => {
+        e2.stopPropagation(); fechar();
+        const destino = b.dataset.f;
+        if (artePrende(p, destino)) { avisoArtePresa(p); return; }
+        el.classList.add("saindo");
+        setTimeout(() => { pedChegou = p.id; atualizarPedido(p.id, { fila: destino, ordem: ordemFinal(destino, p.id) }); say("Pedido #" + p.numero + " → " + filaInfo(destino).nome + ".", "ok"); }, 200);
+      }));
+      document.querySelectorAll(".kc-des-menu:not([hidden])").forEach(m => { m.hidden = true; const c = m.closest(".kc"); if (c) c.classList.remove("menu-aberto"); });
+      /* abre para cima quando não cabe embaixo */
+      movMenu.hidden = false; movBt.setAttribute("aria-expanded", "true"); el.classList.add("menu-aberto");
+      const r = movMenu.getBoundingClientRect(), lista = el.closest(".kb-lista"), lim = lista ? Math.min(window.innerHeight, lista.getBoundingClientRect().bottom) : window.innerHeight;
+      movMenu.classList.toggle("pra-cima", r.bottom > lim - 8);
+    });
+    movMenu.addEventListener("keydown", ev => { if (ev.key === "Escape") { fechar(); movBt.focus(); } });
   }
   el.querySelector(".kc-ok input").addEventListener("change", ev => {
     if (!ev.target.checked) return;
@@ -8031,6 +8145,143 @@ function renderViewerDet() {
   box.querySelectorAll(".det-thumbs button").forEach(b => { const x = (detMinis[+b.dataset.k] || lista[+b.dataset.k]); b.querySelector("img").src = x.img; b.addEventListener("click", () => { detIdx = +b.dataset.k; renderViewerDet(); }); });
   box.querySelectorAll(".det-view .kc-seta").forEach(b => b.addEventListener("click", () => { detIdx += b.classList.contains("dir") ? 1 : -1; renderViewerDet(); }));
 }
+/* WhatsApp: abre a conversa com o cliente com a mensagem de pedido pronto */
+const ICO_ZAP = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.54-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>';
+function telWhats(p) {
+  for (const t of [p.telefone, p.contato]) {
+    const m = String(t || "").match(/\+?\d[\d\s().-]{8,}\d/);
+    if (!m) continue;
+    let d = m[0].replace(/\D/g, "").replace(/^0+/, "");
+    if (d.length < 10) continue;
+    if (!(d.startsWith("55") && d.length >= 12)) d = "55" + d;
+    return d;
+  }
+  return "";
+}
+/* textos das mensagens: padrão + o que o ADM escreveu em MENSAGENS */
+const MSG_PADRAO = {
+  contato: "{saudacao}, {cliente}! Tudo bem? Aqui é da {empresa}, sobre o seu pedido *#{pedido}*.",
+  pronto: "{saudacao}, {cliente}! Tudo bem? Aqui é da {empresa}.\n\nSeu pedido *#{pedido}* já está *pronto*! ✅\nPode vir retirar quando quiser. Qualquer dúvida, é só chamar por aqui."
+};
+const MSG_VARS = [
+  ["cliente", "Nome do cliente"], ["pedido", "Nº do pedido"], ["empresa", "Nome da gráfica"], ["saudacao", "Bom dia / Boa tarde"],
+  ["total", "Valor total"], ["entrega", "Data de entrega"], ["materiais", "Materiais"], ["atendente", "Atendente"]
+];
+let msgCfg = { contato: {}, pronto: {} };
+function textoMsg(tipo, emp) { return (msgCfg[tipo] && msgCfg[tipo][emp]) || MSG_PADRAO[tipo]; }
+function saudacaoAgora() { const h = new Date().getHours(); return h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite"; }
+function preencherMsg(txt, p) {
+  const emp = empresaDe(p);
+  const its = typeof itensDoPedido === "function" ? itensDoPedido(p) : [];
+  const total = its.reduce((a, i) => a + parseReal(i.preco), 0);
+  const v = {
+    cliente: String(p.cliente || "").trim() || "cliente",
+    pedido: p.numero || "",
+    empresa: emp === "soares" ? "Gráfica Soares" : "Amazônia Gráfica",
+    saudacao: saudacaoAgora(),
+    total: total ? "R$ " + total.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "",
+    entrega: p.prazo ? dataCurta(p.prazo) : "",
+    materiais: its.map(i => i.material).filter(Boolean).join(", "),
+    atendente: p.atendente || ""
+  };
+  return String(txt).replace(/\{(\w+)\}/g, (m, k) => k in v ? v[k] : m).replace(/, !/g, "!").replace(/[ \t]+\n/g, "\n");
+}
+async function carregarMensagens() {
+  let v = null;
+  if (modoHist === "nuvem") { try { v = (await apiCfg("GET", "?chave=mensagens")).valor; } catch (e) { return; } }
+  else { try { v = JSON.parse(localStorage.getItem("amz_mensagens") || "null"); } catch (e) {} }
+  msgCfg = { contato: Object.assign({}, v && v.contato), pronto: Object.assign({}, v && v.pronto) };
+}
+window.carregarMensagens = carregarMensagens;
+function linkWhats(p, pronto) {
+  const tel = telWhats(p); if (!tel) return "";
+  const msg = preencherMsg(textoMsg(pronto ? "pronto" : "contato", empresaDe(p)), p);
+  const cel = matchMedia("(pointer:coarse)").matches;
+  return (cel ? "https://api.whatsapp.com/send" : "https://web.whatsapp.com/send") + "?phone=" + tel + "&text=" + encodeURIComponent(msg);
+}
+/* aba MENSAGENS: editar os textos, com prévia no jeito do WhatsApp */
+(function () {
+  let emp = "amazonia", rasc = null, sujo = false;
+  const EX = { cliente: "Maria Souza", numero: "32/2026", prazo: hojeISO(), atendente: "WILLIAN", itens: [{ material: "ADESIVO BRILHO", quantidade: "150", preco: "21,26" }, { material: "LONA", quantidade: "1", preco: "90,00" }] };
+  const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const zapFmt = t => esc(t).replace(/\*([^*\n]+)\*/g, "<b>$1</b>").replace(/_([^_\n]+)_/g, "<i>$1</i>").replace(/~([^~\n]+)~/g, "<s>$1</s>");
+  function prev() {
+    const d = new Date(), hora = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    ["contato", "pronto"].forEach(t => {
+      const b = document.getElementById("msg-prev-" + t);
+      b.innerHTML = zapFmt(preencherMsg(document.getElementById("msg-txt-" + t).value, Object.assign({ empresa: emp }, EX)));
+      b.dataset.hora = hora;
+    });
+  }
+  function mostrar() {
+    document.querySelectorAll("#msg-emp button").forEach(b => b.classList.toggle("on", b.dataset.emp === emp));
+    ["contato", "pronto"].forEach(t => { document.getElementById("msg-txt-" + t).value = (rasc[t][emp]) || MSG_PADRAO[t]; });
+    prev();
+  }
+  function guardarTela() {
+    ["contato", "pronto"].forEach(t => { const v = document.getElementById("msg-txt-" + t).value; rasc[t][emp] = v.trim() && v !== MSG_PADRAO[t] ? v : ""; });
+  }
+  const status = (t, cls) => { const el = document.getElementById("msg-status"); el.textContent = t; el.style.color = cls === "err" ? "#e04848" : cls === "ok" ? "#25d366" : ""; };
+  window.msgAoAbrir = async () => {
+    status("Carregando…");
+    await carregarMensagens();
+    rasc = { contato: Object.assign({}, msgCfg.contato), pronto: Object.assign({}, msgCfg.pronto) }; sujo = false;
+    mostrar(); status("");
+  };
+  document.querySelectorAll(".msg-vars").forEach(box => {
+    const ta = document.getElementById(box.dataset.alvo);
+    box.innerHTML = MSG_VARS.map(([k, n]) => '<button type="button" data-k="' + k + '" title="' + n + '">' + n + '</button>').join("");
+    box.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+      const ins = "{" + b.dataset.k + "}", i = ta.selectionStart ?? ta.value.length, f = ta.selectionEnd ?? i;
+      ta.value = ta.value.slice(0, i) + ins + ta.value.slice(f);
+      ta.focus(); ta.selectionStart = ta.selectionEnd = i + ins.length;
+      ta.dispatchEvent(new Event("input"));
+    }));
+  });
+  ["contato", "pronto"].forEach(t => document.getElementById("msg-txt-" + t).addEventListener("input", () => { sujo = true; status("Alterações não salvas."); prev(); }));
+  document.querySelectorAll("#msg-emp button").forEach(b => b.addEventListener("click", () => { if (!rasc) return; guardarTela(); emp = b.dataset.emp; mostrar(); }));
+  document.querySelectorAll(".msg-padrao").forEach(b => b.addEventListener("click", () => {
+    const ta = document.getElementById("msg-txt-" + b.dataset.tipo); ta.value = MSG_PADRAO[b.dataset.tipo]; ta.dispatchEvent(new Event("input"));
+  }));
+  document.getElementById("msg-salvar").addEventListener("click", async () => {
+    if (!rasc) return;
+    guardarTela();
+    const valor = { contato: {}, pronto: {} };
+    ["contato", "pronto"].forEach(t => ["amazonia", "soares"].forEach(e => { if (rasc[t][e]) valor[t][e] = rasc[t][e]; }));
+    const bt = document.getElementById("msg-salvar"); bt.disabled = true; status("Salvando…");
+    try {
+      if (modoHist === "nuvem") await apiCfg("PUT", "", { chave: "mensagens", valor });
+      else localStorage.setItem("amz_mensagens", JSON.stringify(valor));
+      msgCfg = valor; sujo = false;
+      status("Mensagens salvas. Já valem para todo mundo.", "ok"); say("Mensagens do WhatsApp salvas.", "ok");
+    } catch (e) {
+      status(e.status === 400 ? "O servidor ainda não conhece as mensagens: falta publicar o api/config.js novo." : (e.msg || "Não consegui salvar. Tente de novo."), "err");
+    }
+    bt.disabled = false;
+  });
+  window.addEventListener("beforeunload", e => { if (sujo && !document.getElementById("view-msg").hidden) { e.preventDefault(); e.returnValue = ""; } });
+})();
+function textoAviso(a) {
+  if (!a || !a.em) return "";
+  const d = new Date(a.em); if (isNaN(d)) return "";
+  return " · " + String(d.getDate()).padStart(2, "0") + "/" + String(d.getMonth() + 1).padStart(2, "0") + " " + String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0") + (a.por ? " · " + a.por : "");
+}
+/* tocou em "Avisar que está pronto": o card passa a mostrar que o cliente já foi avisado */
+async function marcarAvisado(p) {
+  if (somenteVer()) return;
+  const aviso = { em: new Date().toISOString(), por: sessao ? sessao.usuario : "" };
+  const naTela = pedidos.find(x => x.id === p.id); if (naTela) naTela.avisoPronto = aviso;
+  p.avisoPronto = aviso;
+  if (modoHist !== "nuvem") { const l = pedLocal.find(x => x.id === p.id); if (l) { l.avisoPronto = aviso; salvarPedLocal(); } }
+  setTimeout(() => { if (detPed && detPed.id === p.id) renderDetalhe(); }, 300);
+  await atualizarPedido(p.id, { avisouPronto: true });
+  const salvo = pedidos.find(x => x.id === p.id);
+  if (modoHist === "nuvem" && salvo && !salvo.avisoPronto) {
+    salvo.avisoPronto = aviso; renderKB();
+    say("O servidor não guardou o aviso: falta publicar o api/pedidos.js novo na pasta api do GitHub.", "err");
+  }
+  if (detPed && detPed.id === p.id) { if (salvo) detPed = salvo; renderDetalhe(); }
+}
 function renderDetalhe() {
   const p = detPed; if (!p) return;
   const f = filaInfo(p.fila);
@@ -8045,6 +8296,27 @@ function renderDetalhe() {
   $("#det-tags").innerHTML = tags;
   $("#det-cliente").textContent = p.cliente || "Sem cliente";
   $("#det-contato").textContent = [p.contato, p.telefone].filter(Boolean).join(" · ") || "Sem contato informado";
+  if (telWhats(p)) {
+    const box = $("#det-contato");
+    const a = document.createElement("a");
+    a.className = "det-zap"; a.href = linkWhats(p, false); a.target = "_blank"; a.rel = "noopener";
+    a.title = "Abrir a conversa com o cliente no WhatsApp";
+    a.innerHTML = ICO_ZAP + "<span>WHATSAPP</span>";
+    box.appendChild(a);
+    if (p.fila === "pronto") {
+      const av = document.createElement("a");
+      av.className = "det-zap det-zap-pronto"; av.href = linkWhats(p, true); av.target = "_blank"; av.rel = "noopener";
+      av.title = "Mandar no WhatsApp a mensagem de que o pedido está pronto";
+      av.innerHTML = ICO_ZAP + "<span>" + (p.avisoPronto ? "AVISAR DE NOVO" : "AVISAR QUE ESTÁ PRONTO") + "</span>";
+      av.addEventListener("click", () => marcarAvisado(p));
+      box.appendChild(av);
+    }
+    if (p.avisoPronto && (p.fila === "pronto" || p.fila === "entregue")) {
+      const t = document.createElement("span"); t.className = "det-avisado";
+      t.textContent = "✓ Cliente avisado que está pronto" + textoAviso(p.avisoPronto);
+      box.appendChild(t);
+    }
+  }
   const its = itensDoPedido(p);
   const total = its.reduce((a, i) => a + parseReal(i.preco), 0);
   $("#det-materiais").innerHTML = its.length ? its.map(i => {
@@ -9926,7 +10198,7 @@ window.renderVisao=renderVisao;
 /* ================= AUDITORIA (só ADM) ================= */
 (function () {
   const ACOES = { usuarios: "Usuários", designer: "Designer da arte", moveu: "Moveu de fila", arquivou: "Arquivou", desarquivou: "Voltou do arquivo", criou: "Criou pedido", editou: "Editou pedido",
-    artes: "Trocou artes", arte: "Aprovação de arte", acabamento: "Acabamento", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
+    artes: "Trocou artes", arte: "Aprovação de arte", acabamento: "Acabamento", avisou: "Avisou cliente", reordenou: "Mudou a posição", excluiu: "Excluiu pedido", entrou: "Entrou no painel", "senha errada": "Senha errada" };
   let itens = [], ultimoId = 0, timer = null, ativa = false, novos = new Set(), carregando = false;
   const $a = id => document.getElementById(id);
   $a("aud-acao").innerHTML = '<option value="">Tudo</option>' + Object.entries(ACOES).map(([k, v]) => '<option value="' + k + '">' + v + '</option>').join("");
