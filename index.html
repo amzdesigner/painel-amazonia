@@ -590,6 +590,10 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .msg-pe{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-top:16px;flex-wrap:wrap}
 .msg-pe .hint{margin:0;flex:1}
 @media (max-width:640px){.msg-emp{width:100%;display:flex}.msg-emp button{flex:1 1 0}.msg-card{padding:14px}.msg-pe{position:sticky;bottom:0;background:var(--bg);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));margin:12px 0 0}.msg-pe .btn{flex:1 1 100%;min-height:48px}}
+#descanso{position:fixed;left:50%;top:calc(76px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:9px;max-width:calc(100vw - 24px);padding:10px 16px;border-radius:999px;border:1px solid var(--line-2);background:var(--card);color:var(--text);font:600 13.5px Inter,system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer}
+#descanso[hidden]{display:none}
+#descanso svg{width:16px;height:16px;flex:none;color:#f5a524}
+#descanso b{color:var(--accent,#0a84ff)}
 .det-zap-pronto{background:#128c4a;box-shadow:0 2px 8px rgba(18,140,74,.35)}
 .det-avisado{flex-basis:100%;font-size:12.5px;font-weight:700;color:#25d366}
 .kc-avisado{margin:7px 0 0;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:#fff;background:#1fa855;border-radius:999px;padding:3px 10px 3px 7px;letter-spacing:.01em}
@@ -5884,13 +5888,53 @@ async function completarMiniaturas() {
   if (pedidos.some(p => (p.temArte || p.arte || (p.artes && p.artes.length)) && !minisDe(p).length && !minisTentadas.has(p.id))) setTimeout(completarMiniaturas, 500);
 }
 window.carregarPedidos = carregarPedidos;
+
+/* ===== economia do banco de dados =====
+ * O banco (Neon) só cobra enquanto está ligado, e ele desliga sozinho depois de 5 min sem consultas.
+ * Por isso o painel só fica conferindo pedidos novos enquanto tem gente usando:
+ *  - tela escondida (aba minimizada, celular bloqueado): não consulta nada;
+ *  - mexeu nos últimos 2 min: confere a cada 15 s;
+ *  - parado há mais de 2 min: confere a cada 1 min;
+ *  - parado há mais de 15 min (horário da gráfica) ou 3 min (fora dele): pausa até alguém tocar na tela.
+ */
+const ECONOMIA = { rapidoMin: 2, pausaHorario: 15, pausaFora: 3, abre: 7, fecha: 19 };
+let ultimaAtividade = Date.now(), emDescanso = false, ultimaConsulta = 0;
+function horarioGrafica() { const d = new Date(), h = d.getHours(); return d.getDay() !== 0 && h >= ECONOMIA.abre && h < ECONOMIA.fecha; }
+function paradoMin() { return (Date.now() - ultimaAtividade) / 60000; }
+function podeConsultar() { return !document.hidden && paradoMin() < (horarioGrafica() ? ECONOMIA.pausaHorario : ECONOMIA.pausaFora); }
+function mostrarDescanso(on) {
+  let el = document.getElementById("descanso");
+  if (!el) {
+    el = document.createElement("button"); el.type = "button"; el.id = "descanso"; el.hidden = true;
+    el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg><span>Atualização pausada para economizar. <b>Toque para atualizar</b></span>';
+    document.body.appendChild(el);
+  }
+  el.hidden = !on;
+}
+function acordarPainel() {
+  if (!emDescanso) return;
+  emDescanso = false; mostrarDescanso(false);
+  if (modoHist === "nuvem" && pedAtivo) { ultimaConsulta = Date.now(); carregarPedidos(true); }
+  if (window.audAcordar) window.audAcordar();
+}
+function marcarAtividade() { ultimaAtividade = Date.now(); acordarPainel(); }
+["pointerdown", "keydown", "wheel", "touchstart"].forEach(ev => window.addEventListener(ev, marcarAtividade, { passive: true, capture: true }));
+document.addEventListener("visibilitychange", () => { if (!document.hidden) marcarAtividade(); });
+/* chamada pelos relógios: diz se agora pode ir ao banco */
+function vezDeConsultar(intervaloRapido, ultima) {
+  if (modoHist !== "nuvem" || document.hidden) return false;
+  if (!podeConsultar()) { if (!emDescanso) { emDescanso = true; mostrarDescanso(true); } return false; }
+  const espera = paradoMin() < ECONOMIA.rapidoMin ? intervaloRapido : 60000;
+  return Date.now() - (ultima == null ? ultimaConsulta : ultima) >= espera - 500;
+}
+window.vezDeConsultar = vezDeConsultar;
 window.pedAoMudar = on => {
   pedAtivo = on;
   clearInterval(pedTimer);
   if (on) {
     renderKB(); carregarPedidos();
     /* outros computadores: atualiza o quadro a cada 15 s */
-    pedTimer = setInterval(() => { if (modoHist === "nuvem" && !document.hidden) carregarPedidos(true); }, 15000);
+    pedTimer = setInterval(() => { if (vezDeConsultar(15000)) { ultimaConsulta = Date.now(); carregarPedidos(true); } }, 15000);
   }
 };
 
@@ -9934,7 +9978,14 @@ async function buildPedidoPdf(v) {
     /* cliente e datas */
     y += 18;
     s.text("CLIENTE:", L, y, { size: 8, color: PRETO });
-    s.text(v.cliente || "-", L + 48, y + 0.5, { size: 12, color: PRETO, maxW: R - L - 48 });
+    /* só o telefone (se não tiver, usa o contato quando ele for um número) */
+    const contatoPdf = String(v.telefone || "").trim() || (/\d{4}/.test(v.contato || "") ? (String(v.contato).match(/\+?\d[\d\s().-]{6,}\d/) || [""])[0].trim() : "");
+    const XC = L + Math.round((R - L) * 0.55);
+    s.text(v.cliente || "-", L + 48, y + 0.5, { size: 12, color: PRETO, maxW: (contatoPdf ? XC - 12 : R) - L - 48 });
+    if (contatoPdf) {
+      s.text("TELEFONE:", XC, y, { size: 8, color: PRETO });
+      s.text(contatoPdf, XC + 54, y + 0.5, { size: 10.5, color: PRETO, maxW: R - XC - 54 });
+    }
     y += 19;
     s.text("DATA:", L, y, { size: 8, color: PRETO });
     s.text(v.data || "", L + 40, y, { size: 8.5, bold: false, color: PRETO });
@@ -10305,8 +10356,10 @@ window.renderVisao=renderVisao;
     clearInterval(timer); timer = null;
     if (!ativa) return;
     ultimoId = 0; carregar(true);
-    timer = setInterval(() => { if (!document.hidden) carregar(false); }, 4000);
+    let ult = 0;
+    timer = setInterval(() => { if (window.vezDeConsultar ? !window.vezDeConsultar(10000, ult) : document.hidden) return; ult = Date.now(); carregar(false); }, 5000);
   };
+  window.audAcordar = () => { if (ativa) carregar(false); };
   ["aud-usuario", "aud-acao", "aud-dia"].forEach(id => $a(id).addEventListener("change", render));
   $a("aud-busca").addEventListener("input", render);
 })();
