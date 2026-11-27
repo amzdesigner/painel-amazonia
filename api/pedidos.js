@@ -89,7 +89,7 @@ function prepararBanco() {
 }
 
 const CAMPOS = ["cliente", "clienteId", "contato", "telefone", "material", "produtoId", "precoUnit", "descricao", "medidas",
-  "quantidade", "preco", "prazo", "prioridade", "atendente", "obs", "qtdArtes",
+  "quantidade", "preco", "prazo", "prazoHora", "prioridade", "atendente", "obs", "qtdArtes",
   /* de qual gráfica é o pedido: "amazonia" ou "soares" */
   "empresa",
   /* pagamento */
@@ -100,6 +100,7 @@ function limpa(b) {
   const o = {};
   CAMPOS.forEach(c => { o[c] = String(b[c] == null ? "" : b[c]).trim().slice(0, c === "obs" || c === "descricao" ? 3000 : 200); });
   if (!["normal", "urgente"].includes(o.prioridade)) o.prioridade = "normal";
+  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(o.prazoHora) || !o.prazo) o.prazoHora = "";   /* hora da entrega: "14:30" */
   if (Array.isArray(b.itens)) {
     o.itens = b.itens.slice(0, 60).filter(it => it && typeof it === "object").map(it => {
       const i = {};
@@ -193,7 +194,7 @@ function semValores(p) {
   return p;
 }
 /* o que mudou nos dados do pedido (para a auditoria) */
-const ROTULOS = { cliente: "cliente", contato: "contato", telefone: "telefone", itens: "materiais", prazo: "prazo", prioridade: "prioridade",
+const ROTULOS = { cliente: "cliente", contato: "contato", telefone: "telefone", itens: "materiais", prazo: "prazo", prazoHora: "hora da entrega", prioridade: "prioridade",
   preco: "valor", atendente: "atendente", obs: "observação", metodoPag: "forma de pagamento", condPag: "condição de pagamento",
   entrada: "entrada", pagoEm: "data do pagamento", restantePago: "restante", restanteMetodo: "forma do restante" };
 function oQueMudou(antes, depois) {
