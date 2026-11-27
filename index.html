@@ -752,6 +752,17 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kc-topo{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:11.5px;color:var(--muted);font-weight:700}
 .kc-num{font-variant-numeric:tabular-nums}
 .kc-urg{background:rgba(224,72,72,.15);color:#e04848;border-radius:6px;padding:1px 6px;font-size:10.5px;letter-spacing:.05em}
+.kc-entrega{display:flex;align-items:center;gap:7px;margin:8px 0 2px;padding:7px 10px;border-radius:10px;background:var(--card-2);border:1px solid var(--line);font-weight:800;font-size:13px;letter-spacing:.01em;line-height:1.2;flex-wrap:wrap}
+.kc-entrega svg{width:15px;height:15px;flex:none;opacity:.85}
+.kc-ent-rot{font-size:10.5px;letter-spacing:.08em;opacity:.75}
+.kc-ent-dia{white-space:nowrap}
+.kc-ent-hora{margin-left:auto;font-size:15px;font-variant-numeric:tabular-nums;padding:1px 8px;border-radius:7px;background:rgba(255,255,255,.08);white-space:nowrap}
+:root[data-theme=light] .kc-ent-hora{background:rgba(0,0,0,.06)}
+.kc-entrega.hoje{background:rgba(217,138,0,.16);border-color:rgba(217,138,0,.45);color:#e09400}
+.kc-entrega.amanha{background:rgba(10,132,255,.12);border-color:rgba(10,132,255,.35);color:#3d9bff}
+.kc-entrega.atr{background:rgba(224,72,72,.16);border-color:rgba(224,72,72,.5);color:#ff5a5a}
+.kc.soares .kc-entrega:not(.atr):not(.hoje):not(.amanha){background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14)}
+.pm-entrega{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:10px}
 .kc-prazo{margin-left:auto;display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:1px 6px;background:var(--card-2)}
 .kc-prazo svg{width:12px;height:12px}
 .kc-prazo.atr{background:rgba(224,72,72,.15);color:#e04848}
@@ -2484,7 +2495,10 @@ body.modal-aberto{overflow:hidden}
           <p class="hint">Use o lápis para mudar o nome de um tamanho ou o preço unitário só nesta venda. Ao clicar em <b>Adicionar ao pedido</b> o painel pergunta se a camisa já vai para a <b>O.S de camisa</b> (sem preço, com arte, tamanhos, tecido e gola). Se não for agora, o botão <b>Enviar para O.S de camisa</b> fica no pedido para usar depois.</p>
         </div>
         <div class="grid-c">
-          <label class="f"><span>Prazo de entrega</span><input type="date" id="pm-prazo"></label>
+          <div class="pm-entrega">
+            <label class="f"><span>Data da entrega</span><input type="date" id="pm-prazo"></label>
+            <label class="f"><span>Hora da entrega</span><input type="time" id="pm-prazoHora" step="900"></label>
+          </div>
           <div class="pm-total dup"><span>Total do pedido · <em id="pm-total-n">1 material</em></span><b id="pm-total">R$ 0,00</b></div>
         </div>
         <p class="c-sec">Pagamento</p>
@@ -6288,7 +6302,31 @@ let filtroEmpresa = (() => { try { const v = localStorage.getItem("amz_filtro_em
 const daEmpresa = p => (!filtroEmpresa || empresaDe(p) === filtroEmpresa) && daSituacao(p);
 /* filtro rápido: só atrasados ou só urgentes */
 let filtroSit = (() => { try { const v = localStorage.getItem("amz_filtro_sit") || ""; return ["", "atrasados", "urgentes"].includes(v) ? v : ""; } catch (e) { return ""; } })();
-const pedAtrasado = p => !!p.prazo && p.prazo < hojeISO() && p.fila !== "pronto" && p.fila !== "entregue";
+/* entrega: passou da data, ou é hoje e já passou da hora marcada */
+function prazoPassou(p) {
+  if (!p || !p.prazo) return false;
+  const hoje = hojeISO();
+  if (p.prazo < hoje) return true;
+  if (p.prazo > hoje || !p.prazoHora) return false;
+  const [h, m] = String(p.prazoHora).split(":").map(Number), n = new Date();
+  return n.getHours() * 60 + n.getMinutes() > (h || 0) * 60 + (m || 0);
+}
+const pedAtrasado = p => prazoPassou(p) && p.fila !== "pronto" && p.fila !== "entregue";
+const DIAS_SEM = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"];
+function htmlEntrega(p, concluido) {
+  if (!p.prazo) return "";
+  const [a, mo, d] = p.prazo.split("-").map(Number), dt = new Date(a, mo - 1, d);
+  const amanha = new Date(); amanha.setDate(amanha.getDate() + 1);
+  const ddmm = String(d).padStart(2, "0") + "/" + String(mo).padStart(2, "0");
+  const ehHoje = p.prazo === hojeISO(), ehAmanha = p.prazo === iso(amanha);
+  const atr = !concluido && prazoPassou(p);
+  const quando = ehHoje ? "HOJE" : ehAmanha ? "AMANHÃ · " + ddmm : DIAS_SEM[dt.getDay()] + " " + ddmm;
+  const cls = concluido ? "" : atr ? " atr" : ehHoje ? " hoje" : ehAmanha ? " amanha" : "";
+  return '<div class="kc-entrega' + cls + '" title="Entrega: ' + escapa(dataCurta(p.prazo) + (p.prazoHora ? " às " + p.prazoHora : "")) + '">' + ICO_CAL +
+    '<span class="kc-ent-rot">' + (atr ? "ATRASADO" : "ENTREGA") + '</span>' +
+    '<span class="kc-ent-dia">' + (atr && !ehHoje ? "era " + DIAS_SEM[dt.getDay()] + " " + ddmm : quando) + '</span>' +
+    (p.prazoHora ? '<span class="kc-ent-hora">' + escapa(p.prazoHora) + '</span>' : "") + '</div>';
+}
 const daSituacao = p => !filtroSit || (filtroSit === "atrasados" ? pedAtrasado(p) : p.prioridade === "urgente");
 document.querySelectorAll("#ped-sit [data-sit]").forEach(b => b.addEventListener("click", () => {
   filtroSit = filtroSit === b.dataset.sit ? "" : b.dataset.sit;
@@ -6313,7 +6351,7 @@ function cardPedido(p, fila, idxFila) {
   el.setAttribute("aria-label", "Pedido " + p.numero + ", " + (p.cliente || ""));
   const hoje = hojeISO();
   const concluido = fila.id === "pronto" || fila.id === "entregue";
-  const prazo = p.prazo ? '<span class="kc-prazo' + (concluido ? "" : p.prazo < hoje ? " atr" : p.prazo === hoje ? " hoje" : "") + '" title="Prazo de entrega">' + ICO_CAL + (p.prazo === hoje ? "Hoje" : dataCurta(p.prazo).slice(0, 5)) + '</span>' : "";
+  const prazo = "";
   const minis = minisDe(p);
   const mini = minis.length ? '<div class="kc-thumb"><img alt="" draggable="false">' +
     (minis.length > 1 ? '<div class="kc-setas"><button type="button" class="kc-seta esq" aria-label="Arte anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button><button type="button" class="kc-seta dir" aria-label="Próxima arte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button></div>' : "") + '</div>' : "";
@@ -6323,6 +6361,7 @@ function cardPedido(p, fila, idxFila) {
     '<div class="kc-topo"><span class="kc-num">#' + escapa(p.numero) + '</span>' + (p.prioridade === "urgente" ? '<span class="kc-urg">URGENTE</span>' : "") + (semValores() ? "" : badgePag(p)) + prazo + '</div>' +
     '<p class="kc-cli">' + escapa(p.cliente || "Sem cliente") + '</p>' +
     (p.descricao ? '<p class="kc-desc">' + escapa(p.descricao) + '</p>' : "") +
+    htmlEntrega(p, concluido) +
     '<div class="kc-tags">' + chipsMateriais(p) +
       (p.obs ? '<span class="kc-info" title="' + escapa(p.obs) + '">' + ICO_OBS + '</span>' : "") +
       (!minis.length && (p.temArte || p.arte || (p.artes && p.artes.length)) ? '<span class="kc-info" title="Tem arte anexada">' + ICO_ARTE + '</span>' : "") +
@@ -6484,7 +6523,7 @@ function renderKB() {
     }
     kb.appendChild(col);
   });
-  pedidos.filter(p => veFila(p.fila)).forEach(p => { total++; if (p.prioridade === "urgente") urg++; if (p.prazo && p.prazo < hoje && p.fila !== "pronto" && p.fila !== "entregue") atr++; });
+  pedidos.filter(p => veFila(p.fila)).forEach(p => { total++; if (p.prioridade === "urgente") urg++; if (pedAtrasado(p)) atr++; });
   $("#ped-resumo").innerHTML = total
     ? "<b>" + total + "</b> " + (total === 1 ? "pedido" : "pedidos") + " no quadro" + (urg ? " · <b>" + urg + "</b> urgente" + (urg > 1 ? "s" : "") : "") + (atr ? " · <b style=\"color:#e04848\">" + atr + "</b> atrasado" + (atr > 1 ? "s" : "") : "")
     : "Quadro vazio.";
@@ -6677,7 +6716,7 @@ function abrirPedidoModal(p, filaInicial) {
   $("#pm-salvar").textContent = p ? "Salvar alterações" : "Criar pedido";
   $("#pm-excluir").hidden = !p;
   const v = (k, def) => (p && p[k] != null ? p[k] : def);
-  ["cliente", "contato", "telefone", "prazo", "atendente", "obs"].forEach(k => $("#pm-" + k).value = v(k, ""));
+  ["cliente", "contato", "telefone", "prazo", "prazoHora", "atendente", "obs"].forEach(k => $("#pm-" + k).value = v(k, ""));
   carregarItensPed(p);
   if (window.atualizaPagamento) { montaPagamento(p); fecharCamisa(); }
   setPrio(v("prioridade", "normal"));
@@ -6727,7 +6766,7 @@ $("#pm-form").addEventListener("submit", async ev => {
     medidas: itens.length === 1 ? itens[0].medidas : "", quantidade: itens.length === 1 ? itens[0].quantidade : "",
     produtoId: "", precoUnit: "",
     preco: total ? total.toFixed(2) : "",
-    prazo: $("#pm-prazo").value, prioridade: pedPrio,
+    prazo: $("#pm-prazo").value, prazoHora: $("#pm-prazo").value ? $("#pm-prazoHora").value : "", prioridade: pedPrio,
     atendente: $("#pm-atendente").value.trim(), obs: $("#pm-obs").value.trim(),
     empresa: pmEmpresa
   };
@@ -6878,7 +6917,7 @@ if (/[?&]pedido=/.test(location.search)) { const u = location.href; setTimeout((
 /* ---------- rascunhos de pedido (só de quem salvou) ---------- */
 let pmRascId = null, rascLista = [], rascCarregadoEm = 0;
 function formPedTemConteudo() {
-  if (["cliente", "contato", "telefone", "prazo", "obs"].some(k => ($("#pm-" + k).value || "").trim())) return true;
+  if (["cliente", "contato", "telefone", "prazo", "prazoHora", "obs"].some(k => ($("#pm-" + k).value || "").trim())) return true;
   if (pmItens.some(i => String(i.material || "").trim() || String(i.descricao || "").trim() || parseReal(i.preco) || i.camisa)) return true;
   return pmArtes.length > 0;
 }
@@ -6890,7 +6929,7 @@ function rascunhoDoForm() {
     itens, material: itens.map(i => i.material).filter(Boolean).join(" + ").slice(0, 200),
     descricao: itens.map(i => i.descricao).filter(Boolean).join(" | "),
     medidas: itens.length === 1 ? itens[0].medidas : "", quantidade: itens.length === 1 ? itens[0].quantidade : "",
-    preco: total ? total.toFixed(2) : "", prazo: $("#pm-prazo").value, prioridade: pedPrio,
+    preco: total ? total.toFixed(2) : "", prazo: $("#pm-prazo").value, prazoHora: $("#pm-prazoHora").value, prioridade: pedPrio,
     atendente: $("#pm-atendente").value.trim(), obs: $("#pm-obs").value.trim(), empresa: pmEmpresa
   };
   try { Object.assign(dados, pagamentoDoForm()); } catch (e) {}
@@ -7942,7 +7981,7 @@ function dadosPdfPedido() {
     cliente: $("#pm-cliente").value.trim(),
     contato: $("#pm-contato").value.trim(), telefone: fmtTel($("#pm-telefone").value),
     itens, total: total ? fmtReal(total) : "",
-    prazo: $("#pm-prazo").value ? dataCurta($("#pm-prazo").value) : "",
+    prazo: $("#pm-prazo").value ? dataCurta($("#pm-prazo").value) + ($("#pm-prazoHora").value ? " às " + $("#pm-prazoHora").value : "") : "",
     prioridade: pedPrio === "urgente" ? "URGENTE" : "Normal",
     atendente: $("#pm-atendente").value.trim(),
     etapa: filaInfo($("#pm-fila").value).nome,
@@ -8578,8 +8617,9 @@ function renderDetalhe() {
   const concluido = p.fila === "pronto" || p.fila === "entregue";
   if (p.prazo) {
     const d = diasAte(p.prazo);
-    const txt = "Entrega " + dataCurta(p.prazo) + (concluido ? "" : d < 0 ? " · atrasado há " + (-d) + (d === -1 ? " dia" : " dias") : d === 0 ? " · hoje" : " · faltam " + d + (d === 1 ? " dia" : " dias"));
-    tags += '<span class="det-tag' + (!concluido && d < 0 ? " atr" : !concluido && d === 0 ? " hoje" : "") + '">' + escapa(txt) + '</span>';
+    const passou = !concluido && prazoPassou(p);
+    const txt = "Entrega " + dataCurta(p.prazo) + (p.prazoHora ? " às " + p.prazoHora : "") + (concluido ? "" : d < 0 ? " · atrasado há " + (-d) + (d === -1 ? " dia" : " dias") : d === 0 ? (passou ? " · atrasado (hoje)" : " · hoje") : " · faltam " + d + (d === 1 ? " dia" : " dias"));
+    tags += '<span class="det-tag' + (passou ? " atr" : !concluido && d === 0 ? " hoje" : "") + '">' + escapa(txt) + '</span>';
   }
   $("#det-tags").innerHTML = tags;
   $("#det-cliente").textContent = p.cliente || "Sem cliente";
@@ -8708,7 +8748,7 @@ function dadosPdfDePedido(p, artes) {
       material: String(i.material || "").toUpperCase(), descricao: i.descricao || "", medidas: i.medidas || "",
       quantidade: q ? q + (/^\d+$/.test(q) ? " un." : "") : "", valor: parseReal(i.preco) ? fmtReal(parseReal(i.preco)) : "" }; }),
     total: total ? fmtReal(total) : "",
-    prazo: p.prazo ? dataCurta(p.prazo) : "", prioridade: p.prioridade === "urgente" ? "URGENTE" : "Normal",
+    prazo: p.prazo ? dataCurta(p.prazo) + (p.prazoHora ? " às " + p.prazoHora : "") : "", prioridade: p.prioridade === "urgente" ? "URGENTE" : "Normal",
     atendente: p.atendente || "", etapa: filaInfo(p.fila).nome, obs: p.obs || "",
     pagamento: textoPagamento(p, total),
     artes: (artes || []).map(a => ({ img: a.img, rotulo: a.material || (a.item ? "" : "Pedido todo") }))
@@ -10143,14 +10183,14 @@ function viasDoForm() {
   return Object.assign({
     numero: p ? p.numero : "", data: dataPedido(p && p.criado), designer: p ? (p.designer || "") : "",
     cliente: $("#pm-cliente").value.trim(), contato: $("#pm-contato").value.trim(), telefone: fmtTel($("#pm-telefone").value),
-    atendente: $("#pm-atendente").value.trim(), prioridade: pedPrio, prazo: $("#pm-prazo").value, obs: $("#pm-obs").value.trim(),
+    atendente: $("#pm-atendente").value.trim(), prioridade: pedPrio, prazo: $("#pm-prazo").value, prazoHora: $("#pm-prazo").value ? $("#pm-prazoHora").value : "", obs: $("#pm-obs").value.trim(),
     itens: itensParaSalvar(), artes: pmArtes.map(a => ({ img: a.img, item: a.item || "" }))
   }, pagamentoDoForm());
 }
 function viasDoPedido(p, artes) {
   return {
     numero: p.numero || "", data: dataPedido(p.criado), cliente: p.cliente || "", contato: p.contato || "", telefone: p.telefone || "",
-    atendente: p.atendente || "", designer: p.designer || "", prioridade: p.prioridade || "normal", prazo: p.prazo || "", obs: p.obs || "",
+    atendente: p.atendente || "", designer: p.designer || "", prioridade: p.prioridade || "normal", prazo: p.prazo || "", prazoHora: p.prazoHora || "", obs: p.obs || "",
     itens: itensDoPedido(p), artes: (artes || []).map(a => ({ img: a.img, item: a.item || "" })),
     metodoPag: p.metodoPag || "", condPag: p.condPag || "", entrada: p.entrada || "", restantePago: p.restantePago || ""
   };
@@ -10235,7 +10275,7 @@ async function buildPedidoPdf(v) {
     s.text(v.data || "", L + 40, y, { size: 8.5, bold: false, color: PRETO });
     const XE = L + 170;
     s.text("ENTREGA:", XE, y, { size: 8, color: PRETO });
-    s.text(dataBR(v.prazo) || "—", XE + 55, y, { size: 8.5, color: PRETO });
+    s.text((dataBR(v.prazo) || "—") + (v.prazo && v.prazoHora ? " às " + v.prazoHora : ""), XE + 55, y, { size: 8.5, color: PRETO });
     if (v.prioridade === "urgente") s.text("URGENTE", R, y, { size: 8, color: [200, 30, 36], align: "right" });
     y += 12;
 
@@ -10403,7 +10443,7 @@ async function buildViasPdfAntigo(v, tam, quais) {
       RR(28, y, 539, 48, 14, { stroke: V, lw: 1.6 });
       rot("Atendente", 40, y + 29, 12); faixa(97, y + 11, 88, 26, v.atendente, { size: 10 });
       rot("Prioridade", 196, y + 29, 12); faixa(258, y + 11, 86, 26, v.prioridade === "urgente" ? "URGENTE" : "Normal", { size: 10, bold: v.prioridade === "urgente", centro: true });
-      rot("Data da Entrega", 353, y + 29, 12); faixa(446, y + 11, 111, 26, v.prazo ? dataCurta(v.prazo) : "", { size: 11, centro: true });
+      rot("Data da Entrega", 353, y + 29, 12); faixa(446, y + 11, 111, 26, v.prazo ? dataCurta(v.prazo) + (v.prazoHora ? " " + v.prazoHora : "") : "", { size: v.prazoHora ? 9.5 : 11, centro: true });
       y += 58;
       RR(28, y, 539, 70, 14, { stroke: V, lw: 1.6 });
       rot("Cliente", 40, y + 23, 11); faixa(82, y + 9, 475, 22, (v.cliente || "").toUpperCase(), { size: 10.5, bold: true });
