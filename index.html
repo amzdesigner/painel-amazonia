@@ -99,7 +99,7 @@ html[data-zoom] .modal{min-height:calc(100vh / var(--zoom));min-height:calc(100d
 .cols > *,.card,.card .body,.preview-wrap{min-width:0}
 .f{display:flex;flex-direction:column;gap:6px}
 .f > span,.f > .lb{font-size:12.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
-input[type=text],input[type=date],input[type=datetime-local],input[type=search],input[type=password],textarea{font-family:inherit;font-size:16px;line-height:1.3;color:var(--text);background:var(--field);border:1.5px solid var(--field-line);border-radius:9px;padding:12px;width:100%;min-height:48px;-webkit-appearance:none;appearance:none;display:block}
+input[type=text],input[type=date],input[type=time],input[type=email],input[type=datetime-local],input[type=search],input[type=password],textarea{font-family:inherit;font-size:16px;line-height:1.3;color:var(--text);background:var(--field);border:1.5px solid var(--field-line);border-radius:9px;padding:12px;width:100%;min-height:48px;-webkit-appearance:none;appearance:none;display:block}
 textarea{min-height:76px;resize:vertical}
 input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .hint{color:var(--muted);font-size:12.5px}
@@ -638,6 +638,52 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .usr-drive p{margin:0;font-size:13px;color:var(--muted);line-height:1.45;overflow-wrap:anywhere}
 .usr-drive .bts{display:flex;gap:8px;flex-wrap:wrap}
 @media (max-width:640px){#drv-envio{right:12px;left:12px;width:auto;bottom:calc(86px + env(safe-area-inset-bottom,0px))}.det-orig{margin-left:0;width:100%}.det-orig-bt{flex:1 1 auto;justify-content:center}}
+.uso-topo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.uso-topo .hint{flex:1 1 320px;margin:0}
+.uso-dolar{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:600}
+.uso-dolar input{width:72px;min-height:40px;text-align:center}
+.uso-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;margin-bottom:14px}
+.uso-kpi{padding:16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.uso-kpi .r{font-size:12.5px;font-weight:700;color:var(--muted)}
+.uso-kpi b{font-size:28px;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.uso-kpi small{font-size:12.5px;color:var(--muted);line-height:1.4}
+.uso-kpi.destaque{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));}
+.uso-kpi.destaque b{color:var(--accent)}
+.uso-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:14px;align-items:start}
+.uso-card{padding:16px 18px;min-width:0}
+.uso-card h3{margin:0 0 4px;font-size:15.5px}
+.uso-card>.hint{margin:0 0 12px}
+.uso-meta{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.uso-meta .linha{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600}
+.uso-meta .linha span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.uso-trilho{height:12px;border-radius:6px;background:var(--card-2);overflow:hidden;position:relative}
+.uso-trilho i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--accent)}
+.uso-trilho i.proj{background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--accent) 45%,transparent) 0 5px,transparent 5px 9px)}
+.uso-trilho.alerta i:not(.proj){background:#f5a524}
+.uso-trilho.estouro i:not(.proj){background:#e04848}
+.uso-dias{display:flex;align-items:flex-end;gap:3px;height:150px;padding-top:18px;border-bottom:1px solid var(--line)}
+.uso-dias .uso-d{flex:1 1 0;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative}
+.uso-dias .uso-d i{display:block;width:100%;max-width:22px;border-radius:4px 4px 0 0;background:var(--accent);min-height:2px}
+.uso-dias .uso-d.hoje i{background:#f5a524}
+.uso-dias .uso-d:hover i{filter:brightness(1.2)}
+.uso-dias .uso-d em{position:absolute;bottom:calc(var(--h) + 3px);font-style:normal;font-size:10px;font-weight:700;color:var(--muted);white-space:nowrap}
+.uso-eixo{display:flex;gap:3px;margin-top:4px}
+.uso-eixo span{flex:1 1 0;min-width:0;text-align:center;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.uso-tab{width:100%;border-collapse:collapse;font-size:13px}
+.uso-tab th{text-align:left;font-size:11.5px;color:var(--muted);font-weight:700;padding:6px 6px;border-bottom:1px solid var(--line)}
+.uso-tab td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+.uso-tab td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.uso-tab .barra{height:8px;border-radius:4px;background:var(--card-2);min-width:60px;overflow:hidden}
+.uso-tab .barra i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.uso-tab tr.clica{cursor:pointer}
+.uso-tab tr.clica:hover td{background:var(--card-2)}
+.uso-cfg{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px;margin:0}
+.uso-cfg dt{color:var(--muted);font-weight:600}
+.uso-cfg dd{margin:0;font-weight:700}
+.uso-ok{color:#1fa463}.uso-alerta{color:#f5a524}.uso-ruim{color:#e04848}
+.uso-passos{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.6}
+.uso-passos code{background:var(--card-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12.5px}
+@media (max-width:640px){.uso-kpi b{font-size:24px}.uso-dias{height:120px}.uso-dias .uso-d em{display:none}.uso-tab .col-barra{display:none}}
 #descanso{position:fixed;left:50%;top:calc(76px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:9px;max-width:calc(100vw - 24px);padding:10px 16px;border-radius:999px;border:1px solid var(--line-2);background:var(--card);color:var(--text);font:600 13.5px Inter,system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer}
 #descanso[hidden]{display:none}
 #descanso svg{width:16px;height:16px;flex:none;color:#f5a524}
@@ -762,7 +808,23 @@ select.sel{font:inherit;font-size:16px;color:var(--text);background:var(--field)
 .kc-entrega.amanha{background:rgba(10,132,255,.12);border-color:rgba(10,132,255,.35);color:#3d9bff}
 .kc-entrega.atr{background:rgba(224,72,72,.16);border-color:rgba(224,72,72,.5);color:#ff5a5a}
 .kc.soares .kc-entrega:not(.atr):not(.hoje):not(.amanha){background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14)}
-.pm-entrega{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:10px}
+.pm-linha-ent{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:end}
+.pm-entrega{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px}
+.pm-entrega .f>span{white-space:nowrap}
+.pm-entrega input{width:100%;min-width:0}
+.pm-linha-ent .pm-total{min-height:62px}
+.pm-cli-linha{display:flex;gap:8px;align-items:stretch}
+.pm-cli-linha input{flex:1;min-width:0}
+.pm-cli-mais{flex:none;width:46px;border-radius:10px;border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);display:grid;place-items:center;cursor:pointer}
+.pm-cli-mais svg{width:20px;height:20px}
+.pm-cli-mais:hover,.pm-cli-mais[aria-expanded=true]{background:var(--accent);color:#fff}
+.pm-cli-novo{margin-top:12px;padding:14px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--accent) 6%,var(--card))}
+.pm-cli-novo-cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:10px}
+.pm-cli-novo-cab b{font-size:14.5px}
+.pm-cli-novo-cab span{font-size:12.5px;color:var(--muted)}
+.pm-cli-novo-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px 12px}
+.pm-cli-novo-bts{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;flex-wrap:wrap}
+@media (max-width:640px){.pm-linha-ent{grid-template-columns:1fr}.pm-cli-novo-bts .btn{flex:1 1 0}}
 .kc-prazo{margin-left:auto;display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:1px 6px;background:var(--card-2)}
 .kc-prazo svg{width:12px;height:12px}
 .kc-prazo.atr{background:rgba(224,72,72,.15);color:#e04848}
@@ -1472,6 +1534,7 @@ body.modal-aberto{overflow:hidden}
       <button type="button" data-view="recibo" id="nav-recibo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v18l2.5-1.6L10 21l2-1.6L14 21l2.5-1.6L19 21V3H5Z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>RECIBO</span></button>
       <button type="button" data-view="calc" id="nav-calc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7v3h-7z"/><path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 16.5h.01M12 16.5h.01M15.5 16.5h.01"/></svg><span>CALCULADORA ATUALCARD</span></button>
       <button type="button" data-view="msg" id="nav-msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5z"/><path d="M8.5 10h7M8.5 13.5h4.5"/></svg><span>MENSAGENS</span></button>
+      <button type="button" data-view="uso" id="nav-uso"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v6.5c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8V5.5M4.5 12v6.5c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8V12"/></svg><span>USO DO BANCO</span></button>
       <button type="button" data-view="aud" id="nav-aud"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="M12 8v4l2.5 2"/></svg><span>AUDITORIA</span></button>
       <button type="button" data-view="usr" id="nav-usr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M19 8v6M16 11h6"/></svg><span>USUÁRIOS</span></button>
       <button type="button" data-view="time" id="nav-time" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3zM3 10h18M3 15h18M9 5v14M15 5v14"/></svg><span>LISTA DO TIME</span></button>
@@ -1706,6 +1769,16 @@ body.modal-aberto{overflow:hidden}
           <p class="hint" id="msg-status"></p>
           <button type="button" class="btn primary" id="msg-salvar">Salvar mensagens</button>
         </div>
+      </div>
+
+      <!-- ================= USO DO BANCO (só ADM) ================= -->
+      <div id="view-uso" hidden>
+        <div class="uso-topo">
+          <p class="hint" id="uso-sub">Quanto o banco de dados (Neon) está gastando neste mês, quanto espaço ocupa e o que mais pesa.</p>
+          <label class="uso-dolar">Dólar R$ <input type="text" id="uso-dolar" inputmode="decimal" value="5,90" aria-label="Cotação do dólar em reais"></label>
+          <button type="button" class="btn" id="uso-atualizar">Atualizar</button>
+        </div>
+        <div id="uso-corpo"><p class="hint">Carregando…</p></div>
       </div>
 
       <!-- ================= AUDITORIA (só ADM) ================= -->
@@ -2464,9 +2537,23 @@ body.modal-aberto{overflow:hidden}
       <div class="modal-corpo">
         <p class="c-sec">Cliente</p>
         <div class="grid-c">
-          <label class="f dup"><span>Nome do cliente *</span><input type="text" id="pm-cliente" list="pm-cli-lista" placeholder="Digite ou escolha um cliente cadastrado"><datalist id="pm-cli-lista"></datalist></label>
+          <div class="f dup"><span><label for="pm-cliente">Nome do cliente *</label></span>
+            <div class="pm-cli-linha"><input type="text" id="pm-cliente" list="pm-cli-lista" placeholder="Digite ou escolha um cliente cadastrado"><datalist id="pm-cli-lista"></datalist>
+              <button type="button" class="pm-cli-mais" id="pm-cli-mais" title="Cadastrar cliente novo no sistema" aria-label="Cadastrar cliente novo" aria-expanded="false" aria-controls="pm-cli-novo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+          </div>
           <label class="f"><span>Nome do contato</span><input type="text" id="pm-contato" placeholder="Com quem falar"></label>
           <label class="f"><span>Telefone</span><input type="text" id="pm-telefone" inputmode="tel" placeholder="(92) 99999-9999"></label>
+        </div>
+        <div class="pm-cli-novo" id="pm-cli-novo" hidden>
+          <div class="pm-cli-novo-cab"><b>Cadastrar cliente novo</b><span>Fica salvo em Clientes para os próximos pedidos.</span></div>
+          <div class="pm-cli-novo-grade">
+            <label class="f"><span>Nome do cliente *</span><input type="text" id="pcn-nome" autocomplete="off"></label>
+            <label class="f"><span>Nome do contato</span><input type="text" id="pcn-contato" autocomplete="off"></label>
+            <label class="f"><span>Telefone / WhatsApp</span><input type="text" id="pcn-tel" inputmode="tel" placeholder="(92) 99999-9999" autocomplete="off"></label>
+            <label class="f"><span>CPF ou CNPJ</span><input type="text" id="pcn-doc" inputmode="numeric" placeholder="Opcional" autocomplete="off"></label>
+            <label class="f"><span>E-mail</span><input type="email" id="pcn-email" placeholder="Opcional" autocomplete="off"></label>
+          </div>
+          <div class="pm-cli-novo-bts"><button type="button" class="btn" id="pcn-cancelar">Cancelar</button><button type="button" class="btn primary" id="pcn-salvar">Salvar cliente</button></div>
         </div>
         <p class="c-sec">Materiais do pedido</p>
         <div id="pm-itens" class="pm-itens"></div>
@@ -2494,7 +2581,7 @@ body.modal-aberto{overflow:hidden}
           </div>
           <p class="hint">Use o lápis para mudar o nome de um tamanho ou o preço unitário só nesta venda. Ao clicar em <b>Adicionar ao pedido</b> o painel pergunta se a camisa já vai para a <b>O.S de camisa</b> (sem preço, com arte, tamanhos, tecido e gola). Se não for agora, o botão <b>Enviar para O.S de camisa</b> fica no pedido para usar depois.</p>
         </div>
-        <div class="grid-c">
+        <div class="pm-linha-ent">
           <div class="pm-entrega">
             <label class="f"><span>Data da entrega</span><input type="date" id="pm-prazo"></label>
             <label class="f"><span>Hora da entrega</span><input type="time" id="pm-prazoHora" step="900"></label>
@@ -2823,7 +2910,7 @@ const shell = document.getElementById("shell");
    O histórico segue sendo gravado nos bastidores. */
 const MOSTRAR_VISAO = true;
 document.getElementById("nav-visao").hidden = !MOSTRAR_VISAO;
-const TITULOS = { mal: "Malharia", visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo", calc: "Calculadora Atual Card", aud: "Auditoria", usr: "Usuários", msg: "Mensagens" };
+const TITULOS = { mal: "Malharia", visao: "Visão Geral", rel: "Relatórios", ped: "Pedidos", prod: "Produtos", os: "O.S Camisa", orc: "Orçamento", cli: "Clientes", time: "Lista do time", recibo: "Recibo", calc: "Calculadora Atual Card", aud: "Auditoria", usr: "Usuários", msg: "Mensagens", uso: "Uso do banco" };
 function irPara(v) {
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.view === v));
   document.getElementById("view-visao").hidden = v !== "visao";
@@ -2840,6 +2927,7 @@ function irPara(v) {
   document.getElementById("view-aud").hidden = v !== "aud";
   document.getElementById("view-usr").hidden = v !== "usr";
   document.getElementById("view-msg").hidden = v !== "msg";
+  document.getElementById("view-uso").hidden = v !== "uso";
   document.getElementById("top-mal").hidden = v !== "mal";
   document.getElementById("bar-mal").hidden = v !== "mal";
   document.getElementById("top-rel").hidden = v !== "rel";
@@ -2847,7 +2935,7 @@ function irPara(v) {
   document.getElementById("top-prod").hidden = v !== "prod";
   document.getElementById("top-ped").hidden = v !== "ped";
   document.body.classList.toggle("modo-kb", v === "ped");
-  document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod" || v === "calc" || v === "aud" || v === "usr" || v === "msg";
+  document.querySelector(".bar").hidden = v === "visao" || v === "cli" || v === "ped" || v === "prod" || v === "calc" || v === "aud" || v === "usr" || v === "msg" || v === "uso";
   document.getElementById("bar-os").hidden = v === "recibo" || v === "visao" || v === "orc" || v === "rel" || v === "mal";
   document.getElementById("bar-orc").hidden = v !== "orc";
   document.getElementById("bar-recibo").hidden = v !== "recibo";
@@ -2872,6 +2960,7 @@ function irPara(v) {
   if (window.audAoMudar) window.audAoMudar(v === "aud");
   if (v === "usr" && window.usrAoAbrir) window.usrAoAbrir();
   if (v === "msg" && window.msgAoAbrir) window.msgAoAbrir();
+  if (v === "uso" && window.usoAoAbrir) window.usoAoAbrir();
   guardar("amz_view", v);
 }
 document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => irPara(b.dataset.view)));
@@ -4223,7 +4312,7 @@ const TODAS_ABAS = ["visao", "ped", "rel", "prod", "mal", "os", "cli", "orc", "r
 const ehAdm = () => !!sessao && sessao.papel === "adm";
 function permAtual() {
   if (!sessao) return { nome: "", abas: [], pedidos: "producao", valores: false };
-  if (ehAdm()) return { nome: "ADMINISTRADOR", abas: TODAS_ABAS.concat("usr", "msg"), pedidos: "completo", valores: true, filas: null };
+  if (ehAdm()) return { nome: "ADMINISTRADOR", abas: TODAS_ABAS.concat("usr", "msg", "uso"), pedidos: "completo", valores: true, filas: null };
   return sessao.perm || { nome: "PRODUÇÃO", abas: ["ped"], pedidos: "producao", valores: false, filas: null };
 }
 const podeAba = v => permAtual().abas.includes(v);
@@ -6710,7 +6799,7 @@ function abrirPedidoModal(p, filaInicial) {
   pmPerguntouCamisa = false; pmRascId = null;
   if (!podeGravarPed()) return;
   pedEditId = p ? p.id : null;
-  pmDriveFila = []; renderPmDrive();
+  pmDriveFila = []; renderPmDrive(); abrirCliNovo(false);
   $("#pm-titulo").textContent = p ? "Pedido #" + p.numero : "Novo pedido";
   marcaEmpresa(p ? empresaDe(p) : (filtroEmpresa || "amazonia"));
   $("#pm-salvar").textContent = p ? "Salvar alterações" : "Criar pedido";
@@ -6735,6 +6824,58 @@ $("#pm-cliente").addEventListener("change", () => {
   if (!$("#pm-telefone").value.trim() && (c.tel1 || c.tel2)) $("#pm-telefone").value = c.tel1 || c.tel2;
 });
 $("#pm-telefone").addEventListener("blur", e => e.target.value = fmtTel(e.target.value));
+/* + ao lado do nome: cadastra o cliente novo sem sair do pedido */
+function abrirCliNovo(abrir) {
+  const box = $("#pm-cli-novo"); box.hidden = !abrir;
+  $("#pm-cli-mais").setAttribute("aria-expanded", String(abrir));
+  if (!abrir) return;
+  $("#pcn-nome").value = $("#pm-cliente").value.trim();
+  $("#pcn-contato").value = $("#pm-contato").value.trim();
+  $("#pcn-tel").value = $("#pm-telefone").value.trim();
+  $("#pcn-doc").value = ""; $("#pcn-email").value = "";
+  setTimeout(() => { box.scrollIntoView({ block: "nearest", behavior: "smooth" }); $("#pcn-nome").focus(); }, 30);
+}
+$("#pm-cli-mais").addEventListener("click", () => abrirCliNovo($("#pm-cli-novo").hidden));
+$("#pcn-cancelar").addEventListener("click", () => abrirCliNovo(false));
+$("#pcn-tel").addEventListener("blur", e => e.target.value = fmtTel(e.target.value));
+$("#pcn-doc").addEventListener("blur", e => e.target.value = fmtDoc(e.target.value));
+$("#pcn-nome").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); $("#pcn-salvar").click(); } });
+$("#pcn-salvar").addEventListener("click", async () => {
+  const nome = $("#pcn-nome").value.trim();
+  if (!nome) { say("Informe o nome do cliente.", "err"); $("#pcn-nome").focus(); return; }
+  const doc = fmtDoc($("#pcn-doc").value), dig = soDig(doc);
+  const d = {}; C_CAMPOS.forEach(c => d[c] = "");
+  Object.assign(d, { nome, contato: $("#pcn-contato").value.trim(), tel1: fmtTel($("#pcn-tel").value), email: $("#pcn-email").value.trim(),
+    cnpj: dig.length > 11 ? doc : "", cpf: dig.length && dig.length <= 11 ? doc : "" });
+  d.documento = d.cnpj || d.cpf; d.tipo = d.cnpj ? "pj" : d.cpf ? "pf" : "pj";
+  const lista = typeof clientes !== "undefined" ? clientes : [];
+  const igual = lista.find(c => (c.nome || "").trim().toLowerCase() === nome.toLowerCase() || (dig.length >= 11 && soDig(c.cnpj || c.cpf || c.documento) === dig));
+  if (igual && !(await confirmar("Já existe o cliente “" + igual.nome + "” cadastrado. Cadastrar outro mesmo assim?", { titulo: "Cliente repetido", sim: "Cadastrar outro", nao: "Usar o que já existe", perigo: false }))) {
+    $("#pm-cliente").value = igual.nome;
+    if (!$("#pm-contato").value.trim() && igual.contato) $("#pm-contato").value = igual.contato;
+    if (!$("#pm-telefone").value.trim() && (igual.tel1 || igual.tel2)) $("#pm-telefone").value = igual.tel1 || igual.tel2;
+    abrirCliNovo(false); return;
+  }
+  const bt = $("#pcn-salvar"); bt.disabled = true;
+  try {
+    let salvo;
+    if (modoHist === "nuvem") { salvo = (await apiCli("POST", "", d)).item; clientes = clientes.filter(c => c.id !== salvo.id).concat([salvo]).sort(porNome); }
+    else {
+      salvo = Object.assign({}, d, { id: "l_" + Date.now(), atualizado: new Date().toISOString() });
+      clientesLocal = clientesLocal.filter(c => c.id !== salvo.id).concat([salvo]); salvarClientesLocal();
+      clientes = clientesLocal.slice().sort(porNome);
+    }
+    $("#pm-cliente").value = salvo.nome;
+    if (salvo.contato) $("#pm-contato").value = salvo.contato;
+    if (salvo.tel1) $("#pm-telefone").value = salvo.tel1;
+    $("#pm-cli-lista").innerHTML = clientes.map(c => '<option value="' + escapa(c.nome) + '"></option>').join("");
+    if (typeof renderClientes === "function") try { renderClientes(); } catch (e) {}
+    abrirCliNovo(false);
+    say("Cliente “" + salvo.nome + "” cadastrado e colocado no pedido.", "ok");
+  } catch (e) {
+    say(e.status === 403 ? "Seu usuário não tem permissão para cadastrar clientes. Peça ao ADM liberar a aba Clientes." : "Não consegui cadastrar: " + (e.msg || "sem conexão") + ".", "err");
+  } finally { bt.disabled = false; }
+});
 $("#pm-form").addEventListener("submit", async ev => {
   ev.preventDefault();
   let irOS = pmAbrirOSDepois; pmAbrirOSDepois = null;
@@ -8587,6 +8728,102 @@ function linkWhats(p, pronto) {
     bt.disabled = false;
   });
   window.addEventListener("beforeunload", e => { if (sujo && !document.getElementById("view-msg").hidden) { e.preventDefault(); e.returnValue = ""; } });
+})();
+/* ================= USO DO BANCO (só ADM) ================= */
+(function () {
+  const LIMITE_US = 15;   /* o alerta de gastos combinado na Neon */
+  const MB = b => b >= 1e9 ? (b / 1e9).toFixed(2).replace(".", ",") + " GB" : (b / 1e6).toFixed(b < 1e7 ? 2 : 1).replace(".", ",") + " MB";
+  const US = v => "US$ " + v.toFixed(2).replace(".", ",");
+  const RS = v => "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const num = (v, c) => Number(v).toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c });
+  const NOMES_TAB = { pedidos: "Pedidos (com artes e miniaturas)", historico: "Histórico de O.S / orçamentos", clientes: "Clientes", produtos: "Produtos", auditoria: "Auditoria", usuarios: "Usuários", hierarquias: "Hierarquias", config: "Configurações", rascunhos: "Rascunhos", push_subs: "Notificações (aparelhos)", contadores: "Contadores" };
+  let dados = null;
+  function dolar() { const v = parseReal($("#uso-dolar").value); return v > 0 ? v : 5.9; }
+  try { const d = localStorage.getItem("amz_dolar"); if (d) $("#uso-dolar").value = d; } catch (e) {}
+  $("#uso-dolar").addEventListener("change", () => { try { localStorage.setItem("amz_dolar", $("#uso-dolar").value); } catch (e) {} if (dados) render(); });
+  async function carregar(forcar) {
+    const corpo = $("#uso-corpo");
+    if (modoHist !== "nuvem") { corpo.innerHTML = '<section class="card uso-card"><h3>Só no painel publicado</h3><p class="hint">Aqui na prévia não existe banco de dados. Abra o painel no site para ver o uso.</p></section>'; return; }
+    if (!dados) corpo.innerHTML = '<p class="hint">Carregando…</p>';
+    const bt = $("#uso-atualizar"); bt.disabled = true;
+    try {
+      const r = await fetch("/api/uso" + (forcar ? "?atualizar=1" : ""), { headers: cabecalhoAuth(), cache: "no-store" });
+      const j = await r.json().catch(() => null);
+      if (!r.ok || !j) throw new Error((j && j.erro) || (r.status === 404 ? "falta publicar o vercel.json novo e os arquivos api/config.js e api/_uso.js no GitHub" : "sem conexão"));
+      dados = j; render();
+    } catch (e) { corpo.innerHTML = '<section class="card uso-card"><h3>Não consegui ler o uso</h3><p class="hint">' + escapa(e.message) + '</p></section>'; }
+    bt.disabled = false;
+  }
+  window.usoAoAbrir = () => carregar(false);
+  $("#uso-atualizar").addEventListener("click", () => carregar(true));
+  function render() {
+    const { banco, neon } = dados, cot = dolar(), corpo = $("#uso-corpo");
+    let h = "";
+    const agora = new Date();
+    if (neon && neon.configurado && !neon.erro) {
+      const ini = new Date(neon.periodo.inicio), fim = new Date(neon.periodo.fim);
+      const frac = Math.min(1, Math.max(0.02, (agora - ini) / (fim - ini)));
+      const diasMes = Math.round((fim - ini) / 864e5), diaHoje = Math.min(diasMes, Math.floor((agora - ini) / 864e5) + 1);
+      const c = neon.custo, proj = c.totalUS / frac;
+      const pct = Math.min(100, c.totalUS / LIMITE_US * 100), pctProj = Math.min(100, proj / LIMITE_US * 100);
+      const est = c.totalUS >= LIMITE_US ? "estouro" : proj > LIMITE_US ? "alerta" : "";
+      const minCu = neon.autoscaling && neon.autoscaling.min, maxCu = neon.autoscaling && neon.autoscaling.max;
+      h += '<div class="uso-kpis">' +
+        '<section class="card uso-kpi destaque"><span class="r">Gasto até agora (mês)</span><b>' + US(c.totalUS) + '</b><small>≈ ' + RS(c.totalUS * cot) + ' · dia ' + diaHoje + ' de ' + diasMes + '</small></section>' +
+        '<section class="card uso-kpi"><span class="r">Previsão para o mês</span><b>' + US(proj) + '</b><small>≈ ' + RS(proj * cot) + ' se continuar nesse ritmo</small></section>' +
+        '<section class="card uso-kpi"><span class="r">Processamento</span><b>' + num(c.cuHoras, 1) + ' h</b><small>horas de computação (CU-hora) · ' + US(c.computeUS) + '</small></section>' +
+        '<section class="card uso-kpi"><span class="r">Espaço ocupado</span><b>' + MB(banco.bytes) + '</b><small>armazenamento do mês · ' + US(c.storageUS) + '</small></section>' +
+        '</div>';
+      h += '<div class="uso-grade">';
+      h += '<section class="card uso-card"><h3>Limite de ' + US(LIMITE_US) + ' no mês</h3><p class="hint">A barra cheia é o gasto até agora; a parte listrada é a previsão até o fim do mês.</p>' +
+        '<div class="uso-meta"><div class="uso-trilho ' + est + '"><i class="proj" style="width:' + pctProj.toFixed(1) + '%"></i><i style="width:' + pct.toFixed(1) + '%"></i></div>' +
+        '<div class="linha"><span>Gasto: ' + US(c.totalUS) + ' (' + Math.round(c.totalUS / LIMITE_US * 100) + '%)</span><span>Previsão: ' + US(proj) + '</span></div>' +
+        '<div class="linha"><span class="' + (est === "estouro" ? "uso-ruim" : est ? "uso-alerta" : "uso-ok") + '">' + (est === "estouro" ? "Passou do limite combinado." : est ? "Nesse ritmo, passa do limite no fim do mês." : "Dentro do limite.") + '</span><span></span></div></div></section>';
+      if (neon.porDia && neon.porDia.length) {
+        const mapa = new Map(neon.porDia.map(d => [d.dia, d.cuSeg / 3600]));
+        const lista = []; for (let i = 0; i < diasMes; i++) { const d = new Date(ini.getTime() + i * 864e5).toISOString().slice(0, 10); lista.push([d, mapa.get(d) || 0]); }
+        const mx = Math.max(0.05, ...lista.map(x => x[1])), hojeISOu = agora.toISOString().slice(0, 10);
+        h += '<section class="card uso-card"><h3>Processamento por dia</h3><p class="hint">Horas de computação em cada dia do mês. Dias com o painel aberto o dia todo aparecem mais altos.</p>' +
+          '<div class="uso-dias">' + lista.map(([d, v]) => { const hp = (v / mx * 100).toFixed(1); return '<div class="uso-d' + (d === hojeISOu ? " hoje" : "") + '" style="--h:' + hp + '%" title="' + d.slice(8, 10) + '/' + d.slice(5, 7) + ': ' + num(v, 2) + ' h · ' + US(v * c.precos.cuHora) + '">' + (v >= mx * 0.6 ? '<em>' + num(v, 1) + '</em>' : "") + '<i style="height:' + hp + '%"></i></div>'; }).join("") + '</div>' +
+          '<div class="uso-eixo">' + lista.map(([d], i) => '<span>' + (i % 5 === 0 || i === lista.length - 1 ? d.slice(8, 10) : "") + '</span>').join("") + '</div></section>';
+      } else if (neon.avisoConsumo) {
+        h += '<section class="card uso-card"><h3>Processamento por dia</h3><p class="hint">' + escapa(neon.avisoConsumo) + ' Os totais acima vêm do resumo do projeto.</p></section>';
+      }
+      const susp = neon.suspendeSeg;
+      h += '<section class="card uso-card"><h3>Configuração do banco</h3><p class="hint">O que segura a conta: tamanho máximo baixo e desligar quando ninguém usa.</p><dl class="uso-cfg">' +
+        '<dt>Plano</dt><dd>' + escapa(neon.plano ? neon.plano.charAt(0).toUpperCase() + neon.plano.slice(1) : "—") + '</dd>' +
+        '<dt>Tamanho (CU)</dt><dd class="' + (maxCu > 0.5 ? "uso-alerta" : "uso-ok") + '">' + (minCu != null ? num(minCu, 2) + " a " + num(maxCu, 2) + " CU" : "—") + (maxCu > 0.5 ? " · recomendado máx. 0,25" : "") + '</dd>' +
+        '<dt>Desliga parado</dt><dd class="' + (susp != null && susp < 0 ? "uso-ruim" : "uso-ok") + '">' + (susp == null ? "—" : susp < 0 ? "Nunca (desligamento automático está DESLIGADO)" : susp === 0 ? "Após 5 min (padrão)" : "Após " + Math.round(susp / 60) + " min") + '</dd>' +
+        '<dt>Agora</dt><dd>' + (neon.estado === "active" ? '<span class="uso-alerta">Ligado</span> <small style="color:var(--muted);font-weight:600">(abrir esta tela já liga o banco)</small>' : neon.estado === "idle" ? '<span class="uso-ok">Desligado (economizando)</span>' : escapa(neon.estado || "—")) + '</dd>' +
+        '<dt>Preços</dt><dd>' + US(c.precos.cuHora).replace(",", ",") + ' por CU-hora · ' + US(c.precos.gbMes) + ' por GB/mês</dd>' +
+        '</dl></section>';
+      h += '</div>';
+    } else {
+      h += '<div class="uso-kpis"><section class="card uso-kpi destaque"><span class="r">Espaço ocupado</span><b>' + MB(banco.bytes) + '</b><small>tamanho total do banco agora</small></section>' +
+        '<section class="card uso-kpi"><span class="r">Pedidos guardados</span><b>' + num((banco.tabelas.find(t => t.nome === "pedidos") || {}).linhas || 0, 0) + '</b><small>incluindo arquivados</small></section></div>';
+      h += '<section class="card uso-card" style="margin-bottom:14px"><h3>' + (neon && neon.erro ? "Não consegui ler o consumo da Neon" : "Ligar o consumo do mês (gasto em dólar)") + '</h3>' +
+        (neon && neon.erro ? '<p class="hint">' + escapa(neon.erro) + '</p>' :
+        '<p class="hint">Para ver as horas de processamento e o gasto do mês, o painel precisa de uma chave da Neon. É feito uma vez só:</p>' +
+        '<ol class="uso-passos"><li>No <b>console.neon.tech</b>, clique na sua foto → <b>Account settings → API keys → Create new API key</b> e copie a chave.</li>' +
+        '<li>No projeto do painel, vá em <b>Settings</b> e copie o <b>Project ID</b> (algo como <code>polished-sun-12345678</code>).</li>' +
+        '<li>Na Vercel, em <b>Settings → Environment Variables</b>, crie <code>NEON_API_KEY</code> e <code>NEON_PROJECT_ID</code> com esses valores e faça o <b>Redeploy</b>.</li></ol>') + '</section>';
+    }
+    /* tabelas e pedidos pesados (do próprio banco) */
+    const mxT = Math.max(1, ...banco.tabelas.map(t => t.bytes));
+    h += '<div class="uso-grade" style="margin-top:14px">' +
+      '<section class="card uso-card"><h3>O que ocupa espaço</h3><p class="hint">Tamanho de cada parte do banco (dados + índices).</p><div class="tblwrap"><table class="uso-tab"><thead><tr><th>Parte</th><th class="col-barra"></th><th class="n">Registros</th><th class="n">Tamanho</th></tr></thead><tbody>' +
+      banco.tabelas.map(t => '<tr><td>' + escapa(NOMES_TAB[t.nome] || t.nome) + '</td><td class="col-barra" style="width:30%"><div class="barra"><i style="width:' + (t.bytes / mxT * 100).toFixed(1) + '%"></i></div></td><td class="n">' + num(t.linhas, 0) + '</td><td class="n">' + MB(t.bytes) + '</td></tr>').join("") +
+      '</tbody></table></div></section>' +
+      '<section class="card uso-card"><h3>Pedidos mais pesados</h3><p class="hint">Normalmente pesam por causa das artes coladas no pedido. Arquivos grandes podem ir para o Google Drive.</p><div class="tblwrap"><table class="uso-tab"><thead><tr><th>Pedido</th><th>Cliente</th><th class="n">Tamanho</th></tr></thead><tbody>' +
+      (banco.maiores.length ? banco.maiores.map(p => '<tr class="clica" data-id="' + escapa(p.id) + '"><td><b>#' + escapa(p.numero) + '</b>' + (p.arquivado ? ' <small style="color:var(--muted)">arquivado</small>' : "") + '</td><td>' + escapa(p.cliente || "—") + '</td><td class="n">' + MB(p.bytes) + '</td></tr>').join("") : '<tr><td colspan="3">Nenhum pedido.</td></tr>') +
+      '</tbody></table></div></section></div>';
+    h += '<p class="hint" style="margin-top:12px">Atualizado ' + new Date(dados.geradoEm).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) + '. Valores em dólar são estimativas pelos preços do plano Launch; a fatura oficial fica na Neon/Vercel.</p>';
+    corpo.innerHTML = h;
+    corpo.querySelectorAll("tr.clica").forEach(tr => tr.addEventListener("click", () => {
+      const p = pedidos.find(x => String(x.id) === tr.dataset.id);
+      if (p) abrirDetalhe(p); else say("Esse pedido está arquivado. Procure no histórico.", "info");
+    }));
+  }
 })();
 function textoAviso(a) {
   if (!a || !a.em) return "";
